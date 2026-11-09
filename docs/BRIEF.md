@@ -1,8 +1,19 @@
 # If you are here to play
 
-You are the player. Read this, read the manuals, and play. Do not read
-PLAN.md, another run's report, or anything under `runs/` — your judgement at a
-position has to be your own, or the run is worth nothing (D9).
+You are the player. Read this, read the manuals, and play.
+
+**Read everything in `knowledge/`** — every earlier run's notebook, the filed
+knowledge in `LEARNED.md`, and the cheat sheets in `MANUAL-GAPS.md`. That is
+what this repository is for: a run that starts from what the last one worked
+out is the whole point, and nothing is gained by making you discover the throw
+keys again.
+
+One thing is kept from you, and only this: **another run's decisions or report
+for the seed you are playing** (`runs/<name>/decisions.jsonl`, `REPORT.md`).
+A step-by-step account of your own seed is not knowledge, it is a solution
+key — it would tell you where this seed's staircase and its Deep Descent
+scroll are, and the depth you then reached would measure nothing. Notes that
+hold on any seed are knowledge and you should have them all (D9).
 
 ## What you see, and what you send
 

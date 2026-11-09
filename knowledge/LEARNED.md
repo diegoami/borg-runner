@@ -275,7 +275,7 @@ the hard way, the statement says so.
   anchor: new:unidentified-objects
   status: hypothesis
   evidence: sonnet-2#76, sonnet-2#77, sonnet-2#78, sonnet-2#79, sonnet-2#80
-  note: this is what one scroll supports: it exists on depth 1, it fires after a few turns (game turn 2707 to 2751, about four to five player turns, during which the player picked up gold), it lands on a new level, and the 3 experience (NXT 14 to 11) is what the first-use formula gives for a level-10 kind at character level 4. It does not support a rate, a safe depth, or what "5 below" counts from (below).
+  note: this is what one scroll supports: it exists on depth 1, it fires after a few turns (game turn 2707 to 2751, about four to five player turns, during which the player walked toward some gold it did not reach), it lands on a new level, and the 3 experience (NXT 14 to 11) is what the first-use formula gives for a level-10 kind at character level 4. It does not support a rate, a safe depth, or what "5 below" counts from (below).
 
 - [deep-descent-five-below] From depth 1 the scroll took the character to depth 6, which agrees with "five levels below the deepest level reached" and cannot tell it from "five below the current level" because the two were both 1.
   anchor: new:unidentified-objects

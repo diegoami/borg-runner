@@ -137,9 +137,23 @@ manual at its pin — seventeen chapters, ten appendices generated from
 its rules are "a starting policy to be measured, not truths", and that is how
 they are treated here: following one and being hurt by it is a result.
 
-It may **not** read another run's conclusions before playing. A fresh session
-per run is the point — its judgement at a position has to be independent, or
-the comparison with the Borg is worthless.
+**And every earlier run's notebook, and everything in `knowledge/`.** An
+earlier version of this decision withheld them, on the grounds that a player
+had to be an independent control. That was the right rule for a different
+question — "what does an independent reader do at this position, where the
+Borg did X" — and the wrong one here, where the point is accumulation. It also
+contradicted what was actually done: runs 2 and 3 were handed the whole
+knowledge base, and that is what made run 2 read an unknown scroll on depth 1.
+Withholding knowledge from the next player is the one thing this repository
+exists not to do.
+
+What is still withheld is narrow and has a reason: **another run's decisions
+or write-up for the seed being played**. That is not knowledge, it is a
+solution key — it names where this seed's staircase and its Deep Descent
+scroll are — and a depth reached by following it measures nothing. The test is
+whether a note would still be true on another seed: if yes it is knowledge and
+belongs in `knowledge/`; if no it belongs to that run's record and says which
+seed it was about.
 
 ## D10. The exchange is plain files in the run directory
 
