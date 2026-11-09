@@ -315,3 +315,42 @@ def test_a_record_does_not_lose_what_it_already_knew(tmp_path):
     again = run_module.write_record(run, outcome='stopped')
     assert again['character'] == 'Half-Troll Warrior'
     assert again['standing_from'] == 'a replay of the archived keys'
+
+
+def test_two_runs_of_the_same_character_are_refused(tmp_path, monkeypatch):
+    """Runs may play at the same time; they may not share a savefile.
+
+    Each run has its own directory, game process and notebook, so parallel
+    runs are the normal case - but the savefile is named after the character,
+    and a second run of the same name would delete the first one's save.
+    """
+    import os
+    import pytest
+
+    monkeypatch.setattr(run_module, 'RUNS', tmp_path)
+    live = tmp_path / 'first'
+    (live / run_module.ASK).mkdir(parents=True)
+    (live / 'started.json').write_text(json.dumps(
+        {'seed': 7, 'character': 'shared', 'pid': os.getpid(), 'build': {}}))
+    second = tmp_path / 'second'
+    (second / run_module.ASK).mkdir(parents=True)
+    with pytest.raises(RuntimeError, match='already playing'):
+        run_module.start(second, 7, character='shared', log=lambda *a: None)
+
+
+def test_a_finished_run_does_not_block_another(tmp_path, monkeypatch):
+    """Only a *live* process holds the name."""
+    monkeypatch.setattr(run_module, 'RUNS', tmp_path)
+    done = tmp_path / 'done'
+    (done / run_module.ASK).mkdir(parents=True)
+    (done / 'started.json').write_text(json.dumps(
+        {'seed': 7, 'character': 'shared', 'pid': 999999, 'build': {}}))
+    # No exception: the pid is gone, so the name is free. The build is not
+    # prepared here, so it fails later and for another reason.
+    try:
+        run_module.start(tmp_path / 'next', 7, character='shared',
+                         out=tmp_path / 'nobuild', log=lambda *a: None)
+    except RuntimeError as problem:
+        assert 'already playing' not in str(problem)
+    except FileNotFoundError:
+        pass

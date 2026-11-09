@@ -199,6 +199,28 @@ def start(run, seed, out=None, character=None, resume=False, log=print):
         raise FileNotFoundError(f'no binary at {game}; build first')
 
     character = character or run.name
+    # Runs are independent and may play at the same time - each has its own
+    # directory, its own game process and its own notebook. The one thing they
+    # share is the savefile, which is named after the character: starting a
+    # second run of the same name would delete the first one's save out from
+    # under it. Names are unique per run, so this only happens by mistake, and
+    # it is cheap to refuse.
+    for other in sorted(RUNS.glob('*/started.json')):
+        if other.parent == run:
+            continue
+        try:
+            already = json.loads(other.read_text())
+        except ValueError:
+            continue
+        if already.get('character') != character:
+            continue
+        pid = already.get('pid')
+        if pid and Path(f'/proc/{pid}').exists():
+            raise RuntimeError(
+                f'{other.parent.name} is already playing as {character!r} '
+                f'(pid {pid}); two runs cannot share a savefile. Use another '
+                f'--name.')
+
     save = savefile_of(out, character)
     if save.exists() and not resume:
         # The game loads a savefile of this name if one is there, so a replay

@@ -225,6 +225,34 @@ All five are the same shape: **the screen and the keyboard are the only
 contract, and anything we assume about them has to be checked against the
 game.** That is the argument for keeping this frontend as small as it is.
 
+## D15. Runs are independent and may play at once
+
+A run owns a directory, a game process, a seed, a character and a notebook.
+Nothing is shared between two of them except the built binary, which is read
+only, so **several runs play at the same time** — and that is the normal way
+to use this, not an edge case: `sonnet-2` and `sonnet-3` played together on
+different seeds, each keeping its own notes, and were consolidated afterwards.
+
+Two consequences worth stating.
+
+**Parallel runs are what makes `confirmed` reachable.** An item in
+`LEARNED.md` may only be promoted when two *different* runs show it, so
+running two or four at once is how a consolidation gets something to agree
+with. Same inherited notes, different seeds, is the useful shape; same seed
+twice measures how much of a run is the model rather than the dungeon.
+
+**The savefile is the one thing that collides.** It is named after the
+character, which is the run's name, so a second run of the same name would
+delete the first one's save while it was playing. `start` refuses when another
+run's recorded process is alive under that name. The first build after a
+change is also not safe to race — two runs preparing it at once would copy
+into the same directory — so build once (`python -m borg_runner build`) before
+launching several.
+
+Consolidation happens **after**, over all the notebooks at once, which is
+better than serialising the runs: a disagreement between two runs that never
+saw each other is stronger evidence than one run revising itself.
+
 ## What this repository is not
 
 - not a Borg, and not a tuning of one: it holds no thresholds and no policy;
