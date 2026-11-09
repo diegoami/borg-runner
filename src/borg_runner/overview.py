@@ -123,6 +123,24 @@ def markdown(found):
     return '\n'.join(lines)
 
 
+# The dashboard is three files with one source: the table a reader browses on
+# GitHub, the page served at the Pages root, and the same page inside
+# records/. One command writes all three, so a run finishing from any harness
+# leaves the dashboard current instead of only the markdown.
+PAGES = ('index.html', 'records/overview.html')
+
+
+def write_all(found=None, log=print):
+    """Every form of the table: the markdown and both pages."""
+    found = found if found is not None else rows()
+    written = [write_markdown(found)]
+    for where in PAGES:
+        written.append(write_page(found, into=run_module.pins.ROOT / where))
+    for path in written:
+        log(f'overview: {path}')
+    return written
+
+
 def write_markdown(found=None, into=None):
     found = found if found is not None else rows()
     into = Path(into) if into else run_module.RECORDS / 'OVERVIEW.md'

@@ -356,14 +356,45 @@ def write(run, into=None, standalone=True):
     return page
 
 
+def rebuild_all(log=print):
+    """Regenerate every archived run's replay page.
+
+    `archive` writes a run's replay when the run ends, so this is for after
+    the page itself changes - a new column, a fixed bug - rather than for
+    normal use. A run whose working directory is gone needs its keys replayed
+    first, because the screens are not archived; it is said rather than
+    guessed at.
+    """
+    done, missing = [], []
+    for record in sorted((run_module.RECORDS).glob('*/record.json')):
+        name = record.parent.name
+        live = run_module.RUNS / name
+        if not (live / run_module.ASK).is_dir() or not any(
+                (live / run_module.ASK).glob('screen-*.txt')):
+            missing.append(name)
+            continue
+        page = write(live, into=record.parent / 'report.html')
+        done.append(name)
+        log(f'replay: {page}')
+    for name in missing:
+        log(f'replay: {name} has no screens left; '
+            f'replay its keys first (borg_runner replay --run records/{name})')
+    return done, missing
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description='one run as a self-contained page')
-    parser.add_argument('--run', required=True, type=Path)
+    parser.add_argument('--run', type=Path)
     parser.add_argument('--into', type=Path)
+    parser.add_argument('--all', action='store_true',
+                        help="regenerate every archived run's replay page")
     parser.add_argument('--artifact', action='store_true',
                         help='leave out the document skeleton, for a host that '
                              'supplies its own')
     args = parser.parse_args(argv)
+    if args.all:
+        rebuild_all()
+        return 0
     print(write(args.run, args.into, standalone=not args.artifact))
     return 0
 

@@ -83,22 +83,47 @@ the escapes are \n Enter, \e Escape, \t Tab, \\ a backslash.
   would settle it.
 - Aim for about 150 decisions unless told otherwise, then stop.
 
-== WHEN YOU STOP ==
+== WHEN YOU STOP: RECORD IT AND UPDATE THE DASHBOARD ==
+
+Run all five, in order. The first three are about your run; the last two
+publish it, and they are what makes your run visible to anyone else.
 
     .venv/bin/python -m borg_runner record --run runs/{RUNNAME} \
         --tokens <total> --tool-calls <total> \
         --played-by <session|codex|opencode|other> \
         --model <provider>/<exact model version>
+
     .venv/bin/python -m borg_runner keep --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner archive --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner overview
+    git add records knowledge index.html && \
+        git commit -m "{RUNNAME}: <depth, level, how it ended>" && \
+        git pull --rebase -q && git push -q
 
-Leave the tokens and tool calls off rather than guessing them if you do not
-know your own. `--model` must name the provider and the exact version;
-`record` refuses a bare family name.
+What each does:
 
-`keep` promotes only the notes *you* added, not the ones you were handed, so a
-line you inherited is never counted as a second sighting.
+- **record** writes the run record: the seed, the build, the character the
+  game drew, its level, its gold, the game's own valuation of what it
+  carries, whether it died and to what. Leave the tokens and tool calls off
+  rather than guessing. `--model` must name the provider and the exact
+  version, e.g. `openai/gpt-5.6-luna`; a bare family name is refused, because
+  two runs of the same family months apart are not the same experiment.
+- **keep** promotes the notes *you* added into `knowledge/`, with the seed and
+  build they came from. Notes you were handed are not promoted, so an
+  inherited line is never counted as a second sighting.
+- **archive** keeps the run in git: its keys, its decisions, its notes, its
+  tools if you wrote any - and **generates its replay page**, which is how
+  anyone watches your game back, screen by screen.
+- **overview** rebuilds the dashboard: `records/OVERVIEW.md`, `index.html` and
+  `records/overview.html`, all three from the records.
+- **the commit** publishes it. The dashboard is served at
+  <https://diegoami.github.io/borg-runner/>, so until you push, your run is
+  not there. Pull with a rebase first: other runs may have finished while you
+  played, and only `records/`, `knowledge/` and the dashboard files are yours
+  to add.
+
+If the replay page itself ever needs rebuilding for every run - after someone
+changes it - that is `borg_runner report --all`, not something a run does.
 
 Then write runs/{RUNNAME}/REPORT.md: where you took the character and where
 you left it, the decisions you would take back, where the reading was wrong or

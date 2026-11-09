@@ -34,6 +34,22 @@ character and notebook; several play at once, and that is how a claim gets a
 second witness (D15). The names must differ, or the tool refuses and says
 which run holds the name.
 
+When a run stops it publishes itself — the prompts end with the five commands
+that do it:
+
+```sh
+.venv/bin/python -m borg_runner record --run runs/mine --played-by … --model …/…
+.venv/bin/python -m borg_runner keep --run runs/mine        # its notes into knowledge/
+.venv/bin/python -m borg_runner archive --run runs/mine     # keys, notes, and its replay page
+.venv/bin/python -m borg_runner overview                    # the dashboard, all three files
+git add records knowledge index.html && git commit -m … && git pull --rebase && git push
+```
+
+`archive` generates that run's replay; `overview` rebuilds
+`records/OVERVIEW.md`, `index.html` and `records/overview.html` from the
+records; the push is what puts it on the site. To rebuild every replay after
+changing the page itself, `borg_runner report --all`.
+
 While they play, from anywhere:
 
 ```sh

@@ -134,6 +134,12 @@ def cmd_keep(args):
 def cmd_report(args):
     from . import report as report_module
 
+    if args.all:
+        report_module.rebuild_all()
+        return 0
+    if not args.run:
+        print('say which run, or --all', file=sys.stderr)
+        return 1
     print(report_module.write(args.run, args.into))
     return 0
 
@@ -190,7 +196,10 @@ def cmd_status(args):
 def cmd_overview(args):
     from . import overview as overview_module
 
-    print(overview_module.write_markdown(into=args.into))
+    if args.into:
+        print(overview_module.write_markdown(into=args.into))
+    else:
+        overview_module.write_all()
     return 0
 
 
@@ -265,8 +274,10 @@ def parser():
     p.set_defaults(func=cmd_keep)
 
     p = sub.add_parser('report', help='one run as a self-contained HTML page')
-    p.add_argument('--run', required=True, type=Path)
+    p.add_argument('--run', type=Path)
     p.add_argument('--into', type=Path)
+    p.add_argument('--all', action='store_true',
+                   help="regenerate every archived run's replay page")
     p.set_defaults(func=cmd_report)
 
     p = sub.add_parser('record', help='write the run record')
