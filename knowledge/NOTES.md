@@ -2,6 +2,28 @@
 
 Three runs: seed 7 Half-Troll Warrior twice (alive, depth 1 at ask 125; alive, depth 6 at ask 153) and seed 11 Human Mage (died on depth 1 at character level 1, ask 48). Read after `manuals/INSTRUCTIONS.md`; where they disagree this file is what the game did. **(3 runs) / (2 runs)** = seen on separate runs; **(1 run)** = one run's word, a lead. Evidence for any line is in `knowledge/LEARNED.md` under the `[id]`; `MANUAL-GAPS.md` has the long cheat sheets. Gold, shop stock and depth-1 monsters are those two characters'.
 
+
+## Explore and descend with the game's own pathfinder
+
+**`lxg` to explore, `l>g` to reach a known down staircase, `l<g` to go back up**
+(2 runs: `sonnet-2-again` 156-230 found and used it; earlier runs' failure to
+find any staircase is what made it worth looking for).
+
+- Each must be alone in its ask: a key after `g` cuts the walk to one step, so
+  `lxglxglxg` is three one-square hops, not three walks (1 run, measured both
+  ways at asks 156-164).
+- `>` in look mode with no staircase known does nothing and rings a bell.
+- Taking the stairs is then `>` on its own, and a key sent after a level
+  change is swallowed, so send `> ` with a trailing space (2 runs).
+- Connected stairs make a reroll two asks: `< ` then `> ` gives a fresh level
+  of the same depth. Reroll on a level feeling of 5 or more — the digit on
+  screen is danger, higher is worse (1 run; chapter 15 has that digit the
+  other way round).
+
+**No run has ever found a down staircase by walking.** Four runs and ~350 asks
+found none; the one deliberate descent used `l>g`, and the one other descent
+was a Deep Descent scroll read by luck.
+
 ## Keys that did not do what the manual implied
 - **A `-more-` swallows the next key** (3 runs): a command typed behind one loses its first key and the rest misreads. A space clears a `-more-` and is harmless otherwise (2 runs), so end strings with spaces (`va'   `). Stairs and Deep Descent each end in a `-more-`: a key after `>` in the same string is lost, `<>` left a run in town. [more-swallows-next-key, space-clears-more, level-change-more]
 - **Menu letters are labels, not positions** (3 runs): store rows `a c f h j m n o q r u v y z`; pack `a b c d e f g i m ...` (skips `h j k l`); the **throw prompt has its own letters** (oil `a` there, `b` or `c` in the pack). Read them off the screen. [store-letters-fixed, pack-letters-skip, throw-menu-own-letters]

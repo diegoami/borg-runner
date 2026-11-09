@@ -81,6 +81,14 @@ than by writing code. A tool that reimplements what the game offers costs you
 the chance to find that out, and what you then write in your notebook is about
 your tool instead of about Angband.
 
+== THE TIP THAT MATTERS MOST ==
+
+`lxg` explores, `l>g` walks to a known down staircase, `l<g` back up. Send
+each alone in its ask - any key after `g` cuts the walk to one step. That is
+the game's own pathfinding, it is how the only deliberate descent in any run
+happened, and it is in `manuals/INSTRUCTIONS.md` under "The one thing to take
+from this page". No run has ever found a staircase by walking.
+
 == RULES ==
 
 - Your character is drawn, not chosen: press * at the race menu and * at the

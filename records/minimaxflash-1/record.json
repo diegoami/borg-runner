@@ -1,0 +1,55 @@
+{
+  "asks": 148,
+  "asks_made": 149,
+  "build": {
+    "binary_sha256": "610d5deed6e58c81e6af502f2b0ec720d90883a58ac5493379ca6fab24f44e24",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "54a4cc8b04a2381c2063b41bf687b65e11984b14e2c1547b7c96991fcfb3f8a6",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 585,
+  "character": "High-Elf Druid",
+  "character_level": 1,
+  "class": "Druid",
+  "cost": {
+    "model": "minimax-coding-plan/MiniMax-M3.1-Flash",
+    "played_by": "opencode",
+    "tool_calls": 300
+  },
+  "death_depth": null,
+  "died": false,
+  "exit_code": null,
+  "final_turn": 7433,
+  "gold": 26,
+  "hp": {
+    "max": 13,
+    "now": 13
+  },
+  "keypresses": 1081,
+  "keys_sha256": "ebda604230a18eafc7132e4c45dfeeb945921958cf2234f7659ba95598fb186b",
+  "killed_by": null,
+  "max_character_level": 1,
+  "max_depth": 1,
+  "notebook_lines": 52,
+  "notebook_sha256": "fe06b887b99e58e1f8e7aa86f9ebed0605d151e03e0ab546e98ac4798b591860",
+  "outcome": "ended",
+  "own_tools": [],
+  "race": "High-Elf",
+  "read_before_playing": "Files opened for this run: manuals/INSTRUCTIONS.md (whole), knowledge/NOTES.md (whole), records/OVERVIEW.md, PLAYGAME.txt, CONTINUEGAME.txt (to check it did not apply). Seed 23 chosen: OVERVIEW.md shows only seeds 7 and 11, so 23 is free. Run name minimaxflash-1. (ask 1)",
+  "read_its_own_playbook": false,
+  "run": "minimaxflash-1",
+  "savefile_sha256": "2fb8eddef4fcbdb2c8d2e5be481a591f1b03c02f60d96c0bce11390f4a72060f",
+  "schema": "borg-runner/run-record@1",
+  "screens": 149,
+  "screens_sha256": "0d088689bf1479855a12bbfdca7b35a1f41edbe41619e2003b09626365aba8e1",
+  "seed": 23,
+  "wealth": 611
+}

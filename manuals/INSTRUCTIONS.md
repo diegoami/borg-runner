@@ -6,6 +6,20 @@ Sources, so any line can be checked. `command`/`playing`/`attack`/`birth` = `ven
 
 Original keyset: digits walk (`1-9`, `5` stays), letters are commands. Keys you send are not interpreted: 80x24 screen, game turns advance in tens.
 
+## The one thing to take from this page
+
+**`lxg` explores and `l>g` descends. Use them instead of walking.**
+
+- `lxg` — look, jump the cursor to the nearest square beside unexplored space, walk there. The game pathfinds; one ask covers what a dozen digit-presses would.
+- `l>g` — the same to the nearest **known** down staircase. Then `>` takes it.
+- `l<g` — the same to a known up staircase.
+- Send each **alone in its ask**: any key after `g` interrupts the walk after one step, so `lxglxglxg` gives one-square hops, not three walks.
+- With no staircase known yet, `>` in look mode does nothing (the game rings a bell) and the cursor stays put. Keep exploring with `lxg` until one is on the map.
+
+OBSERVED, `sonnet-2-again` asks 156-230: this is how the only deliberate descent in any run happened — depth 6 to depth 7, after four runs and some 350 asks had never found a staircase at all. One ask walked 11 steps and 110 game turns onto the stairs.
+
+Two runs went wrong here in ways worth not repeating. One spent ~100 asks walking a level blind and found nothing. One wrote itself a 143-line pathfinder, used it for 148 asks, reached depth 1, and never tried `lxg` — the game already had what it was building. **Check the game's own commands before you write code.**
+
 ## 1. Be born (`birth` ; the birth screens)
 - Race menu `*` (random item, Enter selects the highlight), class menu `*`. Stat screen: `a` (point-based), Enter to accept the allocation; Enter for the name, `y` for the history, any key to continue.
 - Level-1 hit points = race hit die + class hit die (+CON) (`src/player-birth.c`: `hitdie = r_mhp + c_mhp`). FACT, `race` hitdie: Hobbit 7; Gnome, Kobold 8; Elf 9; Human, Half-Elf, Half-Orc, Dunadan, High-Elf 10; Dwarf 11; Half-Troll 12. Class die: Warrior 9, Blackguard 8, Paladin 6, Ranger 5, Rogue 4, Priest/Druid/Necromancer 2, Mage 0 (`class` hitdie).
@@ -25,7 +39,7 @@ Original keyset: digits walk (`1-9`, `5` stays), letters are commands. Keys you 
 - Step: a digit. Moving into a monster attacks it, into a door opens it, into a **visible trap tries to disarm it**; `W` + digit walks onto a trap on purpose. `o`/`c` open/close, `D` disarm or lock, `T` tunnel (rubble, veins), `g` pick up, `,` or `5` stay a turn.
 - Run: `.` then a digit; it follows the corridor until you must choose or something disturbs you (`playing`, Disturb: a hit or spell on you, an object or monster in the next square, a known trap, a new level). A count repeats a command: `0`, number, command.
 - `n` repeats the previous command. A keypress interrupts a run, rest or path (Space/Esc are safe).
-- **Walk to a known place for one command** (`playing`, Targeting and Pathfinding, which lists `<`, `>`, `p` as up, down, unknown "respectively"; `src/ui-target.c` agrees): `*` or `l`, then `>` moves the cursor to the nearest *known* down staircase (`<` up), `x` to the nearest square next to unexplored space, then `g` walks you there along the shortest path, stopping when disturbed; `n` resumes. **UNTESTED by any run.** The `autoexplore_commands` option does the same on bare `>`, `<`, `p`, but options may not be changed here.
+- **Walk to a known place for one command** (see "The one thing to take from this page" above; OBSERVED, `sonnet-2-again` 156-230, no longer untested) (`playing`, Targeting and Pathfinding, which lists `<`, `>`, `p` as up, down, unknown "respectively"; `src/ui-target.c` agrees): `*` or `l`, then `>` moves the cursor to the nearest *known* down staircase (`<` up), `x` to the nearest square next to unexplored space, then `g` walks you there along the shortest path, stopping when disturbed; `n` resumes. The `autoexplore_commands` option does the same on bare `>`, `<`, `p`, but options may not be changed here.
 - Level feeling, bottom status line `LF:a-b`: **a is danger, higher = worse** (1 quiet ... 9 omens of death; `src/ui-display.c prt_level_feeling`), `?` until explored; b is loot. Chapter 15's STAIR-01 reads the digit the other way round; do not use its `K_LF_LEAVE`. `^f` repeats the feeling text.
 - Terrain on the status line names where you stand ("Up staircase", "Down staircase", "Open floor"). `>` and `<` work only on those.
 - Stairs are connected (`birth`): after `>` you stand on an up staircase; after `<` on a down one. Leaving a level destroys it; taking a staircase always gives a new level.
@@ -64,12 +78,22 @@ Original keyset: digits walk (`1-9`, `5` stays), letters are commands. Keys you 
 - **POLICY** c15 REST-01/02: rest only when no awake monster can reach you in about 5 turns; rest on a staircase when one is within about 10 steps.
 - Blackguards regenerate HP at half rate; Necromancers and spell-users rest for mana.
 
+- **A trap door is not a way down, it is how you lose control of your descent.**
+  `trap` gives it 2d8 damage (2-16, and a level-1 Mage or Druid has 12 hit
+  points) and it drops you one level **on no staircase**. That second part is
+  the expensive one: arriving off stairs forfeits the connected-stairs escape
+  and the two-ask reroll (`< ` then `> `) that every run which survived has
+  leaned on, and you land in an unexplored level with no known way back up.
+  Recognise it - shown `^`, named by `l`ook - and walk around it. `W`+digit
+  steps onto a trap deliberately; there is no reason to. If you fall through
+  one anyway, find a staircase before you pick a fight.
+
 ## 8. Descend
 - Every level has down staircases (`command`) but you must find one. Ways down, all FACT unless marked:
+  0. **`l>g` then `>`** — the one to use; see the top of this page;
   1. a `>` you walk onto and press `>` on;
-  2. a **trap door** (`trap`: falls one level, 2d8 damage unless you have feather fall; shown `^`, `l`ook names it, `W`+digit walks onto it) **UNTESTED**;
-  3. Scroll of **Deep Descent** (`object`: found from DL1, **not sold**): after 3+1d4 turns you drop to **5 levels below your deepest level reached**, not below where you stand (`src/effect-handler-general.c`), landing on no staircase;
-  4. Scroll of Magic Mapping (65 g, Alchemist when stocked; found from DL5) maps 22 rows x 40 columns around you (`object` `effect-yx`);
+  2. Scroll of **Deep Descent** (`object`: found from DL1, **not sold**): after 3+1d4 turns you drop to **5 levels below your deepest level reached**, not below where you stand (`src/effect-handler-general.c`), landing on no staircase;
+  3. Scroll of Magic Mapping (65 g, Alchemist when stocked; found from DL5) maps 22 rows x 40 columns around you (`object` `effect-yx`);
   5. Word of Recall (in your kit unless that option is on): read in the dungeon it takes you to town, read in town it returns you to your deepest depth after 15-34 turns (c15 TOWN-05).
 - **POLICY** c15 DEPTH-02, minimum kit before going below: DL5 needs Word of Recall, 3+ cure potions and a ranged attack; DL15 needs 100 max HP and about 10 Phase Door. DEPTH-01 says gate depth on the worst single hit of the depth band, not on character level. Treat these as numbers to test.
 

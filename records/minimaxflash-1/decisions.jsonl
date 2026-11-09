@@ -1,0 +1,148 @@
+{"ask": 1, "depth": 0, "keys": " ", "reason": "continue past the splash screen", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "*", "reason": "randomize race, then read the highlight before confirming", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "*", "reason": "randomize the class at the class menu (the character is drawn, not chosen)", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "a\\n", "reason": "choose point-based stats and accept the allocation the game filled in", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "\\n", "reason": "accept the name minimaxflash-1", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "y ", "reason": "accept history, then clear the -more- with a space", "turn": 1}
+{"ask": 7, "depth": 0, "keys": "G", "reason": "open the spell-study prompt to learn the one CL1 verse", "turn": 1}
+{"ask": 8, "depth": 0, "keys": "a", "reason": "choose the Lesser Charms book to study from", "turn": 1}
+{"ask": 9, "depth": 0, "keys": "a", "reason": "learn Detect Life: it reveals every living monster in the area, which is the safety tool this 13-HP druid needs", "turn": 1}
+{"ask": 10, "depth": 0, "keys": "11233333", "reason": "walk from the town stairs to the General Store (1) to see the oil price", "turn": 11}
+{"ask": 11, "depth": 0, "keys": "ph30\\ny ", "reason": "buy 30 flasks of oil (3 gold each) - oil is the Druid's only real attack at CL1", "turn": 81}
+{"ask": 12, "depth": 0, "keys": "pm1\\ny ", "reason": "buy a cloak for +1 AC (6 gold)", "turn": 81}
+{"ask": 13, "depth": 0, "keys": "\\e 999966699966333333", "reason": "leave the General Store and walk to the Alchemy Shop (5) at town (10,48)", "turn": 81}
+{"ask": 14, "depth": 0, "keys": "99993333", "reason": "walk to the Alchemy Shop (5) at town (10,50)", "turn": 211}
+{"ask": 15, "depth": 0, "keys": "pa4\\ny ", "reason": "buy 4 Cure Light Wounds (20 each = 80 gold)", "turn": 281}
+{"ask": 16, "depth": 0, "keys": "pn3\\ny ", "reason": "buy 3 Phase Door scrolls (15 each = 45 gold): the Druid has no escape spell, scrolls are the only way out", "turn": 281}
+{"ask": 17, "depth": 0, "keys": "\\e 777777441114447777114111111", "reason": "leave the Alchemist and walk to the Armoury (2) at town (11,23) to see armour prices", "turn": 281}
+{"ask": 18, "depth": 0, "keys": "M", "reason": "press M for the full-level map to get an absolute view of the town and my position", "turn": 561}
+{"ask": 19, "depth": 0, "keys": "8", "reason": "step up; if the map is right the Armoury entrance is directly above me", "turn": 561}
+{"ask": 20, "depth": 0, "keys": "8", "reason": "step up into the Armoury (the M view was still open and swallowed the previous 8)", "turn": 561}
+{"ask": 21, "depth": 0, "keys": "4", "reason": "step left onto the Armoury door (the '2' is one tile west of me)", "turn": 571}
+{"ask": 22, "depth": 0, "keys": "pf1\\ny ", "reason": "buy Soft Leather Armour (84 gold) for +8 AC - the single biggest survival gain for a 13 HP druid", "turn": 571}
+{"ask": 23, "depth": 0, "keys": "pj1\\ny ", "reason": "buy a Metal Cap (+3 AC) for 24 gold", "turn": 571}
+{"ask": 24, "depth": 0, "keys": "\\e 86666662", "reason": "leave the Armoury and walk up-then-right-then-down onto the General Store door at (11,29)", "turn": 571}
+{"ask": 25, "depth": 0, "keys": "62", "reason": "step right then down onto the General Store door at (11,30)", "turn": 651}
+{"ask": 26, "depth": 0, "keys": "ph9\\ny ", "reason": "buy 9 more flasks of oil (27 gold); 39 flasks total is the most I can carry without going over the 108 lb burden limit", "turn": 661}
+{"ask": 27, "depth": 0, "keys": "\\e 77777899", "reason": "leave the General Store and walk to the town down staircase at (3,27)", "turn": 661}
+{"ask": 28, "depth": 0, "keys": "> ", "reason": "descend to depth 1 and clear the level-change -more- with a space", "turn": 751}
+{"ask": 29, "depth": 1, "keys": "M", "reason": "press M for the full-level map: the map command draws the actual terrain of the whole level, so it may show the down staircase", "turn": 751}
+{"ask": 30, "depth": 1, "keys": "*xg", "reason": "use targeting mode: x picks the nearest unexplored frontier, g walks the path there - one ask of exploration instead of blind steps", "turn": 751}
+{"ask": 31, "depth": 1, "keys": " ", "reason": "clear the -more-", "turn": 751}
+{"ask": 32, "depth": 1, "keys": "*", "reason": "open the targeting mode alone and read its screen before sending x and g", "turn": 761}
+{"ask": 33, "depth": 1, "keys": "xg", "reason": "x targets the nearest unexplored frontier square, g walks the shortest path there", "turn": 761}
+{"ask": 34, "depth": 1, "keys": "*xg", "reason": "try the whole sequence in one ask: open targeting, jump to the frontier, walk there", "turn": 771}
+{"ask": 35, "depth": 1, "keys": "i", "reason": "open the pack: the sidebar still shows Cur AC 0, so the armour, cloak and cap I bought are not worn yet", "turn": 781}
+{"ask": 36, "depth": 1, "keys": "\\ewi", "reason": "leave the item prompt, then wear the Soft Leather Armour (letter i) for +8 AC", "turn": 781}
+{"ask": 37, "depth": 1, "keys": "i", "reason": "read the pack again to get the current item letters after the re-lettering", "turn": 791}
+{"ask": 38, "depth": 1, "keys": "\\ewmwi", "reason": "wear the Metal Cap (m, +3 AC) and the Cloak (i, +1 AC): AC should reach 12", "turn": 791}
+{"ask": 39, "depth": 1, "keys": "*xg*xg*xg*xg*xg", "reason": "chain several frontier hops in one ask to explore depth 1 quickly", "turn": 811}
+{"ask": 40, "depth": 1, "keys": "4444744414", "reason": "walk the computed path (9 steps) to the far end of the room and step west through the open door into unknown space", "turn": 861}
+{"ask": 41, "depth": 1, "keys": "6999633366314", "reason": "walk the computed 13-step path to the farthest frontier cell and one step beyond into the unknown", "turn": 961}
+{"ask": 42, "depth": 1, "keys": "69744777411144", "reason": "walk the 14-step path to the farthest frontier", "turn": 1091}
+{"ask": 43, "depth": 1, "keys": "9996333663144", "reason": "walk the 13-step path to the farthest frontier, avoiding the three worm masses on the way", "turn": 1221}
+{"ask": 44, "depth": 1, "keys": " 663663144", "reason": "clear the -more- with a space, then run the 9-step path out of the worm room toward the southern corridor", "turn": 1324}
+{"ask": 45, "depth": 1, "keys": "qa ", "reason": "quaff a Cure Light Wounds to heal from 4/13 back to full (the quaff prompt lists potion types, and CLW is my only potion, so it should be letter a)", "turn": 1419}
+{"ask": 46, "depth": 1, "keys": "d ", "reason": "quaff the Cure Light Wounds (pack letter d)", "turn": 1419}
+{"ask": 47, "depth": 1, "keys": "477771144", "reason": "walk the 9-step path to the far west end of the room (the open door at the west end is a frontier)", "turn": 1429}
+{"ask": 48, "depth": 1, "keys": "7771144", "reason": "walk the 7-step path to the frontier in the west part of the room", "turn": 1478}
+{"ask": 49, "depth": 1, "keys": "44444444444444444444 ", "reason": "walk west in a long run: the game moves until the real wall, so a long digit string explores a corridor and is robust to map errors", "turn": 1548}
+{"ask": 50, "depth": 1, "keys": "669o ", "reason": "walk 3 tiles to the chest in the pocket room and open it", "turn": 1748}
+{"ask": 51, "depth": 1, "keys": "5 ", "reason": "press 5 in the direction prompt: that is the 'no direction' option, which opens the chest under my feet", "turn": 1778}
+{"ask": 52, "depth": 1, "keys": "\\eg", "reason": "cancel the direction prompt and pick up whatever lies on this square", "turn": 1778}
+{"ask": 53, "depth": 1, "keys": "i", "reason": "check the pack: did the chest give me a scroll?", "turn": 1779}
+{"ask": 54, "depth": 1, "keys": "\\e66666666666666666666 ", "reason": "leave the item prompt and run east along the corridor (the game stops at the real obstacle)", "turn": 1779}
+{"ask": 55, "depth": 1, "keys": "26666666666666666666666 ", "reason": "step down into the east-west corridor and run east along it", "turn": 1849}
+{"ask": 56, "depth": 1, "keys": "qd ", "reason": "quaff a Cure Light Wounds at 6/13 HP while six worm masses crowd me", "turn": 2074}
+{"ask": 57, "depth": 1, "keys": "va' ", "reason": "throw a flask of oil at the nearest worm mass to start clearing the corridor", "turn": 2084}
+{"ask": 58, "depth": 1, "keys": " va' va' ", "reason": "clear the -more- and throw two more flasks of oil at the nearest worm masses", "turn": 2084}
+{"ask": 59, "depth": 1, "keys": " va' ", "reason": "throw another flask of oil at the nearest worm mass", "turn": 2094}
+{"ask": 60, "depth": 1, "keys": "4444444444474444444444111 ", "reason": "leave the worm cluster: run back west into the pocket room and then to the corridor at row 15, which is the only frontier away from the worms", "turn": 2104}
+{"ask": 61, "depth": 1, "keys": "44444444444444444444 ", "reason": "run west through the alcove into unexplored space", "turn": 2354}
+{"ask": 62, "depth": 1, "keys": "888888888888888888 ", "reason": "step up into the alcove and run north into unexplored space", "turn": 2364}
+{"ask": 63, "depth": 1, "keys": "7g", "reason": "step onto the unidentified item (*) north-west of me and pick it up", "turn": 2464}
+{"ask": 64, "depth": 1, "keys": "7", "reason": "step up-left onto the item tile; the previous attempt did not move and printed nothing", "turn": 2464}
+{"ask": 65, "depth": 1, "keys": "14444444444444444 ", "reason": "step into the corridor and run west through the newly found room to reveal its far side", "turn": 2464}
+{"ask": 66, "depth": 1, "keys": "936666666666666696 ", "reason": "walk east along the corridor to the frontier at (6,48)", "turn": 2634}
+{"ask": 67, "depth": 1, "keys": "66666666666666666666 ", "reason": "run east from the corridor end into unexplored space", "turn": 2814}
+{"ask": 68, "depth": 1, "keys": "qd ", "reason": "quaff a Cure Light Wounds at 4/13 HP after a bat hit me", "turn": 2954}
+{"ask": 69, "depth": 1, "keys": " d ", "reason": "clear the -more- and quaff the potion", "turn": 2959}
+{"ask": 70, "depth": 1, "keys": "44 ", "reason": "attack the fruit bat next to me twice with the whip", "turn": 2964}
+{"ask": 71, "depth": 1, "keys": "888888888888888888 ", "reason": "run north up the corridor that is already visible above me", "turn": 2983}
+{"ask": 72, "depth": 1, "keys": "9g ", "reason": "step onto the flask in the small room and pick it up (it may be a potion)", "turn": 3053}
+{"ask": 73, "depth": 1, "keys": "23g ", "reason": "step down-right twice onto the flask and pick it up", "turn": 3053}
+{"ask": 74, "depth": 1, "keys": "6g ", "reason": "step east onto the flask and pick it up", "turn": 3073}
+{"ask": 75, "depth": 1, "keys": "963342 ", "reason": "walk to the frontier cell and step into the unknown square at (12,37)", "turn": 3084}
+{"ask": 76, "depth": 1, "keys": "9996933333 ", "reason": "walk the 10-step path to the frontier cell beyond the closed door", "turn": 3134}
+{"ask": 77, "depth": 1, "keys": "777444714411112214444444444444414444444444444479 ", "reason": "take the longest path (48 steps) to the farthest frontier cell, crossing the level westward", "turn": 3234}
+{"ask": 78, "depth": 1, "keys": "99666666669.8 ", "reason": "walk to the north door and then RUN north, which follows the corridor through the dark instead of stopping every two tiles", "turn": 3443}
+{"ask": 79, "depth": 1, "keys": "9.8 ", "reason": "open the north door and run north into the unexplored area", "turn": 3553}
+{"ask": 80, "depth": 1, "keys": ".8 ", "reason": "run north up the visible corridor", "turn": 3573}
+{"ask": 81, "depth": 1, "keys": "M", "reason": "press M for the whole-level remembered map: it will show any staircase I have already seen but scrolled out of the window", "turn": 3583}
+{"ask": 82, "depth": 1, "keys": "va' ", "reason": "throw oil at the nearest icky thing: DL1 icky things are only 6 hp and give 2 exp, and I need 8 units for CL2", "turn": 3583}
+{"ask": 83, "depth": 1, "keys": "va' ", "reason": "throw oil at the nearest icky thing (the previous throw was eaten by the still-open map view)", "turn": 3583}
+{"ask": 84, "depth": 1, "keys": "' ", "reason": "select the closest monster as the throw target", "turn": 3583}
+{"ask": 85, "depth": 1, "keys": "\\e666.8 ", "reason": "cancel the throw prompt, walk east to the north-south corridor and run north up it", "turn": 3583}
+{"ask": 86, "depth": 1, "keys": "8va' ", "reason": "step north so the centipede comes into light range, then throw a flask of oil at it", "turn": 3623}
+{"ask": 87, "depth": 1, "keys": " 8va' ", "reason": "clear the -more-, step north to bring the centipede into light range, and throw oil at it", "turn": 3633}
+{"ask": 88, "depth": 1, "keys": "\\e2141214411112214444444444444414444444444444479 ", "reason": "cancel the throw and walk the long 46-step path west to the frontier at the western edge of my explored area", "turn": 3643}
+{"ask": 89, "depth": 1, "keys": "4794444444444 ", "reason": "reach the western frontier and run west into unexplored space", "turn": 4073}
+{"ask": 90, "depth": 1, "keys": "666666666666666666 ", "reason": "run east from the frontier cell into unexplored space", "turn": 4113}
+{"ask": 91, "depth": 1, "keys": "va'88 ", "reason": "kill the adjacent bat with oil, then step north toward the corridor", "turn": 4153}
+{"ask": 92, "depth": 1, "keys": "q d 88887889 ", "reason": "quaff a Cure Light Wounds (space clears the prompt's -more-), then walk north up the corridor", "turn": 4163}
+{"ask": 93, "depth": 1, "keys": "8.8 ", "reason": "step north to the frontier and run north up the corridor", "turn": 4253}
+{"ask": 94, "depth": 1, "keys": ".8", "reason": "run north up the corridor (no trailing space this time: a keypress during a run cancels it)", "turn": 4273}
+{"ask": 95, "depth": 1, "keys": "8.8", "reason": "step through the open door and run north", "turn": 4403}
+{"ask": 96, "depth": 1, "keys": "699369666", "reason": "walk the 9-step path to the new northeast frontier", "turn": 4423}
+{"ask": 97, "depth": 1, "keys": "747.8", "reason": "reach the northern frontier and run north", "turn": 4513}
+{"ask": 98, "depth": 1, "keys": "8999999", "reason": "walk to the north edge of the new room", "turn": 4563}
+{"ask": 99, "depth": 1, "keys": "M", "reason": "open the whole-level map to check whether a staircase has scrolled out of my window", "turn": 4633}
+{"ask": 100, "depth": 1, "keys": " 74444441111", "reason": "dismiss the map view and walk the 11-step path to the southwest frontier", "turn": 4633}
+{"ask": 101, "depth": 1, "keys": "63333221411171", "reason": "walk the 14-step path to the southwest frontier", "turn": 4743}
+{"ask": 102, "depth": 1, "keys": "39996988777744", "reason": "walk the 14-step path back north to the frontier", "turn": 4883}
+{"ask": 103, "depth": 1, "keys": "M", "reason": "open the whole-level map to see which direction still has unexplored level (the southern half of the level is untouched)", "turn": 5023}
+{"ask": 104, "depth": 1, "keys": "2", "reason": "dismiss the map view and step south toward the frontier", "turn": 5023}
+{"ask": 105, "depth": 1, "keys": "663333221411178", "reason": "walk the 15-step path to the southern frontier of the blob", "turn": 5023}
+{"ask": 106, "depth": 1, "keys": "22222.4", "reason": "go down to the southern corridor and run west along it to find a way out of the explored region", "turn": 5173}
+{"ask": 107, "depth": 1, "keys": "144447.4", "reason": "step west to the frontier and run west along the corridor", "turn": 5363}
+{"ask": 108, "depth": 1, "keys": "366669888896666666987", "reason": "walk the 21-step path to the northern frontier", "turn": 5423}
+{"ask": 109, "depth": 1, "keys": "939996988777741", "reason": "walk the 15-step path to the northern frontier", "turn": 5633}
+{"ask": 110, "depth": 1, "keys": "3214444444122221444478", "reason": "walk the 22-step path back to the western frontier, where I saw the icky thing, the snake and the bat", "turn": 5783}
+{"ask": 111, "depth": 1, "keys": "maa", "reason": "cast Detect Life to find the living monsters around me (the first cast of a spell also pays 2 experience)", "turn": 5843}
+{"ask": 112, "depth": 1, "keys": "maa", "reason": "cast Detect Life again (the first attempt failed on the 18 percent failure rate)", "turn": 5853}
+{"ask": 113, "depth": 1, "keys": "222214", "reason": "walk to the southern frontier cell", "turn": 5863}
+{"ask": 114, "depth": 1, "keys": "8.8", "reason": "step to the last frontier cell and run north", "turn": 5923}
+{"ask": 115, "depth": 1, "keys": "M", "reason": "open the whole-level map to plan the last exploration push", "turn": 5943}
+{"ask": 116, "depth": 1, "keys": " 4", "reason": "dismiss the map view and step west to the frontier", "turn": 5943}
+{"ask": 117, "depth": 1, "keys": "4.4", "reason": "step west to the frontier and run west", "turn": 5953}
+{"ask": 118, "depth": 1, "keys": "2.2", "reason": "step south and run south into the unknown", "turn": 5963}
+{"ask": 119, "depth": 1, "keys": "4.4", "reason": "step west and run west", "turn": 5973}
+{"ask": 120, "depth": 1, "keys": "4va4", "reason": "step west and throw a flask of oil west at the floating eye (its gaze only hits when adjacent, and it never moves)", "turn": 6033}
+{"ask": 121, "depth": 1, "keys": "4.4", "reason": "step west and run west past the dead eye", "turn": 6043}
+{"ask": 122, "depth": 1, "keys": "4.4", "reason": "step west through the door and run west", "turn": 6083}
+{"ask": 123, "depth": 1, "keys": "4.4", "reason": "run west through the doorway area", "turn": 6103}
+{"ask": 124, "depth": 1, "keys": "4.4", "reason": "run west into the new area", "turn": 6243}
+{"ask": 125, "depth": 1, "keys": "4.4", "reason": "run west", "turn": 6273}
+{"ask": 126, "depth": 1, "keys": "4.4", "reason": "run west", "turn": 6293}
+{"ask": 127, "depth": 1, "keys": "4.4", "reason": "run west along the new corridor", "turn": 6323}
+{"ask": 128, "depth": 1, "keys": "14444", "reason": "walk west to the far frontier cell", "turn": 6333}
+{"ask": 129, "depth": 1, "keys": "74444444", "reason": "move to the western frontier and keep going west", "turn": 6383}
+{"ask": 130, "depth": 1, "keys": "7.8", "reason": "step north-west to the frontier and run north", "turn": 6403}
+{"ask": 131, "depth": 1, "keys": "8.8", "reason": "step north and run north into the unknown", "turn": 6573}
+{"ask": 132, "depth": 1, "keys": "2223.8", "reason": "walk to the northern frontier and run north", "turn": 6613}
+{"ask": 133, "depth": 1, "keys": "6.6", "reason": "step east to the frontier and run east", "turn": 6653}
+{"ask": 134, "depth": 1, "keys": "8.8", "reason": "run north", "turn": 6673}
+{"ask": 135, "depth": 1, "keys": "6.8", "reason": "step north-east and run north", "turn": 6693}
+{"ask": 136, "depth": 1, "keys": "6.8", "reason": "step east and run north into the unknown", "turn": 6703}
+{"ask": 137, "depth": 1, "keys": "maa", "reason": "cast Detect Life again with my last spell point to find a monster to kill for the last 2 experience units", "turn": 6713}
+{"ask": 138, "depth": 1, "keys": "666999", "reason": "walk toward the giant white mouse Detect Life showed", "turn": 6723}
+{"ask": 139, "depth": 1, "keys": "6", "reason": "attack the giant white mouse with the whip - one blow kills it", "turn": 6783}
+{"ask": 140, "depth": 1, "keys": "R4\\n ", "reason": "rest 4 turns to regenerate a spell point, so I can cast Detect Life once more", "turn": 6793}
+{"ask": 141, "depth": 1, "keys": "R12\\n ", "reason": "rest 12 turns to regenerate spell points", "turn": 6833}
+{"ask": 142, "depth": 1, "keys": "11144441147144444444444122311", "reason": "walk the long path back to the frontier in the western part of the explored area", "turn": 6953}
+{"ask": 143, "depth": 1, "keys": "maa", "reason": "cast Detect Life with the regenerated spell point to find a last monster for level 2", "turn": 7243}
+{"ask": 144, "depth": 1, "keys": "6.6", "reason": "run east along the corridor for the last exploration push", "turn": 7253}
+{"ask": 145, "depth": 1, "keys": "M", "reason": "final whole-level map check for a staircase anywhere in the explored region", "turn": 7333}
+{"ask": 146, "depth": 1, "keys": " 444444", "reason": "dismiss the map view and walk west along the corridor for the last time", "turn": 7333}
+{"ask": 147, "depth": 1, "keys": ".4", "reason": "last run west along the corridor", "turn": 7393}
+{"ask": 148, "depth": 1, "keys": ".2", "reason": "last exploration step: run south", "turn": 7413}
