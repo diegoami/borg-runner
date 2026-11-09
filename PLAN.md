@@ -61,7 +61,31 @@ gets deeper.
 
 | # | Task | Status |
 |---|---|---|
-| T10 | Carry a notebook into a later run, and measure whether depth rises | todo |
+| T10 | Carry a notebook into a later run, and measure whether depth rises | **done** |
+| T11 | Decide whether the game's own disturbance flushes the key buffer | todo, owner's call |
+
+**T10, 2026-11-09.** Three runs, same frontend and manual. `sonnet-1` on seed
+7 with nothing inherited reached depth 1 in 125 asks. `sonnet-2` on the same
+seed, inheriting its notes, reached **depth 6** — but by reading an unknown
+scroll that happened to be Deep Descent, which the inherited cheat sheet told
+it to try. One scroll is not a result. `sonnet-3` on seed 11 inherited the same
+notes, chose a Mage for the level-1 stair-detection spell, found the staircase
+at once, and then **died on depth 1** to a small kobold. Depth rose, the cause
+was luck, and the knowledge demonstrably changed how all three played.
+
+**T11, the open question the death raised.** `sonnet-3` was confused by a gas
+trap and then spent sixteen "hold" keys in a single ask while a wounded kobold
+was next to it. It had no way to stop part way through, and died at ten hit
+points.
+
+The frontend currently ignores `TERM_XTRA_FLUSH` on purpose
+(`patch/src/main-agent.c:214`): the game raises it when the player is
+disturbed, and we keep the buffer so that nothing the agent asked for
+disappears without record. Honouring it instead would mean **the game**
+decides when a key string is abandoned — which is exactly D5's "the game's own
+router", and it would have saved that character — but it would also change
+what a recording means, so the three runs already kept would no longer replay
+under the new build. That is the owner's call, not a session's.
 
 ## Not planned
 
