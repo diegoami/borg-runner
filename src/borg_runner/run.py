@@ -16,6 +16,10 @@ from pathlib import Path
 from . import build, pins
 
 RUNS = pins.ROOT / 'runs'
+# A run directory is scratch: git ignores it, and seed plus keys reproduce it
+# exactly. The notebook is the one thing that is not reproducible, because it
+# is what the player worked out, so it is promoted into knowledge/ and kept.
+KNOWLEDGE = pins.ROOT / 'knowledge'
 ASK = 'ask'
 DECISIONS = 'decisions.jsonl'
 KEYS = 'input.txt'
@@ -34,6 +38,65 @@ def directory(name=None):
     (path / ASK).mkdir(exist_ok=True)
     (path / 'save').mkdir(exist_ok=True)
     return path
+
+
+def inherit(run, notebook_path, log=print):
+    """Start a run with somebody else's notes.
+
+    This is the experiment the whole thing is for: if a run that inherits a
+    notebook gets deeper than the run that wrote it, accumulated knowledge is
+    worth something. The inherited file is recorded by hash, because from the
+    moment it is carried forward it is an input under test, not a private
+    memory.
+    """
+    source = Path(notebook_path)
+    text = source.read_text()
+    (Path(run) / NOTEBOOK).write_text(text)
+    log(f'notebook: inherited {source.name}, '
+        f'{len(text.splitlines())} lines, {hashlib.sha256(text.encode()).hexdigest()[:12]}')
+    return {'inherited_from': str(source),
+            'sha256': hashlib.sha256(text.encode()).hexdigest()}
+
+
+def keep(run, into=None, log=print):
+    """Promote a run's notebook into knowledge/, with where it came from.
+
+    Provenance is the whole point: a note is worth what its evidence is worth,
+    and the evidence is the run - its seed, its build and its keys, all of
+    which replay.
+    """
+    run = Path(run)
+    book = run / NOTEBOOK
+    if not book.exists() or not book.read_text().strip():
+        raise FileNotFoundError(f'{run.name} kept no notes')
+    record = json.loads((run / RECORD).read_text()) if (run / RECORD).exists() else {}
+    started = json.loads((run / 'started.json').read_text()) if (run / 'started.json').exists() else {}
+    build = started.get('build') or {}
+    KNOWLEDGE.mkdir(exist_ok=True)
+    target = Path(into) if into else KNOWLEDGE / f'{run.name}.md'
+    header = [
+        f'# Notes from {run.name}',
+        '',
+        'Written by the player during one game, in its own words, and promoted',
+        'here unedited. Every line carries the ask that taught it; the run',
+        'replays from its seed and keys, so any line can be checked.',
+        '',
+        f'- seed: {started.get("seed")}',
+        f'- character: {started.get("character")}',
+        f'- game: {build.get("game")} {str(build.get("commit"))[:12]}',
+        f'- patch: {str(build.get("patch_sha256"))[:12]}',
+        f'- reached: depth {record.get("max_depth")} in {record.get("asks")} asks, '
+        f'{record.get("keypresses")} keypresses, turn {record.get("final_turn")}',
+        f'- outcome: {record.get("outcome")}',
+        f'- keys: {str(record.get("keys_sha256"))[:12]}',
+        f'- notebook: {str(record.get("notebook_sha256"))[:12]}',
+        '',
+        '## The notes',
+        '',
+    ]
+    target.write_text('\n'.join(header) + book.read_text().rstrip() + '\n')
+    log(f'kept: {target}')
+    return target
 
 
 def start(run, seed, out=None, character=None, resume=False, log=print):
@@ -156,7 +219,9 @@ def notebook(run, lines=NOTEBOOK_LINES):
 def remember(run, note, ask=None):
     """Append a note. The player's words, with the ask that taught it."""
     path = Path(run) / NOTEBOOK
-    line = f'- {note.strip()}' + (f' (ask {ask})' if ask is not None else '')
+    # The player may or may not write its own bullet; one is enough.
+    said = note.strip().lstrip('-').strip()
+    line = f'- {said}' + (f' (ask {ask})' if ask is not None else '')
     with path.open('a') as book:
         book.write(line + '\n')
     return path

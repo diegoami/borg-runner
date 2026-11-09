@@ -17,7 +17,8 @@ def a_run(tmp_path, asks=(('1', ' '), ('2', 'a'))):
     (run / 'started.json').write_text(json.dumps({
         'schema': 'borg-runner/started@1', 'seed': 7, 'pid': 1,
         'character': 'r1', 'command': [], 'savefile': str(tmp_path / 'nosave'),
-        'build': {'commit': 'x' * 40}}))
+        'build': {'game': 'angband/angband', 'commit': 'x' * 40,
+                  'patch_sha256': 'y' * 64}}))
     for number, _ in asks:
         (run / run_module.ASK / f'question-{number}.txt').write_text(
             f'ask {number}\nturn {int(number) * 10}\ndepth 1\nmax_depth 2\n'
@@ -103,3 +104,53 @@ def test_a_game_is_born_played_recorded_and_replays_identically(tmp_path):
                             log=lambda *a: None)
     assert verdict['identical'], verdict['differences']
     assert verdict['asks_replayed'] == verdict['asks_recorded']
+
+
+def test_a_note_gets_one_bullet_however_the_player_wrote_it(tmp_path):
+    run = a_run(tmp_path)
+    run_module.remember(run, '- already bulleted', ask=3)
+    run_module.remember(run, 'not bulleted', ask=4)
+    lines = (run / run_module.NOTEBOOK).read_text().splitlines()
+    assert lines == ['- already bulleted (ask 3)', '- not bulleted (ask 4)']
+
+
+def test_the_notebook_is_shown_but_never_corrected(tmp_path):
+    """D4: a wrong belief is a result, so nothing here edits it."""
+    run = a_run(tmp_path)
+    run_module.remember(run, 'something false', ask=1)
+    assert 'something false' in run_module.notebook(run)
+    run_module.answer(run, 2, 'x', reason='later')
+    assert 'something false' in run_module.notebook(run), 'it must survive'
+
+
+def test_keeping_a_notebook_records_where_it_came_from(tmp_path):
+    """Promotion into knowledge/ carries the seed, the build and the hashes."""
+    run = a_run(tmp_path)
+    run_module.remember(run, '`>` needs a down staircase', ask=2)
+    run_module.write_record(run, outcome='stopped')
+    kept = run_module.keep(run, into=tmp_path / 'kept.md', log=lambda *a: None)
+    text = kept.read_text()
+    assert 'seed: 7' in text and 'angband/angband' in text
+    assert '`>` needs a down staircase' in text
+    assert text.count('## The notes') == 1
+
+
+def test_a_run_can_inherit_a_notebook(tmp_path):
+    """T10's mechanism: the next run starts with the last one's notes."""
+    source = tmp_path / 'inherited.md'
+    source.write_text('- oil is thrown with v (ask 83)\n')
+    run = tmp_path / 'fresh'
+    (run / run_module.ASK).mkdir(parents=True)
+    carried = run_module.inherit(run, source, log=lambda *a: None)
+    assert 'oil is thrown' in run_module.notebook(run)
+    assert carried['sha256'] and str(source) in carried['inherited_from']
+
+
+def test_keeping_refuses_a_run_that_learned_nothing(tmp_path):
+    run = a_run(tmp_path)
+    try:
+        run_module.keep(run, into=tmp_path / 'x.md', log=lambda *a: None)
+    except FileNotFoundError as problem:
+        assert 'kept no notes' in str(problem)
+    else:
+        raise AssertionError('an empty notebook should not be promoted')

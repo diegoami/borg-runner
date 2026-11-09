@@ -16,6 +16,8 @@ def cmd_build(args):
 def cmd_play(args):
     """Start a game and leave it waiting for the first answer."""
     run = run_module.directory(args.name)
+    if args.notebook:
+        run_module.inherit(run, args.notebook)
     process = run_module.start(run, args.seed, log=print)
     if not replay_module.wait_for(run, 1, process, timeout=60):
         run_module.stop(run, process)
@@ -123,6 +125,12 @@ def cmd_autoplay(args):
     return 0 if answered else 1
 
 
+def cmd_keep(args):
+    """Promote a run's notebook into knowledge/."""
+    print(run_module.keep(args.run, args.into))
+    return 0
+
+
 def cmd_report(args):
     from . import report as report_module
 
@@ -147,6 +155,8 @@ def parser():
     p = sub.add_parser('play', help='start a game and wait for the first answer')
     p.add_argument('--seed', type=int, required=True)
     p.add_argument('--name')
+    p.add_argument('--notebook', type=Path,
+                   help='start with these notes, from knowledge/ or another run')
     p.set_defaults(func=cmd_play)
 
     p = sub.add_parser('wait', help='show the question waiting now')
@@ -191,6 +201,11 @@ def parser():
     p.add_argument('--manual-pages', action='store_true',
                    help="also put the game's own manual pages in the state")
     p.set_defaults(func=cmd_autoplay)
+
+    p = sub.add_parser('keep', help="promote a run's notebook into knowledge/")
+    p.add_argument('--run', required=True, type=Path)
+    p.add_argument('--into', type=Path)
+    p.set_defaults(func=cmd_keep)
 
     p = sub.add_parser('report', help='one run as a self-contained HTML page')
     p.add_argument('--run', required=True, type=Path)

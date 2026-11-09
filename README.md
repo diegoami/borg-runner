@@ -41,6 +41,13 @@ Four parts, and nothing else:
 4. **Report** — one page per run: what happened, what it believed at the time,
    and what it would do differently.
 
+And one thing is **kept**: `knowledge/`. A run directory is scratch — git
+ignores it, and the seed plus the keys reproduce it exactly. The **notebook**
+is the only part that is not reproducible, because it is what the player
+worked out, so `keep` promotes it into `knowledge/` with its provenance: the
+seed, the build, the depth reached and the hashes. A later run starts from it
+with `play --notebook`, and then the question is whether it gets deeper.
+
 ## Why the screen, and why keys
 
 Both were decided by the owner on 2026-11-09 after a model played a full game
