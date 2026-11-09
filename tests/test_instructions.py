@@ -47,6 +47,8 @@ What it does NOT check, and so what a pass does not mean:
 * **That the pin is right.** The page is checked against `pins.json`; if the
   pin is wrong for the build in use, so is this.
 """
+import os
+
 import pytest
 
 from borg_runner import gamedata, instructions
@@ -68,6 +70,13 @@ KIND_FLOORS = {
 def clones():
     problems = gamedata.clones_at_their_pins()
     if any('not cloned' in p for p in problems):
+        if os.environ.get('BORG_RUNNER_REQUIRE_VENDOR'):
+            # A skip reads as a pass. Where this test is the only thing
+            # standing between the page and silent drift - in CI - a missing
+            # clone has to fail instead.
+            raise AssertionError(
+                'the pinned clones are missing and BORG_RUNNER_REQUIRE_VENDOR '
+                'is set: run scripts/setup.sh')
         pytest.skip('run scripts/setup.sh first')
     assert not problems, '; '.join(problems) + ' - run scripts/setup.sh'
 

@@ -1,0 +1,40 @@
+name: tests
+
+# The page checks itself against the pinned game, which only means something
+# if it runs. Without this, a push that made manuals/INSTRUCTIONS.md disagree
+# with lib/gamedata would be noticed by nobody.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Clone the pinned sources
+        run: bash scripts/setup.sh
+
+      - name: Install
+        run: pip install -e '.[test]'
+
+      - name: Test
+        # The clones are present, so the checks that need them must not skip.
+        env:
+          BORG_RUNNER_REQUIRE_VENDOR: '1'
+        run: python -m pytest -q
+
+      - name: The dashboard is current
+        # A run that forgot to rebuild it would otherwise leave the site
+        # disagreeing with the records it is generated from.
+        run: |
+          python -m borg_runner overview
+          git diff --exit-code -- records/OVERVIEW.md index.html records/overview.html \
+            || { echo 'the dashboard is stale: run "python -m borg_runner overview" and commit'; exit 1; }
