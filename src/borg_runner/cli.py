@@ -139,7 +139,19 @@ def cmd_report(args):
 
 
 def cmd_record(args):
-    print(json.dumps(run_module.write_record(args.run), indent=2, sort_keys=True))
+    cost = None
+    if args.tokens or args.played_by or args.model:
+        cost = {'tokens': args.tokens, 'played_by': args.played_by,
+                'model': args.model, 'tool_calls': args.tool_calls}
+        cost = {name: value for name, value in cost.items() if value}
+    print(json.dumps(run_module.write_record(args.run, cost=cost),
+                     indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_archive(args):
+    """Keep a run in git: the seed, the keys, the reasons and the notes."""
+    print(run_module.archive(args.run, args.into))
     return 0
 
 
@@ -214,7 +226,17 @@ def parser():
 
     p = sub.add_parser('record', help='write the run record')
     p.add_argument('--run', required=True, type=Path)
+    p.add_argument('--tokens', type=int,
+                   help='what the run cost, for a run a session played')
+    p.add_argument('--tool-calls', type=int)
+    p.add_argument('--played-by', help='session, subagent, opencode, openrouter')
+    p.add_argument('--model')
     p.set_defaults(func=cmd_record)
+
+    p = sub.add_parser('archive', help='keep a run in git under records/')
+    p.add_argument('--run', required=True, type=Path)
+    p.add_argument('--into', type=Path)
+    p.set_defaults(func=cmd_archive)
     return top
 
 

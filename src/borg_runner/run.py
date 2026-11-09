@@ -21,12 +21,19 @@ RUNS = pins.ROOT / 'runs'
 # exactly. The notebook is the one thing that is not reproducible, because it
 # is what the player worked out, so it is promoted into knowledge/ and kept.
 KNOWLEDGE = pins.ROOT / 'knowledge'
+# What is kept in git for a run worth citing. The screens are left out on
+# purpose: they are large and `replay` regenerates them byte for byte from the
+# seed and the keys, which is the whole claim of D6. What cannot be
+# regenerated is the seed, the keys, the reasons and the notes.
 ASK = 'ask'
 DECISIONS = 'decisions.jsonl'
 KEYS = 'input.txt'
 RECORD = 'record.json'
 NOTEBOOK = 'notebook.md'
 NOTEBOOK_LINES = 60
+RECORDS = pins.ROOT / 'records'
+ARCHIVED = (RECORD, KEYS, DECISIONS, NOTEBOOK, 'REPORT.md', 'started.json',
+            'manual.json', 'model-calls.jsonl')
 
 # Save and quit. The game writes its savefile and exits cleanly, which is
 # both how a run ends and what `takeover` needs to exist (D7).
@@ -97,6 +104,58 @@ def keep(run, into=None, log=print):
     ]
     target.write_text('\n'.join(header) + book.read_text().rstrip() + '\n')
     log(f'kept: {target}')
+    return target
+
+
+def spend(run):
+    """What the run cost, from the model calls it recorded.
+
+    A run played by a session has no call log, so its cost is written in by
+    whoever ran it (`record --tokens`); a run played through a provider sums
+    its own.
+    """
+    path = Path(run) / 'model-calls.jsonl'
+    if not path.exists():
+        return None
+    calls, tokens, usd, models = 0, 0, 0.0, set()
+    for line in path.read_text().splitlines():
+        if not line.strip():
+            continue
+        call = json.loads(line)
+        calls += 1
+        usage = (call.get('usage') or {}).get('tokens') or {}
+        for field in ('total_tokens', 'input_tokens', 'output_tokens',
+                      'input', 'output', 'reasoning'):
+            value = usage.get(field)
+            if isinstance(value, (int, float)):
+                tokens += int(value) if field != 'total_tokens' else 0
+                if field == 'total_tokens':
+                    tokens += int(value)
+        usd += usage.get('cost') or 0.0
+        served = (call.get('usage') or {}).get('served_model') or call.get('model')
+        if served:
+            models.add(served)
+    return {'model_calls': calls, 'tokens': tokens or None,
+            'usd': round(usd, 6) or None, 'models': sorted(models)}
+
+
+def archive(run, into=None, log=print):
+    """Keep a run in git: the seed, the keys, the reasons and the notes.
+
+    runs/ is scratch and ignored, which is right for the screens and wrong for
+    everything else - the keys are the recording, and they were being thrown
+    away.
+    """
+    run = Path(run)
+    target = Path(into) if into else RECORDS / run.name
+    target.mkdir(parents=True, exist_ok=True)
+    kept = []
+    for name in ARCHIVED:
+        source = run / name
+        if source.exists() and source.stat().st_size:
+            (target / name).write_bytes(source.read_bytes())
+            kept.append(name)
+    log(f'archived: {target} ({", ".join(kept)})')
     return target
 
 
@@ -344,7 +403,7 @@ def stop(run, process, log=print, patience=20.0):
         log('run: the game saved and quit')
 
 
-def write_record(run, process=None, outcome=None):
+def write_record(run, process=None, outcome=None, cost=None):
     """What the run was, in one file, with the keys beside it.
 
     The savefile is copied in, because the build tree's `lib/save` is scratch
@@ -392,6 +451,7 @@ def write_record(run, process=None, outcome=None):
         'savefile_sha256': (hashlib.sha256(live.read_bytes()).hexdigest()
                             if live.exists() else None),
         'outcome': outcome or ('playing' if alive(process) else 'ended'),
+        'cost': cost or spend(run),
         'died': bool(death),
         'killed_by': (death or {}).get('cause'),
         'death_depth': (death or {}).get('depth'),

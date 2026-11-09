@@ -1,0 +1,40 @@
+{
+  "asks": 153,
+  "asks_made": 153,
+  "build": {
+    "binary_sha256": "61f6dd3549142f5883b48d15eaf4e2baa5bd1c44084d7a3b257ff53a903f84a8",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "5c02c7cbbcdd47e620136e1d4b90c66f5d6134672aebf0922ac7b983d5245484",
+    "schema": "borg-runner/build@1"
+  },
+  "cost": {
+    "model": "claude-sonnet-5-5",
+    "played_by": "subagent",
+    "tokens": 172221,
+    "tool_calls": 160
+  },
+  "death_depth": null,
+  "died": false,
+  "exit_code": null,
+  "final_turn": 6056,
+  "keypresses": 637,
+  "keys_sha256": "03a19a1ba55bccb781a8362fd0f13ce83aaaca8360d31acd03c21d5f74f7319d",
+  "killed_by": null,
+  "max_depth": 6,
+  "notebook_lines": 32,
+  "notebook_sha256": "ac1ca8c66ecd29a0c1df392a464cd8bc3b32981f611aff97900ac4d586cc8f14",
+  "outcome": "ended",
+  "run": "sonnet-2",
+  "savefile_sha256": "b06c14afa905ab054110d1d317c4f1df1b50f887d239b51574811ee7d8be0038",
+  "schema": "borg-runner/run-record@1",
+  "screens": 153,
+  "screens_sha256": "6207b949d4328ad8bada2e02eae4e24a23f9afc08485c524998b7765e0f75306",
+  "seed": 7
+}

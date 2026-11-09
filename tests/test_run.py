@@ -185,3 +185,43 @@ def test_a_living_run_has_no_death(tmp_path):
     run = a_run(tmp_path)
     assert run_module.death_of(run) is None
     assert run_module.write_record(run, outcome='stopped')['died'] is False
+
+
+def test_a_run_is_kept_in_git_without_its_screens(tmp_path):
+    """The keys are the recording; the screens replay from them (D6)."""
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='past the splash')
+    run_module.answer(run, 2, '2222', reason='four steps south')
+    run_module.remember(run, 'something learned', ask=1)
+    run_module.write_record(run, outcome='stopped')
+    kept = run_module.archive(run, into=tmp_path / 'kept', log=lambda *a: None)
+    names = sorted(p.name for p in kept.iterdir())
+    assert 'input.txt' in names, 'the keys are the point'
+    assert 'record.json' in names and 'decisions.jsonl' in names
+    assert 'notebook.md' in names
+    assert not any(name.startswith('screen-') for name in names)
+    assert (kept / 'input.txt').read_text() == run_module.keys_sent(run)
+
+
+def test_the_cost_of_a_run_is_recorded(tmp_path):
+    """A session-played run has no call log, so its cost is written in."""
+    run = a_run(tmp_path)
+    record = run_module.write_record(
+        run, outcome='stopped',
+        cost={'tokens': 162466, 'tool_calls': 129, 'played_by': 'subagent'})
+    assert record['cost']['tokens'] == 162466
+    assert record['cost']['played_by'] == 'subagent'
+
+
+def test_a_provider_played_run_sums_its_own_cost(tmp_path):
+    run = a_run(tmp_path)
+    (run / 'model-calls.jsonl').write_text(
+        '{"ask": 1, "model": "m", "usage": {"tokens": {"total_tokens": 100,'
+        ' "cost": 0.001}, "served_model": "served/one"}}\n'
+        '{"ask": 2, "model": "m", "usage": {"tokens": {"total_tokens": 50,'
+        ' "cost": 0.002}, "served_model": "served/two"}}\n')
+    spent = run_module.spend(run)
+    assert spent['model_calls'] == 2
+    assert spent['tokens'] == 150
+    assert spent['usd'] == 0.003
+    assert spent['models'] == ['served/one', 'served/two']

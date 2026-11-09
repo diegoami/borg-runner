@@ -160,10 +160,21 @@ def facts(data):
     if data['replay']:
         rows.append(('replay', 'identical' if data['replay'].get('identical')
                                else 'DIFFERED'))
-    spend = sum((((call.get('usage') or {}).get('tokens') or {}).get('cost') or 0)
-                for call in data['calls'].values())
-    if spend:
-        rows.append(('model cost', f'${spend:.4f} over {len(data["calls"])} calls'))
+    cost = record.get('cost') or {}
+    if cost.get('tokens'):
+        shown = f"{cost['tokens']:,} tokens"
+        if cost.get('tool_calls'):
+            shown += f", {cost['tool_calls']} tool calls"
+        if cost.get('usd'):
+            shown += f", ${cost['usd']:.4f}"
+        rows.append(('cost', shown))
+    elif cost.get('usd'):
+        rows.append(('cost', f"${cost['usd']:.4f} over "
+                             f"{cost.get('model_calls')} model calls"))
+    if cost.get('played_by') or cost.get('model') or cost.get('models'):
+        rows.append(('played by', cost.get('played_by') or ''))
+        rows.append(('model', cost.get('model')
+                     or ', '.join(cost.get('models') or [])))
     return [(name, value) for name, value in rows if value not in (None, '')]
 
 

@@ -1,0 +1,125 @@
+{"ask": 1, "depth": 0, "keys": " ", "reason": "past splash", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "i", "reason": "highlight Half-Troll", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "\\n", "reason": "select Half-Troll", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "\\n", "reason": "select Warrior", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "\\n", "reason": "point-based", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "\\n", "reason": "accept stats", "turn": 1}
+{"ask": 7, "depth": 0, "keys": "\\n", "reason": "accept name", "turn": 1}
+{"ask": 8, "depth": 0, "keys": "y", "reason": "accept history", "turn": 1}
+{"ask": 9, "depth": 0, "keys": "\\n", "reason": "continue", "turn": 1}
+{"ask": 10, "depth": 0, "keys": "i", "memory": "Half-Troll Warrior seed 7, 146 gold, standing on town down staircase at top right. Plan: 5 Alchemist (phase, CLW), 1 General (oil, CLW?), then dive.", "reason": "check inventory", "turn": 1}
+{"ask": 11, "depth": 0, "keys": "\\e/", "reason": "check equipment", "turn": 1}
+{"ask": 12, "depth": 0, "keys": "\\e\\ee", "reason": "equipment list", "turn": 1}
+{"ask": 13, "depth": 0, "keys": "\\e2223662", "reason": "walk to General Store 1", "turn": 1}
+{"ask": 14, "depth": 0, "keys": "ph", "reason": "buy oil", "turn": 61}
+{"ask": 15, "depth": 0, "keys": "15\\n", "reason": "15 flasks", "turn": 61}
+{"ask": 16, "depth": 0, "keys": "ypm1\\ny", "reason": "accept; buy cloak", "turn": 61}
+{"ask": 17, "depth": 0, "keys": "wf", "reason": "wear cloak", "turn": 61}
+{"ask": 18, "depth": 0, "keys": "\\e84422222226", "reason": "leave store, walk toward 5 Alchemist", "turn": 61}
+{"ask": 19, "depth": 0, "keys": "6", "reason": "enter alchemist", "turn": 181}
+{"ask": 20, "depth": 0, "keys": "po3\\nypa2\\ny", "reason": "buy 3 phase, 2 CLW", "turn": 181}
+{"ask": 21, "depth": 0, "keys": "\\e", "reason": "cancel messy prompt", "turn": 181}
+{"ask": 22, "depth": 0, "keys": "pa", "reason": "buy CLW", "turn": 181}
+{"ask": 23, "depth": 0, "keys": "2\\n", "reason": "quantity 2", "turn": 181}
+{"ask": 24, "depth": 0, "keys": "y", "reason": "confirm", "turn": 181}
+{"ask": 25, "depth": 0, "keys": "\\n\\e44888888878888", "reason": "leave store, walk back to down staircase", "turn": 181}
+{"ask": 26, "depth": 0, "keys": "i", "memory": "Half-Troll Warrior seed 7. Bought 15 oil, cloak(worn), 3 Phase, 2 CLW. Have Word of Recall, Berserk potion. On town > now. Plan: dive, throw oil (v) at tough things, melee weak ones.", "reason": "check inventory letters", "turn": 321}
+{"ask": 27, "depth": 0, "keys": "\\e>", "reason": "descend", "turn": 321}
+{"ask": 28, "depth": 1, "keys": " ", "reason": "dismiss more", "turn": 321}
+{"ask": 29, "depth": 1, "keys": ".4", "reason": "run west along corridor", "turn": 321}
+{"ask": 30, "depth": 1, "keys": ".4.4.4", "reason": "run west", "turn": 371}
+{"ask": 31, "depth": 1, "keys": ".8.8", "reason": "run north", "turn": 391}
+{"ask": 32, "depth": 1, "keys": ".8.6.8.6.8.4", "reason": "run along twisty passage", "turn": 411}
+{"ask": 33, "depth": 1, "keys": ".6.6.6", "reason": "run east", "turn": 451}
+{"ask": 34, "depth": 1, "keys": ".8.6.8.6", "reason": "explore", "turn": 551}
+{"ask": 35, "depth": 1, "keys": ".4", "reason": "run west along the room's north wall", "turn": 611}
+{"ask": 36, "depth": 1, "keys": ".4.4.4.4", "reason": "run west", "turn": 661}
+{"ask": 37, "depth": 1, "keys": "7777777777", "reason": "walk northwest in the open cave", "turn": 701}
+{"ask": 38, "depth": 1, "keys": "69999999", "reason": "follow the diagonal passage NE", "turn": 711}
+{"ask": 39, "depth": 1, "keys": "l", "reason": "look at monsters", "turn": 731}
+{"ask": 40, "depth": 1, "keys": "\\e6", "reason": "approach c", "turn": 731}
+{"ask": 41, "depth": 1, "keys": "999", "reason": "attack sleeping c", "turn": 741}
+{"ask": 42, "depth": 1, "keys": "66666", "reason": "kill the ant", "turn": 757}
+{"ask": 43, "depth": 1, "keys": "998g", "reason": "pick up scroll", "turn": 793}
+{"ask": 44, "depth": 1, "keys": "rg", "reason": "read-test unknown scroll at DL1 while safe", "turn": 814}
+{"ask": 45, "depth": 1, "keys": "3223.6", "reason": "head to east exit", "turn": 824}
+{"ask": 46, "depth": 1, "keys": ".6.6.6", "reason": "continue east", "turn": 924}
+{"ask": 47, "depth": 1, "keys": ".8.8.8", "reason": "north", "turn": 954}
+{"ask": 48, "depth": 1, "keys": ".8.8.8", "reason": "north", "turn": 1004}
+{"ask": 49, "depth": 1, "keys": "88888", "reason": "approach the worm and potion", "turn": 1084}
+{"ask": 50, "depth": 1, "keys": "666", "reason": "melee the fruit bat", "turn": 1134}
+{"ask": 51, "depth": 1, "keys": "7888", "reason": "kill the worm", "turn": 1157}
+{"ask": 52, "depth": 1, "keys": "2222", "reason": "attack worm", "turn": 1197}
+{"ask": 53, "depth": 1, "keys": "999", "reason": "attack adjacent worm NE", "turn": 1237}
+{"ask": 54, "depth": 1, "keys": "\\n999", "reason": "finish worm", "turn": 1243}
+{"ask": 55, "depth": 1, "keys": "666g", "reason": "pick up ~", "turn": 1281}
+{"ask": 56, "depth": 1, "keys": "1444444gi", "reason": "get the potion, check inv", "turn": 1312}
+{"ask": 57, "depth": 1, "keys": "\\eqe", "reason": "drink-test unknown potion", "turn": 1383}
+{"ask": 58, "depth": 1, "keys": "3222222.2.2", "reason": "leave room, go back south", "turn": 1393}
+{"ask": 59, "depth": 1, "keys": "1.2.2.2", "reason": "run south down corridor", "turn": 1453}
+{"ask": 60, "depth": 1, "keys": ".2.2.2", "reason": "south", "turn": 1523}
+{"ask": 61, "depth": 1, "keys": "44444444441444444", "reason": "walk west past the bat/ant room toward unexplored west", "turn": 1693}
+{"ask": 62, "depth": 1, "keys": "9.8.8.8", "reason": "north passage", "turn": 1853}
+{"ask": 63, "depth": 1, "keys": "9999.8.8", "reason": "north", "turn": 1893}
+{"ask": 64, "depth": 1, "keys": "4.4.4.4", "reason": "west", "turn": 1913}
+{"ask": 65, "depth": 1, "keys": "4.2.2.2.2", "reason": "southwest passage", "turn": 1953}
+{"ask": 66, "depth": 1, "keys": "2.2.2.2", "reason": "south", "turn": 2003}
+{"ask": 67, "depth": 1, "keys": "1<", "reason": "reroll: cave level is slow, take < to town then > to a fresh DL1", "turn": 2023}
+{"ask": 68, "depth": 0, "keys": " ", "reason": "dismiss more", "turn": 2033}
+{"ask": 69, "depth": 0, "keys": ">", "reason": "fresh DL1", "turn": 2033}
+{"ask": 70, "depth": 1, "keys": " ", "reason": "dismiss more", "turn": 2033}
+{"ask": 71, "depth": 1, "keys": ".4.4.4", "reason": "explore west", "turn": 2033}
+{"ask": 72, "depth": 1, "keys": "8999", "reason": "kill worm", "turn": 2103}
+{"ask": 73, "depth": 1, "keys": "4444", "reason": "attack worm", "turn": 2123}
+{"ask": 74, "depth": 1, "keys": "2663.2", "reason": "try the south exit near the start corridor", "turn": 2139}
+{"ask": 75, "depth": 1, "keys": ".4.4.4", "reason": "west", "turn": 2159}
+{"ask": 76, "depth": 1, "keys": ".4.4", "reason": "west", "turn": 2239}
+{"ask": 77, "depth": 1, "keys": "3.2.2", "reason": "through the door south", "turn": 2259}
+{"ask": 78, "depth": 1, "keys": "22", "reason": "enter room", "turn": 2299}
+{"ask": 79, "depth": 1, "keys": "3333", "reason": "kill worm", "turn": 2319}
+{"ask": 80, "depth": 1, "keys": "7774444444.8", "reason": "head to the gap in the north wall at far west of room", "turn": 2348}
+{"ask": 81, "depth": 1, "keys": "v", "reason": "throw oil at C", "turn": 2618}
+{"ask": 82, "depth": 1, "keys": "a", "reason": "choose oil", "turn": 2618}
+{"ask": 83, "depth": 1, "keys": "'", "reason": "throw at closest", "turn": 2618}
+{"ask": 84, "depth": 1, "keys": "\\n", "reason": "see throw result", "turn": 2618}
+{"ask": 85, "depth": 1, "keys": "\\n", "reason": "continue", "turn": 2618}
+{"ask": 86, "depth": 1, "keys": "\\nva'", "reason": "second oil", "turn": 2618}
+{"ask": 87, "depth": 1, "keys": "\\n222", "reason": "melee Fang in corridor", "turn": 2628}
+{"ask": 88, "depth": 1, "keys": "\\n222", "reason": "keep attacking Fang", "turn": 2648}
+{"ask": 89, "depth": 1, "keys": "\\n2", "reason": "attack Fang", "turn": 2657}
+{"ask": 90, "depth": 1, "keys": "R&\\n", "reason": "rest", "turn": 2672}
+{"ask": 91, "depth": 1, "keys": ".2.2.2", "reason": "continue south", "turn": 3052}
+{"ask": 92, "depth": 1, "keys": "1.4.4", "reason": "west into room", "turn": 3082}
+{"ask": 93, "depth": 1, "keys": "4441111", "reason": "attack the sleeping c", "turn": 3112}
+{"ask": 94, "depth": 1, "keys": "7g", "reason": "pick up item", "turn": 3158}
+{"ask": 95, "depth": 1, "keys": ".4.4", "reason": "west exit", "turn": 3169}
+{"ask": 96, "depth": 1, "keys": "44444444444.4", "reason": "west", "turn": 3189}
+{"ask": 97, "depth": 1, "keys": "7.4.4", "reason": "west", "turn": 3389}
+{"ask": 98, "depth": 1, "keys": "7444.4.4", "reason": "west exit", "turn": 3419}
+{"ask": 99, "depth": 1, "keys": "\\n888", "reason": "melee wild cat", "turn": 3478}
+{"ask": 100, "depth": 1, "keys": "7777.8.4", "reason": "follow the NW passage", "turn": 3498}
+{"ask": 101, "depth": 1, "keys": "va'", "reason": "oil at the awake centipede", "turn": 3578}
+{"ask": 102, "depth": 1, "keys": "\\n\\n", "reason": "see result", "turn": 3578}
+{"ask": 103, "depth": 1, "keys": "\\eva\\n", "reason": "throw at current target", "turn": 3588}
+{"ask": 104, "depth": 1, "keys": "5", "reason": "throw at target (5)", "turn": 3588}
+{"ask": 105, "depth": 1, "keys": "  ", "reason": "dismiss", "turn": 3588}
+{"ask": 106, "depth": 1, "keys": "1112221111", "reason": "kill the sleeping centipede", "turn": 3598}
+{"ask": 107, "depth": 1, "keys": "9999996666669.8", "reason": "go to the NE exit of the room", "turn": 3677}
+{"ask": 108, "depth": 1, "keys": ".8.8.8.8", "reason": "north", "turn": 3837}
+{"ask": 109, "depth": 1, "keys": "8888888888", "reason": "north", "turn": 3877}
+{"ask": 110, "depth": 1, "keys": "9888888888", "reason": "north along the east column", "turn": 3937}
+{"ask": 111, "depth": 1, "keys": ".6.6.6", "reason": "east", "turn": 3977}
+{"ask": 112, "depth": 1, "keys": "66.6.6", "reason": "through the open door east", "turn": 4107}
+{"ask": 113, "depth": 1, "keys": ".6.6.6", "reason": "east corridor", "turn": 4147}
+{"ask": 114, "depth": 1, "keys": "66666666.6.6", "reason": "east", "turn": 4177}
+{"ask": 115, "depth": 1, "keys": "6666.6.6", "reason": "east", "turn": 4277}
+{"ask": 116, "depth": 1, "keys": "996666g9666g", "reason": "collect ( and ?", "turn": 4337}
+{"ask": 117, "depth": 1, "keys": "ri", "reason": "read unknown scroll", "turn": 4439}
+{"ask": 118, "depth": 1, "keys": " i", "reason": "check inventory", "turn": 4439}
+{"ask": 119, "depth": 1, "keys": "\\e333.6.6", "reason": "east door", "turn": 4449}
+{"ask": 120, "depth": 1, "keys": ".6.6.6", "reason": "east", "turn": 4499}
+{"ask": 121, "depth": 1, "keys": "88.8.8", "reason": "open door north and run", "turn": 4599}
+{"ask": 122, "depth": 1, "keys": "9999999", "reason": "follow diagonal NE", "turn": 4639}
+{"ask": 123, "depth": 1, "keys": "6999999", "reason": "east then NE", "turn": 4639}
+{"ask": 124, "depth": 1, "keys": "\u0018", "reason": "the session stopped the run", "turn": 4659}
+{"ask": 125, "depth": 1, "keys": "\\e", "reason": "accept the save", "turn": 4659}

@@ -41,7 +41,11 @@ Four parts, and nothing else:
 4. **Report** — one page per run: what happened, what it believed at the time,
    and what it would do differently.
 
-And one thing is **kept**: `knowledge/`. A run directory is scratch — git
+Two things are **kept in git**, and the run directory is not one of them:
+`records/` holds each run's seed, **every key**, the reasons and the notes —
+everything that cannot be regenerated. The screens are left out because
+`replay` reproduces them byte for byte from the seed and the keys, which is
+the whole claim of D6. And `knowledge/`. A run directory is scratch — git
 ignores it, and the seed plus the keys reproduce it exactly. The **notebook**
 is the only part that is not reproducible, because it is what the player
 worked out, so `keep` promotes it into `knowledge/` with its provenance: the

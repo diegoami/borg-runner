@@ -1,0 +1,47 @@
+{"ask": 1, "depth": 0, "keys": " ", "reason": "past splash", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "\\n", "reason": "Human race; plan Mage because Find Traps/Doors/Stairs spell at CL1 detects stairs (strategy manual ch14 s2.3)", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "b\\n", "reason": "Mage", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "a\\n", "reason": "point-based", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "\\n", "reason": "accept name", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "y", "reason": "accept history", "turn": 1}
+{"ask": 7, "depth": 0, "keys": " ", "reason": "continue", "turn": 1}
+{"ask": 8, "depth": 0, "keys": "i", "reason": "look at inventory", "turn": 1}
+{"ask": 9, "depth": 0, "keys": "\\eG", "reason": "study", "turn": 1}
+{"ask": 10, "depth": 0, "keys": "a", "reason": "pick book", "turn": 1}
+{"ask": 11, "depth": 0, "keys": "c", "reason": "learn Find Traps/Doors/Stairs first: descending is the goal; oil handles kills", "turn": 1}
+{"ask": 12, "depth": 0, "keys": "mac", "reason": "cast for first-cast xp", "turn": 11}
+{"ask": 13, "depth": 0, "keys": " 2222222226662", "reason": "walk to General store 1", "turn": 11}
+{"ask": 14, "depth": 0, "keys": "2", "reason": "enter General store", "turn": 151}
+{"ask": 15, "depth": 0, "keys": "pj20\\ny", "reason": "buy 20 flasks of oil", "turn": 151}
+{"ask": 16, "depth": 0, "keys": "pn\\n", "reason": "buy cloak (default qty 1?)", "turn": 151}
+{"ask": 17, "depth": 0, "keys": "y", "reason": "confirm", "turn": 151}
+{"ask": 18, "depth": 0, "keys": "we", "reason": "wear cloak", "turn": 151}
+{"ask": 19, "depth": 0, "keys": "pm\\ny", "reason": "spare torch", "turn": 151}
+{"ask": 20, "depth": 0, "keys": " \\e8444444444444444", "reason": "leave, walk west along street toward Alchemist 5", "turn": 151}
+{"ask": 21, "depth": 0, "keys": "442", "reason": "enter Alchemist", "turn": 321}
+{"ask": 22, "depth": 0, "keys": "ph6\\ny", "reason": "buy 6 Phase Door", "turn": 341}
+{"ask": 23, "depth": 0, "keys": " pa5\\ny", "reason": "buy 5 CLW", "turn": 341}
+{"ask": 24, "depth": 0, "keys": " i", "reason": "inventory check", "turn": 341}
+{"ask": 25, "depth": 0, "keys": "\\es", "reason": "try selling Word of Recall to see its price", "turn": 341}
+{"ask": 26, "depth": 0, "keys": "\\e\\e89666666666666668", "reason": "walk to Armoury 2", "turn": 341}
+{"ask": 27, "depth": 0, "keys": "pm\\ny", "reason": "buy Leather Shield [8]", "turn": 511}
+{"ask": 28, "depth": 0, "keys": "wi", "reason": "wear shield", "turn": 511}
+{"ask": 29, "depth": 0, "keys": "\\e1778888888", "reason": "walk back to > staircase", "turn": 511}
+{"ask": 30, "depth": 0, "keys": "R&\\n>", "reason": "rest to full SP then descend", "turn": 621}
+{"ask": 31, "depth": 1, "keys": " mac", "reason": "dismiss, cast stair detection on arrival", "turn": 701}
+{"ask": 32, "depth": 1, "keys": "\\emac", "reason": "retry cast (a stray key was eaten by a -more-)", "turn": 701}
+{"ask": 33, "depth": 1, "keys": " ", "reason": "dismiss more", "turn": 701}
+{"ask": 34, "depth": 1, "keys": ".8", "reason": "run north along corridor", "turn": 711}
+{"ask": 35, "depth": 1, "keys": "8.4", "reason": "step into open area, run west", "turn": 741}
+{"ask": 36, "depth": 1, "keys": "6666666g", "reason": "get the ~ item", "turn": 831}
+{"ask": 37, "depth": 1, "keys": "i", "reason": "check what the ~ was", "turn": 902}
+{"ask": 38, "depth": 1, "keys": "\\e.8", "reason": "run north in room", "turn": 902}
+{"ask": 39, "depth": 1, "keys": "69.8", "reason": "go through the north gap", "turn": 942}
+{"ask": 40, "depth": 1, "keys": "v", "reason": "throw oil at adjacent kobold; look at menu", "turn": 992}
+{"ask": 41, "depth": 1, "keys": "a'", "reason": "throw at nearest", "turn": 992}
+{"ask": 42, "depth": 1, "keys": " va5", "reason": "throw again at target", "turn": 992}
+{"ask": 43, "depth": 1, "keys": ".8", "reason": "run north", "turn": 1012}
+{"ask": 44, "depth": 1, "keys": ".8", "reason": "continue north", "turn": 1122}
+{"ask": 45, "depth": 1, "keys": "ssssssssss", "reason": "wait out confusion", "turn": 1182}
+{"ask": 46, "depth": 1, "keys": "\\e,,,,,,,,,,", "reason": "hold with comma to wait out confusion", "turn": 1182}
+{"ask": 47, "depth": 1, "keys": ",,,,,,,,,,,,,,,,", "reason": "keep holding", "turn": 1282}
