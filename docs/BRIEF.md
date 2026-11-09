@@ -1,5 +1,10 @@
 # If you are here to play
 
+**The short form of this file is [PLAYGAME.txt](../PLAYGAME.txt)**, which is
+what a harness is handed. Read that if you are about to play;
+[CONTINUEGAME.txt](../CONTINUEGAME.txt) is the same for carrying a run on.
+What follows is the same thing at length, with the reasons.
+
 You are the player. Read this, read the manuals, and play.
 
 **Read everything in `knowledge/`** — every earlier run's notebook, the filed

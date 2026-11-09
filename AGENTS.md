@@ -16,6 +16,11 @@ that belongs to the model, in the prompt.
 
 ## If you are here to play
 
+**Use [PLAYGAME.txt](PLAYGAME.txt)** for a new game, or
+[CONTINUEGAME.txt](CONTINUEGAME.txt) to carry a stopped one on. They are the
+prompt, kept in one place so every run is played under the same rules; what
+follows is the longer explanation behind them.
+
 You are the player, not the maintainer. Read the brief
 (`docs/BRIEF.md`) and nothing else from this repository — not the plan, not
 other runs' reports. Your judgement at a position has to be independent of

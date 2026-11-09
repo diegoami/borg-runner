@@ -13,6 +13,45 @@ Those runs are the input for [borg-agent](https://github.com/diegoami/borg-agent
 death analyser and, through it, for the Rust
 [borg-rs](https://github.com/diegoami/borg-rs).
 
+## Running one
+
+Two files are the entry points. Hand either to any harness — Codex, a Claude
+session, a terminal — as one line, with the placeholders filled in:
+
+```
+Follow the prompt in /home/diego/projects/borg-runner/PLAYGAME.txt — RUNNAME=codex-1
+Follow the prompt in /home/diego/projects/borg-runner/CONTINUEGAME.txt — FROM=sonnet-2-again
+```
+
+[PLAYGAME.txt](PLAYGAME.txt) starts a new game: the reading, the loop, the
+rules and what to run when it stops. Give it a `SEED` as well to play a
+dungeon another run has played, or leave it out and it picks an unused one and
+records which. [CONTINUEGAME.txt](CONTINUEGAME.txt) carries a stopped run on
+from where it left off, with that character's level, gear, wounds and notes.
+
+**Runs do not interfere.** Each owns its directory, game process, seed,
+character and notebook; several play at once, and that is how a claim gets a
+second witness (D15). The names must differ, or the tool refuses and says
+which run holds the name.
+
+While they play, from anywhere:
+
+```sh
+.venv/bin/python -m borg_runner status     # depth, asks, pace, dead or alive
+.venv/bin/python -m borg_runner overview   # the table of every archived run
+```
+
+The table is also a page: **<https://diegoami.github.io/borg-runner/>**, where
+each run links to a replay you can step through, screen by screen.
+
+By hand, the whole of it is:
+
+```sh
+.venv/bin/python -m borg_runner play --seed 7 --name mine
+.venv/bin/python -m borg_runner wait --run runs/mine
+.venv/bin/python -m borg_runner answer 1 ' ' --run runs/mine --reason "past the splash"
+```
+
 ## The loop
 
 ```
