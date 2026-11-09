@@ -731,6 +731,11 @@ def status(where=None):
                     seconds.append(took)
         pace = round(sorted(seconds)[len(seconds) // 2], 1) if seconds else None
         last = question(run, asked_at[-1]) if asked_at else {}
+        # The deepest reached, not where it happens to be standing. Reporting
+        # only the current depth made a run that had been to depth 1 and come
+        # back up read as never having left the town.
+        deepest = max([(question(run, number).get('depth') or 0)
+                       for number in asked_at] or [0])
         # A dead character's game is still running: it draws the tombstone and
         # waits for a key. Reporting that as "playing" is a lie the status
         # line should not tell.
@@ -754,7 +759,8 @@ def status(where=None):
             'answered': len(taken),
             'asked': len(asked_at),
             'turn': last.get('turn'),
-            'depth': last.get('depth'),
+            'depth': deepest,
+            'depth_now': last.get('depth'),
             'character': record.get('character') or last.get('race'),
             'outcome': ('died: ' + str(record.get('killed_by'))
                         if record.get('died') else record.get('outcome')),

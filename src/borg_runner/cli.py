@@ -171,13 +171,14 @@ def cmd_status(args):
     if not standing:
         print('no runs yet')
         return 0
-    print(f"{'run':<22} {'state':<17} {'asks':>9} {'depth':>5} {'turn':>6} "
+    print(f"{'run':<22} {'state':<17} {'asks':>9} {'deep':>4} {'now':>4} {'turn':>6} "
           f"{'s/ask':>6} {'notes':>5}  character / outcome")
     for row in standing:
         state = row['state']
         asks = f"{row['answered']}/{row['asked']}"
         print(f"{row['run']:<22} {state:<17} {asks:>9} "
-              f"{str(row['depth'] if row['depth'] is not None else '-'):>5} "
+              f"{str(row['depth'] if row['depth'] is not None else '-'):>4} "
+              f"{str(row['depth_now'] if row['depth_now'] is not None else '-'):>4} "
               f"{str(row['turn'] or '-'):>6} "
               f"{str(row['seconds_per_decision'] or '-'):>6} "
               f"{row['notes']:>5}  "

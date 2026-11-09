@@ -458,3 +458,18 @@ def test_the_game_is_started_in_its_own_session(tmp_path):
     import inspect
     source = inspect.getsource(run_module.start)
     assert 'start_new_session=True' in source
+
+
+def test_status_reports_the_deepest_depth_not_the_current_one(tmp_path, monkeypatch):
+    """A run that went down and came back up had not "never left the town"."""
+    monkeypatch.setattr(run_module, 'RUNS', tmp_path)
+    run = a_run(tmp_path)
+    (run / run_module.ASK / 'question-1.txt').write_text(
+        'ask 1\nturn 10\ndepth 1\nmax_depth 1\ncursor 0 0\n')
+    (run / run_module.ASK / 'question-2.txt').write_text(
+        'ask 2\nturn 20\ndepth 0\nmax_depth 1\ncursor 0 0\n')
+    (run / 'started.json').write_text(json.dumps(
+        {'seed': 7, 'character': 'r1', 'pid': 999999, 'build': {}}))
+    row, = [r for r in run_module.status(tmp_path) if r['run'] == 'r1']
+    assert row['depth'] == 1, 'the deepest it reached'
+    assert row['depth_now'] == 0, 'and where it is standing'
