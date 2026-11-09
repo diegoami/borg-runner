@@ -275,8 +275,14 @@ def start(run, seed, out=None, character=None, resume=False, log=print):
     command = [str(game), '-magent', f'-u{character}',
                '--', f'-d{run / ASK}', f'-s{seed}']
     handle = (run / 'game.log').open('w')
+    # Detached, in a session of its own. The game outlives the command that
+    # starts it - it sits waiting for key files - and a harness that kills its
+    # tool call's process group would otherwise take the game with it. A Codex
+    # session did exactly that: the game answered one key and vanished, with
+    # an empty log and no error.
     process = subprocess.Popen(command, cwd=game.parent, stdin=subprocess.DEVNULL,
-                               stdout=handle, stderr=subprocess.STDOUT)
+                               stdout=handle, stderr=subprocess.STDOUT,
+                               start_new_session=True)
     (run / 'started.json').write_text(json.dumps({
         'schema': 'borg-runner/started@1',
         'seed': seed,

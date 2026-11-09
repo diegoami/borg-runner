@@ -446,3 +446,15 @@ def test_a_run_that_only_repeats_what_it_was_given_is_not_promoted(tmp_path):
         assert 'added nothing' in str(problem)
     else:
         raise AssertionError('it added nothing, so there is nothing to promote')
+
+
+def test_the_game_is_started_in_its_own_session(tmp_path):
+    """It must outlive the command that starts it.
+
+    The game waits for key files long after `play` returns, so a harness that
+    kills its tool call's process group would kill the game too - which a
+    Codex session did, twice, one ask in.
+    """
+    import inspect
+    source = inspect.getsource(run_module.start)
+    assert 'start_new_session=True' in source

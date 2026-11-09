@@ -41,6 +41,12 @@ it, and the whole question here is what a reader does differently.
 Do not pass --notebook. Inherited knowledge belongs in the reading; your
 notebook holds only what you find.
 
+The game runs on by itself between your calls, waiting for the next key file,
+and it is started in a session of its own so that it survives whatever
+harness you are. If `wait` ever says the run has exited after you have only
+just started it, say so rather than starting over: that is a bug worth
+reporting, not something to work around.
+
 == PLAY: ONE CALL PER DECISION ==
 
     .venv/bin/python -m borg_runner answer <n> '<keys>' --run runs/{RUNNAME} \
