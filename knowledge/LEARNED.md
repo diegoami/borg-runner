@@ -1,5 +1,14 @@
 # LEARNED: knowledge filed against the manual
 
+> **Caveat added 2026-11-09, after this was written.** `sonnet-2` and
+> `sonnet-3` were each handed `sonnet-1`'s notebook, and their promoted
+> notebooks then repeated 18 of its lines — so an item marked `confirmed` on
+> `sonnet-1` plus one of those two may rest on **one** sighting copied
+> forward, not two. The promoted notebooks now carry only each run's own
+> notes, and the next consolidation must re-check every `confirmed` item whose
+> two witnesses are `sonnet-1` and an inheritor. Items confirmed from a run's
+> own screens, which the Count section lists, are unaffected.
+
 Second consolidation. Three runs now: `sonnet-1` (seed 7, Half-Troll Warrior,
 nothing inherited, 125 asks, depth 1, character level 3, alive), `sonnet-2`
 (seed 7, the same character, inheriting sonnet-1's notes, 153 asks, **depth 6**,

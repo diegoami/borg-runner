@@ -406,3 +406,43 @@ def test_carrying_a_run_on_does_not_replay_the_quit(tmp_path):
     run_module.answer(run, 3, '\\e', reason='accept the save')
     assert replay_module.recorded_keys(run) == ['2222', '\x18', '\\e']
     assert replay_module.recorded_keys(run, played_only=True) == ['2222']
+
+
+def test_only_a_runs_own_notes_are_promoted(tmp_path):
+    """Inherited lines are not a second observation.
+
+    sonnet-2 and sonnet-3 each had 18 of sonnet-1's lines inside their own
+    notebooks, so an item "confirmed" on two runs could rest on one sighting
+    copied forward.
+    """
+    handed = tmp_path / 'given.md'
+    handed.write_text('- oil is thrown with v (ask 83)\n'
+                      '- store letters skip (ask 25)\n')
+    run = a_run(tmp_path)
+    run_module.inherit(run, handed, log=lambda *a: None)
+    run_module.remember(run, 'a kobold survived one flask', ask=40)
+    book = run_module.notebook(run)
+    assert 'oil is thrown' in book, 'the player still reads what it was given'
+    mine = run_module.own_notes(run)
+    assert len(mine) == 1 and 'kobold survived' in mine[0]
+    run_module.answer(run, 1, ' ', reason='x')
+    run_module.write_record(run, outcome='stopped')
+    kept = run_module.keep(run, into=tmp_path / 'kept.md', log=lambda *a: None)
+    text = kept.read_text()
+    assert 'kobold survived' in text
+    assert 'oil is thrown' not in text, 'it was not this run that found that'
+    assert 'are **not** repeated here' in text
+
+
+def test_a_run_that_only_repeats_what_it_was_given_is_not_promoted(tmp_path):
+    handed = tmp_path / 'given.md'
+    handed.write_text('- oil is thrown with v (ask 83)\n')
+    run = a_run(tmp_path)
+    run_module.inherit(run, handed, log=lambda *a: None)
+    run_module.write_record(run, outcome='stopped')
+    try:
+        run_module.keep(run, into=tmp_path / 'x.md', log=lambda *a: None)
+    except FileNotFoundError as problem:
+        assert 'added nothing' in str(problem)
+    else:
+        raise AssertionError('it added nothing, so there is nothing to promote')

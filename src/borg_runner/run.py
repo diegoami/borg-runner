@@ -76,17 +76,46 @@ def inherit(run, notebook_path, log=print):
     return carried
 
 
+def own_notes(run):
+    """The notes this run wrote, without the ones it was handed.
+
+    A run that inherits a notebook starts with somebody else's lines in it,
+    and promoting the whole file made those lines look like a second
+    observation: 18 of sonnet-2's 28 lines were sonnet-1's, so an item
+    "confirmed" on both could rest on one sighting copied forward. The
+    inherited file is named in `inherited.json`, so its lines can be taken
+    back out.
+    """
+    run = Path(run)
+    mine = (run / NOTEBOOK).read_text().splitlines() if (run / NOTEBOOK).exists() else []
+    handed = set()
+    carried = run / 'inherited.json'
+    if carried.exists():
+        try:
+            source = Path(json.loads(carried.read_text()).get('inherited_from') or '')
+        except ValueError:
+            source = Path('')
+        if source.exists():
+            handed = {line.strip() for line in source.read_text().splitlines()
+                      if line.strip()}
+    return [line for line in mine if line.strip() and line.strip() not in handed]
+
+
 def keep(run, into=None, log=print):
-    """Promote a run's notebook into knowledge/, with where it came from.
+    """Promote a run's own notes into knowledge/, with where they came from.
 
     Provenance is the whole point: a note is worth what its evidence is worth,
     and the evidence is the run - its seed, its build and its keys, all of
-    which replay.
+    which replay. Only what this run wrote is promoted; see `own_notes`.
     """
     run = Path(run)
     book = run / NOTEBOOK
     if not book.exists() or not book.read_text().strip():
         raise FileNotFoundError(f'{run.name} kept no notes')
+    mine = own_notes(run)
+    if not mine:
+        raise FileNotFoundError(f'{run.name} added nothing to the notes it was '
+                                f'given')
     record = json.loads((run / RECORD).read_text()) if (run / RECORD).exists() else {}
     started = json.loads((run / 'started.json').read_text()) if (run / 'started.json').exists() else {}
     build = started.get('build') or {}
@@ -112,7 +141,15 @@ def keep(run, into=None, log=print):
         '## The notes',
         '',
     ]
-    target.write_text('\n'.join(header) + book.read_text().rstrip() + '\n')
+    carried = run / 'inherited.json'
+    if carried.exists():
+        handed = json.loads(carried.read_text())
+        header[5:5] = [
+            f'This run was handed {Path(handed["inherited_from"]).name} '
+            f'({handed.get("lines")} lines) and those lines are **not** '
+            f'repeated here: what follows is only what this run added.',
+            '']
+    target.write_text('\n'.join(header) + '\n'.join(mine).rstrip() + '\n')
     log(f'kept: {target}')
     return target
 
