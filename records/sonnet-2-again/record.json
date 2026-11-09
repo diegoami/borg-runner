@@ -1,0 +1,57 @@
+{
+  "asks": 291,
+  "asks_made": 291,
+  "build": {
+    "binary_sha256": "610d5deed6e58c81e6af502f2b0ec720d90883a58ac5493379ca6fab24f44e24",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "54a4cc8b04a2381c2063b41bf687b65e11984b14e2c1547b7c96991fcfb3f8a6",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 1864,
+  "character": "Half-Troll Warrior",
+  "character_level": 8,
+  "class": "Warrior",
+  "continues": "sonnet-2",
+  "cost": {
+    "model": "anthropic/claude-sonnet-5-5",
+    "played_by": "subagent",
+    "tokens": 142837,
+    "tool_calls": 147
+  },
+  "death_depth": null,
+  "died": false,
+  "exit_code": null,
+  "final_turn": 10416,
+  "gold": 161,
+  "hp": {
+    "max": 127,
+    "now": 71
+  },
+  "keypresses": 1107,
+  "keys_sha256": "b43d1a10c30975de0572a2589aa9a3fb2eee5a94d8397bc80eac94098c08d050",
+  "killed_by": null,
+  "max_character_level": 8,
+  "max_depth": 7,
+  "notebook_lines": 34,
+  "notebook_sha256": "40aec126d71d4ea7ccc719ec032764e91d594e5854d597f48e2b8146938a3e8f",
+  "outcome": "stopped",
+  "race": "Half-Troll",
+  "read_before_playing": "Files actually opened before ask 1: docs/BRIEF.md, knowledge/MANUAL-GAPS.md, knowledge/LEARNED.md, the sonnet-1 notebook (printed), vendor/angband docs guide.rst (first 150 lines) and command.rst (Run section), strategy-manual ch15 first 120 lines and the grep of ch14 for Warrior (only headings, not the full playbook). Plan: shop incl. Magic Mapping, then dive. (ask 1)",
+  "read_its_own_playbook": true,
+  "replay_url": "https://claude.ai/artifact/4j469nhijoVLT6KJXMub3o",
+  "run": "sonnet-2-again",
+  "savefile_sha256": "49dd7ee0a0b2ac42d749bcb90af65b73f75e074af899fcd90cd9afd0b486d0b7",
+  "schema": "borg-runner/run-record@1",
+  "screens": 291,
+  "screens_sha256": "8e417a4dcdb6a91de73de29b43563e7b1db78eaad78f6e9c86236dfad0b0d56e",
+  "seed": 7,
+  "wealth": 2025
+}

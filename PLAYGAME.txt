@@ -1,0 +1,96 @@
+Play one game of Angband 4.2.6 from the screen, one keypress at a time.
+
+Before you start, substitute the two placeholders below. If you were given
+only a run name, choose a seed that does not already appear in
+records/OVERVIEW.md and say in your first note which one you chose.
+
+    {RUNNAME}   the name of your run, e.g. codex-1
+    {SEED}      an integer, e.g. 101
+
+Work from /home/diego/projects/borg-runner and use .venv/bin/python for every
+python command. Your run will not disturb any other run: each one owns its own
+directory, game process, seed, character and notebook. If the name is already
+taken by a live run, the tool refuses and names the run holding it; pick
+another.
+
+== READ THESE TWO FIRST, COMPLETELY ==
+
+    manuals/INSTRUCTIONS.md   the game's manual and a strategy manual
+                              distilled into the order a player needs them.
+                              Section 9 has a block for each of the nine
+                              classes - read the one you are given, after the
+                              draw. Every line is labelled FACT, POLICY or
+                              UNTESTED and says where it came from.
+    knowledge/NOTES.md        what earlier runs found out, each line marked
+                              with how many runs saw it. Where these two
+                              disagree, NOTES wins: it is evidence and the
+                              other is reading.
+
+Everything else in the repository is lookup. Go to it for a number or a page,
+not before. Do not read other runs' decisions or write-ups for your own seed -
+general notes are knowledge, a transcript of your seed is a solution key.
+
+Your first note must say which files you actually opened. Nothing else records
+it, and the whole question here is what a reader does differently.
+
+== START ==
+
+    .venv/bin/python -m borg_runner play --seed {SEED} --name {RUNNAME}
+    .venv/bin/python -m borg_runner wait --run runs/{RUNNAME}
+
+Do not pass --notebook. Inherited knowledge belongs in the reading; your
+notebook holds only what you find.
+
+== PLAY: ONE CALL PER DECISION ==
+
+    .venv/bin/python -m borg_runner answer <n> '<keys>' --run runs/{RUNNAME} \
+        --reason "one line, your own words" \
+        --note "a trick worth keeping, with the evidence that taught it"
+
+`answer` sends the keys and prints the next screen, so after the first `wait`
+it is one call per decision. `--note` appends to your notebook, which is
+printed back to you with every later screen and given to whoever plays next;
+nothing here ever writes to it or corrects it.
+
+Keys: every character you send is a key the game receives. Four escapes exist
+for keys that cannot be typed: \n Enter, \e Escape, \t Tab, \\ a backslash.
+Several keys in one answer are usually right.
+
+== RULES ==
+
+- Your character is drawn, not chosen: press * at the race menu and * at the
+  class menu. Then read your class's block in INSTRUCTIONS section 9.
+- Take the easy option at birth: at the stat screen press a (point-based) then
+  Enter to accept the allocation the game has filled in. Do not move points.
+- Read the top line of the screen first. It is the game's message line and it
+  usually says why your last key did nothing ("I see no up staircase here").
+  A -more- there means a message is waiting and any key clears it.
+- The header of each screen says `cursor at x,y`. In a menu that is the
+  highlighted row, which the characters cannot show you.
+- Change no setting, no option and no file outside your run directory.
+- You may not call anything a defect. If you think a player could do better,
+  say what would settle it.
+- Aim for about 150 decisions unless you are told otherwise, then stop.
+
+== WHEN YOU STOP ==
+
+    .venv/bin/python -m borg_runner record --run runs/{RUNNAME} \
+        --tokens <your total tokens> --tool-calls <your total tool calls> \
+        --played-by <session|codex|opencode|other> \
+        --model <provider>/<exact model version>
+    .venv/bin/python -m borg_runner keep --run runs/{RUNNAME}
+    .venv/bin/python -m borg_runner archive --run runs/{RUNNAME}
+    .venv/bin/python -m borg_runner overview
+
+--model must name the provider and the exact version, e.g.
+openai/gpt-5.6-luna or anthropic/claude-sonnet-5-5; `record` refuses a bare
+family name, because two runs of the same family months apart are not the same
+experiment.
+
+Then write runs/{RUNNAME}/REPORT.md: what happened (depth, character level,
+how it ended, decisions, turns; if you died, what killed you and the last
+three decisions before it), the decisions you would take back, where the
+reading was wrong or not enough, what you could not see or could not do, and
+your leads - each with the evidence and what would settle it.
+
+A broken run honestly reported is a result. A tidy story is not.

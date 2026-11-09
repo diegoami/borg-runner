@@ -1,0 +1,29 @@
+{
+  "build": {
+    "binary_sha256": "610d5deed6e58c81e6af502f2b0ec720d90883a58ac5493379ca6fab24f44e24",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "54a4cc8b04a2381c2063b41bf687b65e11984b14e2c1547b7c96991fcfb3f8a6",
+    "schema": "borg-runner/build@1"
+  },
+  "character": "sonnet-2",
+  "command": [
+    "/home/diego/projects/borg-runner/build/e473720ed88a-54a4cc8b04a2/build/game/angband",
+    "-magent",
+    "-usonnet-2",
+    "--",
+    "-d/home/diego/projects/borg-runner/runs/sonnet-2-again/ask",
+    "-s7"
+  ],
+  "pid": 296688,
+  "savefile": "/home/diego/projects/borg-runner/build/e473720ed88a-54a4cc8b04a2/build/game/lib/save/sonnet-2",
+  "schema": "borg-runner/started@1",
+  "seed": 7
+}
