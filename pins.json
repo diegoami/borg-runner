@@ -1,0 +1,20 @@
+{
+  "schema": "borg-runner/pins@1",
+  "pins": {
+    "angband": {
+      "repository": "angband/angband",
+      "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+      "version": "4.2.6",
+      "role": "The game, plain and unmodified: upstream 4.2.6. Built --disable-borg with the main-test frontend, plus our own input hook from patch/. The same commit borg-agent pins as `original`, so runs here and Borg runs are the same game.",
+      "manual": ["docs/index.rst", "docs/guide.rst", "docs/playing.rst", "docs/command.rst",
+                 "docs/attack.rst", "docs/dungeon.rst", "docs/birth.rst", "docs/option.rst",
+                 "lib/help/"]
+    },
+    "strategy-manual": {
+      "repository": "diegoami/neo-angband-tracker",
+      "commit": "777eea1d9bd6c4094e87fff23af3984dd23f7edb",
+      "path": "docs/c-manual/",
+      "role": "Seventeen chapters, ten appendices generated from lib/gamedata, and a copy of the official user manual. Chapter 15 is a machine-oriented distillation that says of itself that its rules are a starting policy to be measured, not truths - which is how a run here must treat them."
+    }
+  }
+}
