@@ -34,6 +34,10 @@ def show(run, number, with_memory=True):
     print(f'=== ASK {asked["ask"]}  turn {asked["turn"]}  '
           f'depth {asked.get("depth")}{cursor} ===')
     print(asked['screen'].rstrip('\n'))
+    book = run_module.notebook(run)
+    if book:
+        print('=== YOUR NOTEBOOK (yours; nothing here writes or corrects it) ===')
+        print(book)
     memory = run_module.memory_now(run)
     if with_memory and memory:
         print('=== YOUR MEMORY (yours to keep; nothing here maintains it) ===')
@@ -59,6 +63,8 @@ def cmd_answer(args):
         return 1
     run_module.answer(run, args.number, keys_from(args.keys),
                       reason=args.reason, memory=args.memory)
+    if args.note:
+        run_module.remember(run, args.note, ask=args.number)
     import subprocess, time
     for _ in range(600):
         waiting = run_module.asked(run)
@@ -146,6 +152,8 @@ def parser():
     p.add_argument('--run', required=True, type=Path)
     p.add_argument('--reason', default='', help='one line, recorded with the keys')
     p.add_argument('--memory', help='your memory of the world, carried into the next prompt')
+    p.add_argument('--note', help='a trick worth keeping, appended to your notebook '
+                                  'and shown with every later screen')
     p.set_defaults(func=cmd_answer)
 
     p = sub.add_parser('replay', help='play a recording again and compare screens')

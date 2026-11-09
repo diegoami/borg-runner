@@ -24,6 +24,9 @@ it is one call per decision.
 - **`--memory`** is yours. Send it when it changes; the newest one is printed
   back to you with every screen. Nothing here maintains it, corrects it or
   checks it against the game — see below.
+- **`--note`** appends to your **notebook**, which is printed back with every
+  screen from then on. See "Write tricks down" below; this is the most
+  valuable thing you produce.
 
 ## Keys
 
@@ -69,6 +72,32 @@ still have a Phase Door and does not is making a real mistake, and if the
 frontend quietly fixed it the mistake could never be seen. Your memory is
 recorded as you wrote it, so the report can show what you believed beside what
 was true.
+
+## Write tricks down
+
+`runs/<your run>/notebook.md` is yours. It is printed back to you with every
+screen, and **nothing here ever writes to it or corrects it** except your own
+`--note`. You may edit the file to prune it; only the last 60 lines are shown,
+so a notebook that grows without bound crowds out the screen.
+
+Write down what the game taught you that the manual did not say, in the form
+of something you can act on next time. Two real examples from earlier runs,
+both of which cost dozens of wasted keys before anyone noticed:
+
+```
+- `>` only works while standing on a down staircase; the bottom status line
+  says "Down staircase" when you are (ask 23: pressed > off the stairs and
+  the message line said "There is no down staircase here")
+- after taking stairs down you arrive on an *up* staircase, so `<` there
+  undoes the descent you just made (ask 31: went 0 -> 1 -> 0 -> 1)
+```
+
+**Every note carries the evidence that taught it** — the ask, and what the
+screen said. A note without evidence is a superstition, and it will be
+believed by whoever inherits this notebook.
+
+The notebook is the point of the run. The character will probably die; the
+notes are what survives, and a later run may be given them to start from.
 
 ## What to read
 

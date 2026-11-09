@@ -20,6 +20,8 @@ ASK = 'ask'
 DECISIONS = 'decisions.jsonl'
 KEYS = 'input.txt'
 RECORD = 'record.json'
+NOTEBOOK = 'notebook.md'
+NOTEBOOK_LINES = 60
 
 # Save and quit. The game writes its savefile and exits cleanly, which is
 # both how a run ends and what `takeover` needs to exist (D7).
@@ -135,6 +137,31 @@ def answer(run, number, keys, reason='', memory=None):
     return target
 
 
+def notebook(run, lines=NOTEBOOK_LINES):
+    """The player's own notes, as the player left them.
+
+    Nothing here writes to this file except `remember`, and nothing here ever
+    edits or corrects it: a trick the player got wrong is a thing we want to
+    see, not hide (D4). The player may rewrite it to prune, which is why only
+    the last lines are shown - a notebook that grows without bound would
+    crowd out the screen.
+    """
+    path = Path(run) / NOTEBOOK
+    if not path.exists():
+        return ''
+    kept = path.read_text().splitlines()
+    return '\n'.join(kept[-lines:])
+
+
+def remember(run, note, ask=None):
+    """Append a note. The player's words, with the ask that taught it."""
+    path = Path(run) / NOTEBOOK
+    line = f'- {note.strip()}' + (f' (ask {ask})' if ask is not None else '')
+    with path.open('a') as book:
+        book.write(line + '\n')
+    return path
+
+
 def decisions(run):
     path = Path(run) / DECISIONS
     if not path.exists():
@@ -227,6 +254,10 @@ def write_record(run, process=None, outcome=None):
         'final_turn': taken[-1]['turn'] if taken else 0,
         'max_depth': max((entry.get('depth') or 0) for entry in taken) if taken else 0,
         'screens': len(screens),
+        'notebook_lines': len(notebook(run, lines=10**6).splitlines()),
+        'notebook_sha256': (hashlib.sha256(
+            (run / NOTEBOOK).read_bytes()).hexdigest()
+            if (run / NOTEBOOK).exists() else None),
         'keys_sha256': hashlib.sha256(keys.encode()).hexdigest(),
         'screens_sha256': hashlib.sha256(
             b''.join(p.read_bytes() for p in screens)).hexdigest(),
