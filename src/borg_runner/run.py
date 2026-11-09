@@ -244,13 +244,7 @@ def start(run, seed, out=None, character=None, resume=False, log=print):
     """
     # The game is started in its own directory, so every path it is given
     # must be absolute or it will look for them beside the binary.
-    run = Path(run).resolve()
-    out = Path(out) if out else build.prepare(log=log)
-    game = build.binary(out)
-    if not game.exists():
-        raise FileNotFoundError(f'no binary at {game}; build first')
-
-    character = character or run.name
+    character = character or Path(run).resolve().name
     # Runs are independent and may play at the same time - each has its own
     # directory, its own game process and its own notebook. The one thing they
     # share is the savefile, which is named after the character: starting a
@@ -272,6 +266,14 @@ def start(run, seed, out=None, character=None, resume=False, log=print):
                 f'{other.parent.name} is already playing as {character!r} '
                 f'(pid {pid}); two runs cannot share a savefile. Use another '
                 f'--name.')
+
+    run = Path(run).resolve()
+    # The guard above runs before this, so a duplicate name is refused
+    # without first spending minutes on a build.
+    out = Path(out) if out else build.prepare(log=log)
+    game = build.binary(out)
+    if not game.exists():
+        raise FileNotFoundError(f'no binary at {game}; build first')
 
     save = savefile_of(out, character)
     if save.exists() and not resume:
