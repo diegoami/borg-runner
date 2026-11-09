@@ -98,3 +98,25 @@ def test_the_table_links_to_the_published_replay(tmp_path):
     a_record(tmp_path, 'one', replay_url='https://claude.ai/artifact/abc')
     table = overview.markdown(overview.rows(tmp_path))
     assert '[watch](https://claude.ai/artifact/abc)' in table
+
+
+def test_the_page_links_the_local_replay_not_only_the_artifact(tmp_path):
+    """Every run has a local report.html; only some have a published artifact.
+
+    The markdown table preferred the local page and the HTML page did not, so
+    runs without an artifact appeared as plain text on the site.
+    """
+    run = a_record(tmp_path, 'one')
+    (run / 'report.html').write_text('<title>x</title>')
+    (run / 'REPORT.md').write_text('# what happened\n')
+    found = overview.rows(tmp_path)
+    assert found[0]['replay'] == 'one/report.html'
+    page = overview.page(found)
+    assert 'one/report.html' in page
+    assert 'one/REPORT.md' in page, 'and what it wrote'
+
+
+def test_a_run_with_no_replay_page_is_still_listed(tmp_path):
+    a_record(tmp_path, 'bare')
+    page = overview.page(overview.rows(tmp_path))
+    assert 'bare' in page

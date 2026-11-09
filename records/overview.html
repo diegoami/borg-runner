@@ -47,10 +47,11 @@ a { color:var(--accent) }
 <body><main>
 <h1>Every run</h1>
 <p class="sub">One game of Angband each, played from the screen one keypress at
-a time. <strong>Wealth</strong> is gold plus the game's own valuation of
+a time. <strong>Click a run to watch its replay</strong>, screen by screen, or
+the pencil for what it wrote. <strong>Wealth</strong> is gold plus the game's own valuation of
 everything carried and worn, so a lucky dive reads differently from a
 well-equipped descent. <strong>Inherited</strong> names the notebook the run
-started from. Click a run to watch its replay, or a column to sort.</p>
+started from. Click a column to sort.</p>
 <div class="controls">
   <label for="model">Model</label>
   <select id="model"><option value="all">all models</option><option value="alibaba-token-plan/qwen3.8-flash">alibaba-token-plan/qwen3.8-flash</option><option value="anthropic/claude-sonnet-5-5">anthropic/claude-sonnet-5-5</option><option value="openai/gpt-5.6-luna">openai/gpt-5.6-luna</option></select>
@@ -97,9 +98,17 @@ identity and the filter.</p>
       return (x < y ? -1 : x > y ? 1 : 0) * (ascending ? 1 : -1);
     });
     body.innerHTML = shown.map(function (r) {
-      var name = r.replay_url
-        ? '<a href="' + escaped(r.replay_url) + '">' + escaped(r.run) + '</a>'
+        // The local replay page first: it is served from this site and anyone
+      // can open it, where the artifact link is private to its owner. The
+      // markdown table did this and the page did not, so every run without a
+      // published artifact sat here as plain text.
+      var page = r.replay || r.replay_url;
+      var name = page
+        ? '<a href="' + escaped(page) + '">' + escaped(r.run) + '</a>'
         : escaped(r.run);
+      var notes = r.report
+        ? ' <a href="' + escaped(r.report) + '" title="what the run wrote">&#9998;</a>'
+        : '';
       var wealth = r.wealth === null ? '—'
         : Number(r.wealth).toLocaleString() + ' <span class="count">('
           + cell(r, 'gold') + ' + ' + cell(r, 'carried_value') + ')</span>';
@@ -107,7 +116,7 @@ identity and the filter.</p>
         ? '<span class="died">' + escaped(r.outcome) + '</span>'
         : '<span class="alive">' + escaped(r.outcome || '—') + '</span>';
       return '<tr>'
-        + '<td>' + name + '</td>'
+        + '<td>' + name + notes + '</td>'
         + '<td class="n">' + cell(r, 'seed') + '</td>'
         + '<td class="model">' + escaped(r.model || '—') + '</td>'
         + '<td>' + escaped(r.character || '-') + '</td>'
