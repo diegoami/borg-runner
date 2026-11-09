@@ -75,6 +75,49 @@ Two runs went wrong here in ways worth not repeating. One spent ~100 asks walkin
 - Do not treat Word of Recall (15-34 turns delay) or Deep Descent (3+1d4 turns) as an escape (c15 ESC-04).
 - Running from faster monsters does not work: +10 speed is double your moves (`attack`, "A note on speed").
 
+## 6b. What to keep and what to leave
+
+**Selling pays nothing** (`birth_no_selling` is on; `birth`, c15 ITEM-05). So an
+object is worth carrying only if you will **use** it or **wear** it. Gold is
+the only loot with a value. That removes most of item management: do not haul
+anything to town.
+
+**The rule that does the rest:** in `object.txt` every harmful consumable has
+`cost:0`, and every useful one has a price. FACT, checked against the file:
+cost 0 at depth 0-10 is Potion of Sleep, Blindness, Confusion, Salt Water,
+Slowness, Poison, Surprise; Scroll of Summon Monster, Darkness, Aggravate
+Monster, Trap Creation; Staff of Darkness, Summoning, Haste Monsters; Wand of
+Heal Monster, Haste Monster. Once a kind is identified, its price in a shop
+tells you which group it is in.
+
+**Keep, in this order of usefulness to a shallow character** (cost = what the
+Alchemist or General Store charges, so also what it is worth to you):
+
+| Keep | cost | from depth | why |
+|---|---|---|---|
+| Flask of oil | 3 | 1 | the ranged attack every class has; 10-20 of them |
+| Potion of Cure Light Wounds | 20 | 0 | the heal you will actually reach for |
+| Scroll of Phase Door | 15 | 1 | one monster is the problem; short hop |
+| Ration of Food | 3 | 0 | two or three; starvation has killed a run |
+| Wooden Torch / Lantern | 2 / 35 | 1 / 3 | you cannot read scrolls in the dark |
+| Scroll of Magic Mapping | 65 | 5 | maps 22x40 around you - but one run paid 65 and saw no staircase |
+| Potion of Cure Serious / Critical Wounds | 70 / 200 | 3 / 5 | when Light stops being enough |
+| Scroll of Teleportation | 40 | 10 | the escape when Phase Door is not far enough |
+| Scroll of Deep Descent | 250 | 10 | not sold; five levels below your deepest |
+| Scroll of Word of Recall | 125 | 5 | useless until you have been deep; it does nothing from the town |
+| Potion of Speed / Heroism / Berserk Strength | 75 / 25 / 80 | 1 / 1 / 3 | drink before a fight you have chosen |
+| Wand of Magic Missile / Stinking Cloud | 200 / 400 | 3 / 5 | ranged damage for a class with no spell |
+
+**Leave** everything with cost 0, and everything you will not wear: a second
+weapon, armour too heavy for your class's spell allowance, a ring or amulet
+whose rune you have not identified and cannot afford to test. Picking up a
+better weapon of the same kind swaps it for you automatically (OBSERVED,
+`sonnet-2-again`).
+
+**An unknown potion or scroll is worth trying** rather than carrying, because
+first use pays experience and selling pays nothing - the conditions and the
+risk table are in `knowledge/NOTES.md`.
+
 ## 7. Recover
 - `R` then `&` then Enter rests until healed or disturbed; `R` `*` Enter until HP and SP are full; or give a number. Resting doubles regeneration; poison, stun, cuts stop it (c15 CURE-01, REST-01).
 - **POLICY** c15 REST-01/02: rest only when no awake monster can reach you in about 5 turns; rest on a staircase when one is within about 10 steps.
