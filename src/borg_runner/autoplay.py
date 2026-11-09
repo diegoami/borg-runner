@@ -64,8 +64,13 @@ and when you are unsure, spend a keypress and look. Nothing will correct you,
 deliberately: believing you still have a Phase Door when you do not is a real
 mistake and we want to see it, not hide it.
 
-Your character is drawn, not chosen: at the race menu press "*" and at the
-class menu press "*". The game's own birth screen offers it. Then read what
+Take the easy option at birth. Your character is drawn, not chosen: at the
+race menu press "*" and at the class menu press "*". At the stat screen choose
+point-based ("a") and accept the allocation the game has already filled in by
+pressing Enter - it is the game's own recommendation. Do not move points
+around: a character is made by how it is played, not by two points of
+strength, and deliberating there has cost a run thousands of tokens and
+got it nothing. The game's own birth screen offers it. Then read what
 you need about the class you were given. A player who picks its class every
 time produces notes that read as general when they are one class's notes.
 

@@ -58,6 +58,13 @@ inherited note turns out to be about somebody else's class, say so.
 The record keeps the race and class the game drew, from the game's own state,
 so a run that chose instead of drawing is visible afterwards.
 
+Take the easy option at birth, always. At the stat screen choose
+point-based (`a`) and accept the allocation the game has already filled in
+with Enter: it is the game's own recommendation and it is good enough. Do not
+move points around. One run spent 3,600 tokens of reasoning on that screen and
+reached no further for it; a character is made by how it is played, not by two
+points of strength.
+
 ## Keys
 
 Every byte you send is a key. Four escapes exist for keys you cannot type:
