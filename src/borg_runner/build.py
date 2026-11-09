@@ -20,8 +20,15 @@ PATCH = pins.ROOT / 'patch'
 BUILDS = pins.ROOT / 'build'
 FRONTEND = 'src/main-agent.c'
 
+# The build id is pinned on purpose. Left alone, CMake runs `git describe` in
+# the source directory - which is a copy inside *this* repository - so the
+# game's splash screen carried borg-runner's own commit and a -dirty flag, and
+# every commit here changed screen 1 of every recording. A replay then
+# differed on the first ask and on nothing else. Found 2026-11-09 by replaying
+# three runs under a new build.
 CMAKE_ARGS = ['-DSUPPORT_BORG=OFF', '-DSUPPORT_TEST_FRONTEND=OFF',
-              '-DSUPPORT_X11_FRONTEND=ON', '-DCMAKE_BUILD_TYPE=Release']
+              '-DSUPPORT_X11_FRONTEND=ON', '-DCMAKE_BUILD_TYPE=Release',
+              f'-DANGBAND_BUILD_ID=borg-runner-{pins.commit("angband")[:7]}']
 
 # Each edit is (file, what must be there exactly once, what replaces it).
 EDITS = (
@@ -60,6 +67,11 @@ def patch_sha256(patch=PATCH):
     for _, old, new in EDITS:
         digest.update(old.encode())
         digest.update(new.encode())
+    # The configure flags belong in the key too: changing one of them changes
+    # the binary, and leaving them out meant a changed flag quietly reused the
+    # cached build. Found when pinning the build id did not take effect.
+    for argument in CMAKE_ARGS:
+        digest.update(argument.encode())
     return digest.hexdigest()
 
 

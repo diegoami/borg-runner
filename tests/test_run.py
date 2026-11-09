@@ -32,8 +32,30 @@ def test_a_question_carries_the_turn_the_cursor_and_the_screen(tmp_path):
     """The cursor is the menu highlight, which the screen cannot show."""
     run = a_run(tmp_path)
     asked = run_module.question(run, 1)
-    assert asked == {'ask': 1, 'turn': 10, 'screen': 'screen 1\n',
-                     'depth': 1, 'max_depth': 2, 'cursor': {'x': 4, 'y': 9}}
+    assert asked['ask'] == 1 and asked['turn'] == 10
+    assert asked['screen'] == 'screen 1\n'
+    assert asked['depth'] == 1 and asked['max_depth'] == 2
+    assert asked['cursor'] == {'x': 4, 'y': 9}
+    # A question written by an older build carries none of the standing.
+    assert asked['level'] is None and asked['carried'] is None
+
+
+def test_a_question_carries_the_characters_standing(tmp_path):
+    """The game's own numbers: level, hit points, gold, and what it carries."""
+    run = a_run(tmp_path)
+    (run / run_module.ASK / 'question-1.txt').write_text(
+        'ask 1\nturn 10\ndepth 1\nmax_depth 2\nlevel 6\nhp 98 98\n'
+        'gold 146\ncarried 1200\ncursor 4 9\n')
+    asked = run_module.question(run, 1)
+    assert asked['level'] == 6
+    assert asked['race'] is None, 'an older question carries no character'
+    assert asked['hp'] == {'now': 98, 'max': 98}
+    assert asked['gold'] == 146 and asked['carried'] == 1200
+    run_module.answer(run, 1, ' ', reason='x')
+    record = run_module.write_record(run, outcome='stopped')
+    assert record['character_level'] == 6
+    assert record['carried_value'] == 1200
+    assert record['wealth'] == 1346, 'gold plus what is carried'
 
 
 def test_answering_writes_the_keys_and_records_the_reason(tmp_path):
@@ -187,6 +209,19 @@ def test_a_living_run_has_no_death(tmp_path):
     assert run_module.write_record(run, outcome='stopped')['died'] is False
 
 
+def test_the_record_says_which_race_and_class_the_game_drew(tmp_path):
+    """The run presses * for both, so only the game knows what it got."""
+    run = a_run(tmp_path)
+    (run / run_module.ASK / 'question-1.txt').write_text(
+        'ask 1\nturn 10\ndepth 0\nmax_depth 0\nlevel 1\ngold 146\n'
+        'carried 100\nrace Half-Troll\nclass Warrior\ncursor 1 2\n')
+    run_module.answer(run, 1, '*', reason='the game draws the race')
+    record = run_module.write_record(run, outcome='stopped')
+    assert record['race'] == 'Half-Troll'
+    assert record['class'] == 'Warrior'
+    assert record['character'] == 'Half-Troll Warrior'
+
+
 def test_a_run_is_kept_in_git_without_its_screens(tmp_path):
     """The keys are the recording; the screens replay from them (D6)."""
     run = a_run(tmp_path)
@@ -225,3 +260,19 @@ def test_a_provider_played_run_sums_its_own_cost(tmp_path):
     assert spent['tokens'] == 150
     assert spent['usd'] == 0.003
     assert spent['models'] == ['served/one', 'served/two']
+
+
+def test_the_tombstones_clock_is_not_a_difference():
+    """The game prints the wall clock on the tomb; it is not game state."""
+    from borg_runner import replay as replay_module
+    first = 'RIP\n   on Mon Nov  9 20:09:29 2026   \n'
+    again = 'RIP\n   on Tue Dec 25 03:00:00 2027   \n'
+    assert first != again
+    assert replay_module.comparable(first) == replay_module.comparable(again)
+
+
+def test_a_real_difference_on_the_tomb_is_still_caught():
+    from borg_runner import replay as replay_module
+    kobold = 'by a small kobold.\n   on Mon Nov  9 20:09:29 2026   \n'
+    naga = 'by a black naga.\n   on Mon Nov  9 20:09:29 2026   \n'
+    assert replay_module.comparable(kobold) != replay_module.comparable(naga)

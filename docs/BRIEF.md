@@ -28,6 +28,25 @@ it is one call per decision.
   screen from then on. See "Write tricks down" below; this is the most
   valuable thing you produce.
 
+## Your character is drawn, not chosen
+
+**At the race menu press `*`, and at the class menu press `*`.** The game's
+own birth screen offers it — "`*` for a random menu item" — so the draw is the
+game's, not ours and not yours. You do not pick your race or your class.
+
+This is a rule because the alternative quietly ruins the knowledge. A model
+left to choose will pick the class it reasons best about, every run; the notes
+then read as general when they are really one class's notes, and nobody
+notices until a different class dies of them. One earlier run chose Warrior,
+another chose Mage for a spell it had read about, and their notes disagree
+about what the early game is like.
+
+So read your class's playbook **after** the draw, not before, and when an
+inherited note turns out to be about somebody else's class, say so.
+
+The record keeps the race and class the game drew, from the game's own state,
+so a run that chose instead of drawing is visible afterwards.
+
 ## Keys
 
 Every byte you send is a key. Four escapes exist for keys you cannot type:

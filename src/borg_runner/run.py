@@ -33,7 +33,7 @@ NOTEBOOK = 'notebook.md'
 NOTEBOOK_LINES = 60
 RECORDS = pins.ROOT / 'records'
 ARCHIVED = (RECORD, KEYS, DECISIONS, NOTEBOOK, 'REPORT.md', 'started.json',
-            'manual.json', 'model-calls.jsonl')
+            'inherited.json', 'manual.json', 'model-calls.jsonl')
 
 # Save and quit. The game writes its savefile and exits cleanly, which is
 # both how a run ends and what `takeover` needs to exist (D7).
@@ -60,10 +60,16 @@ def inherit(run, notebook_path, log=print):
     source = Path(notebook_path)
     text = source.read_text()
     (Path(run) / NOTEBOOK).write_text(text)
-    log(f'notebook: inherited {source.name}, '
-        f'{len(text.splitlines())} lines, {hashlib.sha256(text.encode()).hexdigest()[:12]}')
-    return {'inherited_from': str(source),
-            'sha256': hashlib.sha256(text.encode()).hexdigest()}
+    carried = {'inherited_from': str(source),
+               'lines': len(text.splitlines()),
+               'sha256': hashlib.sha256(text.encode()).hexdigest()}
+    # Written down, not just logged: what a run started from is part of what
+    # the run means, and the overview reads it.
+    (Path(run) / 'inherited.json').write_text(
+        json.dumps(carried, indent=2, sort_keys=True) + '\n')
+    log(f'notebook: inherited {source.name}, {carried["lines"]} lines, '
+        f'{carried["sha256"][:12]}')
+    return carried
 
 
 def keep(run, into=None, log=print):
@@ -232,9 +238,21 @@ def question(run, number):
         fields[name] = value
     screen = (ask / f'screen-{number}.txt').read_text()
     cursor = fields.get('cursor', '').split()
+    hp = fields.get('hp', '').split()
+    def number_of(name, default=None):
+        try:
+            return int(fields[name])
+        except (KeyError, ValueError):
+            return default
     return {'ask': number, 'turn': int(fields.get('turn', 0)), 'screen': screen,
             'depth': int(fields.get('depth', -1)),
             'max_depth': int(fields.get('max_depth', -1)),
+            'level': number_of('level'),
+            'gold': number_of('gold'),
+            'carried': number_of('carried'),
+            'race': fields.get('race') or None,
+            'class': fields.get('class') or None,
+            'hp': {'now': int(hp[0]), 'max': int(hp[1])} if len(hp) == 2 else None,
             'cursor': {'x': int(cursor[0]), 'y': int(cursor[1])} if len(cursor) == 2 else None}
 
 
@@ -403,6 +421,36 @@ def stop(run, process, log=print, patience=20.0):
         log('run: the game saved and quit')
 
 
+def _standing(run, asked_at):
+    """How the character stood, at the end and at its best.
+
+    The value carried is the game's own `object_value()` over the whole gear
+    list, so a run says not only how deep it went but how well equipped it was
+    when it got there - which is what tells a lucky dive from a good one.
+    """
+    seen = [question(run, number) for number in asked_at] if asked_at else []
+    seen = [asked for asked in seen if asked.get('level') not in (None, -1)]
+    if not seen:
+        return {'character_level': None, 'gold': None, 'carried_value': None,
+                'wealth': None, 'race': None, 'class': None, 'character': None}
+    last = seen[-1]
+    born = next((asked for asked in seen
+                 if asked.get('race') and asked['race'] != '?'), last)
+    return {
+        'race': born.get('race'),
+        'class': born.get('class'),
+        'character': (f"{born.get('race')} {born.get('class')}"
+                      if born.get('race') and born.get('race') != '?' else None),
+        'character_level': last['level'],
+        'max_character_level': max(asked['level'] for asked in seen),
+        'gold': last.get('gold'),
+        'carried_value': last.get('carried'),
+        # What the character was worth all told, the way a player counts it.
+        'wealth': (last.get('gold') or 0) + (last.get('carried') or 0),
+        'hp': last.get('hp'),
+    }
+
+
 def write_record(run, process=None, outcome=None, cost=None):
     """What the run was, in one file, with the keys beside it.
 
@@ -452,6 +500,7 @@ def write_record(run, process=None, outcome=None, cost=None):
                             if live.exists() else None),
         'outcome': outcome or ('playing' if alive(process) else 'ended'),
         'cost': cost or spend(run),
+        **_standing(run, asked_at),
         'died': bool(death),
         'killed_by': (death or {}).get('cause'),
         'death_depth': (death or {}).get('depth'),

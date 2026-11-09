@@ -14,6 +14,7 @@
  */
 #include "angband.h"
 #include "game-world.h"
+#include "obj-power.h"
 #include "init.h"
 #include "ui-command.h"
 #include "ui-display.h"
@@ -153,6 +154,27 @@ static bool agent_read_keys(const char *path)
 }
 
 /**
+ * What the character is worth carrying, by the game's own valuation.
+ *
+ * `object_value()` is what the game itself uses, so this is not an estimate
+ * of ours: the pack, the quiver and what is worn, each at its own quantity.
+ * Reported because depth alone does not say how a character was doing - a
+ * level 6 pauper and a level 6 character with escapes are different runs.
+ */
+static int32_t agent_carried_value(void)
+{
+    struct object *obj;
+    int32_t worth = 0;
+
+    if (!player)
+        return 0;
+    for (obj = player->gear; obj; obj = obj->next)
+        worth += object_value(obj, obj->number);
+    return worth;
+}
+
+
+/**
  * The game wants input. If we are part way through a key string, press the
  * next one; otherwise show the screen and ask.
  *
@@ -192,6 +214,19 @@ static errr agent_event(int wait)
              * screen. */
             file_putf(file, "depth %d\n", player ? (int)player->depth : -1);
             file_putf(file, "max_depth %d\n", player ? (int)player->max_depth : -1);
+            file_putf(file, "level %d\n", player ? (int)player->lev : -1);
+            file_putf(file, "hp %d %d\n", player ? (int)player->chp : -1,
+                      player ? (int)player->mhp : -1);
+            file_putf(file, "gold %d\n", player ? (int)player->au : -1);
+            file_putf(file, "carried %d\n", (int)agent_carried_value());
+            /* Who is playing. The run asks for a random race and class, so
+             * nothing but the game knows which were drawn, and a run whose
+             * knowledge turns out to be one class's knowledge can only be
+             * spotted if the record says the class. */
+            file_putf(file, "race %s\n",
+                      (player && player->race) ? player->race->name : "?");
+            file_putf(file, "class %s\n",
+                      (player && player->class) ? player->class->name : "?");
             file_putf(file, "cursor %d %d\n", agent_cursor_x, agent_cursor_y);
             file_putf(file, "screen %s\n", screen);
             file_putf(file, "answer_to %s\n", answer);

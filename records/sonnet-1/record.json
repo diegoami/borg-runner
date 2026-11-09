@@ -14,8 +14,10 @@
     "patch_sha256": "5c02c7cbbcdd47e620136e1d4b90c66f5d6134672aebf0922ac7b983d5245484",
     "schema": "borg-runner/build@1"
   },
+  "carried_value": 713,
+  "character_level": 3,
   "cost": {
-    "model": "claude-sonnet-5-5",
+    "model": "anthropic/claude-sonnet-5-5",
     "played_by": "subagent",
     "tokens": 162466,
     "tool_calls": 129
@@ -24,17 +26,26 @@
   "died": false,
   "exit_code": null,
   "final_turn": 4659,
+  "gold": 10,
+  "hp": {
+    "max": 52,
+    "now": 52
+  },
   "keypresses": 644,
   "keys_sha256": "3258a3a6f41f16690951637b3fad48c15c9b2a6c8aa4de57dcaa3bea5ca1373a",
   "killed_by": null,
+  "max_character_level": 3,
   "max_depth": 1,
   "notebook_lines": 11,
   "notebook_sha256": "50b57559bebc8e60cc9aeb311794aebb616e3b09e13bdb755d32b939b4021f8d",
   "outcome": "ended",
+  "replay_url": "https://claude.ai/artifact/KS7bEkMGgWFWQ5dTzysz52",
   "run": "sonnet-1",
   "savefile_sha256": "0c0c1bc96dd431568bb62495f7988303b0da9e6355d1c454c58f1a222b79563b",
   "schema": "borg-runner/run-record@1",
   "screens": 125,
   "screens_sha256": "6a58a3f5d87196aaf34a5da4e85d7d50c6a677935a13b5abc3c0ab9f37e8d13a",
-  "seed": 7
+  "seed": 7,
+  "standing_from": "sonnet-1-standing, a replay of the archived keys",
+  "wealth": 723
 }

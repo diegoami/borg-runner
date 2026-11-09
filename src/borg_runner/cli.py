@@ -144,8 +144,19 @@ def cmd_record(args):
         cost = {'tokens': args.tokens, 'played_by': args.played_by,
                 'model': args.model, 'tool_calls': args.tool_calls}
         cost = {name: value for name, value in cost.items() if value}
+    if args.model and '/' not in args.model:
+        print('a model is written provider/model-version, for example '
+              'anthropic/claude-sonnet-5-5', file=sys.stderr)
+        return 1
     print(json.dumps(run_module.write_record(args.run, cost=cost),
                      indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_overview(args):
+    from . import overview as overview_module
+
+    print(overview_module.write_markdown(into=args.into))
     return 0
 
 
@@ -232,6 +243,10 @@ def parser():
     p.add_argument('--played-by', help='session, subagent, opencode, openrouter')
     p.add_argument('--model')
     p.set_defaults(func=cmd_record)
+
+    p = sub.add_parser('overview', help='the table of every archived run')
+    p.add_argument('--into', type=Path)
+    p.set_defaults(func=cmd_overview)
 
     p = sub.add_parser('archive', help='keep a run in git under records/')
     p.add_argument('--run', required=True, type=Path)

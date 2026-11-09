@@ -62,3 +62,27 @@ def test_the_built_binary_contains_no_borg_at_all():
                              capture_output=True, text=True).stdout.lower()
     assert 'borg' not in symbols
     assert 'inkey_hack' not in symbols
+
+
+def test_the_configure_flags_are_part_of_the_build_key():
+    """A changed flag changes the binary, so it must change the key.
+
+    Pinning the build id had no effect at first because the key did not cover
+    the flags, so prepare() handed back the cached binary.
+    """
+    first = build.patch_sha256()
+    original = list(build.CMAKE_ARGS)
+    try:
+        build.CMAKE_ARGS.append('-DSOMETHING_ELSE=ON')
+        assert build.patch_sha256() != first
+    finally:
+        build.CMAKE_ARGS[:] = original
+    assert build.patch_sha256() == first
+
+
+def test_the_build_id_is_pinned_to_the_game_and_not_to_this_repository():
+    """Left alone, cmake stamps our own git describe into the splash screen,
+    so every commit here changed screen 1 of every recording."""
+    pinned = [a for a in build.CMAKE_ARGS if a.startswith('-DANGBAND_BUILD_ID=')]
+    assert pinned, 'the build id must be pinned'
+    assert pins.commit('angband')[:7] in pinned[0]

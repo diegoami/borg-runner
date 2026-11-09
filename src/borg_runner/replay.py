@@ -5,12 +5,25 @@ for, which is what makes the claim in D6 checkable: if seed plus keys is the
 whole of the recording, the screens come back identical.
 """
 import json
+import re
 import time
 from pathlib import Path
 
 from . import run as run_module
 
 SCREENS = 'replay-screens'
+
+
+# The tombstone prints the wall clock - "on Mon Nov  9 20:09:29 2026" - which
+# is not game state and can never replay. It is the only such thing found so
+# far, and it is normalised rather than ignored, so a real difference on the
+# same screen is still caught.
+CLOCK = re.compile(r'on [A-Z][a-z]{2} [A-Z][a-z]{2}\s+\d{1,2} '
+                   r'\d{2}:\d{2}:\d{2} \d{4}')
+
+
+def comparable(screen):
+    return CLOCK.sub('on <the clock>', screen)
 
 
 def recorded_keys(original):
@@ -45,8 +58,10 @@ def replay(original, into, out=None, seed=None, stop_after=None, log=print):
             asked = run_module.question(fresh, number)
             reached = asked['turn']
             before = original / run_module.ASK / f'screen-{number}.txt'
-            if before.exists() and before.read_text() != asked['screen']:
-                differences.append({'ask': number, 'turn': asked['turn']})
+            if before.exists():
+                was, now = before.read_text(), asked['screen']
+                if was != now and comparable(was) != comparable(now):
+                    differences.append({'ask': number, 'turn': asked['turn']})
             replayed += 1
             if stop_after is not None and asked['turn'] >= stop_after:
                 log(f'replay: reached turn {asked["turn"]}, stopping')
