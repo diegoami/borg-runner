@@ -78,9 +78,15 @@ the last two, filed under ESC-01, and `selling-pays-nothing`, under `key:s`.*
 > **When it is safe.** Try an unknown potion or scroll when you are at full
 > hit points, nothing is in view, and ideally you are standing on a staircase
 > you could take at once. Scrolls cannot be read in the dark, while blind or
-> while confused; potions can be drunk in all of these. The bad kinds that can
-> appear in the first few levels (GAME DATA, `object.txt`, "depth" is the
-> shallowest level it is generated on):
+> while confused; potions can be drunk in all of these.
+>
+> The table below is **not a list of scrolls and potions** - the complete list
+> is appendix A6 of the strategy manual, and `object.txt` is the data behind
+> it. This is the subset that changes the decision you are actually making:
+> only the kinds that can *hurt* you, only those generated at depth 5 or
+> shallower, and with what to do if one happens. Anything else, look up when
+> you meet it. (GAME DATA, `object.txt`; "depth" is the shallowest level a
+> kind is generated on.)
 >
 > | Kind | Depth | What happens | What to do |
 > |---|---|---|---|
@@ -90,8 +96,11 @@ the last two, filed under ESC-01, and `selling-pays-nothing`, under `key:s`.*
 > | Potion of Salt Water | 3 | hunger drops to very low, paralysed briefly | eat a ration afterwards |
 > | Scroll of Summon Monster | 1 | monsters appear next to you | take the staircase you are standing on |
 > | Scroll of Darkness | 1 | the room goes dark and you are blinded | wait it out |
-> | Scroll of Deep Descent | 1 | after a few turns you are taken **to the level 5 below the deepest level you have reached**, not 5 below where you stand, and you do not arrive on a staircase | see the paragraph below and Sheet 5 |
 > | Scroll of Aggravate Monster | 5 | wakes and hastes everything in sight | leave by the stairs |
+>
+> Deep Descent is generated from depth 1 too, and it is the one unknown scroll
+> that is *worth* finding; it has its own paragraph below rather than a row
+> here, because it is not a hazard.
 >
 > Everything else that appears in the first levels is harmless or useful:
 > Phase Door, Light, Blessing, Detect Invisible, Treasure Detection, Cure
