@@ -101,6 +101,11 @@ notes are what survives, and a later run may be given them to start from.
 
 ## What to read
 
+**Read these before your first key, and make your first note say which files
+you actually opened.** Nothing else records it, so without that note nobody
+can tell whether a run was played by a reader or a guesser — and the whole
+question here is what a reader does differently.
+
 The game's own manual, at the pin:
 
 ```sh
@@ -122,6 +127,10 @@ git cat-file -p HEAD:docs/c-manual/appendices/A1-monsters-by-depth.md   # grep i
 Chapter 15 says of itself that its rules are "a starting policy to be
 measured, not truths". Treat them that way: following one and being hurt by it
 is a **result**, and the most valuable thing you can report.
+
+The minimum before you spend any gold: the commands you intend to use, and
+your class's section of chapter 14. The appendices are lookup tables — grep
+them when you meet something, do not read them through.
 
 ## Rules
 
