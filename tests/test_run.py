@@ -380,6 +380,29 @@ def test_status_reports_how_far_a_run_has_got(tmp_path, monkeypatch):
     (run / 'started.json').write_text(json.dumps(
         {'seed': 7, 'character': 'r1', 'pid': 999999, 'build': {}}))
     row, = [r for r in run_module.status(tmp_path) if r['run'] == 'r1']
-    assert row['state'] == 'stopped'
+    # "stopped" alone would not say whether anything survives.
+    assert row['state'] == 'stopped, not saved'
+    assert row['saved'] is False
+    assert row['can_carry_on'] is True, 'its keys replay, which is enough'
     assert (row['answered'], row['asked']) == (1, 2)
     assert row['notes'] == 1
+
+
+def test_carrying_a_run_on_does_not_replay_the_quit(tmp_path):
+    """The keys that ended a run are not keys that played it.
+
+    Carrying sonnet-2 on first handed over a game sitting at "Saving game...
+    done. Press Return", because the replay faithfully re-executed the
+    save-and-quit the session had sent.
+    """
+    from borg_runner import replay as replay_module
+    run = a_run(tmp_path, asks=(('1', ' '), ('2', 'a'), ('3', 'x')))
+    (run / run_module.ASK / 'question-3.txt').write_text(
+        'ask 3\nturn 30\ndepth 1\nmax_depth 1\ncursor 0 0\n')
+    (run / run_module.ASK / 'screen-3.txt').write_text('still playing\n')
+    run_module.answer(run, 1, '2222', reason='four steps south')
+    run_module.answer(run, 2, run_module.SAVE_AND_QUIT,
+                      reason='the run was stopped')
+    run_module.answer(run, 3, '\\e', reason='accept the save')
+    assert replay_module.recorded_keys(run) == ['2222', '\x18', '\\e']
+    assert replay_module.recorded_keys(run, played_only=True) == ['2222']

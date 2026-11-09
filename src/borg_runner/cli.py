@@ -153,6 +153,18 @@ def cmd_record(args):
     return 0
 
 
+def cmd_carry_on(args):
+    """Replay a run's keys into a fresh run and leave it playing."""
+    from . import replay as replay_module
+
+    into = run_module.RUNS / (args.name or f'{Path(args.run).name}-again')
+    verdict = replay_module.carry_on(args.run, into)
+    print(json.dumps({'run': str(into), 'identical': verdict['identical'],
+                      'waiting_at_ask': verdict['asks_replayed'] + 1,
+                      'turn': verdict['turn_reached']}, indent=2))
+    return 0 if verdict['identical'] else 1
+
+
 def cmd_status(args):
     """Where every run stands, finished or not."""
     standing = run_module.status()
@@ -264,6 +276,11 @@ def parser():
     p.add_argument('--played-by', help='session, subagent, opencode, openrouter')
     p.add_argument('--model')
     p.set_defaults(func=cmd_record)
+
+    p = sub.add_parser('carry-on', help="continue where another run stopped")
+    p.add_argument('--run', required=True, type=Path, help='the run to continue')
+    p.add_argument('--name', help='the new run (default: <run>-again)')
+    p.set_defaults(func=cmd_carry_on)
 
     p = sub.add_parser('status', help='where every run stands, finished or not')
     p.set_defaults(func=cmd_status)

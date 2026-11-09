@@ -39,6 +39,9 @@ ARCHIVED = (RECORD, KEYS, DECISIONS, NOTEBOOK, 'REPORT.md', 'started.json',
 # Save and quit. The game writes its savefile and exits cleanly, which is
 # both how a run ends and what `takeover` needs to exist (D7).
 SAVE_AND_QUIT = '\x18'
+# How a decision records that it was the session ending the run rather than
+# the player playing. `carry_on` drops these, or it would replay the quit.
+STOPPING = ('the run was stopped', 'accept the save', 'the session stopped')
 
 
 def directory(name=None):
@@ -629,6 +632,17 @@ def write_record(run, process=None, outcome=None, cost=None):
     return record
 
 
+def started_file(run):
+    """The savefile this run's character wrote, if it wrote one."""
+    started = Path(run) / 'started.json'
+    if not started.exists():
+        return None
+    try:
+        return json.loads(started.read_text()).get('savefile')
+    except ValueError:
+        return None
+
+
 def live(run):
     """Whether this run's game process is still there."""
     started = Path(run) / 'started.json'
@@ -678,14 +692,22 @@ def status(where=None):
         # waits for a key. Reporting that as "playing" is a lie the status
         # line should not tell.
         running = live(run)
+        # "stopped" alone says nothing about whether anything survives, so it
+        # says which: a character saved and quit can be continued, a dead one
+        # cannot, and one killed before it saved leaves only its keys - which
+        # is enough, because `carry_on` replays them.
+        saved = Path(started_file(run)).exists() if started_file(run) else False
         state = ('dead at the tomb' if record.get('died') and running
                  else 'dead' if record.get('died')
                  else 'playing' if running
-                 else 'stopped' if running is False else '?')
+                 else ('stopped, saved' if saved else 'stopped, not saved')
+                 if running is False else '?')
         out.append({
             'run': run.name,
             'state': state,
             'playing': running,
+            'saved': saved,
+            'can_carry_on': bool(taken) and not record.get('died'),
             'answered': len(taken),
             'asked': len(asked_at),
             'turn': last.get('turn'),
