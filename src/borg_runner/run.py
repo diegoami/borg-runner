@@ -8,6 +8,7 @@ in it. Whoever answers - a session, or a replay - is somebody else's business
 import hashlib
 import json
 import os
+import re
 import signal
 import subprocess
 import time
@@ -200,6 +201,58 @@ def answer(run, number, keys, reason='', memory=None):
     return target
 
 
+# The tombstone, which is the only place the game states the cause. It is
+# drawn inside a box, so the bars are stripped before matching:
+#     |        Killed on Level 1        |
+#     |       by a small kobold.        |
+TOMB = re.compile(r'Killed on Level\s+(?P<depth>\d+)\s+by\s+(?P<cause>[^.]+)\.')
+
+
+def death_of(run, look_at=6):
+    """How the character died, from the game's own tombstone, or None.
+
+    A run that ends in a death is the thing this repository exists to
+    produce, so the record has to say so rather than leaving the outcome as
+    "playing" because nobody asked.
+    """
+    ask = Path(run) / ASK
+    screens = sorted(ask.glob('screen-*.txt'),
+                     key=lambda path: int(path.stem.split('-')[-1]))
+    for screen in reversed(screens[-look_at:]):
+        text = screen.read_text()
+        if 'RIP' not in text:
+            continue
+        # The tomb is a box with the game's own menu drawn to its right, so
+        # each line's content is what lies between the first two bars; the
+        # rest is scenery. Taking the whole line matched the fixture and not
+        # the game.
+        inside = []
+        for line in text.splitlines():
+            parts = line.split('|')
+            inside.append(parts[1] if len(parts) > 2 else line.strip(' |'))
+        found = TOMB.search(' '.join(' '.join(inside).split()))
+        if found:
+            return {'died': True, 'depth': int(found.group('depth')),
+                    'cause': found.group('cause').strip(),
+                    'tombstone': screen.name}
+        return {'died': True, 'depth': None, 'cause': None,
+                'tombstone': screen.name}
+    return None
+
+
+def questions(run):
+    """Every ask the game made, answered or not.
+
+    The last ask is usually unanswered - the game asked once more and the run
+    ended - and on a death that unanswered ask is the tombstone. Counting only
+    answered asks stopped the record and the replay one frame short of the
+    death itself.
+    """
+    ask = Path(run) / ASK
+    return sorted(int(path.stem.split('-')[-1])
+                  for path in ask.glob('question-*.txt'))
+
+
 def notebook(run, lines=NOTEBOOK_LINES):
     """The player's own notes, as the player left them.
 
@@ -309,6 +362,10 @@ def write_record(run, process=None, outcome=None):
     (run / KEYS).write_text(keys)
     screens = sorted((run / ASK).glob('screen-*.txt'))
     taken = decisions(run)
+    asked_at = questions(run)
+    death = death_of(run)
+    if death:
+        outcome = 'died'
     record = {
         'schema': 'borg-runner/run-record@1',
         'run': run.name,
@@ -316,8 +373,14 @@ def write_record(run, process=None, outcome=None):
         'build': started['build'],
         'asks': len(taken),
         'keypresses': len(keys),
-        'final_turn': taken[-1]['turn'] if taken else 0,
-        'max_depth': max((entry.get('depth') or 0) for entry in taken) if taken else 0,
+        # The furthest turn the game reached, which is the last *question*:
+        # on a death the fatal keys are answered and the tombstone is not.
+        'final_turn': (question(run, asked_at[-1])['turn'] if asked_at
+                       else (taken[-1]['turn'] if taken else 0)),
+        'asks_made': len(asked_at),
+        'max_depth': max([(entry.get('depth') or 0) for entry in taken]
+                         + [(question(run, number)['depth'] or 0)
+                            for number in asked_at]) if asked_at or taken else 0,
         'screens': len(screens),
         'notebook_lines': len(notebook(run, lines=10**6).splitlines()),
         'notebook_sha256': (hashlib.sha256(
@@ -329,6 +392,9 @@ def write_record(run, process=None, outcome=None):
         'savefile_sha256': (hashlib.sha256(live.read_bytes()).hexdigest()
                             if live.exists() else None),
         'outcome': outcome or ('playing' if alive(process) else 'ended'),
+        'died': bool(death),
+        'killed_by': (death or {}).get('cause'),
+        'death_depth': (death or {}).get('depth'),
         'exit_code': process.poll() if process else None,
     }
     (run / RECORD).write_text(json.dumps(record, indent=2, sort_keys=True) + '\n')

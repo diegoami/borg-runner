@@ -1,0 +1,24 @@
+
+
+            _______________________                i) Information
+           /                       \         ___   m) Messages
+          /                         \ ___   /   \  f) File dump
+         /            RIP            \   \  :   :  v) View scores
+        /                             \  : _;,,,;_ x) Examine items
+       /           sonnet-3            \,;_        h) History
+      |               the               |   ___    s) Spoilers
+      |             Novice              |  /   \   n) New Game
+      |                                 |  :   :   q) Quit
+      |              Mage               | _;,,,;_   ____
+      |            Level: 1             |          /    \
+      |             Exp: 2              |          :    :
+      |              AU: 6              |          :    :
+      |        Killed on Level 1        |         _;,,,,;_
+      |       by a small kobold.        |
+      |                                 |
+      |   on Mon Nov  9 20:09:29 2026   |
+     *|   *     *     *    *   *     *  | *
+_____)/\\_)_/___(\/___(//_\)/_\//__\\(/_|_)__________________________
+
+
+

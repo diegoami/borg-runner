@@ -4,6 +4,7 @@ The fast tests work on a run directory made by hand, because the shape of the
 directory is the contract; the slow one plays and replays a real game.
 """
 import json
+from pathlib import Path
 
 import pytest
 
@@ -154,3 +155,33 @@ def test_keeping_refuses_a_run_that_learned_nothing(tmp_path):
         assert 'kept no notes' in str(problem)
     else:
         raise AssertionError('an empty notebook should not be promoted')
+
+
+# The real screen from runs/sonnet-3, kept as a fixture: a hand-written box
+# matched a regex that the game's own tombstone did not, because the game
+# draws its menu to the right of the box.
+TOMBSTONE = (Path(__file__).parent / 'tombstone.txt').read_text()
+
+
+def test_a_death_is_read_from_the_games_own_tombstone(tmp_path):
+    """The record must say the character died, and what killed it."""
+    run = a_run(tmp_path)
+    (run / run_module.ASK / 'screen-3.txt').write_text(TOMBSTONE)
+    death = run_module.death_of(run)
+    assert death == {'died': True, 'depth': 1, 'cause': 'a small kobold',
+                     'tombstone': 'screen-3.txt'}
+
+
+def test_a_run_that_died_is_recorded_as_died_whatever_it_was_told(tmp_path):
+    run = a_run(tmp_path)
+    (run / run_module.ASK / 'screen-3.txt').write_text(TOMBSTONE)
+    record = run_module.write_record(run, outcome='stopped')
+    assert record['outcome'] == 'died'
+    assert record['killed_by'] == 'a small kobold'
+    assert record['death_depth'] == 1
+
+
+def test_a_living_run_has_no_death(tmp_path):
+    run = a_run(tmp_path)
+    assert run_module.death_of(run) is None
+    assert run_module.write_record(run, outcome='stopped')['died'] is False
