@@ -35,10 +35,17 @@ REFERENCE = re.compile(r'(?P<run>[A-Za-z0-9_-]+)#(?P<ask>\d+)')
 
 
 def notebooks(where=None):
-    """The promoted notebooks, which are the evidence."""
+    """The promoted notebooks, which are the evidence.
+
+    A notebook is a *run's* notebook, so it is recognised by having a run of
+    the same name - not by being any file in the directory. Globbing every
+    `.md` here made MANUAL-GAPS.md count as a run with no asks, and evidence
+    written `MANUAL-GAPS#1` would then have passed the check. A consolidation
+    could have cited its own output as evidence.
+    """
     where = Path(where) if where else run_module.KNOWLEDGE
-    return sorted(p for p in where.glob('*.md')
-                  if p.name not in ('LEARNED.md', 'README.md'))
+    runs = recorded_runs()
+    return sorted(path for path in where.glob('*.md') if path.stem in runs)
 
 
 def anchors(name=manual_module.DEFAULT):
@@ -78,18 +85,29 @@ def parse(path=LEARNED):
     return items
 
 
-def known_runs():
-    """Run name -> how many asks it had, from whatever records exist."""
+def recorded_runs():
+    """Run name -> how many asks it made, from the records that exist.
+
+    Both the archive and the working directory count, and `asks_made`
+    is used where it is there: a death's tombstone is an unanswered ask, so
+    evidence may legitimately cite it.
+    """
     counts = {}
-    for record in (pins.ROOT / 'runs').glob('*/record.json'):
-        try:
-            body = json.loads(record.read_text())
-        except ValueError:
-            continue
-        counts[body.get('run') or record.parent.name] = body.get('asks') or 0
-    for kept in notebooks():
-        counts.setdefault(kept.stem, 0)
+    for where in (run_module.RECORDS, pins.ROOT / 'runs'):
+        for record in where.glob('*/record.json'):
+            try:
+                body = json.loads(record.read_text())
+            except ValueError:
+                continue
+            name = body.get('run') or record.parent.name
+            asks = body.get('asks_made') or body.get('asks') or 0
+            counts[name] = max(counts.get(name, 0), asks)
     return counts
+
+
+# Kept under its old name for callers that read it.
+def known_runs():
+    return recorded_runs()
 
 
 def check(path=LEARNED, manual_name=manual_module.DEFAULT):
