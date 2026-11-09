@@ -32,6 +32,7 @@ COLUMNS = (
     ('outcome', 'outcome'),
     ('tokens', 'tokens'),
     ('inherited', 'inherited'),
+    ('read_its_own_playbook', 'read its class'),
 )
 
 
@@ -68,6 +69,8 @@ def rows(where=None):
             'played_by': cost.get('played_by'),
             'inherited': Path(carried.get('inherited_from') or '').name or None,
             'standing_from': record.get('standing_from'),
+            'read_its_own_playbook': record.get('read_its_own_playbook'),
+            'read_before_playing': record.get('read_before_playing'),
             'notebook_lines': record.get('notebook_lines'),
             'replay_url': record.get('replay_url'),
             'record': f'records/{record_path.parent.name}/',

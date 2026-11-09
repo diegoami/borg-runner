@@ -276,3 +276,42 @@ def test_a_real_difference_on_the_tomb_is_still_caught():
     kobold = 'by a small kobold.\n   on Mon Nov  9 20:09:29 2026   \n'
     naga = 'by a black naga.\n   on Mon Nov  9 20:09:29 2026   \n'
     assert replay_module.comparable(kobold) != replay_module.comparable(naga)
+
+
+def test_the_reading_note_is_about_files_not_about_the_word_read(tmp_path):
+    """The first attempt matched "read the letter from the list" in a note
+    about shopping, and reported that as the run's reading."""
+    run = a_run(tmp_path)
+    run_module.remember(run, 'Store letters skip, so read the letter off the '
+                             'screen rather than counting', ask=25)
+    run_module.remember(run, 'Opened before play: docs/BRIEF.md, command.rst '
+                             '(run/rest), strategy-manual ch14 Warrior', ask=1)
+    note = run_module.reading_note(run)
+    assert note.startswith('Opened before play')
+
+
+def test_a_run_says_whether_it_read_the_playbook_for_the_class_it_drew(tmp_path):
+    run = a_run(tmp_path)
+    run_module.remember(run, 'Opened: docs/BRIEF.md, command.rst, '
+                             'strategy-manual ch14 Warrior section', ask=1)
+    note = run_module.reading_note(run)
+    assert run_module.read_for_its_character(run, note, 'Warrior') is True
+    assert run_module.read_for_its_character(run, note, 'Mage') is False
+    assert run_module.read_for_its_character(run, note, None) is None
+
+
+def test_a_record_does_not_lose_what_it_already_knew(tmp_path):
+    """A standing recovered by replaying old keys must survive a rewrite."""
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='x')
+    run_module.write_record(run, outcome='stopped')
+    import json
+    path = run / run_module.RECORD
+    record = json.loads(path.read_text())
+    record['character'] = 'Half-Troll Warrior'
+    record['class'] = 'Warrior'
+    record['standing_from'] = 'a replay of the archived keys'
+    path.write_text(json.dumps(record))
+    again = run_module.write_record(run, outcome='stopped')
+    assert again['character'] == 'Half-Troll Warrior'
+    assert again['standing_from'] == 'a replay of the archived keys'

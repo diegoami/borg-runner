@@ -330,6 +330,37 @@ def questions(run):
                   for path in ask.glob('question-*.txt'))
 
 
+def reading_note(run):
+    """The first note, which the brief requires to list what was opened.
+
+    Nothing else records whether a player read anything, and a run's own
+    final report is written afterwards and has been generous with itself: one
+    report claimed three strategy chapters its contemporaneous note did not.
+    """
+    # A note *about files*, not merely a note containing the word "read":
+    # the first attempt matched "read the letter from the list" in a note
+    # about shopping.
+    names = ('.md', '.rst', 'docs/', 'knowledge/', 'manuals/', 'vendor/')
+    for line in notebook(run, lines=10 ** 6).splitlines():
+        said = line.lstrip('- ').strip()
+        if said and any(name in said for name in names):
+            return said
+    return None
+
+
+def read_for_its_character(run, note=None, character_class=None):
+    """Whether the reading note names the class the game drew.
+
+    The character is drawn at random, so the playbook that matters is not
+    knowable in advance - which is exactly why a run has to say it read the
+    one it got, rather than the one it would have chosen.
+    """
+    note = note if note is not None else reading_note(run)
+    if not note or not character_class:
+        return None
+    return character_class.lower() in note.lower()
+
+
 def notebook(run, lines=NOTEBOOK_LINES):
     """The player's own notes, as the player left them.
 
@@ -434,7 +465,11 @@ def _standing(run, asked_at):
         return {'character_level': None, 'gold': None, 'carried_value': None,
                 'wealth': None, 'race': None, 'class': None, 'character': None}
     last = seen[-1]
-    born = next((asked for asked in seen
+    # The *last* ask that names a race, not the first: before birth finishes
+    # the player struct holds the menu's defaults, which are the last race and
+    # class in the lists, so taking the first ask labelled every run a Kobold
+    # Blackguard.
+    born = next((asked for asked in reversed(seen)
                  if asked.get('race') and asked['race'] != '?'), last)
     return {
         'race': born.get('race'),
@@ -506,5 +541,23 @@ def write_record(run, process=None, outcome=None, cost=None):
         'death_depth': (death or {}).get('depth'),
         'exit_code': process.poll() if process else None,
     }
+    # A record must not lose what it already knew. The standing of a run
+    # played under an older build can only be recovered by replaying its
+    # keys, and recomputing from its own questions yields nothing - so a
+    # value already there survives a later rewrite, and `standing_from` says
+    # where it came from.
+    if (run / RECORD).exists():
+        before = json.loads((run / RECORD).read_text())
+        for field in ('race', 'class', 'character', 'character_level',
+                      'max_character_level', 'gold', 'carried_value',
+                      'wealth', 'hp', 'standing_from', 'replay_url'):
+            if record.get(field) is None and before.get(field) is not None:
+                record[field] = before[field]
+    # Last, because it is checked against the class the record ends up with,
+    # which for an older run is the one recovered by replaying its keys.
+    note = reading_note(run)
+    record['read_before_playing'] = note
+    record['read_its_own_playbook'] = read_for_its_character(
+        run, note=note, character_class=record.get('class'))
     (run / RECORD).write_text(json.dumps(record, indent=2, sort_keys=True) + '\n')
     return record
