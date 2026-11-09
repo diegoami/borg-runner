@@ -38,6 +38,7 @@ When a run stops it publishes itself — the prompts end with the five commands
 that do it:
 
 ```sh
+.venv/bin/python -m borg_runner stop --run runs/mine               # it saves and quits
 .venv/bin/python -m borg_runner record --run runs/mine --played-by … --model …/…
 .venv/bin/python -m borg_runner keep --run runs/mine        # its notes into knowledge/
 .venv/bin/python -m borg_runner archive --run runs/mine     # keys, notes, and its replay page

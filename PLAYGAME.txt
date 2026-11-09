@@ -107,7 +107,7 @@ from this page". No run has ever found a staircase by walking.
 
 == WHEN YOU STOP: RECORD IT AND UPDATE THE DASHBOARD ==
 
-Run all five, in order. The first three are about your run; the last two
+Run all six, in order. The first three are about your run; the last two
 publish it, and they are what makes your run visible to anyone else.
 
     .venv/bin/python -m borg_runner record --run runs/{RUNNAME} \
@@ -115,6 +115,7 @@ publish it, and they are what makes your run visible to anyone else.
         --played-by <session|codex|opencode|other> \
         --model <provider>/<exact model version>
 
+    .venv/bin/python -m borg_runner stop --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner keep --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner archive --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner overview
@@ -123,6 +124,12 @@ publish it, and they are what makes your run visible to anyone else.
         git pull --rebase -q && git push -q
 
 What each does:
+
+- **stop** asks the game to save and quit. Nothing else does: when you stop
+  answering, the game sits waiting for the next key for ever. A lingering
+  game holds its character's savefile, which blocks anyone continuing your
+  run, and it is the one step that is easy to forget because the run looks
+  finished to you.
 
 - **record** writes the run record: the seed, the build, the character the
   game drew, its level, its gold, the game's own valuation of what it

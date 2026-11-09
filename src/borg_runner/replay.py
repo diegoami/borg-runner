@@ -127,6 +127,15 @@ def carry_on(original, into, out=None, log=print):
     history, old keys and new, so it replays from its seed like any other.
     """
     original, into = Path(original).resolve(), Path(into).resolve()
+    # The run being continued has finished playing by definition, but its game
+    # may still be sitting at an unanswered ask - nothing reaps it when a model
+    # stops answering. Leaving it alive would make the new run collide with it
+    # over the character's savefile, so it is asked to save and quit first.
+    lingering = run_module.started_process(original)
+    if lingering is not None:
+        log(f'carry_on: {original.name} is still running; asking it to stop')
+        run_module.stop(original, lingering, log=log)
+        run_module.write_record(original, outcome='stopped')
     into.mkdir(parents=True, exist_ok=True)
     (into / run_module.ASK).mkdir(exist_ok=True)
     book = original / run_module.NOTEBOOK

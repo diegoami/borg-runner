@@ -509,6 +509,52 @@ def alive(process):
     return process is not None and process.poll() is None
 
 
+class Started:
+    """A game this session did not start, driven by its recorded pid.
+
+    `stop` needs something that can be polled and signalled; after the
+    command that started a game has returned, all that is left is the pid in
+    `started.json`. A finished run whose model simply stopped answering leaves
+    the game waiting for ever, which blocked `carry-on` on its own name guard.
+    """
+
+    def __init__(self, pid):
+        self.pid = pid
+
+    def poll(self):
+        return None if Path(f'/proc/{self.pid}').exists() else 0
+
+    def send_signal(self, number):
+        try:
+            os.kill(self.pid, number)
+        except OSError:
+            pass
+
+    def wait(self, timeout=None):
+        import time as _time
+        deadline = _time.monotonic() + (timeout or 0)
+        while self.poll() is None and _time.monotonic() < deadline:
+            _time.sleep(0.1)
+        return self.poll()
+
+    def kill(self):
+        self.send_signal(signal.SIGKILL)
+
+
+def started_process(run):
+    """The game of a run this session did not start, or None."""
+    path = Path(run) / 'started.json'
+    if not path.exists():
+        return None
+    try:
+        pid = json.loads(path.read_text()).get('pid')
+    except ValueError:
+        return None
+    if not pid or not Path(f'/proc/{pid}').exists():
+        return None
+    return Started(pid)
+
+
 def stop(run, process, log=print, patience=20.0):
     """Ask the game to save and quit, and wait for it.
 

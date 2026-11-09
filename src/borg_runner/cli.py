@@ -171,6 +171,21 @@ def cmd_carry_on(args):
     return 0 if verdict['identical'] else 1
 
 
+def cmd_stop(args):
+    """End a run's game cleanly, so it saves and does not linger."""
+    process = run_module.started_process(args.run)
+    if process is None:
+        print(f'{Path(args.run).name}: no game of its own is running')
+    else:
+        run_module.stop(args.run, process)
+    record = run_module.write_record(args.run, outcome=args.outcome)
+    print(json.dumps({k: record.get(k) for k in
+                      ('run', 'asks', 'keypresses', 'final_turn', 'max_depth',
+                       'character', 'character_level', 'wealth', 'outcome',
+                       'killed_by')}, indent=2))
+    return 0
+
+
 def cmd_status(args):
     """Where every run stands, finished or not."""
     standing = run_module.status()
@@ -293,6 +308,11 @@ def parser():
     p.add_argument('--run', required=True, type=Path, help='the run to continue')
     p.add_argument('--name', help='the new run (default: <run>-again)')
     p.set_defaults(func=cmd_carry_on)
+
+    p = sub.add_parser('stop', help="end a run's game cleanly")
+    p.add_argument('--run', required=True, type=Path)
+    p.add_argument('--outcome', default='stopped')
+    p.set_defaults(func=cmd_stop)
 
     p = sub.add_parser('status', help='where every run stands, finished or not')
     p.set_defaults(func=cmd_status)

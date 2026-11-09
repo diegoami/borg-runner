@@ -26,6 +26,7 @@ from borg_runner import gamedata as gd
 from borg_runner import pins
 
 INSTRUCTIONS = pins.ROOT / 'manuals' / 'INSTRUCTIONS.md'
+INSTRUCTIONS_2 = pins.ROOT / 'manuals' / 'INSTRUCTIONS_2.md'
 
 CONSUMABLE_TYPES = ('potion', 'scroll', 'food', 'flask')
 
@@ -40,6 +41,7 @@ class Claim:
     ok: bool
     span: tuple = (0, 0)
     verifiable: bool = True
+    covers: tuple = ()          # spans of the page's numbers this claim settles
 
     def message(self):
         if self.claimed is True:           # a yes/no claim: the page relies on it
@@ -101,8 +103,9 @@ def plain(text):
 class Ctx:
     """The page, its line numbers and the claims found so far."""
 
-    def __init__(self, text):
+    def __init__(self, text, volume=1):
         self.text = text
+        self.volume = volume
         self.starts = [0] + [m.end() for m in re.finditer('\n', text)]
         self.report = Report()
         self.shortcuts = {}            # `object` -> its path, from the page's own header
@@ -111,11 +114,11 @@ class Ctx:
         return bisect.bisect_right(self.starts, pos)
 
     def emit(self, kind, pos, what, claimed, real, ok=None, end=None,
-             verifiable=True):
+             verifiable=True, covers=()):
         ok = (claimed == real) if ok is None else ok
         self.report.claims.append(Claim(
             self.line(pos), kind, what, claimed, real, bool(ok),
-            (pos, end if end is not None else pos), verifiable))
+            (pos, end if end is not None else pos), verifiable, tuple(covers)))
         return ok
 
     def problem(self, text, pos=None):
@@ -137,9 +140,11 @@ class Ctx:
 EXTRACTORS = []
 
 
-def extractor(name, minimum):
+def extractor(name, minimum, volumes=(1,)):
+    """Register a grammar. `minimum` is how many claims it must find, one number
+    for every volume it reads or {volume: number}."""
     def register(fn):
-        EXTRACTORS.append((name, minimum, fn))
+        EXTRACTORS.append((name, minimum, fn, tuple(volumes)))
         return fn
     return register
 
@@ -354,7 +359,7 @@ def expand_names(cell):
     names, kind = [], None
     for part in cell.split(' / '):
         part = part.replace('**', '').strip()
-        match = re.match(r'^(Potion|Scroll|Wand|Staff|Ring|Rod) of (.*)$', part)
+        match = re.match(r'^(Potion|Scroll|Wand|Staff|Ring|Rod|Amulet) of (.*)$', part)
         if match:
             kind, part = match[1].lower(), match[2]
         names.append((kind, part))
@@ -580,10 +585,11 @@ def claim_spells(c, cls, entry, body, offset):
         own.append(body[mention.end():stop])
     for index, mention in enumerate(mentions):
         scope = own[index]
+        scope_at = offset + mention.end()
         # "A and B CL3": the level after B is A's too (nothing else is shared)
-        shared = scope
+        shared, shared_at = scope, scope_at
         if re.fullmatch(r'\s*and\s*', scope) and index + 1 < len(mentions):
-            shared = own[index + 1]
+            shared, shared_at = own[index + 1], offset + mentions[index + 1].end()
         # "CL1 spells: A, B (2 sp)" and "CL1: A only": a head names the level
         before = body[:mention.start()]
         heads = list(re.finditer(r'\bCL(\d+)(?: spells?)?:', before))
@@ -596,14 +602,17 @@ def claim_spells(c, cls, entry, body, offset):
         fail = re.search(r'(\d+)% base failure', scope)
         pos = offset + mention.start()
         if level:
-            c.emit('spell level', pos, f'{cls} {real_name} level', int(level[1]), real[2])
+            c.emit('spell level', pos, f'{cls} {real_name} level', int(level[1]), real[2],
+                   covers=[(shared_at + level.start(1), shared_at + level.end(1))])
         elif head is not None and not re.search(r'CL ?\d', scope):
             c.emit('spell level', pos, f'{cls} {real_name} level (under "CL{head}:")',
                    head, real[2])
         if mana:
-            c.emit('spell mana', pos, f'{cls} {real_name} mana', int(mana[1]), real[3])
+            c.emit('spell mana', pos, f'{cls} {real_name} mana', int(mana[1]), real[3],
+                   covers=[(scope_at + mana.start(1), scope_at + mana.end(1))])
         if fail:
-            c.emit('spell fail', pos, f'{cls} {real_name} base failure %', int(fail[1]), real[4])
+            c.emit('spell fail', pos, f'{cls} {real_name} base failure %', int(fail[1]), real[4],
+                   covers=[(scope_at + fail.start(1), scope_at + fail.end(1))])
 
 
 def kit_items(text):
@@ -839,24 +848,43 @@ def plain_keep(text):
     return ''.join(out)
 
 
-def claim_monster(c, entry, label, scope, pos):
+def monster_flags(entry):
+    """The monster's flags with its base's (`monster_base.txt`): ghosts are
+    INVISIBLE and PASS_WALL there, not in the monster's own entry."""
+    flags = set(entry.flags())
+    for base in gd.load('monster_base.txt')[0]:
+        if base.value == entry.first('base'):
+            flags |= base.flags()
+    return flags
+
+
+def claim_monster(c, entry, label, scope, pos, base=None):
+    """Claims in `scope`, the text after a monster's name. `base`, when given, is
+    the page offset of `scope`, and lets each claim say which numbers it settles."""
+    def at(found, group=0):
+        if base is None or found is None:
+            return ()
+        return ((base + found.start(group), base + found.end(group)),)
+
     depth = re.search(r'\bDL ?(\d+)', scope)
     if depth:
-        c.emit('monster depth', pos, f'{label} depth:', int(depth[1]), int(entry.first('depth')))
+        c.emit('monster depth', pos, f'{label} depth:', int(depth[1]), int(entry.first('depth')),
+               covers=at(depth, 1))
     hp = re.search(r'(\d+) hp', scope)
     if hp:
-        c.emit('monster hp', pos, f'{label} hit-points:', int(hp[1]), int(entry.first('hit-points')))
+        c.emit('monster hp', pos, f'{label} hit-points:', int(hp[1]), int(entry.first('hit-points')),
+               covers=at(hp, 1))
     speed = re.search(r'\+(\d+)(?: speed)?\b', scope)
     if speed:
         c.emit('monster speed', pos, f'{label} speed: (+{speed[1]})', int(speed[1]),
-               int(entry.first('speed')) - 110)
+               int(entry.first('speed')) - 110, covers=at(speed, 1))
     exp = re.search(r'(\d+) exp x level (\d+)', scope)
     if exp:
         c.emit('monster exp', pos, f'{label} experience:', int(exp[1]),
-               int(entry.first('experience')))
+               int(entry.first('experience')), covers=at(exp, 1))
         c.emit('monster depth', pos, f'{label} depth: (as level)', int(exp[2]),
-               int(entry.first('depth')))
-    scope_blows = re.sub(r'swarm\*\* of \d+d\d+', '', scope)
+               int(entry.first('depth')), covers=at(exp, 2))
+    scope_blows = re.sub(r'(?:swarm\*\* of|pack of up to) \d+d\d+', '', scope)
     dice = re.search(r'(?:(\d+) x )?(\d+d\d+)', scope_blows)
     real_blows = blow_dice(entry)
     if dice:
@@ -864,25 +892,53 @@ def claim_monster(c, entry, label, scope, pos):
         have = real_blows.count(dice[2])
         c.emit('monster blow', pos, f'{label} blow dice {dice[2]}' +
                (f' x{count}' if count else ''), (count or 1, dice[2]),
-               (have if count else min(have, 1), dice[2]))
+               (have if count else min(have, 1), dice[2]),
+               covers=at(re.search(re.escape(dice[0]), scope)))
     swarm = re.search(r'swarm\*\* of (\d+d\d+)', scope)
     if swarm:
         friends = (entry.first('friends') or '').split(':')
         c.emit('monster group', pos, f'{label} friends: dice', swarm[1],
                friends[1] if len(friends) > 1 else 'no friends: line')
-    upto = re.search(r'up to (\d+)(?: per turn)?', scope)
+    pack = re.search(r'pack of up to (\d+d\d+) more', scope)
+    if pack:
+        same = [v.split(':') for v in entry.all('friends') if v.split(':')[2].lower() == 'same']
+        c.emit('monster group', pos, f'{label} friends: its own kind, dice', pack[1],
+               same[0][1] if same else 'no friends: line', covers=at(pack, 1))
+    upto = re.search(r'up to (\d+)( per its turn)?', scope)
     if upto and real_blows:
         top = sum(gd.dice_max(d) or 0 for d in real_blows)
-        factor = 1 + (int(entry.first('speed')) - 110) // 10
-        c.emit('monster damage', pos, f'{label} worst melee per player turn', int(upto[1]),
-               top * factor)
+        factor = 1 if upto[2] else 1 + (int(entry.first('speed')) - 110) // 10
+        c.emit('monster damage', pos, f'{label} worst melee per ' +
+               ('monster' if upto[2] else 'player') + ' turn', int(upto[1]), top * factor,
+               covers=at(upto, 1))
+    freq = re.search(r'\b1 in (\d+)\b', scope)
+    if freq:
+        real = {int(entry.first(k)) for k in ('spell-freq', 'innate-freq') if entry.first(k)}
+        c.emit('monster freq', pos, f'{label} casts 1 in N turns (spell-freq or innate-freq)',
+               int(freq[1]), int(freq[1]) if int(freq[1]) in real else sorted(real) or 'no freq line',
+               covers=at(freq, 1))
+    flags = monster_flags(entry)
     for word, (where, needle) in KEYWORDS.items():
         if word in scope.lower():
             if where == 'flag':
-                real = needle in entry.flags()
+                real = needle in flags
             else:
                 real = any(needle in value for _, value, _ in entry.fields)
             c.emit('monster trait', pos, f'{label} {word} ({needle})', True, real)
+    for word, flag in VOLUME_TWO_FLAGS.items():
+        if word in scope.lower():
+            c.emit('monster trait', pos, f'{label} {word} ({flag})', True, flag in flags)
+    if base is not None:
+        have = set()
+        for key, value, _ in entry.fields:
+            if key in ('spells', 'blow', 'flags'):
+                have.update(re.findall(r'[A-Z][A-Z_0-9]+', value))
+        for token in re.findall(r'\b([A-Z]{2,}(?:_[A-Z0-9]+)+|[A-Z]{3,})\b', scope):
+            c.emit('monster trait', pos, f'{label} has {token} (spell, blow or flag)', True,
+                   token in have or token in flags)
+
+
+VOLUME_TWO_FLAGS = {'passes walls': 'PASS_WALL', 'breeds': 'MULTIPLY'}
 
 
 @extractor('trap door', minimum=6)
@@ -1130,7 +1186,7 @@ def line_text(c, number):
     return c.text[c.starts[number - 1]:end]
 
 
-@extractor('citation shortcuts', minimum=14)
+@extractor('citation shortcuts', minimum={1: 14, 2: 8}, volumes=(1, 2))
 def citation_shortcuts(c):
     """The header's `object`/`store`/... = file conventions: every file named exists."""
     found = c.search(r'^Sources, so any line can be checked\..*$', re.M, 'the sources header')
@@ -1183,7 +1239,7 @@ def line_files(c, pos):
     return []
 
 
-@extractor('source and field citations', minimum=32)
+@extractor('source and field citations', minimum={1: 32, 2: 40}, volumes=(1, 2))
 def source_citations(c):
     """Every backticked token that names something in the pinned tree must exist."""
     keys = {path.name: gd.load(path.name)[1] for path in gd.GAMEDATA.glob('*.txt')}
@@ -1208,7 +1264,7 @@ def source_citations(c):
         elif re.fullmatch(r'(?:knowledge|docs|records)/[\w./-]+', token):
             c.emit('citation', pos, f'{token} exists in this repository', True,
                    (pins.ROOT / token).exists())
-        elif re.fullmatch(r'[a-z]+(?:_[a-z]+)+', token):
+        elif re.fullmatch(r'[a-z]+(?:_[a-z]+)+', token) and token not in c.shortcuts:
             c.emit('citation', pos, f'option {token} exists in src/list-options.h', True,
                    token in options)
         elif re.fullmatch(r'[A-Z][A-Z_]{3,}', token):
@@ -1228,7 +1284,7 @@ def source_citations(c):
                        True, bool(valid))
 
 
-@extractor('chapter references', minimum=23)
+@extractor('chapter references', minimum={1: 23, 2: 15}, volumes=(1, 2))
 def chapter_references(c):
     """`c4 4.11`, `ESC-04`, `c15 ESC`: the section or rule must exist at the pin."""
     chapters = {n: gd.read_chapter(n) or '' for n in gd.strategy_chapter_files()}
@@ -1248,7 +1304,7 @@ def chapter_references(c):
                bool(re.search(rf'\b{m[1]}-\d\d\b', fifteen)), end=m.end())
 
 
-@extractor('quotations and document sections', minimum=9)
+@extractor('quotations and document sections', minimum={1: 9, 2: 3}, volumes=(1, 2))
 def quotations(c):
     """A phrase in double quotes is quoted from a source cited on its line."""
     sources = {}
@@ -1295,15 +1351,1183 @@ def quotations(c):
                    True, plain(part) in titles, end=m.end())
 
 
+# =============================================================================
+# Volume two: depth 5 to 20 (`manuals/INSTRUCTIONS_2.md`)
+#
+# The same method: the page makes a claim and names where it comes from, the
+# grammar finds the claim and looks it up. What is new is what volume two says
+# that volume one does not: counts over the whole monster list (every breather,
+# every summoner, every unique in range), arithmetic over the game's own
+# formulas (breath damage, teleport distance, hit points at a level) and what
+# the strategy manual says against what the data says. `covers` lets a claim
+# say which numbers on the page it settles, so `number_coverage` can say how
+# many of the page's numbers nothing checks.
+# =============================================================================
+
+def real_monsters():
+    """Every monster kind but the `<player>` placeholder, which is not a monster."""
+    return [e for e in gd.load('monster.txt')[0] if e.value != '<player>']
+
+
+def depth_of(entry):
+    return int(entry.first('depth', '0'))
+
+
+def spell_names(entry):
+    names = []
+    for value in entry.all('spells'):
+        names += [part.strip() for part in value.split('|')]
+    return names
+
+
+def spell_table():
+    return {e.value: e for e in gd.load('monster_spell.txt')[0]}
+
+
+def projection_entries():
+    """`projection.txt` with each `code:` given to the `name:` that FOLLOWS it
+    (the file writes `code:` first, so the generic parser files it under the
+    entry before)."""
+    entries, code, current = [], None, None
+    for number, raw in enumerate((gd.GAMEDATA / 'projection.txt').read_text().splitlines(), 1):
+        if raw.startswith('code:'):
+            code = raw[5:].strip()
+        elif raw.startswith('name:'):
+            current = gd.Entry('projection.txt', 'name', raw[5:], number)
+            current.fields.append(('code', code, number))
+            entries.append(current)
+        elif current is not None and raw.strip() and not raw.startswith('#'):
+            key, _, value = raw.partition(':')
+            current.fields.append((key, value, number))
+    return entries
+
+
+def projection_by_code():
+    return {e.first('code'): e for e in projection_entries()}
+
+
+def projection_by_name():
+    return {e.value.lower(): e for e in projection_entries()}
+
+
+def breath_codes(entry):
+    """The projection codes (`FIRE`, `ELEC`...) of the entry's breath spells."""
+    spells = spell_table()
+    codes = []
+    for name in spell_names(entry):
+        if name.startswith('BR_') and name in spells:
+            codes.append(next(v for k, v, _ in spells[name].fields if k == 'effect').split(':')[1])
+    return codes
+
+
+def in_range(entry, low=5, high=20):
+    return low <= depth_of(entry) <= high
+
+
+def monster_table_two():
+    """`monster_table` plus the short names the page uses for uniques
+    (`Wormtongue` for `Wormtongue, Agent of Saruman`)."""
+    table = monster_table()
+    for key in list(table):
+        if ',' in key:
+            table.setdefault(key.split(',')[0], table[key])
+    return table
+
+
+def name_regex(table):
+    names = sorted(table, key=len, reverse=True)
+    return re.compile(r'(?<![\w])(' + '|'.join(re.escape(n) for n in names) + r')(?![\w])')
+
+
+def table_cells(c, marker):
+    """The first markdown table after `marker`: (header, rows), each a list of
+    (text, start, end) cells with positions in the page."""
+    start = c.text.find(marker)
+    if start < 0:
+        c.problem(f'the page no longer has {marker!r}')
+        return [], []
+    rows, pos = [], c.text.find('\n|', start)
+    while pos >= 0:
+        end = c.text.find('\n', pos + 1)
+        end = len(c.text) if end < 0 else end
+        line = c.text[pos + 1:end]
+        if not line.startswith('|'):
+            break
+        offset, cells = pos + 2, []
+        for part in line.split('|')[1:-1]:
+            lead = len(part) - len(part.lstrip())
+            text = part.strip()
+            cells.append((text, offset + lead, offset + lead + len(text)))
+            offset += len(part) + 1
+        rows.append(cells)
+        pos = end
+    if not rows:
+        return [], []
+    body = [r for r in rows[1:] if not all(re.fullmatch(r':?-+:?', t) for t, _, _ in r)]
+    return rows[0], body
+
+
+def numbers_in(cell):
+    """Spans of the numbers inside a cell (text, start, end)."""
+    text, start, _ = cell
+    return [(start + m.start(), start + m.end()) for m in re.finditer(r'\d+(?:\.\d+)?', text)]
+
+
+def find_row_monster(c, cell, table):
+    entry = find_monster(cell[0], table)
+    if entry is None:
+        c.emit('monster name', cell[1], f'{cell[0]} is a monster in monster.txt', True, False)
+    return entry
+
+
+@extractor('depth bands', minimum=15, volumes=(2,))
+def depth_bands(c):
+    header, rows = table_cells(c, 'kinds per depth band')
+    bands = []
+    for text, _, _ in header[1:]:
+        match = re.fullmatch(r'(\d+)-(\d+)', text)
+        bands.append((int(match[1]), int(match[2])) if match else None)
+    monsters = real_monsters()
+    for row in rows:
+        label = row[0][0]
+        for cell, band in zip(row[1:], bands):
+            inside = [m for m in monsters if band[0] <= depth_of(m) <= band[1]]
+            real = {'kinds': len(inside),
+                    'breathe': sum(any(s.startswith('BR_') for s in spell_names(m)) for m in inside),
+                    'summon': sum(any(s.startswith('S_') for s in spell_names(m)) for m in inside)
+                    }.get(label, 'no such row')
+            c.emit('depth band', cell[1], f'monsters of depth {band[0]}-{band[1]}: {label}',
+                   int(cell[0]), real, covers=numbers_in(cell))
+    spells = spell_table()
+    breaths = [n for n in spells if n.startswith('BR_')]
+    found = c.search(r'`hit:100`', name='the breath always hits claim')
+    c.emit('breath', found.start() if found else 0, 'every BR_ spell has hit:100 (no armour roll)', True,
+           all(spells[n].first('hit') == '100' for n in breaths))
+    found = c.search(r'no `message-save` line on any `BR_` spell', name='breath has no saving throw')
+    c.emit('breath', found.start() if found else 0, 'no BR_ spell has a message-save line (no saving throw)',
+           True, not any(spells[n].has('message-save') for n in breaths))
+
+
+def squash(text):
+    """Chapter text for comparing: no markdown, `x` for the multiplication sign."""
+    return re.sub(r'\s+', ' ', plain(text).replace('×', 'x').replace('−', '-'))
+
+
+def chapter15_depth_gates():
+    """`{depth: (required, [(anchor name, depth)])}` from DEPTH-02's table."""
+    fifteen = gd.read_chapter(15) or ''
+    block = fifteen[fifteen.find('DEPTH-02'):fifteen.find('DEPTH-03')]
+    gates = {}
+    for m in re.finditer(r'^>?\s*\| (\d+) \| (.*?) \| (.*?) \|\s*$', block, re.M):
+        anchors = [(plain(a[0]), int(a[1])) for a in re.findall(r'([^,()]+?) \(D(\d+)', m[3])]
+        gates[int(m[1])] = (squash(m[2]), anchors)
+    return gates
+
+
+@extractor('kit gates', minimum=14, volumes=(2,))
+def kit_gates(c):
+    header, rows = table_cells(c, "The rows in this volume's range")
+    gates, table = chapter15_depth_gates(), monster_table_two()
+    for row in rows:
+        depth_cell, need_cell, anchor_cell = row[:3]
+        depth = int(depth_cell[0])
+        said, anchors = gates.get(depth, (None, []))
+        c.emit('gate', depth_cell[1], f'c15 DEPTH-02 has a row for depth {depth}', True,
+               said is not None, covers=numbers_in(depth_cell))
+        c.emit('gate', need_cell[1], f'depth {depth} gate requirement is c15 DEPTH-02\'s',
+               squash(need_cell[0]), said, covers=numbers_in(need_cell))
+        mine = [(plain(a[0]), int(a[1])) for a in re.findall(r'([^,()]+?) \(DL(\d+)\)', anchor_cell[0])]
+        c.emit('gate', anchor_cell[1], f'depth {depth} anchor monsters (name, depth) are c15 DEPTH-02\'s',
+               mine, anchors)
+        for name, said_depth in anchors:
+            entry = find_monster(name, table)
+            c.emit('gate', anchor_cell[1], f'c15 DEPTH-02 anchor {name}: depth', said_depth,
+                   depth_of(entry) if entry else 'no such monster')
+    found = c.search(r'Cure Light Wounds heals (\d+) \(`object`\), under his (\d+)',
+                     name='the Cure Light Wounds against Bullroarer line')
+    if found:
+        potion = find_object('Cure Light Wounds', types=['potion'])
+        c.emit('gate', found.start(), 'Cure Light Wounds heals', int(found[1]),
+               int(potion.first('dice')) if potion.first('dice') else None, covers=[found.span(1)])
+        bull = table[plain('Bullroarer')]
+        top = sum(gd.dice_max(d) or 0 for d in blow_dice(bull)) * (1 + (int(bull.first('speed')) - 110) // 10)
+        c.emit('gate', found.start(), 'Bullroarer worst melee per player turn', int(found[2]), top,
+               covers=[found.span(2)])
+
+
+@extractor('monster mentions', minimum=40, volumes=(2,))
+def monster_mentions(c):
+    """`**name** (DL5, +10, 60 hp, ...)`: every figure in the parentheses is looked up."""
+    table = monster_table_two()
+    for m in c.finditer(r'\*\*([^*]+?)\*\* \((DL\d+[^)]*)\)'):
+        for name in [n.strip() for n in re.split(r' and |, ', m[1])]:
+            entry = find_monster(name, table)
+            if entry is None:
+                c.emit('monster name', m.start(), f'{name} is a monster in monster.txt', True, False)
+                continue
+            claim_monster(c, entry, name, m[2], m.start(), base=m.start(2))
+
+
+@extractor('monster depths in lists', minimum=14, volumes=(2,))
+def monster_depth_lists(c):
+    """`Orfax and tengu (DL10), quasit (DL16)`: each name's depth."""
+    table = monster_table_two()
+    names = '|'.join(re.escape(n) for n in sorted(table, key=len, reverse=True))
+    text = plain_keep(c.text)
+    chain = re.compile(rf'(?<![\w])((?:{names})(?:(?:, and |, | and )(?:{names}))*) \(dl(\d+)\)')
+    inner = name_regex(table)
+    for m in chain.finditer(text):
+        for name in inner.finditer(m[1]):
+            entry = find_monster(name[1], table)
+            c.emit('monster depth', m.start(), f'{name[1]} depth (in a list)', int(m[2]),
+                   depth_of(entry), covers=[m.span(2)])
+
+
+@extractor('monster lists under a spell or blow', minimum=8, volumes=(2,))
+def monster_token_lists(c):
+    """`TELE_TO casters pull you back: Orfax and tengu`: every name after the colon
+    has that spell, blow or flag."""
+    table = monster_table_two()
+    inner = name_regex(table)
+    for m in c.finditer(r'\b([A-Z][A-Z]+(?:_[A-Z0-9]+)+)\b[^:.\n]{0,70}: ([^.\n]+)'):
+        token = m[1]
+        for name in inner.finditer(plain_keep(m[2])):
+            entry = find_monster(name[1], table)
+            have = set()
+            for key, value, _ in entry.fields:
+                if key in ('spells', 'blow', 'flags'):
+                    have.update(re.findall(r'[A-Z][A-Z_0-9]+', value))
+            c.emit('monster trait', m.start(), f'{name[1]} has {token}', True,
+                   token in have or token in monster_flags(entry))
+
+
+def spell_max_damage(spell, power):
+    """The most a monster spell does at spell power `power`: the first damaging
+    effect's dice, with `expr:` variables worked out left to right."""
+    fields, damaging = spell.fields, ('DAMAGE', 'BOLT', 'BALL', 'BOLT_OR_BEAM', 'ARC', 'STRIKE')
+    for index, (key, value, _) in enumerate(fields):
+        if key != 'effect' or value.split(':')[0] not in damaging:
+            continue
+        dice, values = None, {}
+        for key2, value2, _ in fields[index + 1:]:
+            if key2 == 'effect':
+                break
+            if key2 == 'dice':
+                dice = value2
+            elif key2 == 'expr':
+                var, base_name, ops = value2.split(':', 2)
+                number = power if base_name == 'SPELL_POWER' else 0
+                tokens = ops.split()
+                for op, operand in zip(tokens[0::2], tokens[1::2]):
+                    operand = int(operand)
+                    number = {'/': lambda a, b: a // b, '*': lambda a, b: a * b,
+                              '+': lambda a, b: a + b, '-': lambda a, b: a - b}[op](number, operand)
+                values[var] = number
+        if dice is None:
+            return None
+        for var, number in values.items():
+            dice = dice.replace(f'${var}', str(number))
+        match = re.fullmatch(r'(?:(\d+)\+)?(\d+)d(\d+)', dice)
+        if not match:
+            return None
+        return int(match[1] or 0) + int(match[2]) * int(match[3])
+    return None
+
+
+@extractor('monster spell damage', minimum=11, volumes=(2,))
+def monster_spell_damage(c):
+    found = c.search(r'Worst spells at the native depth: (?P<body>[^.]*?)\. ', re.S, 'the worst spells list')
+    if not found:
+        return
+    table, spells = monster_table_two(), spell_table()
+    body, offset = found['body'], found.start('body')
+    position = 0
+    for group in body.split('; '):
+        start = offset + body.index(group, position)
+        position = body.index(group, position) + len(group)
+        name = re.match(r'^(.*?) (?:[A-Z]{2}_[A-Z]+|WOUND) up to', group)
+        entry = find_monster(name[1], table) if name else None
+        if entry is None:
+            c.problem(f'cannot read a monster in {group!r}', start)
+            continue
+        power = int(entry.first('spell-power') or entry.first('depth'))
+        for m in re.finditer(r'\b([A-Z]{2}_[A-Z]+|WOUND) up to (\d+)', group):
+            real = spell_max_damage(spells[m[1]], power) if m[1] in spells else None
+            c.emit('spell damage', start + m.start(), f'{name[1]} {m[1]} at spell power {power}: '
+                   f'maximum damage', int(m[2]), real, covers=[(start + m.start(2), start + m.end(2))])
+        stated = re.search(r'\(power (\d+)\)', group)
+        if stated:
+            c.emit('spell damage', start, f'{name[1]} spell power', int(stated[1]), power,
+                   covers=[(start + stated.start(1), start + stated.end(1))])
+    formula = c.search(r'`BO_FIRE` is `\$B\+(\d+d\d+)` with B = power / (\d+)', name='the BO_FIRE formula')
+    if formula:
+        fire = spells['BO_FIRE']
+        dice = [v for k, v, _ in fire.fields if k == 'dice'][0]
+        expr = [v for k, v, _ in fire.fields if k == 'expr'][0]
+        c.emit('spell damage', formula.start(), 'BO_FIRE dice', f'$B+{formula[1]}', dice,
+               covers=[formula.span(1), formula.span(2)])
+        c.emit('spell damage', formula.start(), 'BO_FIRE B = power / N', f'B:SPELL_POWER:/ {formula[2]}', expr)
+    reserve = c.search(r'(\d+) \+ the (\d+)-point reserve \(c15 `K_HP_RESERVE`, max\(20, 10%\)\) = (\d+)',
+                       name='the druid bolt plus reserve sum')
+    if reserve:
+        druid = table[plain('druid')]
+        bolt = spell_max_damage(spells['BO_FIRE'], int(druid.first('depth')))
+        c.emit('spell damage', reserve.start(), 'druid BO_FIRE plus reserve is the sum', int(reserve[3]),
+               bolt + int(reserve[2]), covers=[reserve.span(1), reserve.span(2), reserve.span(3)])
+        c.emit('spell damage', reserve.start(), 'the druid bolt in the sum', int(reserve[1]), bolt)
+
+
+STORE_NAMES = {'Alchemist': 'STORE_ALCHEMY', 'Magic shop': 'STORE_MAGIC', 'General Store': 'STORE_GENERAL',
+               'Bookseller': 'STORE_BOOK'}
+
+
+def object_table_two(c, marker, label):
+    """A table of objects: `cost:`, `level:`, found from (the `alloc:` minimum), where
+    it is sold (`Alchemist, sometimes`, `no store`) and, if there is a column for it,
+    how far it teleports."""
+    header, rows = table_cells(c, marker)
+    column = {}
+    for index, (text, _, _) in enumerate(header):
+        low = text.lower().replace('`', '')
+        for word in ('cost', 'level', 'found', 'where', 'distance'):
+            if low.startswith(word):
+                column[word] = index
+    for needed in ('cost', 'level', 'found', 'where'):
+        if needed not in column:
+            c.problem(f'the {label} table has no {needed!r} column')
+            return
+    all_stores = {s['key']: s for s in stores()}
+    for row in rows:
+        names = expand_names(row[0][0])
+        for word, field_name in (('cost', 'cost:'), ('level', 'level:'), ('found', 'alloc: shallowest depth')):
+            cell = row[column[word]]
+            values = [v.strip() for v in cell[0].split(' / ')]
+            if len(values) != len(names):
+                c.problem(f'{row[0][0]!r}: {len(names)} names but {len(values)} values in {word}', cell[1])
+                continue
+            for (kind, name), value in zip(names, values):
+                obj = find_object(name, types=[kind] if kind else None)
+                if obj is None:
+                    c.emit('table', cell[1], f'{name}: no such object', value, 'absent')
+                    continue
+                real = {'cost': lambda: int(obj.first('cost')), 'level': lambda: int(obj.first('level')),
+                        'found': lambda: alloc_min(obj)}[word]()
+                c.emit(f'{label} {word}', cell[1], f'{obj.type} {obj.name} {field_name}', int(value), real,
+                       covers=numbers_in(cell))
+        where = row[column['where']]
+        for kind, name in names:
+            obj = find_object(name, types=[kind] if kind else None)
+            if obj is None:
+                continue
+            sells = []
+            for store_key, entry in all_stores.items():
+                for how in ('always', 'normal'):
+                    if any(t == obj.type and n.lower() == obj.name.lower() for t, n in entry[how]):
+                        sells.append((store_key, how))
+            said = re.match(r'^(Alchemist|Magic shop|General Store|Bookseller), (always|sometimes)$', where[0])
+            if said:
+                want = (STORE_NAMES[said[1]], 'always' if said[2] == 'always' else 'normal')
+                c.emit(f'{label} where', where[1], f'{obj.name} is sold by {said[1]} ({said[2]}) in store.txt',
+                       True, want in sells)
+            elif where[0] == 'no store':
+                c.emit(f'{label} where', where[1], f'{obj.name} is in no store.txt list', [], sells)
+            else:
+                c.problem(f'cannot read where {where[0]!r}', where[1])
+        if 'distance' in column:
+            cell = row[column['distance']]
+            obj = find_object(names[0][1], types=[names[0][0]] if names[0][0] else None)
+            dice = obj.first('dice') if obj else None
+            if re.fullmatch(r'\d+', cell[0]):
+                c.emit(f'{label} distance', cell[1], f'{obj.name} teleports (dice:)', int(cell[0]),
+                       int(dice) if dice and dice.isdigit() else dice, covers=numbers_in(cell))
+            elif re.match(r'\d+% of the span', cell[0]):
+                real = re.fullmatch(r'M(\d+)', dice or '')
+                c.emit(f'{label} distance', cell[1], f'{obj.name} teleports (dice: M)',
+                       int(re.match(r'(\d+)', cell[0])[1]), int(real[1]) if real else dice,
+                       covers=numbers_in(cell))
+
+
+def extract_energy_table():
+    """The 200 entries of `extract_energy[]` in src/game-world.c."""
+    source = gd.read_source('src/game-world.c') or ''
+    body = re.search(r'extract_energy\[200\]\s*=\s*\{(.*?)\};', source, re.S)
+    if not body:
+        return []
+    return [int(n) for n in re.findall(r'\b(\d+),', re.sub(r'/\*.*?\*/', '', body[1]))]
+
+
+@extractor('escape table', minimum=24, volumes=(2,))
+def escape_table(c):
+    object_table_two(c, 'FACT (`src/effect-handler-general.c TELEPORT`', 'escape')
+
+
+@extractor('teleport arithmetic', minimum=24, volumes=(2,))
+def teleport_arithmetic(c):
+    constants_, handler = constants(), gd.read_source('src/effect-handler-general.c') or ''
+    phase = find_object('Phase Door', types=['scroll'])
+    found = c.search(r'lands you (\d+) to (\d+) squares away', name='the Phase Door distance')
+    if found:
+        dis = int(phase.first('dice'))
+        spread = dis // 4 - 1
+        c.emit('teleport', found.start(), 'Phase Door landing distance, low', int(found[1]), dis - spread,
+               covers=[found.span(1)])
+        c.emit('teleport', found.start(), 'Phase Door landing distance, high', int(found[2]), dis + spread,
+               covers=[found.span(2)])
+        c.emit('source', found.start(), 'TELEPORT randomises the distance by randint0(dis / 4)', True,
+               'randint0(dis / 4)' in handler)
+    energy = extract_energy_table()
+    dis = int(phase.first('dice'))
+    first = c.search(r'a \+(\d+) monster has energy (\d+) to your (\d+)', name='the energy of a +10 monster')
+    if first:
+        c.emit('teleport', first.start(), f'energy at +{first[1]}', int(first[2]), energy[110 + int(first[1])],
+               covers=[first.span(1), first.span(2)])
+        c.emit('teleport', first.start(), 'energy at normal speed', int(first[3]), energy[110],
+               covers=[first.span(3)])
+    m = c.search(r'closes it in (\d+) of your turns, a \+(\d+) monster \(energy (\d+)\) in (\d+)',
+                 name='the turns to close a phase')
+    if m and first:
+        def turns(speed):
+            return -(-dis * energy[110] // energy[110 + speed])
+        c.emit('teleport', m.start(), f'turns for a +{first[1]} monster to cross {dis} squares',
+               int(m[1]), turns(int(first[1])), covers=[m.span(1)])
+        c.emit('teleport', m.start(), f'turns for a +{m[2]} monster to cross {dis} squares',
+               int(m[4]), turns(int(m[2])), covers=[m.span(2), m.span(4)])
+        c.emit('teleport', m.start(), f'energy at +{m[2]}', int(m[3]), energy[110 + int(m[2])],
+               covers=[m.span(3)])
+    scroll = find_object('Teleportation', types=['scroll'])
+    m = c.search(r'(\d+)% of the longer of your farthest vertical and farthest horizontal edge distance',
+                 name='the Teleportation distance')
+    if m:
+        c.emit('teleport', m.start(), 'Teleportation distance percentage (dice: M)', int(m[1]),
+               int(scroll.first('dice')[1:]), covers=[m.span(1)])
+    m = c.search(r'full (\d+) x (\d+) level \(`constants`\) that is (\d+), then a random quarter either '
+                 r'way: (\d+) to (\d+) squares', name='the middle-of-the-level teleport')
+    if m:
+        wid, hgt = constants_.get('world:dungeon-wid'), constants_.get('world:dungeon-hgt')
+        c.emit('teleport', m.start(), 'level width (constants)', int(m[1]), wid, covers=[m.span(1)])
+        c.emit('teleport', m.start(), 'level height (constants)', int(m[2]), hgt, covers=[m.span(2)])
+        span = max(wid - wid // 2, wid // 2, hgt - hgt // 2, hgt // 2)
+        dis = span * int(scroll.first('dice')[1:]) // 100
+        c.emit('teleport', m.start(), 'teleport distance from the middle', int(m[3]), dis, covers=[m.span(3)])
+        low, high = dis - (dis // 4 - 1), dis + (dis // 4 - 1)
+        c.emit('teleport', m.start(), 'teleport distance range, low', int(m[4]), low, covers=[m.span(4)])
+        c.emit('teleport', m.start(), 'teleport distance range, high', int(m[5]), high, covers=[m.span(5)])
+        c.emit('source', m.start(), 'TELEPORT scales by the larger edge distance', True,
+               'MAX(vertical, horizontal)' in handler and 'cave->height - start.y' in handler)
+    m = c.search(r'\((\d+)\+d(\d+) charges\)', name='the staff charges')
+    if m:
+        staff = find_object('Teleportation', types=['staff'])
+        c.emit('teleport', m.start(), 'Staff of Teleportation charges:', f'{m[1]}+d{m[2]}',
+               staff.first('charges'), covers=[m.span(1), m.span(2)])
+    m = c.search(r'from DL(\d+) is DL(\d+)', name='Deep Descent from DL15')
+    if m:
+        skip = constants_.get('world:stair-skip')
+        c.emit('teleport', m.start(), 'Deep Descent lands this far below your deepest', int(m[2]),
+               int(m[1]) + 4 // skip + 1, covers=[m.span(1), m.span(2)])
+    m = c.search(r'goes up or down at random, even odds; it cannot go up from the town', name='Teleport Level')
+    if m:
+        c.emit('source', m.start(), 'TELEPORT_LEVEL is a coin flip when both ways are legal', True,
+               'randint0(100) < 50' in handler)
+        c.emit('source', m.start(), 'TELEPORT_LEVEL cannot go up in town', True,
+               '|| !player->depth' in handler)
+    m = c.search(r'a nexus resist saves you', name='the nexus resist')
+    if m:
+        c.emit('source', m.start(), 'a monster TELEPORT_LEVEL is resisted with nexus', True,
+               'player_resists(player, ELEM_NEXUS)' in handler)
+    m = c.search(r'anti-teleportation curse \((?P<types>[^)]*), `curse`\)', name='the anti-teleportation curse')
+    if m:
+        curse = next((e for e in gd.load('curse.txt')[0] if e.value == 'anti-teleportation'), None)
+        real = set(curse.all('type')) if curse else set()
+        said = set()
+        for word in re.split(r',\s*| or ', m['types']):
+            said |= {'armour': {'soft armor', 'hard armor', 'dragon armor'}}.get(word.strip(), {word.strip()})
+        c.emit('curse', m.start(), 'anti-teleportation curse is on these item types', sorted(said), sorted(real))
+        c.emit('curse', m.start(), 'anti-teleportation curse is the NO_TELEPORT flag', True,
+               bool(curse and 'NO_TELEPORT' in curse.flags()))
+        c.emit('source', m.start(), 'both teleports say "Teleportation forbidden!" under the curse', True,
+               handler.count('Teleportation forbidden!') >= 3 and 'OF_NO_TELEPORT' in handler)
+    m = c.search(r'only a teleport of (\d+) or less works', name='the no-teleport square rule')
+    if m:
+        c.emit('source', m.start(), 'a no-teleport square blocks a teleport longer than 10', True,
+               f'((dis > {m[1]}) || (dis == 0))' in handler, covers=[m.span(1)])
+    m = c.search(r'gauntlet level \(found from DL(\d+), `dungeon_profile`\)', name='the gauntlet level')
+    if m:
+        profile = next((e for e in gd.load('dungeon_profile.txt')[0] if e.value == 'gauntlet'), None)
+        c.emit('teleport', m.start(), 'gauntlet min-level', int(m[1]),
+               int(profile.first('min-level')) if profile else None, covers=[m.span(1)])
+        generate = gd.read_source('src/gen-cave.c') or ''
+        c.emit('source', m.start(), 'the gauntlet level is marked SQUARE_NO_TELEPORT', True,
+               'SQUARE_NO_TELEPORT' in generate)
+
+
+def handler_body(code):
+    source = gd.read_source('src/project-player.c') or ''
+    found = re.search(rf'static int project_player_handler_{code}\(.*?\n}}\n', source, re.S)
+    return found.group(0) if found else ''
+
+
+SIDE_EFFECTS = {'destroys pack items': 'inven_damage', 'poisons': 'TMD_POISONED',
+                'blinds': 'TMD_BLIND', 'stuns': 'TMD_STUN', 'cuts': 'TMD_CUT'}
+
+
+@extractor('breath elements', minimum=40, volumes=(2,))
+def breath_elements(c):
+    header, rows = table_cells(c, 'FACT: damage = the breather')
+    by_name = projection_by_name()
+    for row in rows:
+        element = by_name.get(row[0][0].lower())
+        if element is None:
+            c.emit('breath', row[0][1], f'{row[0][0]} is a projection in projection.txt', True, False)
+            continue
+        for index, field_name in ((1, 'divisor'), (2, 'damage-cap')):
+            cell = row[index]
+            c.emit('breath element', cell[1], f'{element.value} {field_name}', int(cell[0]),
+                   int(element.first(field_name)), covers=numbers_in(cell))
+        note = row[3]
+        body = handler_body(element.first('code'))
+        for word, token in SIDE_EFFECTS.items():
+            if word in note[0]:
+                c.emit('breath element', note[1], f'{element.value} breath: {word} ({token} in its handler)',
+                       True, token in body)
+        if 'halved' in note[0]:
+            adjust = gd.read_source('src/project-player.c') or ''
+            c.emit('breath element', note[1], 'acid is halved when it eats a piece of armour (minus_ac)',
+                   True, 'type == PROJ_ACID && p && minus_ac(p)' in adjust)
+    seen = {r[0][0].lower() for r in rows}
+    used = {by_name[projection_name(code)].value for m in real_monsters() if in_range(m, 5, 24)
+            for code in breath_codes(m)}
+    c.emit('breath element', 0, 'every element a monster of DL5-24 breathes is in the table', [],
+           sorted(used - seen))
+    source = gd.read_source('src/mon-spell.c') or ''
+    found = c.search(r'damage = the breather\'s current hit points / divisor, capped', name='the breath formula')
+    if found:
+        c.emit('source', found.start(), 'breath_dam: hp / divisor, capped by damage_cap', True,
+               'dam = hp / element->divisor;' in source and 'if (dam > element->damage_cap)' in source)
+    m = c.search(r'acid, lightning, fire, cold and poison are (\d+)/(\d+) per resist level; light, dark, '
+                 r'sound and shards (\d+)/\((8\+1d4)\) per level', name='the resist factors')
+    if m:
+        for name in ('acid', 'lightning', 'fire', 'cold', 'poison'):
+            p = by_name[name]
+            c.emit('resist', m.start(), f'{name} resist is {m[1]}/{m[2]} per level',
+                   (int(m[1]), int(m[2])), (int(p.first('numerator')), int(p.first('denominator'))),
+                   covers=[m.span(1), m.span(2)])
+        for name in ('light', 'dark', 'sound', 'shards'):
+            p = by_name[name]
+            c.emit('resist', m.start(), f'{name} resist is {m[3]}/({m[4]}) per level',
+                   (int(m[3]), m[4]), (int(p.first('numerator')), p.first('denominator')),
+                   covers=[m.span(3), m.span(4)])
+    m = c.search(r'adds one level and no more than (\d+) count', name='the temporary resist cap')
+    if m:
+        calcs = gd.read_source('src/player-calcs.c') or ''
+        cap = re.search(r'temp_resist\]\.res_level\s*<\s*(\d+)\)\s*\{\s*state->el_info\[[^\]]*\]\.res_level\+\+',
+                        calcs)
+        c.emit('source', m.start(), 'a timed resist adds one level only below the cap (player-calcs.c)',
+               int(m[1]), int(cap[1]) if cap else None, covers=[m.span(1)])
+    m = c.search(r'potion alone is (\d+)/(\d+) and a permanent resist plus the potion is (\d+)/(\d+)',
+                 name='one and two resist levels')
+    if m:
+        c.emit('resist', m.start(), 'one level of 1/3 is 1/3, two are 1/9', (1, 3, 1, 9),
+               (int(m[1]), int(m[2]), int(m[3]), int(m[4])), ok=(int(m[1]), int(m[2]), int(m[3]), int(m[4]))
+               == (1, 3, 1, 3 ** 2), covers=[m.span(i) for i in (1, 2, 3, 4)])
+    m = c.search(r'is a (\d+)-degree cone \(`BREATH:\.\.\.:0:(\d+)`\), full strength out to (\d+) squares '
+                 r'and then (\d+)/\(distance \+ 1\) of it: (\d+)% at (\d+) squares, (\d+)% at (\d+)',
+                 name='the breath falloff')
+    if m:
+        spells = spell_table()
+        degrees = {int(next(v for k, v, _ in spells[n].fields if k == 'effect').split(':')[3])
+                   for n in spells if n.startswith('BR_')}
+        c.emit('breath', m.start(), 'every BR_ spell is this many degrees', {int(m[1])}, degrees,
+               covers=[m.span(1), m.span(2)])
+        c.emit('breath', m.start(), '(BREATH:...:0:N) is the degrees', int(m[2]), int(m[1]))
+        diameter = 4 * 60 // int(m[1])
+        c.emit('breath', m.start(), 'full strength out to diameter - 1 squares', int(m[3]), diameter - 1,
+               covers=[m.span(3)])
+        c.emit('breath', m.start(), 'then diameter / (distance + 1) of the strength', int(m[4]), diameter,
+               covers=[m.span(4)])
+        for share_at, dist_at in ((5, 6), (7, 8)):
+            c.emit('breath', m.start(), f'strength at {m[dist_at]} squares (%)', int(m[share_at]),
+                   round(100 * diameter / (int(m[dist_at]) + 1)), covers=[m.span(share_at), m.span(dist_at)])
+        project = (gd.read_source('src/project.c') or '') + (gd.read_source('src/effect-handler-attack.c') or '')
+        c.emit('source', m.start(), 'BREATH starts at diameter 4 and widens by 60 / degrees; project() '
+               'divides by distance + 1', True,
+               'int diameter_of_source = 4;' in project and 'diameter_of_source * 60 / degrees_of_arc' in project
+               and '(diameter_of_source * dam) / (i + 1)' in project)
+    m = c.search(r'doubled at the monster\'s preferred range', name='the doubled breath chance')
+    if m:
+        c.emit('source', m.start(), 'monster_can_cast doubles the chance at best_range', True,
+               'chance *= 2;' in (gd.read_source('src/mon-attack.c') or '') and
+               'tdist == mon->best_range' in (gd.read_source('src/mon-attack.c') or ''))
+        header_text = re.sub(r'\s*#\s*', ' ', (gd.GAMEDATA / 'monster.txt').read_text())
+        c.emit('docs', m.start(), 'monster.txt: innate-freq is the number of monster turns on average', True,
+               'the number of monster turns, on average, before the monster will perform' in header_text)
+
+
+def projection_name(code):
+    return projection_by_code()[code].value.lower()
+
+
+@extractor('breather table', minimum=120, volumes=(2,))
+def breather_table(c):
+    header, rows = table_cells(c, 'Every breather of DL5-20')
+    table, by_name = monster_table_two(), projection_by_name()
+    listed = set()
+    for row in rows:
+        name, depth, hp, element, breath, freq = row[:6]
+        entry = find_row_monster(c, name, table)
+        if entry is None:
+            continue
+        listed.add(entry.value)
+        c.emit('breather', depth[1], f'{name[0]} depth', int(depth[0]), depth_of(entry), covers=numbers_in(depth))
+        c.emit('breather', hp[1], f'{name[0]} hit-points', int(hp[0]), int(entry.first('hit-points')),
+               covers=numbers_in(hp))
+        said = sorted(plain(e) for e in element[0].split(', '))
+        real = sorted(projection_name(code) for code in breath_codes(entry))
+        c.emit('breather', element[1], f'{name[0]} breathes', said, real)
+        damages = set()
+        for code in breath_codes(entry):
+            p = projection_by_code()[code]
+            damages.add(min(int(entry.first('hit-points')) // int(p.first('divisor')), int(p.first('damage-cap'))))
+        c.emit('breather', breath[1], f'{name[0]} breath at full hit points', int(breath[0]),
+               damages.pop() if len(damages) == 1 else sorted(damages), covers=numbers_in(breath))
+        real_freq = entry.first('innate-freq')
+        c.emit('breather', freq[1], f'{name[0]} innate-freq (1 in N)', int(freq[0]),
+               int(real_freq) if real_freq else None, covers=numbers_in(freq))
+    real = {m.value for m in real_monsters() if in_range(m) and breath_codes(m)}
+    c.emit('breather', 0, 'every breather of depth 5-20 is in the table', [], sorted(real - listed))
+    c.emit('breather', 0, 'the table lists only breathers of depth 5-20', [], sorted(listed - real))
+    found = c.search(r'each has (\d+d\d+) companions of its kind \(`friends`, `monster`\)',
+                     name='hound companions')
+    if found:
+        hounds = [m for m in real_monsters() if in_range(m) and m.value.endswith(' hound')]
+        have = {next((v.split(':')[1] for v in m.all('friends') if v.split(':')[2].lower() == 'same'), None)
+                for m in hounds if breath_codes(m)}
+        c.emit('breather', found.start(), 'every breathing hound has these companions', {found[1]}, have,
+               covers=[found.span(1)])
+    found = c.search(r'The largest breath in the range is the chimaera\'s (\d+); the baby dragons\' (\d+) to '
+                     r'(\d+)', name='largest breath')
+    if found:
+        rows_by = {plain(r[0][0]): int(r[4][0]) for r in rows}
+        c.emit('breather', found.start(), 'the largest breath in the table', int(found[1]),
+               max(rows_by.values()), covers=[found.span(1)])
+        c.emit('breather', found.start(), 'the chimaera has the largest breath', 'chimaera',
+               max(rows_by, key=rows_by.get))
+        babies = [v for k, v in rows_by.items() if k.startswith('baby ') and 'multi' not in k and 'gold' not in k]
+        c.emit('breather', found.start(), 'baby dragons breathe this much, low', int(found[2]), min(babies),
+               covers=[found.span(2)])
+        c.emit('breather', found.start(), 'baby multi-hued dragon breathes this much, high', int(found[3]),
+               rows_by['baby multi-hued dragon'], covers=[found.span(3)])
+
+
+@extractor('summoner table', minimum=60, volumes=(2,))
+def summoner_table(c):
+    header, rows = table_cells(c, 'FACT, every summoner of DL5-20')
+    table, spells = monster_table_two(), spell_table()
+    listed = set()
+    for row in rows:
+        name, depth, speed, hp, freq, calls = row[:6]
+        entry = find_row_monster(c, name, table)
+        if entry is None:
+            continue
+        listed.add(entry.value)
+        c.emit('summoner', depth[1], f'{name[0]} depth', int(depth[0]), depth_of(entry), covers=numbers_in(depth))
+        c.emit('summoner', speed[1], f'{name[0]} speed', int(speed[0].lstrip('+')),
+               int(entry.first('speed')) - 110, covers=numbers_in(speed))
+        c.emit('summoner', hp[1], f'{name[0]} hit-points', int(hp[0]), int(entry.first('hit-points')),
+               covers=numbers_in(hp))
+        c.emit('summoner', freq[1], f'{name[0]} spell-freq (1 in N)', int(freq[0]),
+               int(entry.first('spell-freq')) if entry.first('spell-freq') else None, covers=numbers_in(freq))
+        said = sorted(re.findall(r'S_[A-Z_]+', calls[0]))
+        c.emit('summoner', calls[1], f'{name[0]} summon spells', said,
+               sorted(s for s in spell_names(entry) if s.startswith('S_')))
+    real = {m.value for m in real_monsters() if in_range(m) and any(s.startswith('S_') for s in spell_names(m))}
+    c.emit('summoner', 0, 'every summoner of depth 5-20 is in the table', [], sorted(real - listed))
+    c.emit('summoner', 0, 'the table lists only summoners of depth 5-20', [], sorted(listed - real))
+    handler = gd.read_source('src/effect-handler-general.c') or ''
+    m = c.search(r'The `dice:` on each spell is the number of attempts: (?P<body>[^.]*)\.', name='summon attempts')
+    if m:
+        for k in re.finditer(r'`(S_[A-Z_]+)` (\d+)', m['body']):
+            dice = next((v for key, v, _ in spells[k[1]].fields if key == 'dice'), None)
+            at = m.start('body') + k.start(2)
+            c.emit('summoner', at, f'{k[1]} dice: (attempts)', int(k[2]), int(dice) if dice else None,
+                   covers=[(at, at + len(k[2]))])
+    m = c.search(r'stops when the sum reaches your depth x the summoner\'s own level, or the attempts run out',
+                 name='the summon loop')
+    if m:
+        c.emit('source', m.start(), 'SUMMON adds temp * temp and stops at depth * rlev or summon_max', True,
+               'val += temp * temp;' in handler and 'val < player->depth * rlev' in handler
+               and 'attempts < summon_max' in handler)
+    m = c.search(r'`S_KIN` calls monsters of the summoner\'s own base', name='kin')
+    if m:
+        c.emit('source', m.start(), 'S_KIN keeps only monsters of the summoner\'s base', True,
+               'race->base == kin_base' in (gd.read_source('src/mon-summon.c') or ''))
+    m = c.search(r'`S_ANIMAL` any animal', name='animal summons')
+    if m:
+        animal = next((e for e in gd.load('summon.txt')[0] if e.value == 'ANIMAL'), None)
+        c.emit('docs', m.start(), 'summon.txt: ANIMAL is race-flag ANIMAL', 'ANIMAL',
+               animal.first('race-flag') if animal else None)
+    m = c.search(r'(six) of the (eight) \(all but the priest and the druid\) have BLINK', name='blink summoners')
+    if m:
+        every = [x for x in real_monsters() if in_range(x) and any(s.startswith('S_') for s in spell_names(x))]
+        with_blink = [x for x in every if 'BLINK' in spell_names(x)]
+        without = sorted(plain(x.value) for x in every if 'BLINK' not in spell_names(x))
+        c.emit('summoner', m.start(), 'summoners without BLINK', ['druid', 'priest'], without)
+        c.emit('summoner', m.start(), 'summoners with BLINK (six)', 6, len(with_blink), covers=[m.span(1)])
+        c.emit('summoner', m.start(), 'summoners (eight)', 8, len(every), covers=[m.span(2)])
+    for m in c.finditer(r'(Orfax|Boldor) comes with (?P<list>[^.;]*)'):
+        entry = table[plain(m[1])]
+        friends = {v.split(':')[2].lower(): v.split(':')[1] for v in entry.all('friends')}
+        for k in re.finditer(r'(\d+d\d+) ([a-z ]+?)s?(?= and |,|$|\.)', m['list']):
+            c.emit('summoner', m.start('list') + k.start(),
+                   f'{m[1]} comes with {k[2]}: dice', k[1], friends.get(k[2].lower()),
+                   covers=[(m.start('list') + k.start(1), m.start('list') + k.end(1))])
+
+
+NOTE_WORDS = {
+    'casts': lambda e: bool(spell_names(e)),
+    'summons': lambda e: any(s.startswith('S_') for s in spell_names(e)),
+    'steals gold': lambda e: any('EAT_GOLD' in b for b in e.all('blow')),
+    'never moves': lambda e: 'NEVER_MOVE' in monster_flags(e),
+    'paralyses': lambda e: any('PARALYZE' in v for _, v, _ in e.fields),
+}
+
+
+@extractor('unique table', minimum=70, volumes=(2,))
+def unique_table(c):
+    header, rows = table_cells(c, 'FACT, every unique in range')
+    table = monster_table_two()
+    listed = set()
+    for row in rows:
+        name, depth, speed, hp, per_turn, note = row[:6]
+        entry = find_row_monster(c, name, table)
+        if entry is None:
+            continue
+        listed.add(entry.value)
+        c.emit('unique', depth[1], f'{name[0]} depth', int(depth[0]), depth_of(entry), covers=numbers_in(depth))
+        c.emit('unique', speed[1], f'{name[0]} speed', int(speed[0].lstrip('+')),
+               int(entry.first('speed')) - 110, covers=numbers_in(speed))
+        c.emit('unique', hp[1], f'{name[0]} hit-points', int(hp[0]), int(entry.first('hit-points')),
+               covers=numbers_in(hp))
+        top = sum(gd.dice_max(d) or 0 for d in blow_dice(entry))
+        c.emit('unique', per_turn[1], f'{name[0]} worst melee per player turn', int(per_turn[0]),
+               top * (1 + (int(entry.first('speed')) - 110) // 10), covers=numbers_in(per_turn))
+        c.emit('unique', name[1], f'{name[0]} is a UNIQUE', True, 'UNIQUE' in entry.flags())
+        for word, test in NOTE_WORDS.items():
+            if word in note[0]:
+                c.emit('unique', note[1], f'{name[0]}: {word}', True, bool(test(entry)))
+        have = set()
+        for key, value, _ in entry.fields:
+            if key in ('spells', 'blow', 'flags'):
+                have.update(re.findall(r'[A-Z][A-Z_0-9]+', value))
+        for token in re.findall(r'\b[A-Z]{2,}(?:_[A-Z0-9]+)+\b', note[0]):
+            c.emit('unique', note[1], f'{name[0]} has {token}', True, token in have)
+    real = {m.value for m in real_monsters() if in_range(m) and 'UNIQUE' in m.flags()}
+    c.emit('unique', 0, 'every unique of depth 5-20 is in the table', [], sorted(real - listed))
+    c.emit('unique', 0, 'the table lists only uniques of depth 5-20', [], sorted(listed - real))
+
+
+def book_table():
+    """`{book name: (town or dungeon, kind cost)}` from class.txt (the first class
+    that gives the book its `book-properties:` supplies the cost)."""
+    found = {}
+    for entry in gd.load('class.txt')[0]:
+        name, kind = None, None
+        for key, value, _ in entry.fields:
+            if key == 'book':
+                parts = value.split(':')
+                name, kind = parts[2].strip('[]'), parts[1]
+                found.setdefault(name, [kind, None])
+            elif key == 'book-properties' and name and found[name][1] is None:
+                found[name][1] = int(value.split(':')[0])
+    return {k: tuple(v) for k, v in found.items()}
+
+
+@extractor('class spells and books', minimum=110, volumes=(2,))
+def class_books(c):
+    classes = {e.value: e for e in gd.load('class.txt')[0]}
+    books = book_table()
+    seen = []
+    for m in c.finditer(r'^\*\*(\w+)\*\*: (.*)$', re.M):
+        cls, body, offset = m[1], m[2], m.start(2)
+        entry = classes.get(cls)
+        if entry is None:
+            continue
+        seen.append(cls)
+        own = {}
+        for key, value, _ in entry.fields:
+            if key == 'book':
+                own[value.split(':')[2].strip('[]')] = value.split(':')[1]
+        claim_spells(c, cls, entry, body, offset)
+        mentions = list(re.finditer(r'\[([^\]]+)\](?: \((?:(dungeon only)(?:, )?)?(?:kind cost (\d+))?\))?', body))
+        for b in mentions:
+            name = b[1]
+            c.emit('spell book', offset + b.start(), f'{cls} has the book [{name}]', True, name in own)
+            if b[2]:
+                c.emit('spell book', offset + b.start(), f'[{name}] is a dungeon book', 'dungeon',
+                       books.get(name, (None,))[0])
+            if b[3]:
+                c.emit('book cost', offset + b.start(3), f'[{name}] kind cost', int(b[3]),
+                       books.get(name, (None, None))[1], covers=[(offset + b.start(3), offset + b.end(3))])
+                if not b[2]:
+                    c.emit('spell book', offset + b.start(), f'[{name}] is a town book', 'town',
+                           books.get(name, (None,))[0])
+        spells = class_spells(entry)
+        names = {n.lower(): n for _, n, *_ in spells}
+        pattern = re.compile(r'(?<![\w\[])(' + '|'.join(
+            re.escape(n) for n in sorted(names, key=len, reverse=True)) + r')(?![\w\]])', re.I)
+        for s in pattern.finditer(body):
+            real = next(x for x in spells if x[1] == names[s[1].lower()])
+            before = [b for b in mentions if b.start() < s.start()]
+            c.emit('spell book', offset + s.start(), f'{cls} {real[1]} is in the book the line names',
+                   before[-1][1] if before else None, real[0])
+    c.emit('class', 0, 'the class paragraphs are the casters with town books', sorted(seen),
+           sorted(e.value for e in classes.values() if e.has('magic')))
+    m = c.search(r'Town books hold (?P<town>[^;]*); dungeon-only books hold (?P<dungeon>[^.]*)\.', name='teleport books')
+    if m:
+        for which, kind in (('town', 'town'), ('dungeon', 'dungeon')):
+            for k in re.finditer(r'(Mage|Necromancer|Rogue|Priest) (Teleport Self|Shadow Shift|Portal)', m[which]):
+                spell = [s for s in class_spells(classes[k[1]]) if s[1] == k[2]]
+                c.emit('spell book', m.start(which) + k.start(), f'{k[1]} {k[2]} is in a {kind} book',
+                       kind, books[spell[0][0]][0] if spell else 'no such spell')
+    m = c.search(r'(?P<who>Druid, Ranger, Paladin and Blackguard) have none', name='classes with no teleport')
+    if m:
+        for who in re.split(r', | and ', m['who']):
+            teleports = [v for k, v, _ in classes[who].fields if k == 'effect' and v.startswith('TELEPORT')]
+            c.emit('class flags', m.start(), f'{who} has no teleport spell', [], teleports)
+
+
+@extractor('spell numbers', minimum=44, volumes=(2,))
+def spell_numbers(c):
+    classes = {e.value: e for e in gd.load('class.txt')[0]}
+    source = gd.read_source('src/player-spell.c') or ''
+    m = c.search(r'falls (\d+) per level above the spell\'s level, never below (\d+)% \(the floor can be '
+                 r'higher for a low casting stat\) and never above (\d+)%', name='the spell failure rule')
+    if m:
+        c.emit('source', m.start(), 'spell_chance: 3 per level above the spell', int(m[1]),
+               3 if 'chance -= 3 * (player->lev - spell->slevel);' in source else None, covers=[m.span(1)])
+        c.emit('source', m.start(), 'spell_chance: floor of 5 percent', int(m[2]),
+               5 if 'minfail < 5' in source else None, covers=[m.span(2)])
+        c.emit('source', m.start(), 'spell_chance: cap of 50 percent', int(m[3]),
+               50 if 'if (chance > 50) chance = 50;' in source else None, covers=[m.span(3)])
+    m = c.search(r'adds (\d+) per missing point', name='the mana shortfall')
+    if m:
+        c.emit('source', m.start(), 'spell_chance: 5 per missing mana point', int(m[1]),
+               5 if '5 * (spell->smana - player->csp)' in source else None, covers=[m.span(1)])
+    m = c.search(r'Teleport Self \((\d+)%\) is down to the (\d+)% floor at CL(\d+)', name='the Mage floor')
+    if m:
+        spell = next(s for s in class_spells(classes['Mage']) if s[1] == 'Teleport Self')
+        c.emit('spell', m.start(), 'Mage Teleport Self base failure', int(m[1]), spell[4], covers=[m.span(1)])
+        floor = 5
+        level = next((cl for cl in range(spell[2], 51) if spell[4] - 3 * (cl - spell[2]) <= floor), None)
+        c.emit('spell', m.start(), 'Mage Teleport Self reaches the floor at CL', int(m[3]), level,
+               covers=[m.span(2), m.span(3)])
+    m = c.search(r'moves you \(CL x (\d+)/(\d+)\)% of the span', name='Teleport Self distance')
+    if m:
+        mage = classes['Mage']
+        index = next(i for i, (k, v, _) in enumerate(mage.fields) if k == 'spell' and v.startswith('Teleport Self'))
+        expr = next(v for k, v, _ in mage.fields[index:index + 6] if k == 'expr')
+        c.emit('spell', m.start(), 'Teleport Self distance is M:PLAYER_LEVEL * 9 / 5', f'M:PLAYER_LEVEL:* {m[1]} / {m[2]}',
+               expr, covers=[m.span(1), m.span(2)])
+        wid = constants().get('world:dungeon-wid', 198)
+        for k in re.finditer(r'CL(\d+) is (\d+)%, about (\d+)', c.text):
+            cl = int(k[1])
+            pct = cl * int(m[1]) // int(m[2])
+            c.emit('spell', k.start(), f'Teleport Self at CL{cl}: percent', int(k[2]), pct, covers=[k.span(2)])
+            c.emit('spell', k.start(), f'Teleport Self at CL{cl}: squares from the middle', int(k[3]),
+                   (wid // 2) * pct // 100, covers=[k.span(3)])
+    m = c.search(r'First cast pays experience x spell level', name='the first-cast experience')
+    if m:
+        c.emit('source', m.start(), 'a first cast pays sexp * slevel', True,
+               'player_exp_gain(player, e * spell->slevel)' in source)
+        for k in re.finditer(r'(Mage|Druid|Priest|Necromancer|Rogue|Ranger|Paladin|Blackguard) '
+                             r'([A-Z][A-Za-z\' ]+?) (\d+) x (\d+) = (\d+)', c.text[m.start():m.start() + 700]):
+            at = m.start() + k.start()
+            spell = [s for s in class_spells(classes[k[1]]) if s[1] == k[2]]
+            exp_of = None
+            for key, value, _ in classes[k[1]].fields:
+                if key == 'spell' and value.split(':')[0] == k[2]:
+                    exp_of = int(value.split(':')[5])
+            c.emit('spell', at, f'{k[1]} {k[2]} experience (last field)', int(k[3]), exp_of,
+                   covers=[(m.start() + k.start(3), m.start() + k.end(3))])
+            c.emit('spell', at, f'{k[1]} {k[2]} level', int(k[4]), spell[0][2] if spell else None,
+                   covers=[(m.start() + k.start(4), m.start() + k.end(4))])
+            c.emit('spell', at, f'{k[1]} {k[2]} first cast pays', int(k[5]), int(k[3]) * int(k[4]),
+                   covers=[(m.start() + k.start(5), m.start() + k.end(5))])
+    m = c.search(r'CL(\d+) needs (\d+) x race exp / 100, CL(\d+) (\d+) and CL(\d+) (\d+)', name='level thresholds')
+    if m:
+        text = gd.read_source('src/player.c') or ''
+        table = [int(n) for n in re.findall(r'\b(\d+)L?,', text[text.index('player_exp[PY_MAX_LEVEL]'):][:900])]
+        for level_at, exp_at in ((1, 2), (3, 4), (5, 6)):
+            level = int(m[level_at])
+            c.emit('source', m.start(), f'player_exp: experience for CL{level}', int(m[exp_at]), table[level - 2],
+                   covers=[m.span(level_at), m.span(exp_at)])
+
+
+@extractor('buy table', minimum=48, volumes=(2,))
+def buy_table(c):
+    object_table_two(c, 'the shop adds its own markup; read the price). "found from" is', 'buy')
+
+
+@extractor('first appearances', minimum=3, volumes=(2,))
+def first_appearances(c):
+    """`**Breath** (from DL5)`: the shallowest monster that has the thing."""
+    monsters = real_monsters()
+    for word, test in (('Breath', lambda m: any(s.startswith('BR_') for s in spell_names(m))),
+                       ('Summoning', lambda m: any(s.startswith('S_') for s in spell_names(m))),
+                       ('HOLD', lambda m: 'HOLD' in spell_names(m))):
+        found = c.search(rf'\*\*{word}\*\* \(from DL(\d+)\)', name=f'the {word} first depth')
+        if found:
+            c.emit('first appearance', found.start(), f'shallowest monster with {word}',
+                   int(found[1]), min(depth_of(m) for m in monsters if test(m)), covers=[found.span(1)])
+
+
+@extractor('hit points and free action', minimum=20, volumes=(2,))
+def hit_points_and_free_action(c):
+    birth = gd.read_source('src/player-birth.c') or ''
+    races = {e.value: e for e in gd.load('p_race.txt')[0]}
+    classes = {e.value: e for e in gd.load('class.txt')[0]}
+    m = c.search(r'hit die \+ \(n-1\) x \(hit die \+ 1\)/2', name='the hit point average')
+    if m:
+        c.emit('source', m.start(), 'roll_hp rolls randint1(hitdie) per level', True,
+               'randint1(player->hitdie)' in birth)
+
+    def average(hit_die, level):
+        return hit_die + (level - 1) * (hit_die + 1) / 2
+
+    for k in re.finditer(r'hit die (\d+) \((\w[\w-]*) (\w+)\) has (\d+) at CL(\d+)(?: and needs CL(\d+) for (\d+))?',
+                         c.text):
+        die = int(races[k[2]].first('hitdie')) + int(classes[k[3]].first('hitdie'))
+        c.emit('hit points', k.start(), f'{k[2]} {k[3]} hit die', int(k[1]), die, covers=[k.span(1)])
+        c.emit('hit points', k.start(), f'{k[2]} {k[3]} average hit points at CL{k[5]}', int(k[4]),
+               int(average(die, int(k[5]))), covers=[k.span(4), k.span(5)])
+        if k[6]:
+            level = next(n for n in range(1, 51) if average(die, n) >= int(k[7]))
+            c.emit('hit points', k.start(), f'{k[2]} {k[3]} reaches {k[7]} hit points at CL', int(k[6]), level,
+                   covers=[k.span(6), k.span(7)])
+    spells = spell_table()
+    m = c.search(r'HOLD paralyses for (\d+\+\d+d\d+) turns', name='HOLD duration')
+    if m:
+        dice = next(v for k, v, _ in spells['HOLD'].fields if k == 'dice')
+        c.emit('spell', m.start(), 'HOLD paralyses for (dice)', m[1], dice, covers=[m.span(1)])
+    m = c.search(r'Free Action blocks it', name='Free Action blocks HOLD')
+    if m:
+        timed = {e.value: e for e in gd.load('player_timed.txt')[0]}
+        c.emit('spell', m.start(), 'PARALYZED fails with FREE_ACT', 'FREE_ACT',
+               (timed['PARALYZED'].first('fail') or '').split(':')[-1])
+    m = c.search(r'The gate sits (\w+) levels after its own first anchor', name='the Free Action gap')
+    if m:
+        gates = chapter15_depth_gates()
+        words = {'seven': 7, 'six': 6, 'eight': 8}
+        first = min(d for n, d in gates[20][1] if n in ('illusionist', 'druid'))
+        c.emit('gate', m.start(), 'levels between the Free Action gate and the first HOLD anchor',
+               words.get(m[1]), 20 - first, covers=[m.span(1)])
+    m = c.search(r'DL(\d+) is inside that window from DL(\d+)', name='the DEPTH-01 window')
+    if m:
+        c.emit('gate', m.start(), 'DEPTH-01 looks to d+5: the first depth that sees DL13', int(m[2]),
+               int(m[1]) - 5, covers=[m.span(1), m.span(2)])
+    m = c.search(r'ring \(found from DL(\d+), (\d+), `object`\) or as an ego on gloves \(found from DL(\d+) to '
+                 r'(\d+)\) or boots \((\d+) to (\d+)\) \(`ego_item`\)', name='where Free Action comes from')
+    if m:
+        ring = find_object('Free Action', types=['ring'])
+        c.emit('gate', m.start(), 'Ring of Free Action found from', int(m[1]), alloc_min(ring), covers=[m.span(1)])
+        c.emit('gate', m.start(), 'Ring of Free Action cost:', int(m[2]), int(ring.first('cost')), covers=[m.span(2)])
+        egos = [e for e in gd.load('ego_item.txt')[0] if e.value == 'of Free Action']
+        by_type = {e.first('type'): re.match(r'\d+:(\d+) to (\d+)', e.first('alloc')) for e in egos}
+        c.emit('gate', m.start(), 'ego of Free Action on gloves: alloc', (int(m[3]), int(m[4])),
+               (int(by_type['gloves'][1]), int(by_type['gloves'][2])), covers=[m.span(3), m.span(4)])
+        c.emit('gate', m.start(), 'ego of Free Action on boots: alloc', (int(m[5]), int(m[6])),
+               (int(by_type['boots'][1]), int(by_type['boots'][2])), covers=[m.span(5), m.span(6)])
+        c.emit('gate', m.start(), 'no store sells Free Action', [], [
+            (s['key'], t, n) for s in stores() for t, n in s['always'] + s['normal'] if 'Free Action' in n])
+
+
+@extractor('town facts', minimum=33, volumes=(2,))
+def town_facts(c):
+    handler = gd.read_source('src/effect-handler-general.c') or ''
+    util = gd.read_source('src/player-util.c') or ''
+    m = c.search(r'(\d+)-(\d+) turns after reading', name='the recall delay')
+    if m:
+        k = re.search(r'word_recall = randint0\((\d+)\) \+ (\d+);', handler)
+        c.emit('source', m.start(), 'Word of Recall delay (src/effect-handler-general.c)',
+               (int(m[1]), int(m[2])), (int(k[2]), int(k[2]) + int(k[1]) - 1) if k else None,
+               covers=[m.span(1), m.span(2)])
+    m = c.search(r'it takes you to DL(\d+)\*\*', name='recall from the town with no depth')
+    if m:
+        c.emit('source', m.start(), 'player_set_recall_depth: at least depth 1', int(m[1]),
+               1 if 'p->recall_depth = MAX(p->recall_depth, 1);' in util else None, covers=[m.span(1)])
+        c.emit('source', m.start(), 'RECALL has no "nothing happens" for an unvisited depth', True,
+               'if (OPT(player, birth_no_recall) && !player->total_winner)' in handler)
+        old = INSTRUCTIONS.read_text()
+        c.emit('docs', m.start(), 'volume 1 says recall does nothing from the town', True,
+               'it does nothing from the town' in old)
+    m = c.search(r'\*\*y also sets your deepest depth to this one\*\*', name='recall y sets max depth')
+    if m:
+        c.emit('source', m.start(), 'recall y sets recall_depth and max_depth to the current depth', True,
+               'player->recall_depth = player->max_depth = player->depth;' in handler)
+    m = c.search(r'\(16 x depth / 10 \+ 16\) x (\d+) with selling off: (?P<piles>[^.]*)\.', name='the gold formula')
+    if m:
+        source = gd.read_source('src/obj-make.c') or ''
+        c.emit('source', m.start(), 'make_gold average is (16 * lev) / 10 + 16', True,
+               'int avg = (16 * lev)/10 + 16;' in source)
+        c.emit('source', m.start(), 'make_gold multiplies by 5 under no_selling', int(m[1]),
+               5 if 'if (OPT(player, birth_no_selling) && player->depth)' in source and 'value *= 5;' in source
+               else None, covers=[m.span(1)])
+        for k in re.finditer(r'(\d+) at DL(\d+)', m['piles']):
+            lev = int(k[2])
+            at = m.start('piles') + k.start()
+            c.emit('source', at, f'gold pile average at DL{lev}', int(k[1]), ((16 * lev) // 10 + 16) * 5,
+                   covers=[(m.start('piles') + k.start(1), m.start('piles') + k.end(1)),
+                           (m.start('piles') + k.start(2), m.start('piles') + k.end(2))])
+    m = c.search(r'a (\d+) staff is (\d+) / (\d+) = ([\d.]+) piles at DL(\d+)', name='the staff in piles')
+    if m:
+        staff = find_object('Teleportation', types=['staff'])
+        avg = ((16 * int(m[5])) // 10 + 16) * 5
+        c.emit('source', m.start(), 'Staff of Teleportation cost:', int(m[1]), int(staff.first('cost')),
+               covers=[m.span(1), m.span(2)])
+        c.emit('source', m.start(), 'a pile at that depth', int(m[3]), avg, covers=[m.span(3), m.span(5)])
+        c.emit('source', m.start(), 'the staff in piles', m[4], f'{int(m[2]) / avg:.1f}', covers=[m.span(4)])
+    m = c.search(r'CCW heals (\d+) and cures (?P<cures>[^;]*?) besides blindness', name='the CCW line')
+    if m:
+        potion = find_object('Cure Critical Wounds', types=['potion'])
+        fields = [(k, v) for k, v, _ in potion.fields]
+        heal = int(next(v for (k, v), (k2, v2) in zip(fields, fields[1:]) if k == 'effect' and v == 'HEAL_HP' and k2 == 'dice'
+                        for v in [v2]))
+        c.emit('effect', m.start(), 'CCW heals', int(m[1]), heal, covers=[m.span(1)])
+        word = {'poison': 'POISONED', 'stun': 'STUN', 'amnesia': 'AMNESIA', 'confusion': 'CONFUSED', 'cuts': 'CUT'}
+        said = {word[w] for w in re.split(r', | and ', m['cures'])}
+        real = {v.split(':')[1] for k, v in fields if k == 'effect' and v.startswith('CURE:')} - {'BLIND'}
+        c.emit('effect', m.start(), 'CCW cures (besides blindness)', sorted(said), sorted(real))
+        c.emit('effect', m.start(), 'CCW cures blindness', True, ('effect', 'CURE:BLIND') in fields)
+    m = c.search(r'stops dropping in the dungeon at DL(\d+)', name='Cure Light Wounds alloc')
+    if m:
+        clw = find_object('Cure Light Wounds', types=['potion'])
+        top = re.match(r'\d+:\d+ to (\d+)', clw.first('alloc'))
+        c.emit('effect', m.start(), 'Cure Light Wounds alloc maximum depth', int(m[1]), int(top[1]),
+               covers=[m.span(1)])
+    m = c.search(r'drained stats come back at your next level \(`src/player.c adjust_level`\)', name='stat restore')
+    if m:
+        player = gd.read_source('src/player.c') or ''
+        body = player[player.index('static void adjust_level'):][:2200]
+        c.emit('source', m.start(), 'adjust_level restores every stat at a level up', True,
+               all(f'EF_RESTORE_STAT, source_none(), "0", STAT_{s}' in body for s in ('STR', 'INT', 'WIS', 'DEX', 'CON')))
+    m = c.search(r'Summon Undead \(found from DL(\d+)\), Aggravate Monster \(found from DL(\d+)\), and the cost-0 '
+                 r'potions of Sleep and Salt Water, which paralyse', name='unknown scrolls and potions')
+    if m:
+        c.emit('effect', m.start(), 'Summon Undead found from', int(m[1]),
+               alloc_min(find_object('Summon Undead', types=['scroll'])), covers=[m.span(1)])
+        c.emit('effect', m.start(), 'Aggravate Monster found from', int(m[2]),
+               alloc_min(find_object('Aggravate Monster', types=['scroll'])), covers=[m.span(2)])
+        for name in ('Sleep', 'Salt Water'):
+            potion = find_object(name, types=['potion'])
+            c.emit('effect', m.start(), f'potion of {name} cost:', 0, int(potion.first('cost')))
+            c.emit('effect', m.start(), f'potion of {name} paralyses', True,
+                   any('PARALYZED' in v for k, v, _ in potion.fields if k == 'effect'))
+    m = c.search(r'Summon Undead \(`cost:0`, found from DL(\d+)\)', name='Summon Undead in section 5')
+    if m:
+        scroll = find_object('Summon Undead', types=['scroll'])
+        c.emit('effect', m.start(), 'Summon Undead cost:', 0, int(scroll.first('cost')))
+        c.emit('effect', m.start(), 'Summon Undead found from', int(m[1]), alloc_min(scroll), covers=[m.span(1)])
+        for what, kind in (('Summon Monster', 'scroll'), ('Summoning', 'staff')):
+            c.emit('effect', m.start(), f'{kind} of {what} cost:', 0,
+                   int(find_object(what, types=[kind]).first('cost')))
+
+
+def manual_says_two(c):
+    rules = [
+        (r'typical CL 8-22 and 18-32', 12, r'### Typical CL\s+8-22'),
+        (r'typical CL 8-22 and 18-32', 12, r'### Typical CL\s+18-32'),
+        (r'c15 `K_HP_RESERVE`, max\(20, 10%\)', 15, r'`K_HP_RESERVE` \| max\(20, 10% max hp\)'),
+        (r'until about CL30 \(c13 13\.1\)', 13, r'until clvl ~30'),
+        (r'c15 DEPTH-01 looks at monsters native to d-2 to d\+5', 15, r'd−2 … d\+5'),
+        (r'c8 says this', 8, r'full strength out to 7'),
+        (r"c15 15\.3's `D = 4`", 15, r'`D = 4`'),
+        (r"FIGHT-04's `halves at 7`", 15, r'halves at 7'),
+        (r'the chapter\'s "\+20" for him', 15, r'Bullroarer \(D5, \+20\)'),
+        (r'down to under 3 Phase Door', 12, r'fewer than 3 Phase'),
+        (r'c15 TOWN-02', 15, r'Notably absent from town stock lists'),
+        (r'c15 DEPTH-02 lists a minimum kit per depth', 15, r'DEPTH-02 — Mandatory kit gates'),
+    ]
+    chapters = {n: gd.read_chapter(n) or '' for n in gd.strategy_chapter_files()}
+    for anchor, chapter, needle in rules:
+        found = c.search(anchor, name=anchor, required=False)
+        if not found:
+            c.problem(f'the page no longer has {anchor!r}')
+            continue
+        c.emit('manual says', found.start(), f'chapter {chapter} contains {needle!r}', True,
+               bool(re.search(needle, chapters[chapter])), end=found.end(), covers=[found.span()])
+
+
+extractor('strategy manual quotations', minimum=10, volumes=(2,))(manual_says_two)
+
+
+# -- how much of the page's numbers a check settles ---------------------------
+
+NUMBER_TOKEN = re.compile(r'(?<![A-Za-z_$#])(?:\d+d\d+|\d+(?:\.\d+)?)')
+
+
+def structural_spans(text):
+    """Numbers that name a place rather than state a fact: headings, the sources
+    header, table headers, chapter and section references, rule ids."""
+    spans = []
+    for m in re.finditer(r'^(#.*|Sources, so any line can be checked\..*)$', text, re.M):
+        spans.append(m.span())
+    for m in re.finditer(r'^\|.*\|\s*\n\|[-| :]+\|', text, re.M):          # a table's header and rule
+        spans.append(m.span())
+    for pattern in (r'\bc\d+(?: \d+\.\d+(?:[-,] ?\d+\.\d+)*)?', r'\b[A-Z]{2,6}-\d\d[a-z]?(?:/\d\d)*\b',
+                    r'\b[Ss]ections? \d+(?:-\d+)?\b', r'\b[Vv]olume \d\b'):
+        spans += [m.span() for m in re.finditer(pattern, text)]
+    return spans
+
+
+def number_coverage(report, text):
+    """`(covered, total, uncovered)`: every number on the page that is not
+    structural, and the ones no claim says it settles."""
+    ignore = structural_spans(text)
+    covered = [span for claim in report.checked for span in claim.covers]
+
+    def inside(a, b, spans):
+        return any(a < e and s < b for s, e in spans)
+
+    total, missing = 0, []
+    for m in NUMBER_TOKEN.finditer(text):
+        a, b = m.span()
+        if inside(a, b, ignore):
+            continue
+        total += 1
+        if not inside(a, b, covered):
+            line = text.count('\n', 0, a) + 1
+            missing.append((line, m[0], text[max(0, a - 25):b + 25].replace('\n', ' ')))
+    return total - len(missing), total, missing
+
+
 # -- running everything --------------------------------------------------------
 
-def check(text=None, path=INSTRUCTIONS):
-    """Read the page and check every claim the grammars find."""
+def shortcuts_of(text):
+    """`{'object': 'vendor/angband/lib/gamedata/object.txt', ...}` from a page's
+    own `Sources, so any line can be checked.` header."""
+    found = {}
+    header = re.search(r'^Sources, so any line can be checked\..*$', text, re.M)
+    for names, target in re.findall(r'((?:`\w+`/?)+) = `([^`]+)`', header.group(0) if header else ''):
+        for name in re.findall(r'`(\w+)`', names):
+            found[name] = target.replace('<name>', name)
+    return found
+
+
+def check(text=None, path=INSTRUCTIONS, volume=1):
+    """Read the page and check every claim the grammars find. `volume` 2 reads
+    `manuals/INSTRUCTIONS_2.md`, whose header leans on volume 1's shorthand."""
+    if volume == 2 and path == INSTRUCTIONS:
+        path = INSTRUCTIONS_2
     text = path.read_text() if text is None else text
-    ctx = Ctx(text)
+    ctx = Ctx(text, volume)
+    if volume == 2:
+        ctx.shortcuts = shortcuts_of(INSTRUCTIONS.read_text())
     # citation shortcuts first: later extractors use them
     ordered = sorted(EXTRACTORS, key=lambda e: e[0] != 'citation shortcuts')
-    for name, minimum, fn in ordered:
+    for name, minimum, fn, volumes in ordered:
+        if volume not in volumes:
+            continue
+        if isinstance(minimum, dict):
+            minimum = minimum[volume]
         before = len(ctx.report.claims)
         try:
             fn(ctx)

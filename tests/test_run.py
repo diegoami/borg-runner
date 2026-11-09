@@ -493,3 +493,28 @@ def test_a_run_with_no_tools_says_so(tmp_path):
     run = a_run(tmp_path)
     run_module.answer(run, 1, ' ', reason='x')
     assert run_module.write_record(run, outcome='stopped')['own_tools'] == []
+
+
+def test_a_game_this_session_did_not_start_can_still_be_polled(tmp_path):
+    """After the command that started a game returns, the pid is all there is.
+
+    A finished run whose model simply stopped answering leaves the game
+    waiting for ever; nothing reaped it, and that blocked carry-on on the
+    name guard.
+    """
+    import os
+    run = a_run(tmp_path)
+    (run / 'started.json').write_text(json.dumps(
+        {'seed': 7, 'character': 'r1', 'pid': os.getpid(), 'build': {}}))
+    process = run_module.started_process(run)
+    assert process is not None and process.poll() is None, 'we are alive'
+
+    (run / 'started.json').write_text(json.dumps(
+        {'seed': 7, 'character': 'r1', 'pid': 999999, 'build': {}}))
+    assert run_module.started_process(run) is None, 'that pid is gone'
+
+
+def test_no_started_file_means_no_game(tmp_path):
+    run = tmp_path / 'bare'
+    (run / run_module.ASK).mkdir(parents=True)
+    assert run_module.started_process(run) is None
