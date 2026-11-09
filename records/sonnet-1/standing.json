@@ -1,0 +1,15 @@
+{
+  "carried_value": 713,
+  "character": "Half-Troll Warrior",
+  "character_level": 3,
+  "class": "Warrior",
+  "gold": 10,
+  "hp": {
+    "max": 52,
+    "now": 52
+  },
+  "max_character_level": 3,
+  "race": "Half-Troll",
+  "standing_from": "sonnet-1-standing, a replay of this run's archived keys",
+  "wealth": 723
+}

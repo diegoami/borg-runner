@@ -14,19 +14,29 @@
     "patch_sha256": "5c02c7cbbcdd47e620136e1d4b90c66f5d6134672aebf0922ac7b983d5245484",
     "schema": "borg-runner/build@1"
   },
-  "carried_value": null,
+  "carried_value": 1098,
   "character": "Half-Troll Warrior",
-  "character_level": null,
+  "character_level": 6,
   "class": "Warrior",
-  "cost": null,
+  "cost": {
+    "model": "anthropic/claude-sonnet-5-5",
+    "played_by": "subagent",
+    "tokens": 172221,
+    "tool_calls": 160
+  },
   "death_depth": null,
   "died": false,
   "exit_code": null,
   "final_turn": 6056,
-  "gold": null,
+  "gold": 91,
+  "hp": {
+    "max": 98,
+    "now": 98
+  },
   "keypresses": 637,
   "keys_sha256": "03a19a1ba55bccb781a8362fd0f13ce83aaaca8360d31acd03c21d5f74f7319d",
   "killed_by": null,
+  "max_character_level": 6,
   "max_depth": 6,
   "notebook_lines": 32,
   "notebook_sha256": "ac1ca8c66ecd29a0c1df392a464cd8bc3b32981f611aff97900ac4d586cc8f14",
@@ -34,11 +44,13 @@
   "race": "Half-Troll",
   "read_before_playing": "Files actually opened before ask 1: docs/BRIEF.md, knowledge/MANUAL-GAPS.md, knowledge/LEARNED.md, the sonnet-1 notebook (printed), vendor/angband docs guide.rst (first 150 lines) and command.rst (Run section), strategy-manual ch15 first 120 lines and the grep of ch14 for Warrior (only headings, not the full playbook). Plan: shop incl. Magic Mapping, then dive. (ask 1)",
   "read_its_own_playbook": true,
+  "replay_url": "https://claude.ai/artifact/VJnwi9wUTfj3HmHMRa4XcH",
   "run": "sonnet-2",
   "savefile_sha256": "b06c14afa905ab054110d1d317c4f1df1b50f887d239b51574811ee7d8be0038",
   "schema": "borg-runner/run-record@1",
   "screens": 153,
   "screens_sha256": "6207b949d4328ad8bada2e02eae4e24a23f9afc08485c524998b7765e0f75306",
   "seed": 7,
-  "wealth": null
+  "standing_from": "sonnet-2-standing, a replay of this run's archived keys",
+  "wealth": 1189
 }

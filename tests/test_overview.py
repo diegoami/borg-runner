@@ -28,7 +28,7 @@ def test_a_row_per_archived_run(tmp_path):
 def test_the_table_links_each_run_to_what_git_holds(tmp_path):
     a_record(tmp_path, 'one')
     table = overview.markdown(overview.rows(tmp_path))
-    assert '[one](records/one/)' in table
+    assert '[one](one/)' in table, 'relative to records/, where the table lives'
     assert '723 (10 gold + 713 carried)' in table
 
 
@@ -62,7 +62,7 @@ def test_the_real_records_still_read(tmp_path):
     """Against the repository's own records/, whatever is in it."""
     found = overview.rows()
     for row in found:
-        assert row['run'] and row['record'].startswith('records/')
+        assert row['run'] and row['record'].endswith('/')
         if row['model']:
             assert '/' in row['model'], 'a model names its provider'
 
@@ -76,3 +76,25 @@ def test_the_character_is_part_of_a_row(tmp_path):
     assert found[0]['character'] == 'Half-Troll Warrior'
     assert 'character' in [label for _, label in overview.COLUMNS]
     assert 'Half-Troll Warrior' in overview.page(found)
+
+
+def test_the_links_are_relative_to_where_the_table_lives(tmp_path):
+    """OVERVIEW.md sits inside records/, so a records/<run>/ link resolves to
+    records/records/<run>/ and 404s on GitHub."""
+    run = a_record(tmp_path, 'one')
+    (run / 'REPORT.md').write_text('# what happened\n')
+    table = overview.markdown(overview.rows(tmp_path))
+    assert '[one](one/REPORT.md)' in table
+    assert 'records/one' not in table
+
+
+def test_a_run_without_a_write_up_links_to_its_directory(tmp_path):
+    a_record(tmp_path, 'bare')
+    table = overview.markdown(overview.rows(tmp_path))
+    assert '[bare](bare/)' in table
+
+
+def test_the_table_links_to_the_published_replay(tmp_path):
+    a_record(tmp_path, 'one', replay_url='https://claude.ai/artifact/abc')
+    table = overview.markdown(overview.rows(tmp_path))
+    assert '[watch](https://claude.ai/artifact/abc)' in table

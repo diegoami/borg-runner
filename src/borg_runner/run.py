@@ -32,8 +32,9 @@ RECORD = 'record.json'
 NOTEBOOK = 'notebook.md'
 NOTEBOOK_LINES = 60
 RECORDS = pins.ROOT / 'records'
+STANDING = 'standing.json'
 ARCHIVED = (RECORD, KEYS, DECISIONS, NOTEBOOK, 'REPORT.md', 'started.json',
-            'inherited.json', 'manual.json', 'model-calls.jsonl')
+            'inherited.json', 'manual.json', 'model-calls.jsonl', STANDING)
 
 # Save and quit. The game writes its savefile and exits cleanly, which is
 # both how a run ends and what `takeover` needs to exist (D7).
@@ -452,6 +453,28 @@ def stop(run, process, log=print, patience=20.0):
         log('run: the game saved and quit')
 
 
+def recover_standing(run, from_replay, log=print):
+    """Keep a standing recovered by replaying an older run's keys.
+
+    A run played under a build that did not report the character's level,
+    gold or gear can only have those recovered by replaying its keys. Written
+    into the run as `standing.json`, it survives every later rewrite of the
+    record - which three hand-made backfills did not.
+    """
+    replayed = json.loads((Path(from_replay) / RECORD).read_text())
+    kept = {field: replayed.get(field)
+            for field in ('race', 'class', 'character', 'character_level',
+                          'max_character_level', 'gold', 'carried_value',
+                          'wealth', 'hp')
+            if replayed.get(field) is not None}
+    kept['standing_from'] = (f'{Path(from_replay).name}, a replay of this '
+                             f"run's archived keys")
+    (Path(run) / STANDING).write_text(
+        json.dumps(kept, indent=2, sort_keys=True) + '\n')
+    log(f'standing: recovered {len(kept) - 1} fields from {Path(from_replay).name}')
+    return kept
+
+
 def _standing(run, asked_at):
     """How the character stood, at the end and at its best.
 
@@ -459,11 +482,16 @@ def _standing(run, asked_at):
     list, so a run says not only how deep it went but how well equipped it was
     when it got there - which is what tells a lucky dive from a good one.
     """
+    recovered = Path(run) / STANDING
     seen = [question(run, number) for number in asked_at] if asked_at else []
     seen = [asked for asked in seen if asked.get('level') not in (None, -1)]
     if not seen:
-        return {'character_level': None, 'gold': None, 'carried_value': None,
-                'wealth': None, 'race': None, 'class': None, 'character': None}
+        empty = {'character_level': None, 'gold': None, 'carried_value': None,
+                 'wealth': None, 'race': None, 'class': None,
+                 'character': None, 'standing_from': None}
+        if recovered.exists():
+            empty.update(json.loads(recovered.read_text()))
+        return empty
     last = seen[-1]
     # The *last* ask that names a race, not the first: before birth finishes
     # the player struct holds the menu's defaults, which are the last race and
@@ -550,7 +578,7 @@ def write_record(run, process=None, outcome=None, cost=None):
         before = json.loads((run / RECORD).read_text())
         for field in ('race', 'class', 'character', 'character_level',
                       'max_character_level', 'gold', 'carried_value',
-                      'wealth', 'hp', 'standing_from', 'replay_url'):
+                      'wealth', 'hp', 'standing_from', 'replay_url', 'cost'):
             if record.get(field) is None and before.get(field) is not None:
                 record[field] = before[field]
     # Last, because it is checked against the class the record ends up with,

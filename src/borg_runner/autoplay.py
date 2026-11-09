@@ -64,8 +64,18 @@ and when you are unsure, spend a keypress and look. Nothing will correct you,
 deliberately: believing you still have a Phase Door when you do not is a real
 mistake and we want to see it, not hide it.
 
+Your character is drawn, not chosen: at the race menu press "*" and at the
+class menu press "*". The game's own birth screen offers it. Then read what
+you need about the class you were given. A player who picks its class every
+time produces notes that read as general when they are one class's notes.
+
 Rules: change no setting and no option. Do not call anything a defect. If you
 think a player could do better, say what would settle it.
+
+You may add "note": "<one line>" to your answer for something the game taught
+you that the manual did not say. Those notes are kept, printed back to you
+with every later screen, and given to whoever plays next, so write the
+evidence into them: what the screen said, and at which ask.
 
 Play well. Go as deep as you can without throwing the character away."""
 
@@ -96,18 +106,30 @@ def first_message(screen, memory=None):
     return '\n'.join(text)
 
 
-def later_message(screen, memory=None):
+def later_message(screen, memory=None, book=None):
     text = ['=== SCREEN ===', screen]
     if memory:
         text += ['=== YOUR MEMORY (yours; nothing here maintains it) ===', memory]
-    text += ['', 'One JSON object: keys, reason, and memory if it changed.']
+    if book:
+        text += ['=== YOUR NOTEBOOK (yours; nothing here writes or corrects it) ===',
+                 book]
+    text += ['', 'One JSON object: keys, reason, and memory or note if either '
+                 'changed.']
     return '\n'.join(text)
 
 
 def manual_files():
-    """The pages worth attaching once, at the pin. Everything else is lookup."""
+    """What is attached on the first ask, once, and then cached.
+
+    The manual pages at the pin, and everything in knowledge/ - the filed
+    knowledge and the cheat sheets earlier runs paid for. A model playing
+    through a provider gets what a session playing here gets; it would be a
+    poor comparison otherwise.
+    """
     game = pins.clone('angband')
-    wanted = [game / 'docs' / 'command.rst', game / 'docs' / 'guide.rst']
+    wanted = [game / 'docs' / 'command.rst', game / 'docs' / 'guide.rst',
+              run_module.KNOWLEDGE / 'MANUAL-GAPS.md',
+              run_module.KNOWLEDGE / 'LEARNED.md']
     return [path for path in wanted if path.exists()]
 
 
@@ -294,8 +316,10 @@ def autoplay(run, model, process=None, max_asks=200, agent=None, via='opencode',
                            for seen in past]
                 result = call_openrouter(messages_for(screen, memory, history), model)
             else:
+                book = run_module.notebook(run)
                 result = call(
-                    first_message(screen, memory) if first else later_message(screen, memory),
+                    first_message(screen, memory) if first
+                    else later_message(screen, memory, book=book),
                     model, session,
                     attach=manual_files() if first else (),
                     agent=agent, cwd=pins.ROOT)
@@ -315,6 +339,8 @@ def autoplay(run, model, process=None, max_asks=200, agent=None, via='opencode',
             run_module.answer(run, number, str(decision['keys']),
                               reason=str(decision.get('reason', ''))[:300],
                               memory=decision.get('memory'))
+            if decision.get('note'):
+                run_module.remember(run, str(decision['note'])[:600], ask=number)
             answered += 1
             last_goal = (result['usage'] or {}).get('goal') or last_goal
             log(f'autoplay: ask {number} turn {asked["turn"]} '

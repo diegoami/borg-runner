@@ -1,0 +1,15 @@
+{
+  "carried_value": 597,
+  "character": "Human Mage",
+  "character_level": 1,
+  "class": "Mage",
+  "gold": 6,
+  "hp": {
+    "max": 10,
+    "now": -1
+  },
+  "max_character_level": 1,
+  "race": "Human",
+  "standing_from": "sonnet-3-standing, a replay of this run's archived keys",
+  "wealth": 603
+}
