@@ -1,0 +1,108 @@
+Carry on a game of Angband 4.2.6 that an earlier run stopped playing.
+
+Substitute the placeholders. If you were given only the run to continue, the
+new name is that name with "-again" on the end; if that exists already, add a
+number.
+
+    {FROM}      the run to continue, e.g. sonnet-2-again
+    {RUNNAME}   the new run, e.g. sonnet-2-again-2
+
+Work from /home/diego/projects/borg-runner and use .venv/bin/python. Your run
+will not disturb any other: each one owns its directory, game process,
+character and notebook.
+
+== WHY THIS IS A NEW RUN AND NOT A RESTART ==
+
+A stopped game cannot be reopened. The frontend numbers its asks from one each
+process, so a second process would overwrite the first one's questions, and a
+game resumed from a savefile is no longer reproduced by its seed and its keys.
+
+So `carry-on` replays the old keys into a fresh run - which is exact - and
+leaves the game waiting at the next ask, with the old notebook already in
+place. Your run's `input.txt` ends up being the whole history, the old keys
+and yours, so it replays from its seed like any other.
+
+== START ==
+
+    .venv/bin/python -m borg_runner carry-on --run runs/{FROM} --name {RUNNAME}
+
+It prints `waiting_at_ask` and the turn. That ask number is where you begin -
+**not 1**. It also prints `identical`: true means the replay reproduced the
+old game exactly. If it is false, read runs/{RUNNAME}/replay.json before
+playing: a difference only at ask 1 is the known build-id change in older
+recordings and is harmless, anything else means this is not the same game and
+you should say so rather than play on.
+
+    .venv/bin/python -m borg_runner wait --run runs/{RUNNAME}
+
+== READ ==
+
+    manuals/INSTRUCTIONS.md   the manuals distilled. Section 9 has a block per
+                              class - **read the block for the character you
+                              have inherited**, which the screen's sidebar and
+                              `C` will tell you.
+    knowledge/NOTES.md        what earlier runs found. Where these two
+                              disagree, NOTES wins.
+    runs/{FROM}/REPORT.md     the run you are continuing, if it wrote one.
+                              This one you *may* read: it is your own history,
+                              not somebody else's answer key.
+
+Your notebook already contains the notes of the run you are continuing, and
+they are printed back to you with every screen. Do not restate them. Add only
+what is new, or what contradicts them - and when something they claim turns
+out to be wrong, say so with the evidence.
+
+Your first note must say which files you actually opened.
+
+Do not read a *different* run's decisions or write-up for this seed. The run
+you continue is your own past; another run's transcript of the same dungeon is
+a solution key.
+
+== PLAY: ONE CALL PER DECISION ==
+
+    .venv/bin/python -m borg_runner answer <n> '<keys>' --run runs/{RUNNAME} \
+        --reason "one line" --note "something new, with its evidence"
+
+`answer` prints the next screen. Several keys in one answer are usually right;
+the escapes are \n Enter, \e Escape, \t Tab, \\ a backslash.
+
+== WHAT IS DIFFERENT FROM A FRESH RUN ==
+
+- There is no birth. Your character exists, with its level, its gear and its
+  wounds. Press `i`, `e` and `C` early: nothing here remembers what it carries
+  for you, and the run before you may have spent things.
+- You inherit its position, which may be bad. Read the top line of the screen
+  and the status line before you move. The run before you may have left you
+  slowed, confused, out of escapes, or next to something it was losing to.
+- Rest before you descend, and know what you are carrying before you fight.
+
+== RULES ==
+
+- Change no setting, no option and no file outside your run directory.
+- You may not call anything a defect. If a player could do better, say what
+  would settle it.
+- Aim for about 150 decisions unless told otherwise, then stop.
+
+== WHEN YOU STOP ==
+
+    .venv/bin/python -m borg_runner record --run runs/{RUNNAME} \
+        --tokens <total> --tool-calls <total> \
+        --played-by <session|codex|opencode|other> \
+        --model <provider>/<exact model version>
+    .venv/bin/python -m borg_runner keep --run runs/{RUNNAME}
+    .venv/bin/python -m borg_runner archive --run runs/{RUNNAME}
+    .venv/bin/python -m borg_runner overview
+
+Leave the tokens and tool calls off rather than guessing them if you do not
+know your own. `--model` must name the provider and the exact version;
+`record` refuses a bare family name.
+
+`keep` promotes only the notes *you* added, not the ones you were handed, so a
+line you inherited is never counted as a second sighting.
+
+Then write runs/{RUNNAME}/REPORT.md: where you took the character and where
+you left it, the decisions you would take back, where the reading was wrong or
+not enough, what you could not see or do, and your leads with what would
+settle each.
+
+A broken run honestly reported is a result. A tidy story is not.
