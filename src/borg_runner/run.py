@@ -558,7 +558,9 @@ def write_record(run, process=None, outcome=None, cost=None):
     """
     run = Path(run)
     started = json.loads((run / 'started.json').read_text())
-    live = Path(started['savefile'])
+    # A record may be written for a run started by an older version, or by a
+    # test; a missing savefile is not a reason to fail.
+    live = Path(started.get('savefile') or (run / 'no-savefile'))
     if live.exists():
         (run / 'save').mkdir(exist_ok=True)
         kept = run / 'save' / live.name
@@ -625,3 +627,73 @@ def write_record(run, process=None, outcome=None, cost=None):
         run, note=note, character_class=record.get('class'))
     (run / RECORD).write_text(json.dumps(record, indent=2, sort_keys=True) + '\n')
     return record
+
+
+def live(run):
+    """Whether this run's game process is still there."""
+    started = Path(run) / 'started.json'
+    if not started.exists():
+        return None
+    try:
+        pid = json.loads(started.read_text()).get('pid')
+    except ValueError:
+        return None
+    return bool(pid) and Path(f'/proc/{pid}').exists()
+
+
+def status(where=None):
+    """Where every run stands, finished or not.
+
+    Answers the question a person actually has while a run is playing - how
+    far has it got, is it still going, and when will it stop - without having
+    to read a log or ask anyone.
+    """
+    where = Path(where) if where else RUNS
+    out = []
+    for started in sorted(where.glob('*/started.json')):
+        run = started.parent
+        taken = decisions(run)
+        asked_at = questions(run)
+        record = {}
+        if (run / RECORD).exists():
+            try:
+                record = json.loads((run / RECORD).read_text())
+            except ValueError:
+                record = {}
+        seconds = []
+        calls = run / 'model-calls.jsonl'
+        if calls.exists():
+            for line in calls.read_text().splitlines():
+                if not line.strip():
+                    continue
+                try:
+                    took = (json.loads(line).get('usage') or {}).get('seconds')
+                except ValueError:
+                    continue
+                if took:
+                    seconds.append(took)
+        pace = round(sorted(seconds)[len(seconds) // 2], 1) if seconds else None
+        last = question(run, asked_at[-1]) if asked_at else {}
+        # A dead character's game is still running: it draws the tombstone and
+        # waits for a key. Reporting that as "playing" is a lie the status
+        # line should not tell.
+        running = live(run)
+        state = ('dead at the tomb' if record.get('died') and running
+                 else 'dead' if record.get('died')
+                 else 'playing' if running
+                 else 'stopped' if running is False else '?')
+        out.append({
+            'run': run.name,
+            'state': state,
+            'playing': running,
+            'answered': len(taken),
+            'asked': len(asked_at),
+            'turn': last.get('turn'),
+            'depth': last.get('depth'),
+            'character': record.get('character') or last.get('race'),
+            'outcome': ('died: ' + str(record.get('killed_by'))
+                        if record.get('died') else record.get('outcome')),
+            'seconds_per_decision': pace,
+            'notes': len(notebook(run, lines=10 ** 6).splitlines()),
+        })
+    return out

@@ -354,3 +354,32 @@ def test_a_finished_run_does_not_block_another(tmp_path, monkeypatch):
         assert 'already playing' not in str(problem)
     except FileNotFoundError:
         pass
+
+
+def test_status_does_not_call_a_dead_character_playing(tmp_path, monkeypatch):
+    """The game outlives the character: it draws the tombstone and waits."""
+    import os
+
+    monkeypatch.setattr(run_module, 'RUNS', tmp_path)
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='x')
+    (run / 'started.json').write_text(json.dumps(
+        {'seed': 7, 'character': 'r1', 'pid': os.getpid(), 'build': {}}))
+    (run / run_module.ASK / 'screen-2.txt').write_text(TOMBSTONE)
+    run_module.write_record(run, outcome='stopped')
+    row, = [r for r in run_module.status(tmp_path) if r['run'] == 'r1']
+    assert row['state'] == 'dead at the tomb'
+    assert row['playing'] is True, 'the process really is alive'
+
+
+def test_status_reports_how_far_a_run_has_got(tmp_path, monkeypatch):
+    monkeypatch.setattr(run_module, 'RUNS', tmp_path)
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='x')
+    run_module.remember(run, 'something', ask=1)
+    (run / 'started.json').write_text(json.dumps(
+        {'seed': 7, 'character': 'r1', 'pid': 999999, 'build': {}}))
+    row, = [r for r in run_module.status(tmp_path) if r['run'] == 'r1']
+    assert row['state'] == 'stopped'
+    assert (row['answered'], row['asked']) == (1, 2)
+    assert row['notes'] == 1
