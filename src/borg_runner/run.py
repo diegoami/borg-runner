@@ -33,6 +33,11 @@ NOTEBOOK = 'notebook.md'
 NOTEBOOK_LINES = 60
 RECORDS = pins.ROOT / 'records'
 STANDING = 'standing.json'
+# A player may write tools for itself - one wrote a 143-line map parser with
+# breadth-first search. That is legitimate: it reads only the screen. But it
+# changes what the run measures, from "a model playing" to "a model and the
+# code it wrote", so the tools belong in the record beside the keys.
+TOOLS = 'tools'
 ARCHIVED = (RECORD, KEYS, DECISIONS, NOTEBOOK, 'REPORT.md', 'started.json',
             'inherited.json', 'manual.json', 'model-calls.jsonl', STANDING)
 
@@ -209,6 +214,13 @@ def archive(run, into=None, log=print):
         report_module.write(run, into=target / 'report.html')
     except Exception as problem:                      # a run with no screens
         log(f'archive: no report ({problem})')
+
+    tools = run / TOOLS
+    if tools.is_dir():
+        import shutil
+        shutil.rmtree(target / TOOLS, ignore_errors=True)
+        shutil.copytree(tools, target / TOOLS)
+        log(f'archive: {len(list(tools.rglob("*")))} files the player wrote')
 
     kept = []
     for name in ARCHIVED:
@@ -637,6 +649,8 @@ def write_record(run, process=None, outcome=None, cost=None):
                             for number in asked_at]) if asked_at or taken else 0,
         'screens': len(screens),
         'notebook_lines': len(notebook(run, lines=10**6).splitlines()),
+        'own_tools': sorted(path.name for path in (run / TOOLS).iterdir()
+                            if path.is_file()) if (run / TOOLS).is_dir() else [],
         'notebook_sha256': (hashlib.sha256(
             (run / NOTEBOOK).read_bytes()).hexdigest()
             if (run / NOTEBOOK).exists() else None),

@@ -62,6 +62,25 @@ Keys: every character you send is a key the game receives. Four escapes exist
 for keys that cannot be typed: \n Enter, \e Escape, \t Tab, \\ a backslash.
 Several keys in one answer are usually right.
 
+== TOOLS YOU WRITE YOURSELF ==
+
+You may write tools - a script to parse the screen, a pathfinder, anything -
+and one run wrote a 143-line map parser with breadth-first search. It is
+allowed: it reads only the screen, which is all you have. Two conditions.
+
+**Put them in runs/{RUNNAME}/tools/ and say so in your first note.** They are
+archived with the run, because a run played with a pathfinder you wrote is
+measuring you *and your code*, and a reader a month later cannot tell the two
+apart unless the code is there.
+
+**Check the game first.** The game already does more than it looks: `l` then
+`x` then `g` walks you to the nearest unexplored edge, and `l` then `>` then
+`g` walks you to a known down staircase - both in one keypress string, both
+using the game's own pathfinding, and both found by reading the manual rather
+than by writing code. A tool that reimplements what the game offers costs you
+the chance to find that out, and what you then write in your notebook is about
+your tool instead of about Angband.
+
 == RULES ==
 
 - Your character is drawn, not chosen: press * at the race menu and * at the

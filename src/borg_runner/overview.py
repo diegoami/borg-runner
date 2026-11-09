@@ -33,6 +33,7 @@ COLUMNS = (
     ('tokens', 'tokens'),
     ('inherited', 'inherited'),
     ('read_its_own_playbook', 'read its class'),
+    ('own_tools', 'own tools'),
     ('replay', 'replay'),
 )
 
@@ -71,6 +72,7 @@ def rows(where=None):
             'inherited': Path(carried.get('inherited_from') or '').name or None,
             'standing_from': record.get('standing_from'),
             'read_its_own_playbook': record.get('read_its_own_playbook'),
+            'own_tools': len(record.get('own_tools') or []) or None,
             'read_before_playing': record.get('read_before_playing'),
             'notebook_lines': record.get('notebook_lines'),
             'replay_url': record.get('replay_url'),

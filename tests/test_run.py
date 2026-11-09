@@ -473,3 +473,23 @@ def test_status_reports_the_deepest_depth_not_the_current_one(tmp_path, monkeypa
     row, = [r for r in run_module.status(tmp_path) if r['run'] == 'r1']
     assert row['depth'] == 1, 'the deepest it reached'
     assert row['depth_now'] == 0, 'and where it is standing'
+
+
+def test_tools_a_player_wrote_are_archived_with_the_run(tmp_path):
+    """A run played with a pathfinder the player wrote is measuring the
+    player and its code; a reader cannot separate them unless the code is
+    kept."""
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='x')
+    (run / run_module.TOOLS).mkdir()
+    (run / run_module.TOOLS / 'dmap.py').write_text('# a map parser with bfs\n')
+    record = run_module.write_record(run, outcome='stopped')
+    assert record['own_tools'] == ['dmap.py']
+    kept = run_module.archive(run, into=tmp_path / 'kept', log=lambda *a: None)
+    assert (kept / run_module.TOOLS / 'dmap.py').exists()
+
+
+def test_a_run_with_no_tools_says_so(tmp_path):
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='x')
+    assert run_module.write_record(run, outcome='stopped')['own_tools'] == []
