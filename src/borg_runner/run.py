@@ -124,7 +124,7 @@ def spend(run):
     path = Path(run) / 'model-calls.jsonl'
     if not path.exists():
         return None
-    calls, tokens, usd, models = 0, 0, 0.0, set()
+    calls, tokens, usd, models, seconds = 0, 0, 0.0, set(), 0.0
     for line in path.read_text().splitlines():
         if not line.strip():
             continue
@@ -139,11 +139,14 @@ def spend(run):
                 if field == 'total_tokens':
                     tokens += int(value)
         usd += usage.get('cost') or 0.0
+        seconds += (call.get('usage') or {}).get('seconds') or 0.0
         served = (call.get('usage') or {}).get('served_model') or call.get('model')
         if served:
             models.add(served)
     return {'model_calls': calls, 'tokens': tokens or None,
-            'usd': round(usd, 6) or None, 'models': sorted(models)}
+            'usd': round(usd, 6) or None, 'models': sorted(models),
+            'seconds_per_decision': (round(seconds / calls, 1)
+                                     if calls and seconds else None)}
 
 
 def archive(run, into=None, log=print):
@@ -156,6 +159,17 @@ def archive(run, into=None, log=print):
     run = Path(run)
     target = Path(into) if into else RECORDS / run.name
     target.mkdir(parents=True, exist_ok=True)
+
+    # The report is derived - `replay` reproduces the screens from the keys
+    # and `report` rebuilds the page - but it is kept here anyway, because it
+    # is the only *public* form of a replay: the artifact links are private to
+    # the owner's account, and the Pages site serves this.
+    try:
+        from . import report as report_module
+        report_module.write(run, into=target / 'report.html')
+    except Exception as problem:                      # a run with no screens
+        log(f'archive: no report ({problem})')
+
     kept = []
     for name in ARCHIVED:
         source = run / name

@@ -142,8 +142,10 @@ def call(message, model, session, attach=(), agent=None, timeout=600, cwd=None):
     for path in attach:
         command += ['--file', str(path)]
     command.append(message)
+    began = time.monotonic()
     done = subprocess.run(command, capture_output=True, text=True,
                           timeout=timeout, cwd=cwd)
+    seconds = round(time.monotonic() - began, 2)
     text, usage, problem = [], {}, None
     for line in done.stdout.splitlines():
         try:
@@ -158,6 +160,11 @@ def call(message, model, session, attach=(), agent=None, timeout=600, cwd=None):
             usage = {'tokens': part.get('tokens'), 'cost': part.get('cost')}
         elif kind == 'error':
             problem = (event.get('error') or {}).get('message')
+    # The round trip, measured. A decision through OpenCode spawns a process,
+    # which talks to its server, rebuilds the session and calls the provider
+    # across the network; a subagent is one in-process call. The difference is
+    # the backend, not the model, and it belongs in the record.
+    usage['seconds'] = seconds
     return {'text': '\n'.join(text), 'usage': usage, 'error': problem,
             'returncode': done.returncode, 'stderr': done.stderr[-2000:]}
 

@@ -80,6 +80,9 @@ def rows(where=None):
             'record': f'{record_path.parent.name}/',
             'report': (f'{record_path.parent.name}/REPORT.md'
                        if (record_path.parent / 'REPORT.md').exists() else None),
+            'replay': (f'{record_path.parent.name}/report.html'
+                       if (record_path.parent / 'report.html').exists() else None),
+            'seconds_per_decision': cost.get('seconds_per_decision'),
         })
     return found
 
@@ -104,8 +107,10 @@ def markdown(found):
                 where = row.get('report') or row['record']
                 cells.append(f"[{row['run']}]({where})")
             elif key == 'replay':
-                cells.append(f"[watch]({row['replay_url']})"
-                             if row.get('replay_url') else '—')
+                # The local page first: it is public, where the artifact link
+                # is private to the owner's account.
+                where = row.get('replay') or row.get('replay_url')
+                cells.append(f'[watch]({where})' if where else '—')
             elif key == 'wealth' and row['wealth'] is not None:
                 cells.append(f"{row['wealth']:,} "
                              f"({shown(row['gold'])} gold + "

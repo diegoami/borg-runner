@@ -10,6 +10,6 @@ runs of the same family months apart are not the same experiment.
 
 | run | seed | model | character | depth | level | wealth | asks | keys | turn | outcome | tokens | inherited | read its class | replay |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| [sonnet-1](sonnet-1/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 1 | 3 | 723 (10 gold + 713 carried) | 125 | 644 | 4,659 | ended | 162,466 | — | — | [watch](https://claude.ai/artifact/KS7bEkMGgWFWQ5dTzysz52) |
-| [sonnet-2](sonnet-2/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 6 | 6 | 1,189 (91 gold + 1,098 carried) | 153 | 637 | 6,056 | ended | 172,221 | sonnet-1.md | True | [watch](https://claude.ai/artifact/VJnwi9wUTfj3HmHMRa4XcH) |
-| [sonnet-3](sonnet-3/REPORT.md) | 11 | anthropic/claude-sonnet-5-5 | Human Mage | 1 | 1 | 603 (6 gold + 597 carried) | 47 | 222 | 1,348 | died: a small kobold | 124,437 | sonnet-1.md | False | [watch](https://claude.ai/artifact/H267HTv2PF3Vx1HitXWagt) |
+| [sonnet-1](sonnet-1/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 1 | 3 | 723 (10 gold + 713 carried) | 125 | 644 | 4,659 | ended | 162,466 | — | — | [watch](sonnet-1/report.html) |
+| [sonnet-2](sonnet-2/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 6 | 6 | 1,189 (91 gold + 1,098 carried) | 153 | 637 | 6,056 | ended | 172,221 | sonnet-1.md | True | [watch](sonnet-2/report.html) |
+| [sonnet-3](sonnet-3/REPORT.md) | 11 | anthropic/claude-sonnet-5-5 | Human Mage | 1 | 1 | 603 (6 gold + 597 carried) | 47 | 222 | 1,348 | died: a small kobold | 124,437 | sonnet-1.md | False | [watch](sonnet-3/report.html) |

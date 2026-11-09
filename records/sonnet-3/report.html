@@ -1,0 +1,1339 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sonnet-3 replay</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root { --ink:#1b1b1b; --dim:#6b6b6b; --line:#dcdcdc; --bg:#fbfbfa;
+        --card:#ffffff; --screen-bg:#14161a; --screen-ink:#d7dae0;
+        --flag:#8a4b00; }
+* { box-sizing:border-box }
+body { margin:0; background:var(--bg); color:var(--ink);
+       font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif }
+main { max-width:1100px; margin:0 auto; padding-block:24px 72px;
+       padding-left:max(16px, env(safe-area-inset-left, 0px));
+       padding-right:max(16px, env(safe-area-inset-right, 0px)) }
+h1 { font-size:1.5rem; margin:0 0 4px }
+.sub { color:var(--dim); margin:0 0 22px }
+table.facts { border-collapse:collapse; margin:0 0 28px; width:100% }
+table.facts td { border-bottom:1px solid var(--line); padding:6px 10px; vertical-align:top }
+table.facts td:first-child { color:var(--dim); white-space:nowrap; width:1%; padding-right:22px }
+h2 { font-size:1.1rem; margin:34px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--line) }
+.ask { border:1px solid var(--line); border-radius:8px; margin:0 0 14px; background:var(--card);
+       overflow:hidden }
+.ask > summary { cursor:pointer; padding:9px 12px; display:flex; gap:14px;
+                 align-items:baseline; flex-wrap:wrap }
+.ask > summary::-webkit-details-marker { display:none }
+.n { color:var(--dim); font-variant-numeric:tabular-nums; min-width:3.2em }
+.keys { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-weight:600 }
+.why { color:var(--dim); flex:1 1 320px }
+.where { color:var(--dim); font-variant-numeric:tabular-nums }
+.body { padding:0 12px 12px }
+pre.screen { background:var(--screen-bg); color:var(--screen-ink); padding:12px;
+             border-radius:6px; overflow-x:auto; margin:6px 0 0;
+             font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+             font-size:12.5px; line-height:1.25 }
+.note { color:var(--flag); margin:8px 0 0 }
+pre.book { background:var(--card); border:1px solid var(--line); border-radius:8px;
+           padding:12px; white-space:pre-wrap; margin:0 }
+.empty { color:var(--dim) }
+.replay { border:1px solid var(--line); border-radius:8px; background:var(--card);
+          padding:12px; margin:0 0 28px }
+.replay pre { background:var(--screen-bg); color:var(--screen-ink); margin:0;
+              padding:14px; border-radius:6px; overflow-x:auto; min-height:25em;
+              font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+              font-size:13px; line-height:1.22; white-space:pre }
+.bar { display:flex; gap:10px; align-items:center; margin:10px 0 0; flex-wrap:wrap }
+.bar button { font:inherit; padding:5px 11px; border:1px solid var(--line);
+              border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer }
+.bar button:hover { border-color:var(--dim) }
+.bar input[type=range] { flex:1 1 220px; min-width:140px }
+.at { color:var(--dim); font-variant-numeric:tabular-nums; white-space:nowrap }
+.said { margin:10px 0 0; min-height:3em }
+.said .keys { font-size:1.05rem }
+.said .why { color:var(--dim) }
+@media (max-width:620px) { .replay pre { font-size:10.5px } }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --ink:#e8e8e6; --dim:#9a9a97; --line:#2f3136;
+        --bg:#17181b; --screen-bg:#0c0d10; --flag:#e0a34a; --card:#1d1f23;
+        color-scheme:dark }
+}
+:root[data-theme="dark"] { --ink:#e8e8e6; --dim:#9a9a97; --line:#2f3136;
+        --bg:#17181b; --screen-bg:#0c0d10; --flag:#e0a34a; --card:#1d1f23;
+        color-scheme:dark }
+</style></head>
+<body><main>
+<h1>sonnet-3</h1>
+<p class="sub">One game of Angband, played from the screen one keypress at a time.</p>
+<table class="facts"><tr><td>run</td><td>sonnet-3</td></tr><tr><td>seed</td><td>11</td></tr><tr><td>character</td><td>sonnet-3</td></tr><tr><td>outcome</td><td>died</td></tr><tr><td>killed by</td><td>a small kobold</td></tr><tr><td>deepest depth</td><td>1</td></tr><tr><td>final turn</td><td>1348</td></tr><tr><td>asks</td><td>47</td></tr><tr><td>keypresses</td><td>222</td></tr><tr><td>notebook</td><td>33 lines</td></tr><tr><td>game</td><td>angband/angband e473720ed88a</td></tr><tr><td>patch</td><td>5c02c7cbbcdd</td></tr><tr><td>notebook hash</td><td>b5349650fb58</td></tr><tr><td>cost</td><td>124,437 tokens, 61 tool calls</td></tr><tr><td>played by</td><td>subagent</td></tr><tr><td>model</td><td>anthropic/claude-sonnet-5-5</td></tr></table>
+<h2>Replay</h2>
+<p class="sub">Every screen the player faced, in order. Arrow keys step, space
+plays; the line underneath is the keys it sent and why.</p>
+
+<section class="replay">
+  <pre id="screen">(no screens were recorded)</pre>
+  <div class="bar">
+    <button id="back" title="left arrow">&#9664; step</button>
+    <button id="play" title="space">&#9654; play</button>
+    <button id="next" title="right arrow">step &#9654;</button>
+    <input id="scrub" type="range" min="0" value="0" step="1">
+    <span class="at" id="at"></span>
+  </div>
+  <p class="said"><span class="keys" id="keys"></span>
+     <span class="why" id="why"></span></p>
+</section>
+<script>
+(function () {
+  var frames = [{"ask": 1, "turn": 0, "depth": 0, "keys": " ", "reason": "past splash", "goal": "", "notes": ["Opened before play: docs/BRIEF.md, knowledge/MANUAL-GAPS.md, LEARNED.md, sonnet-1.md, guide.rst (1-150), command.rst (run/rest/throw), strategy-manual README + ch10 exploration. (ask 1)"], "screen": "\n                                       ^\n                                      ^^^\n                ^                    ^^^^^                   ^\n               ^^^                  ^^^^^^^                 ^^^\n              ^^^^^                ^^^^^^^^^               ^^^^^\n             ^^^^  _              ^ _  ^^^^^^             _  ^^^^\n            ^^^^  / \\   _ __   __ _| |__   __ _ _ __   __| | ^^^^^\n           ^^^^  / _ \\ | '_ \\ / _` | '_ \\ / _` | '_ \\ / _` | ^^^^^^\n          ^^^^  / ___ \\| | | | (_| | |_) | (_| | | | | (_| | ^^^^^^^\n         ^^^^  /_/   \\_\\_| |_|\\__, |_.__/ \\__,_|_| |_|\\__,_| ^^^^^^^^\n        ^^^^^                 |___/  -g5179d6e-dirty\n       ^^^^^^^^^^^^^^^^^^                     ^^^^  ^^^^^^^^^^^^^^^^^^^\n         \"When the world is old and the Powers grow weary, then Morgoth,\n          seeing that the guard sleepeth, shall come back through the\n          Door of Night out of the Timeless Void.  Then shall the Last\n          Battle be gathered...\"\n\n                         Website: http://rephial.org/\n                     Forums: https://angband.live/forums/\n\n                           For help press '?' in-game\n\n                          [Press any key to continue]\n"}, {"ask": 2, "turn": 1, "depth": 0, "keys": "\\n", "reason": "Human race; plan Mage because Find Traps/Doors/Stairs spell at CL1 detects stairs (strategy manual ch14 s2.3)", "goal": "", "notes": [], "screen": "\n  Please select your character traits from the menus below:\n\n  Use the movement keys to scroll the menu, Enter to select the current menu\n  item, '*' for a random menu item, '@' to finish the character with random\n  selections, 'ESC' to step back through the birth process, '=' for the birth\n  options, '?' for help, or 'Ctrl-X' to quit.\n  Race affects stats and skills, and may confer resistances and abilities.\n\n  a) Human         Str:  +0  Dex:  +0\n  b) Half-Elf      Int:  +0  Con:  +0\n  c) Elf           Wis:  +0\n  d) Hobbit\n  e) Gnome         Hit/Shoot/Throw: +0/+0/+0\n  f) Dwarf         Hit die: 10   XP mod: 100%\n  g) Half-Orc      Disarm:  +0/ +0   Devices:  +0\n  i) Half-Troll    Save:    +0   Stealth:  +0\n  m) Dunadan       Infravision:  0 ft\n  n) High-Elf      Digging:      +0\n  o) Kobold        Search:       +0\n\n\n\n\n"}, {"ask": 3, "turn": 1, "depth": 0, "keys": "b\\n", "reason": "Mage", "goal": "", "notes": [], "screen": "\n  Please select your character traits from the menus below:\n\n  Use the movement keys to scroll the menu, Enter to select the current menu\n  item, '*' for a random menu item, '@' to finish the character with random\n  selections, 'ESC' to step back through the birth process, '=' for the birth\n  options, '?' for help, or 'Ctrl-X' to quit.\n  Class affects stats, skills, and other character traits.\n\n  a) Human         a) Warrior       Str:  +3  Dex:  +2\n  b) Half-Elf      b) Mage          Int:  -2  Con:  +2\n  c) Elf           c) Druid         Wis:  -2\n  d) Hobbit        d) Priest\n  e) Gnome         e) Necromancer   Hit/Shoot/Throw: +70/+55/+55\n  f) Dwarf         f) Paladin       Hit die: 19   XP mod: 100%\n  g) Half-Orc      g) Rogue         Disarm: +25/+20   Devices: +18\n  i) Half-Troll    i) Ranger        Save:   +18   Stealth:  +0\n  m) Dunadan       m) Blackguard    Digging:      +0\n  n) High-Elf                       Search:       +10\n  o) Kobold\n                                    Relentless [30]\n                                    No Magic\n                                    Shield Bash\n\n"}, {"ask": 4, "turn": 1, "depth": 0, "keys": "a\\n", "reason": "point-based", "goal": "", "notes": [], "screen": "\n  Please select your character traits from the menus below:\n\n  Use the movement keys to scroll the menu, Enter to select the current menu\n  item, '*' for a random menu item, '@' to finish the character with random\n  selections, 'ESC' to step back through the birth process, '=' for the birth\n  options, '?' for help, or 'Ctrl-X' to quit.\n  Choose how to generate your intrinsic stats. Point-based is recommended.\n\n  a) Human         a) Warrior       a) Point-based\n  b) Half-Elf      b) Mage          b) Standard roller\n  c) Elf           c) Druid\n  d) Hobbit        d) Priest\n  e) Gnome         e) Necromancer\n  f) Dwarf         f) Paladin\n  g) Half-Orc      g) Rogue\n  i) Half-Troll    i) Ranger\n  m) Dunadan       m) Blackguard\n  n) High-Elf\n  o) Kobold\n\n\n\n\n"}, {"ask": 5, "turn": 1, "depth": 0, "keys": "\\n", "reason": "accept name", "goal": "", "notes": [], "screen": "Enter a name for your character (* for a random name): sonnet-3\n Name                Age             18          Self  RB  CB  EB   Best\n Race   Human        Height        5'3\"   STR:     17  +0  -3  +0     14\n Class  Mage         Weight    12st 0lb   INT:     16  +0  +3  +0  18/10\n Title  Novice       Turns used:          WIS:     10  +0  +0  +0     10\n HP     10/10        Game             1   DEX:     10  +0  +0  +0     10\n SP     2/2          Standard         0   CON:     16  +0  -2  +0     14\n                     Resting          0\n\n Level                  1    Armor        [0,+0]    Saving Throw     31%\n Cur Exp                0                           Stealth         Poor\n Max Exp                0    Melee        1d1,+0    Disarm - phys.   32%\n Adv Exp               10    To-hit        12,+0    Disarm - magic   39%\n                             Blows      1.0/turn    Magic Devices     40\n Gold                   0                           Searching        11%\n Burden            0.0 lb    Shoot to-dam     +0    Infravision     0 ft\n Overweight      -95.9 lb    To-hit         7,+0    Speed         Normal\n Max Depth           Town    Shots      0.0/turn\n\n You are one of several children of a Serf.  You are a credit to the\n family.  You have blue eyes, wavy brown hair, and a dark complexion.\n\n\n\n"}, {"ask": 6, "turn": 1, "depth": 0, "keys": "y", "reason": "accept history", "goal": "", "notes": [], "screen": "Accept character history? [y/n]\n Name   sonnet-3     Age             18          Self  RB  CB  EB   Best\n Race   Human        Height        5'3\"   STR:     17  +0  -3  +0     14\n Class  Mage         Weight    12st 0lb   INT:     16  +0  +3  +0  18/10\n Title  Novice       Turns used:          WIS:     10  +0  +0  +0     10\n HP     10/10        Game             1   DEX:     10  +0  +0  +0     10\n SP     2/2          Standard         0   CON:     16  +0  -2  +0     14\n                     Resting          0\n\n Level                  1    Armor        [0,+0]    Saving Throw     31%\n Cur Exp                0                           Stealth         Poor\n Max Exp                0    Melee        1d1,+0    Disarm - phys.   32%\n Adv Exp               10    To-hit        12,+0    Disarm - magic   39%\n                             Blows      1.0/turn    Magic Devices     40\n Gold                   0                           Searching        11%\n Burden            0.0 lb    Shoot to-dam     +0    Infravision     0 ft\n Overweight      -95.9 lb    To-hit         7,+0    Speed         Normal\n Max Depth           Town    Shots      0.0/turn\n\n You are one of several children of a Serf.  You are a credit to the\n family.  You have blue eyes, wavy brown hair, and a dark complexion.\n\n\n\n"}, {"ask": 7, "turn": 1, "depth": 0, "keys": " ", "reason": "continue", "goal": "", "notes": [], "screen": "\n Name   sonnet-3     Age             18          Self  RB  CB  EB   Best\n Race   Human        Height        5'3\"   STR:     17  +0  -3  +0     14\n Class  Mage         Weight    12st 0lb   INT:     16  +0  +3  +0  18/10\n Title  Novice       Turns used:          WIS:     10  +0  +0  +0     10\n HP     10/10        Game             1   DEX:     10  +0  +0  +0     10\n SP     2/2          Standard         0   CON:     16  +0  -2  +0     14\n                     Resting          0\n\n Level                  1    Armor        [0,+0]    Saving Throw     31%\n Cur Exp                0                           Stealth         Poor\n Max Exp                0    Melee        1d1,+0    Disarm - phys.   32%\n Adv Exp               10    To-hit        12,+0    Disarm - magic   39%\n                             Blows      1.0/turn    Magic Devices     40\n Gold                   0                           Searching        11%\n Burden            0.0 lb    Shoot to-dam     +0    Infravision     0 ft\n Overweight      -95.9 lb    To-hit         7,+0    Speed         Normal\n Max Depth           Town    Shots      0.0/turn\n\n You are one of several children of a Serf.  You are a credit to the\n family.  You have blue eyes, wavy brown hair, and a dark complexion.\n\n\n      ['ESC' to step back, 'S' to start over, or any other key to continue]\n"}, {"ask": 8, "turn": 1, "depth": 0, "keys": "i", "reason": "look at inventory", "goal": "", "notes": [], "screen": "You can learn 1 more spell.\nHuman                            ###         ######              ###\nNovice                         ###.# #########....## ####       ##.## ####\nMage                         ###...###.#...##@.....###..#       #...###..#\nLEVEL      1             ### #....................##....#      #:...##...##\nNXT       10             #.####........###..............#######:..........#\nAU       334       #######..###........##8.................#:.:...........#\n|    ~             #....#....#...................t..............:.........#\nSTR:      14   #####............:.:.:.................:..:.###...:.:::....#\nINT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##\nWIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####\nDEX:      10  #.............7##...::....##4....#2#...............::.:..::...#\nCON:      14  #.............................................................#\n              #.............................................................#\nCur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##\nHP   10/  10   ###............:.###....:.##....####..:###::..###....:......#\nSP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##\n                  #.........:.:.......:..:...........:## :.........:.::...##\n                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#\n                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#\n                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##\n                     #..###   #####...######.##          #.######...##....#\nTown                 ####         #####    ###           ###    ###########\n             Light 1  Study (1) Fed 89 % Down staircase\n"}, {"ask": 9, "turn": 1, "depth": 0, "keys": "\\eG", "reason": "study", "goal": "", "notes": [], "screen": "Select Item: (Inven: a-c, / for Equip, ESC)\nHuman        a) a Book of Magic Spells [First Spells]      3.0 lb\nNovice       b) 2 Rations of Food                          1.6 lb\nMage         c) a Scroll of Word of Recall                 0.5 lb\nLEVEL      1\nNXT       10             #.####........###..............#######:..........#\nAU       334       #######..###........##8.................#:.:...........#\n|    ~             #....#....#...................t..............:.........#\nSTR:      14   #####............:.:.:.................:..:.###...:.:::....#\nINT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##\nWIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####\nDEX:      10  #.............7##...::....##4....#2#...............::.:..::...#\nCON:      14  #.............................................................#\n              #.............................................................#\nCur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##\nHP   10/  10   ###............:.###....:.##....####..:###::..###....:......#\nSP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##\n                  #.........:.:.......:..:...........:## :.........:.::...##\n                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#\n                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#\n                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##\n                     #..###   #####...######.##          #.######...##....#\nTown                 ####         #####    ###           ###    ###########\n             Light 1  Study (1) Fed 89 % Down staircase\n"}, {"ask": 10, "turn": 1, "depth": 0, "keys": "a", "reason": "pick book", "goal": "", "notes": [], "screen": "Study which book? (Inven: a-a, ESC)\nHuman          a) a Book of Magic Spells [First Spells]      3.0 lb\nNovice\nMage                         ###...###.#...##@.....###..#       #...###..#\nLEVEL      1             ### #....................##....#      #:...##...##\nNXT       10             #.####........###..............#######:..........#\nAU       334       #######..###........##8.................#:.:...........#\n|    ~             #....#....#...................t..............:.........#\nSTR:      14   #####............:.:.:.................:..:.###...:.:::....#\nINT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##\nWIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####\nDEX:      10  #.............7##...::....##4....#2#...............::.:..::...#\nCON:      14  #.............................................................#\n              #.............................................................#\nCur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##\nHP   10/  10   ###............:.###....:.##....####..:###::..###....:......#\nSP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##\n                  #.........:.:.......:..:...........:## :.........:.::...##\n                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#\n                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#\n                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##\n                     #..###   #####...######.##          #.######...##....#\nTown                 ####         #####    ###           ###    ###########\n             Light 1  Study (1) Fed 89 % Down staircase\n"}, {"ask": 11, "turn": 1, "depth": 0, "keys": "c", "reason": "learn Find Traps/Doors/Stairs first: descending is the goal; oil handles kills", "goal": "", "notes": [], "screen": "Study which spell? ('?' to toggle description)\nHuman          Name                             Lv Mana Fail Info\nNovice         a) Magic Missile                  1    1  16% unknown\nMage           b) Light Room                     1    2  20% unknown\nLEVEL      1   c) Find Traps, Doors & Stairs     1    1  14% unknown\nNXT       10   d) Phase Door                     2    2  19% difficult\nAU       334   e) Electric Arc                   2    2  31% difficult\n|    ~         f) Detect Monsters                3    2  24% difficult\nSTR:      14   g) Fire Ball                      6    5  50% difficult\nINT:   18/10\nWIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####\nDEX:      10  #.............7##...::....##4....#2#...............::.:..::...#\nCON:      14  #.............................................................#\n              #.............................................................#\nCur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##\nHP   10/  10   ###............:.###....:.##....####..:###::..###....:......#\nSP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##\n                  #.........:.:.......:..:...........:## :.........:.::...##\n                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#\n                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#\n                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##\n                     #..###   #####...######.##          #.######...##....#\nTown                 ####         #####    ###           ###    ###########\n             Light 1  Study (1) Fed 89 % Down staircase\n"}, {"ask": 12, "turn": 11, "depth": 0, "keys": "mac", "reason": "cast for first-cast xp", "goal": "", "notes": [], "screen": "You have learned the spell of Find Traps, Doors & Stairs.\nHuman                            ###         ######              ###\nNovice                         ###.# #########....## ####       ##.## ####\nMage                         ###...###.#...##@.....###..#       #...###..#\nLEVEL      1             ### #....................##....#      #:...##...##\nNXT       10             #.####........###..............#######:..........#\nAU       334       #######..###........##8.................#:.:...........#\n|    ~             #....#....#...................t..............:.........#\nSTR:      14   #####............:.:.:.................:..:.###...:.:::....#\nINT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##\nWIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####\nDEX:      10  #.............7##...::....##4....#2#...............::.:..::...#\nCON:      14  #.............................................................#\n              #.............................................................#\nCur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##\nHP   10/  10   ###............:.###....:.##....####..:###::..###....:......#\nSP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##\n                  #.........:.:.......:..:...........:## :.........:.::...##\n                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#\n                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#\n                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##\n                     #..###   #####...######.##          #.######...##....#\nTown                 ####         #####    ###           ###    ###########\n             Light 1  Fed 89 % Down staircase\n"}, {"ask": 13, "turn": 11, "depth": 0, "keys": " 2222222226662", "reason": "walk to General store 1", "goal": "", "notes": [], "screen": "You sense no traps. You sense no doors. -more-\nHuman                            ###         ######              ###\nNovice                         ###.# #########....## ####       ##.## ####\nMage                         ###...###.#...##@.....###..#       #...###..#\nLEVEL      1             ### #....................##....#      #:...##...##\nNXT       10             #.####........###..............#######:..........#\nAU       334       #######..###........##8.................#:.:...........#\n|    ~             #....#....#...................t..............:.........#\nSTR:      14   #####............:.:.:.................:..:.###...:.:::....#\nINT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##\nWIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####\nDEX:      10  #.............7##...::....##4....#2#...............::.:..::...#\nCON:      14  #.............................................................#\n              #.............................................................#\nCur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##\nHP   10/  10   ###............:.###....:.##....####..:###::..###....:......#\nSP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##\n                  #.........:.:.......:..:...........:## :.........:.::...##\n                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#\n                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#\n                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##\n                     #..###   #####...######.##          #.######...##....#\nTown                 ####         #####    ###           ###    ###########\n             Light 1  Fed 89 % Down staircase\n"}, {"ask": 14, "turn": 151, "depth": 0, "keys": "2", "reason": "enter General store", "goal": "", "notes": [], "screen": "\nHuman                            ###         ######              ###\nNovice                         ###.# #########....## ####       ##.## ####\nMage                         ###...###.#...##>.....###..#       #...###..#\nLEVEL      1             ### #....................##....#      #:...##...##\nNXT        8             #.####........###..............#######:..........#\nAU       334       #######..###........##8.................#:.:...........#\n|    ~             #....#....#..................................:.........#\nSTR:      14   #####............:.:.:.................:..:.###...:.:::....#\nINT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##\nWIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####\nDEX:      10  #.............7##...::....##4....#2#...............::.:..::...#\nCON:      14  #.............................................................#\n              #.........................t.......@...........................#\nCur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##\nHP   10/  10   ###............:.###....:.##....####..:###::..###....:......#\nSP    1/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##\n                  #.........:.:.......:..:...........:## :.........:.::...##\n                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#\n                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#\n                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##\n                     #..###   #####...######.##          #.######...##....#\nTown                 ####         #####   ####           ###    ###########\n             Light 1  Fed 89 % DTrap Open floor\n"}, {"ask": 15, "turn": 151, "depth": 0, "keys": "pj20\\ny", "reason": "buy 20 flasks of oil", "goal": "", "notes": [], "screen": "\n Bilbo the Friendly (Hobbit)                              General Store (5000)\n\n Store Inventory                                          Weight      Price\n a) 16 Hard Biscuits                                      0.2 lb          1\n c) 17 Slime Molds                                        0.2 lb          2\n f) 40 Rations of Food                                    0.8 lb          3\n h) 5 Flasks of Whisky                                    0.5 lb          1\n j) 40 Flasks of oil                                      2.0 lb          3\n m) 40 Wooden Torches (5000 turns)                        2.2 lb          6\n n) 40 Cloaks [1,+0]                                      1.0 lb          6\n o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66\n q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176\n r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1\n u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1\n v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:       334\n"}, {"ask": 16, "turn": 151, "depth": 0, "keys": "pn\\n", "reason": "buy cloak (default qty 1?)", "goal": "", "notes": [], "screen": "You bought 20 Flasks of oil for 60 gold. You have 20 Flasks of oil (c).\n Bilbo the Friendly (Hobbit)                              General Store (5000)\n\n Store Inventory                                          Weight      Price\n a) 16 Hard Biscuits                                      0.2 lb          1\n c) 17 Slime Molds                                        0.2 lb          2\n f) 40 Rations of Food                                    0.8 lb          3\n h) 5 Flasks of Whisky                                    0.5 lb          1\n j) 40 Flasks of oil                                      2.0 lb          3\n m) 40 Wooden Torches (5000 turns)                        2.2 lb          6\n n) 40 Cloaks [1,+0]                                      1.0 lb          6\n o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66\n q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176\n r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1\n u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1\n v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:       274\n"}, {"ask": 17, "turn": 151, "depth": 0, "keys": "y", "reason": "confirm", "goal": "", "notes": [], "screen": "Buy a Cloak [1,+0]? [ESC, any other key to accept]\nPrice: 6\n\n Store Inventory                                          Weight      Price\n a) 16 Hard Biscuits                                      0.2 lb          1\n c) 17 Slime Molds                                        0.2 lb          2\n f) 40 Rations of Food                                    0.8 lb          3\n h) 5 Flasks of Whisky                                    0.5 lb          1\n j) 40 Flasks of oil                                      2.0 lb          3\n m) 40 Wooden Torches (5000 turns)                        2.2 lb          6\n n) 40 Cloaks [1,+0]                                      1.0 lb          6\n o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66\n q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176\n r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1\n u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1\n v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:       274\n"}, {"ask": 18, "turn": 151, "depth": 0, "keys": "we", "reason": "wear cloak", "goal": "", "notes": [], "screen": "You bought a Cloak [1,+0] for 6 gold. You have a Cloak [1,+0] (e).\n Bilbo the Friendly (Hobbit)                              General Store (5000)\n\n Store Inventory                                          Weight      Price\n a) 16 Hard Biscuits                                      0.2 lb          1\n c) 17 Slime Molds                                        0.2 lb          2\n f) 40 Rations of Food                                    0.8 lb          3\n h) 5 Flasks of Whisky                                    0.5 lb          1\n j) 40 Flasks of oil                                      2.0 lb          3\n m) 40 Wooden Torches (5000 turns)                        2.2 lb          6\n n) 40 Cloaks [1,+0]                                      1.0 lb          6\n o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66\n q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176\n r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1\n u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1\n v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:       268\n"}, {"ask": 19, "turn": 151, "depth": 0, "keys": "pm\\ny", "reason": "spare torch", "goal": "", "notes": [], "screen": "You are wearing a Cloak [1,+0] (i).\n Bilbo the Friendly (Hobbit)                              General Store (5000)\n\n Store Inventory                                          Weight      Price\n a) 16 Hard Biscuits                                      0.2 lb          1\n c) 17 Slime Molds                                        0.2 lb          2\n f) 40 Rations of Food                                    0.8 lb          3\n h) 5 Flasks of Whisky                                    0.5 lb          1\n j) 40 Flasks of oil                                      2.0 lb          3\n m) 40 Wooden Torches (5000 turns)                        2.2 lb          6\n n) 40 Cloaks [1,+0]                                      1.0 lb          6\n o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66\n q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176\n r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1\n u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1\n v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:       268\n"}, {"ask": 20, "turn": 151, "depth": 0, "keys": " \\e8444444444444444", "reason": "leave, walk west along street toward Alchemist 5", "goal": "", "notes": [], "screen": "You bought a Wooden Torch (5000 turns) for 6 gold. -more-\n Bilbo the Friendly (Hobbit)                              General Store (5000)\n\n Store Inventory                                          Weight      Price\n a) 16 Hard Biscuits                                      0.2 lb          1\n c) 17 Slime Molds                                        0.2 lb          2\n f) 40 Rations of Food                                    0.8 lb          3\n h) 5 Flasks of Whisky                                    0.5 lb          1\n j) 40 Flasks of oil                                      2.0 lb          3\n m) 40 Wooden Torches (5000 turns)                        2.2 lb          6\n n) 40 Cloaks [1,+0]                                      1.0 lb          6\n o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66\n q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176\n r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1\n u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1\n v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:       268\n"}, {"ask": 21, "turn": 321, "depth": 0, "keys": "442", "reason": "enter Alchemist", "goal": "", "notes": [], "screen": "\nHuman                            ###         ######              ###\nNovice                         ###.# #########....## ####       ##.## ####\nMage                         ###...###.#...##>.....###..#       #...###..#\nLEVEL      1             ### #....................##....#      #:...##...##\nNXT        8             #.####........###..............#######:..........#\nAU       262       #######..###........##8.................#:.:...........#\n|    ~ (           #....#....#..................................:.........#\nSTR:      14   #####............:.:.:.................:..:.###...:.:::....#\nINT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##\nWIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####\nDEX:      10  #.............7##...::....##4....#2#...............::.:..::...#\nCON:      14  #.............................................................#\n              #....................@........................................#\nCur AC     1  ##...........:..:.#5#...:........#1##......:...3##..:.:......##\nHP   10/  10   ###............:.###....:.##....####..:###::..###....:......#\nSP    1/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##\n                  #.........:.:.......:..:...........:## :.........:.::...##\n                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#\n                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#\n                    ##....## #:..##....## #..## ##::##   #.....#....#.:...##\n                     #..###   #####...######.##          #.######...##....#\nTown                 ####         #####   ####           ###    ###########\n             Light 1  Fed 89 % DTrap Open floor\n"}, {"ask": 22, "turn": 341, "depth": 0, "keys": "ph6\\ny", "reason": "buy 6 Phase Door", "goal": "", "notes": [], "screen": "\n Ga-nat the Greedy (Gnome)                                Alchemy Shop (15000)\n\n Store Inventory                                          Weight      Price\n a) 40 Potions of Cure Light Wounds {unseen}              0.4 lb         20\n c) 13 Potions of Boldness {unseen}                       0.4 lb          8\n f) 15 Potions of Resist Heat {unseen}                    0.4 lb         30\n h) 40 Scrolls of Phase Door {unseen}                     0.5 lb         15\n j) 2 Scrolls of Magic Mapping {unseen}                   0.5 lb         65\n m) 13 Scrolls of Detect Invisible {unseen}               0.5 lb         15\n n) 40 Scrolls of Remove Curse {unseen}                   0.5 lb        100\n o) 40 Scrolls of Word of Recall                          0.5 lb        125\n q) 5 Scrolls of Recharging {unseen}                      0.5 lb        200\n r) 23 Scrolls of Holy Chant {unseen}                     0.5 lb         40\n\n\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:       262\n"}, {"ask": 23, "turn": 341, "depth": 0, "keys": " pa5\\ny", "reason": "buy 5 CLW", "goal": "", "notes": [], "screen": "You bought 6 Scrolls titled \"lisnas aebeo\" for 90 gold. -more-\n Ga-nat the Greedy (Gnome)                                Alchemy Shop (15000)\n\n Store Inventory                                          Weight      Price\n a) 40 Potions of Cure Light Wounds {unseen}              0.4 lb         20\n c) 13 Potions of Boldness {unseen}                       0.4 lb          8\n f) 15 Potions of Resist Heat {unseen}                    0.4 lb         30\n h) 40 Scrolls of Phase Door {unseen}                     0.5 lb         15\n j) 2 Scrolls of Magic Mapping {unseen}                   0.5 lb         65\n m) 13 Scrolls of Detect Invisible {unseen}               0.5 lb         15\n n) 40 Scrolls of Remove Curse {unseen}                   0.5 lb        100\n o) 40 Scrolls of Word of Recall                          0.5 lb        125\n q) 5 Scrolls of Recharging {unseen}                      0.5 lb        200\n r) 23 Scrolls of Holy Chant {unseen}                     0.5 lb         40\n\n\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:       262\n"}, {"ask": 24, "turn": 341, "depth": 0, "keys": " i", "reason": "inventory check", "goal": "", "notes": [], "screen": "You bought 5 Misty Potions for 100 gold. -more-\n Ga-nat the Greedy (Gnome)                                Alchemy Shop (15000)\n\n Store Inventory                                          Weight      Price\n a) 40 Potions of Cure Light Wounds {unseen}              0.4 lb         20\n c) 13 Potions of Boldness {unseen}                       0.4 lb          8\n f) 15 Potions of Resist Heat {unseen}                    0.4 lb         30\n h) 40 Scrolls of Phase Door                              0.5 lb         15\n j) 2 Scrolls of Magic Mapping {unseen}                   0.5 lb         65\n m) 13 Scrolls of Detect Invisible {unseen}               0.5 lb         15\n n) 40 Scrolls of Remove Curse {unseen}                   0.5 lb        100\n o) 40 Scrolls of Word of Recall                          0.5 lb        125\n q) 5 Scrolls of Recharging {unseen}                      0.5 lb        200\n r) 23 Scrolls of Holy Chant {unseen}                     0.5 lb         40\n\n\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:       172\n"}, {"ask": 25, "turn": 341, "depth": 0, "keys": "\\es", "reason": "try selling Word of Recall to see its price", "goal": "", "notes": ["Store purchase: `p` + item letter, then quantity prompt has default 1 shown: type the digits then Enter, then a confirm 'ESC, any other key' (asks 14-24; sending 'ph' '15\\n' worked, but chaining extra keys after one purchase got eaten). Store item letters skip (a,c,f,h,j,m,n,o,q,r,u,v,y,z) so read the letter from the list, never count. (ask 25)"], "screen": "Select Item: (Inven: a-g, / for Equip, ESC)\n Ga-nat the  a) a Book of Magic Spells [First Spells]      3.0 lb\n             b) 2 Rations of Food                          1.6 lb\n Store Inven c) 20 Flasks of oil                          40.0 lb\n a) 40 Potio d) 5 Potions of Cure Light Wounds             2.0 lb\n c) 13 Potio e) 6 Scrolls of Phase Door                    3.0 lb\n f) 15 Potio f) a Scroll of Word of Recall                 0.5 lb\n h) 40 Scrol g) a Wooden Torch (5000 turns)                2.2 lb\n j) 2 Scroll\n m) 13 Scrolls of Detect Invisible {unseen}               0.5 lb         15\n n) 40 Scrolls of Remove Curse {unseen}                   0.5 lb        100\n o) 40 Scrolls of Word of Recall                          0.5 lb        125\n q) 5 Scrolls of Recharging {unseen}                      0.5 lb        200\n r) 23 Scrolls of Holy Chant {unseen}                     0.5 lb         40\n\n\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:        72\n"}, {"ask": 26, "turn": 341, "depth": 0, "keys": "\\e\\e89666666666666668", "reason": "walk to Armoury 2", "goal": "", "notes": ["Contradiction: store-bought scrolls/potions ARE identified in the pack after purchase (shop showed Phase Door {unseen} before, plain after; pack listed '6 Scrolls of Phase Door'), though the purchase message said 'Scrolls titled ...'. Selling gives 0 au for everything here (ask 26: 'Give which item? ... 0 au'), so Word of Recall in the starting kit cannot be sold for gold. Mage seed 11 starts with 334 gold, not 146 (Human Mage). Study: command G then book then spell letter (asks 10-12); mac casts spell c; first cast of a spell gave 2 XP (NXT 10 -> 8, ask 14). 'pj20\\ny' bought 20 oil in ONE ask (quantity then any-key confirm) - chained purchases work when the confirm is the last key, 'pn\\ny' too for qty 1. (ask 26)"], "screen": "Give which item?  (Inven: d-f, ESC)\n Ga-nat the Gr d) 5 Potions of Cure Light Wounds        0 au   2.0 lb\n               e) 6 Scrolls of Phase Door               0 au   3.0 lb\n Store Invento f) a Scroll of Word of Recall            0 au   0.5 lb\n a) 40 Potions\n c) 13 Potions of Boldness {unseen}                       0.4 lb          8\n f) 15 Potions of Resist Heat {unseen}                    0.4 lb         30\n h) 40 Scrolls of Phase Door                              0.5 lb         15\n j) 2 Scrolls of Magic Mapping {unseen}                   0.5 lb         65\n m) 13 Scrolls of Detect Invisible {unseen}               0.5 lb         15\n n) 40 Scrolls of Remove Curse {unseen}                   0.5 lb        100\n o) 40 Scrolls of Word of Recall                          0.5 lb        125\n q) 5 Scrolls of Recharging {unseen}                      0.5 lb        200\n r) 23 Scrolls of Holy Chant {unseen}                     0.5 lb         40\n\n\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:        72\n"}, {"ask": 27, "turn": 511, "depth": 0, "keys": "pm\\ny", "reason": "buy Leather Shield [8]", "goal": "", "notes": [], "screen": "\n Kon-Dar the Ugly (Half-Orc)                                    Armoury (5000)\n\n Store Inventory                                          Weight      Price\n a) Chain Mail (-2) [32,+2]                              22.0 lb       1476\n c) Soft Leather Armour of Resist Acid [8,+8] {??}        8.0 lb        986\n f) Studded Leather Armour of Resist Acid (-1) [12,+3] { 10.0 lb        696\n h) Studded Leather Armour (-1) [12,+0]                  10.0 lb        150\n j) 9 Small Metal Shields [5,+0]                          6.0 lb         36\n m) 9 Leather Shields [8,+0]                              9.0 lb         66\n\n\n\n\n\n\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:        72\n"}, {"ask": 28, "turn": 511, "depth": 0, "keys": "wi", "reason": "wear shield", "goal": "", "notes": [], "screen": "You have a Leather Shield [8,+0] (i).\n Kon-Dar the Ugly (Half-Orc)                                    Armoury (5000)\n\n Store Inventory                                          Weight      Price\n a) Chain Mail (-2) [32,+2]                              22.0 lb       1476\n c) Soft Leather Armour of Resist Acid [8,+8] {??}        8.0 lb        986\n f) Studded Leather Armour of Resist Acid (-1) [12,+3] { 10.0 lb        696\n h) Studded Leather Armour (-1) [12,+0]                  10.0 lb        150\n j) 9 Small Metal Shields [5,+0]                          6.0 lb         36\n m) 8 Leather Shields [8,+0]                              9.0 lb         66\n\n\n\n\n\n\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:         6\n"}, {"ask": 29, "turn": 511, "depth": 0, "keys": "\\e1778888888", "reason": "walk back to > staircase", "goal": "", "notes": [], "screen": "You are wearing a Leather Shield [8,+0] (m).\n Kon-Dar the Ugly (Half-Orc)                                    Armoury (5000)\n\n Store Inventory                                          Weight      Price\n a) Chain Mail (-2) [32,+2]                              22.0 lb       1476\n c) Soft Leather Armour of Resist Acid [8,+8] {??}        8.0 lb        986\n f) Studded Leather Armour of Resist Acid (-1) [12,+3] { 10.0 lb        696\n h) Studded Leather Armour (-1) [12,+0]                  10.0 lb        150\n j) 9 Small Metal Shields [5,+0]                          6.0 lb         36\n m) 8 Leather Shields [8,+0]                              9.0 lb         66\n\n\n\n\n\n\n\n\n\n\n\n\n\n Press '?' for help.                                  Gold Remaining:         6\n"}, {"ask": 30, "turn": 621, "depth": 0, "keys": "R&\\n>", "reason": "rest to full SP then descend", "goal": "", "notes": [], "screen": "\nHuman                            ###         ######              ###\nNovice                         ###.# #########....## ####       ##.## ####\nMage                         ###...###.#...##@.....###..#       #...###..#\nLEVEL      1             ### #....................##....#      #:...##...##\nNXT        8             #.####........###..............#######:..........#\nAU         6       #######..###........##8.................#:.:...........#\n|    ~ ()          #....#....#...................t..............:.........#\nSTR:      14   #####............:.:.:.................:..:.###...:.:::....#\nINT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##\nWIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####\nDEX:      10  #.............7##...::....##4....#2#...............::.:..::...#\nCON:      14  #.............................................................#\n              #.............................................................#\nCur AC     9  ##...........:..:.#5#...:........#1##......:...3##..:.:......##\nHP   10/  10   ###............:.###....:.##....####..:###::..###....:......#\nSP    1/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##\n                  #.........:.:.......:..:...........:## :.........:.::...##\n                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#\n                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#\n                    ##....## #:..##....## #..## ##::##   #.....#....#.:...##\n                     #..###   #####...######.##          #.######...##....#\nTown                 ####         #####   ####           ###    ###########\n             Light 1  Fed 89 % DTrap Down staircase\n"}, {"ask": 31, "turn": 701, "depth": 1, "keys": " mac", "reason": "dismiss, cast stair detection on arrival", "goal": "", "notes": [], "screen": "You enter a maze of down staircases. -more-\nHuman                            ###         ######              ###\nNovice                         ###.# #########....## ####       ##.## ####\nMage                         ###...###.#...##@.....###..#       #...###..#\nLEVEL      1             ### #....................##....#      #:...##...##\nNXT        8             #.####........###..............#######:..........#\nAU         6       #######..###........##8.................#:.:...........#\n|    ~ ()          #....#....#...................t..............:.........#\nSTR:      14   #####............:.:.:.................:..:.###...:.:::....#\nINT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##\nWIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####\nDEX:      10  #.............7##...::....##4....#2#...............::.:..::...#\nCON:      14  #.............................................................#\n              #.............................................................#\nCur AC     9  ##...........:..:.#5#...:........#1##......:...3##..:.:......##\nHP   10/  10   ###............:.###....:.##....####..:###::..###....:......#\nSP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##\n                  #.........:.:.......:..:...........:## :.........:.::...##\n                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#\n                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#\n                    ##....## #:..##....## #..## ##::##   #.....#....#.:...##\n                     #..###   #####...######.##          #.######...##....#\nTown                 ####         #####   ####           ###    ###########\n             Light 1  Fed 89 % DTrap Down staircase\n"}, {"ask": 32, "turn": 701, "depth": 1, "keys": "\\emac", "reason": "retry cast (a stray key was eaten by a -more-)", "goal": "", "notes": ["Mage (Human, seed 11): 10 HP at CL1 is one kobold's worth. Cast Find Traps/Doors/Stairs (`mac`, 1 mana, first cast +2 xp) on DL1 arrival showed a `>` ~13 cols west and 6 rows south of the `<` (ask 33-34) - detection works, but it shows no floor: path to the > still unknown after 12 asks. A `-more-` swallows the first key of the next string: ' mac' became ' ' + stray 'm' (dismissing) then 'a','c' ran aim/close (ask 32); send `\\e` or ' ' alone, then the command, or prefix with `\\e`."], "screen": "Direction or <click> (Escape to cancel)?\nHuman                                         .\nNovice                                        .\nMage                                          .\nLEVEL      1                                  .\nNXT        8                                  .\nAU         6                                  .\n|    ~ ()\nSTR:      14\nINT:   18/10\nWIS:      10\nDEX:      10                                 #.#\nCON:      14                                 #@#\n                                             ###\nCur AC     9\nHP   10/  10\nSP    2/   2\n\n\n\n\n\n50' (L1)\n             LF:2-? Light 2  Fed 89 % Up staircase\n"}, {"ask": 33, "turn": 701, "depth": 1, "keys": " ", "reason": "dismiss more", "goal": "", "notes": [], "screen": "You sense the presence of traps! You sense the presence of doors! -more-\nHuman                                         .\nNovice                                        .\nMage                                          .\nLEVEL      1                                  .\nNXT        8                                  .\nAU         6                                  .              '\n|    ~ ()                                         ' '  +  + +\nSTR:      14\nINT:   18/10\nWIS:      10\nDEX:      10                                 #.#      +\nCON:      14                                 #@#                    +\n              + +                            ###                   +\nCur AC     9   +  +                                  + '\nHP   10/  10       +\nSP    2/   2   +  '         ^\n                           '\n                                >                             +\n                        '                                    '  +\n\n\n50' (L1)     '\n             LF:2-? Light 2  Fed 89 % Up staircase\n"}, {"ask": 34, "turn": 711, "depth": 1, "keys": ".8", "reason": "run north along corridor", "goal": "", "notes": [], "screen": "You sense the presence of stairs!\nHuman                                         .\nNovice                                        .\nMage                                          .\nLEVEL      1                                  .\nNXT        8                                  .\nAU         6                                  .              '\n|    ~ ()                                         ' '  +  + +\nSTR:      14\nINT:   18/10\nWIS:      10\nDEX:      10                                 #.#      +\nCON:      14                                 #@#                    +\n              + +                            ###                   +\nCur AC     9   +  +                                  + '\nHP   10/  10       +\nSP    1/   2   +  '         ^\n                           '\n                                >                             +\n                        '                                    '  +\n\n\n50' (L1)     '\n             LF:2-? Light 2  Fed 89 % DTrap Up staircase\n"}, {"ask": 35, "turn": 741, "depth": 1, "keys": "8.4", "reason": "step into open area, run west", "goal": "", "notes": [], "screen": "\nHuman                                        ...\nNovice                                       ...\nMage                                          .\nLEVEL      1                                  .    %\nNXT        8                                  .   .\nAU         6                                  .  .           '\n|    ~ ()                                         ' '  +  + +\nSTR:      14                                 ...\nINT:   18/10                                 #@#\nWIS:      10                                 #.#\nDEX:      10                                 #.#      +\nCON:      14                                 #<#                    +\n              + +                            ###                   +\nCur AC     9   +  +                                  + '\nHP   10/  10       +\nSP    1/   2   +  '         ^\n                           '\n                                >                             +\n                        '                                    '  +\n\n\n50' (L1)     '\n             LF:2-? Light 2  Fed 89 % DTrap Open floor\n"}, {"ask": 36, "turn": 831, "depth": 1, "keys": "6666666g", "reason": "get the ~ item", "goal": "", "notes": [], "screen": "\nHuman                                   #..........%\nNovice                                  %..........#\nMage                                    %..........%\nLEVEL      1                            #..........%\nNXT        8                            #@......~..#\nAU         6                            #.####.##.#          '\n|    ~ ()                               #.####..  ' '  +  + +\nSTR:      14                            #.......\nINT:   18/10                            ######.#\nWIS:      10                                 #.#\nDEX:      10                                 #.#      +\nCON:      14                                 #<#                    +\n              + +                            ###                   +\nCur AC     9   +  +                                  + '\nHP   10/  10       +\nSP    1/   2   +  '         ^\n                           '\n                                >                             +\n                        '                                    '  +\n\n\n50' (L1)     '\n             LF:2-? Light 3  Fed 89 % DTrap Open floor\n"}, {"ask": 37, "turn": 902, "depth": 1, "keys": "i", "reason": "check what the ~ was", "goal": "", "notes": [], "screen": "\nHuman                                   #..........%\nNovice                                  %..........#\nMage                                    %..........%\nLEVEL      1                            #..........%\nNXT        8                            #.......@..#\nAU         6                            #.####.##.#          '\n|    ~ ()                               #.####..  ' '  +  + +\nSTR:      14                            #.......\nINT:   18/10                            ######.#\nWIS:      10                                 #.#\nDEX:      10                                 #.#      +\nCON:      14                                 #<#                    +\n              + +                            ###                   +\nCur AC     9   +  +                                  + '\nHP   10/  10       +\nSP    1/   2   +  '         ^\n                           '\n                                >                             +\n                        '                                    '  +\n\n\n50' (L1)     '\n             LF:2-? Light 3  Fed 89 % DTrap Open floor\n"}, {"ask": 38, "turn": 902, "depth": 1, "keys": "\\e.8", "reason": "run north in room", "goal": "", "notes": [], "screen": "Select Item: (Inven: a-g, / for Equip, ESC)\nHuman        a) a Book of Magic Spells [First Spells]      3.0 lb\nNovice       b) 2 Rations of Food                          1.6 lb\nMage         c) 20 Flasks of oil                          40.0 lb\nLEVEL      1 d) 5 Potions of Cure Light Wounds             2.0 lb\nNXT        8 e) 6 Scrolls of Phase Door                    3.0 lb\nAU         6 f) a Scroll of Word of Recall                 0.5 lb\n|    ~ ()    g) 2 Wooden Torches (5000 turns)              4.4 lb\nSTR:      14\nINT:   18/10                            ######.#\nWIS:      10                                 #.#\nDEX:      10                                 #.#      +\nCON:      14                                 #<#                    +\n              + +                            ###                   +\nCur AC     9   +  +                                  + '\nHP   10/  10       +\nSP    1/   2   +  '         ^\n                           '\n                                >                             +\n                        '                                    '  +\n\n\n50' (L1)     '\n             LF:2-? Light 3  Fed 89 % DTrap Open floor\n"}, {"ask": 39, "turn": 942, "depth": 1, "keys": "69.8", "reason": "go through the north gap", "goal": "", "notes": [], "screen": "\nHuman\nNovice\nMage\nLEVEL      1\nNXT        8\nAU         6\n|    ~ ()\nSTR:      14                         +\nINT:   18/10                          ' %%%%%%%%%%.%\nWIS:      10                            #.......@..%\nDEX:      10                            %..........#\nCON:      14                            %..........%\n                                        #..........%\nCur AC     9                            #..........#\nHP   10/  10                            #.####.##.#.         '\nSP    1/   2                            #.####..  ' '  +  + +\n                                        #.......\n                                        ######.#\n                                             #.#       .\n                                             #.#      + .\n                                             #<#         .          +\n50' (L1)      + +                            ###          .        +\n             LF:2-? Light 3  Fed 89 % DTrap Open floor\n"}, {"ask": 40, "turn": 992, "depth": 1, "keys": "v", "reason": "throw oil at adjacent kobold; look at menu", "goal": "", "notes": [], "screen": "\nHuman\nNovice\nMage\nLEVEL      1\nNXT        8                                     #k#\nAU         6                                     #@#\n|    ~ ()                                        #.#\nSTR:      14                         +           #.#\nINT:   18/10                          ' %%%%%%%%%%.%\nWIS:      10                            #..........%\nDEX:      10                            %..........#\nCON:      14                            %..........%\n                                        #..........%\nCur AC     9                            #..........#\nHP   10/  10                            #.####.##.#.         '\nSP    1/   2                            #.####..  ' '  +  + +\n                                        #.......\n                                        ######.#\n                                             #.#       .\n                                             #.#      + .\n                                             #<#         .          +\n50' (L1)      + +                            ###          .        +\n             LF:2-? Light 2  Fed 89 % DTrap Open floor\n"}, {"ask": 41, "turn": 992, "depth": 1, "keys": "a'", "reason": "throw at nearest", "goal": "", "notes": ["`v` shows only THROWING items with their own letters (oil = a), not pack letters (ask 41), so `va'` / `va5`."], "screen": "Throw which item? (Throwing items: a-a, / for Inven, ESC)\nHuman          a) 20 Flasks of oil     40.0 lb\nNovice\nMage\nLEVEL      1\nNXT        8                                     #k#\nAU         6                                     #@#\n|    ~ ()                                        #.#\nSTR:      14                         +           #.#\nINT:   18/10                          ' %%%%%%%%%%.%\nWIS:      10                            #..........%\nDEX:      10                            %..........#\nCON:      14                            %..........%\n                                        #..........%\nCur AC     9                            #..........#\nHP   10/  10                            #.####.##.#.         '\nSP    1/   2                            #.####..  ' '  +  + +\n                                        #.......\n                                        ######.#\n                                             #.#       .\n                                             #.#      + .\n                                             #<#         .          +\n50' (L1)      + +                            ###          .        +\n             LF:2-? Light 2  Fed 89 % DTrap Open floor\n"}, {"ask": 42, "turn": 992, "depth": 1, "keys": " va5", "reason": "throw again at target", "goal": "", "notes": [], "screen": "The small kobold is targeted. Your Flask of oil hits the small kobold. -more-\nHuman\nNovice\nMage\nLEVEL      1\nNXT        8                                     #k#\nAU         6                                     #@#\n|    ~ ()                                        #.#\nSTR:      14                         +           #.#\nINT:   18/10                          ' %%%%%%%%%%.%\nWIS:      10                            #..........%\nDEX:      10                            %..........#\nCON:      14                            %..........%\n                                        #..........%\nCur AC     9                            #..........#\nHP   10/  10                            #.####.##.#.         '\nSP    1/   2                            #.####..  ' '  +  + +\n                                        #.......\n[**********]                            ######.#\n                                             #.#       .\n                                             #.#      + .\n                                             #<#         .          +\n50' (L1)      + +                            ###          .        +\n             LF:2-? Light 2  Fed 89 % DTrap Open floor\n"}, {"ask": 43, "turn": 1012, "depth": 1, "keys": ".8", "reason": "run north", "goal": "", "notes": [], "screen": "\nHuman\nNovice\nMage\nLEVEL      1\nNXT        8                                     #.#\nAU         6                                     #@#\n|    ~ ()                                        #.#\nSTR:      14                         +           #.#\nINT:   18/10                          ' %%%%%%%%%%.%\nWIS:      10                            #..........%\nDEX:      10                            %..........#\nCON:      14                            %..........%\n                                        #..........%\nCur AC     9                            #..........#\nHP   10/  10                            #.####.##.#.         '\nSP    1/   2                            #.####..  ' '  +  + +\n                                        #.......\n[----------]                            ######.#\n                                             #.#       .\n                                             #.#      + .\n                                             #<#         .          +\n50' (L1)      + +                            ###          .        +\n             LF:2-? Light 2  Fed 88 % DTrap Open floor\n"}, {"ask": 44, "turn": 1122, "depth": 1, "keys": ".8", "reason": "continue north", "goal": "", "notes": [], "screen": "\nHuman\nNovice\nMage\nLEVEL      1\nNXT        8\nAU         6\n|    ~ ()                                    #.#\nSTR:      14                                 #@####\nINT:   18/10                                 #....#\nWIS:      10                                 ####.#\nDEX:      10                                    #.##\nCON:      14                                    #..#\n                                                ##.#\nCur AC     9                                     #.#\nHP   10/  10                                     #.#\nSP    1/   2                                     #.#\n                                     +           #.#\n[----------]                          ' %%%%%%%%%%.%\n                                        #..........%\n                                        %..........#\n                                        %..........%\n50' (L1)                                #..........%\n             LF:2-? Light 2  Fed 88 % DTrap Open floor\n"}, {"ask": 45, "turn": 1182, "depth": 1, "keys": "ssssssssss", "reason": "wait out confusion", "goal": "", "notes": [], "screen": "You are surrounded by a gas of scintillating colours! You are confused!\nHuman\nNovice\nMage\nLEVEL      1\nNXT        8\nAU         6\n|    ~ ()\nSTR:      14\nINT:   18/10\nWIS:      10\nDEX:      10                                .%%#\nCON:      14                                .@.#\n                                            .#.#\nCur AC     9                                 %.%\nHP   10/  10                                 %.#\nSP    1/   2                                 #.#\n                                             #.####\n[----------]                                 #....#\n                                             ####.#\n                                                #.##\n                                                #..#\n50' (L1)                                        ##.#\n             LF:2-? Light 2  Confused Fed 88 % Gas trap\n"}, {"ask": 46, "turn": 1182, "depth": 1, "keys": "\\e,,,,,,,,,,", "reason": "hold with comma to wait out confusion", "goal": "", "notes": [], "screen": "Direction or <click> (Escape to cancel)?\nHuman\nNovice\nMage\nLEVEL      1\nNXT        8\nAU         6\n|    ~ ()\nSTR:      14\nINT:   18/10\nWIS:      10\nDEX:      10                                .%%#\nCON:      14                                .@.#\n                                            .#.#\nCur AC     9                                 %.%\nHP   10/  10                                 %.#\nSP    1/   2                                 #.#\n                                             #.####\n[----------]                                 #....#\n                                             ####.#\n                                                #.##\n                                                #..#\n50' (L1)                                        ##.#\n             LF:2-? Light 2  Confused Fed 88 % Gas trap\n"}, {"ask": 47, "turn": 1282, "depth": 1, "keys": ",,,,,,,,,,,,,,,,", "reason": "keep holding", "goal": "", "notes": ["',' (comma) = hold/stay one turn; 's' prompts for a direction here (ask 46). Gas trap at DL1 gives Confused ~10+ turns (ask 45). (ask 47)", "DEATH at ask 48 (turn 1348), DL1, CL1: killed by the small kobold I had hit with one oil flask at ask 42-43. It left view (health bar went to [----------]), I assumed it was gone/dead (NXT still 8 = no kill xp), walked on, hit a gas trap (confused, ask 45), then sent ',,,,,,,,,,,,,,,,' (16 holds) blind in ONE ask (ask 47) and the kobold walked up and killed a 10-HP mage during those holds. Rule: when a monster that is not confirmed dead is around and you are disabled, send ONE or TWO keys per ask, never a batch of waits; a batch cannot be interrupted by what the screen would have shown. A hit that leaves the health bar unchanged/dashed is not a kill: no XP gain = no kill. (asks 42, 43, 47, 48)"], "screen": "\nHuman\nNovice\nMage\nLEVEL      1\nNXT        8\nAU         6\n|    ~ ()\nSTR:      14\nINT:   18/10\nWIS:      10\nDEX:      10                                .%%#\nCON:      14                                .@.#\n                                            .#.#\nCur AC     9                                 %.%\nHP   10/  10                                 %.#\nSP    1/   2                                 #.#\n                                             #.####\n[----------]                                 #....#\n                                             ####.#\n                                                #.##\n                                                #..#\n50' (L1)                                        ##.#\n             LF:2-? Light 2  Confused Fed 88 % Gas trap\n"}, {"ask": 48, "turn": 1348, "depth": 1, "keys": "", "reason": "the game asked again; the character was dead", "goal": "", "notes": [], "screen": "\n\n            _______________________                i) Information\n           /                       \\         ___   m) Messages\n          /                         \\ ___   /   \\  f) File dump\n         /            RIP            \\   \\  :   :  v) View scores\n        /                             \\  : _;,,,;_ x) Examine items\n       /           sonnet-3            \\,;_        h) History\n      |               the               |   ___    s) Spoilers\n      |             Novice              |  /   \\   n) New Game\n      |                                 |  :   :   q) Quit\n      |              Mage               | _;,,,;_   ____\n      |            Level: 1             |          /    \\\n      |             Exp: 2              |          :    :\n      |              AU: 6              |          :    :\n      |        Killed on Level 1        |         _;,,,,;_\n      |       by a small kobold.        |\n      |                                 |\n      |   on Mon Nov  9 20:09:29 2026   |\n     *|   *     *     *    *   *     *  | *\n_____)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)__________________________\n\n\n\n"}], at = 0, timer = null;
+  var screen = document.getElementById('screen'), scrub = document.getElementById('scrub');
+  var where = document.getElementById('at'), keys = document.getElementById('keys');
+  var why = document.getElementById('why'), play = document.getElementById('play');
+  if (!frames.length) { return; }
+  scrub.max = frames.length - 1;
+  function show(i) {
+    at = Math.max(0, Math.min(frames.length - 1, i));
+    var f = frames[at];
+    screen.textContent = f.screen || '(this ask recorded no screen)';
+    scrub.value = at;
+    where.textContent = 'ask ' + f.ask + ' of ' + frames[frames.length - 1].ask +
+      '  ·  turn ' + f.turn + (f.depth === null ? '' : '  ·  depth ' + f.depth) +
+      (f.goal ? '  ·  ' + f.goal : '');
+    keys.textContent = f.keys ? JSON.stringify(f.keys) + ' — ' : '';
+    why.textContent = (f.reason || '') +
+      (f.notes.length ? '   ⚑ ' + f.notes.join('  ⚑ ') : '');
+  }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; play.innerHTML = '&#9654; play'; }
+  }
+  function start() {
+    if (timer) { stop(); return; }
+    play.innerHTML = '&#10074;&#10074; pause';
+    timer = setInterval(function () {
+      if (at >= frames.length - 1) { stop(); return; }
+      show(at + 1);
+    }, 700);
+  }
+  document.getElementById('next').onclick = function () { stop(); show(at + 1); };
+  document.getElementById('back').onclick = function () { stop(); show(at - 1); };
+  play.onclick = start;
+  scrub.oninput = function () { stop(); show(parseInt(scrub.value, 10)); };
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { stop(); show(at + 1); }
+    else if (e.key === 'ArrowLeft') { stop(); show(at - 1); }
+    else if (e.key === ' ' && e.target === document.body) { e.preventDefault(); start(); }
+  });
+  show(0);
+})();
+</script>
+
+<h2>What it kept</h2>
+<pre class="book"># Notes from sonnet-1
+
+Written by the player during one game, in its own words, and promoted
+here unedited. Every line carries the ask that taught it; the run
+replays from its seed and keys, so any line can be checked.
+
+- seed: 7
+- character: sonnet-1
+- game: angband/angband e473720ed88a
+- patch: 5c02c7cbbcdd
+- reached: depth 1 in 125 asks, 644 keypresses, turn 4659
+- outcome: ended
+- keys: 3258a3a6f41f
+- notebook: 50b57559bebc
+
+## The notes
+- Store purchase: `p` + item letter, then quantity prompt has default 1 shown: type the digits then Enter, then a confirm &#x27;ESC, any other key&#x27; (asks 14-24; sending &#x27;ph&#x27; &#x27;15\n&#x27; worked, but chaining extra keys after one purchase got eaten). Store item letters skip (a,c,f,h,j,m,n,o,q,r,u,v,y,z) so read the letter from the list, never count. (ask 25)
+- Inventory letters can skip too: with 8 items the list read a-g then i (no h) (ask 57). Always read the letter off the screen before q/r/v/w. (ask 57)
+- Rerolling a bad level: take &lt; (connected stairs put you on a staircase) to town, you land on the town &gt; , press &gt; for a fresh DL1; costs ~3 asks (asks 67-69). Arriving by &gt; puts you on an UP staircase (ask 29), arriving by &lt; in town put me on &gt; (ask 69). (ask 69)
+- Throw sequence: v, a (the oil), then &#x27; (apostrophe) = throw at the closest visible target (ask 82-83 prompt: Direction (&#x27;*&#x27; or click to target, &#x27; for closest)). (ask 83)
+- Fang (unique dog, DL1) killed at CL2 in a corridor: 2 oil throws (v a &#x27;) then melee, cost ~11 HP of 31 (asks 84-90). Reward: CL2-&gt;3. Corridor fights vs a fast unique worked. (ask 90)
+- After a first throw, the direction prompt offers &#x27;5&#x27; for the current target: v a 5 re-throws at it (ask 104). Enter in the dungeon opens a command menu (ask 103), so dismiss -more- with space/escape, not Enter, when nothing else is pending. (ask 104)
+
+- CORRECTION to the reroll notes: after &lt; then &gt; the new DL1 started with the same kind of corridor (same spot, &#x27;&lt;&#x27; at east end) but the layout was NOT the same: it had a door south and a worm north, the old one had neither (asks 71-78). Rerolling gives a different level whose start looks alike; it did not help find stairs faster (ask 78+).
+- Runs (.4 etc.) stop at every side opening, treasure vein (*) and door; in caves/rooms a plain run of 8-10 digit steps (&#x27;4444444444&#x27;) moves further per ask than &#x27;.4&#x27; (asks 62-66, 96, 114).
+- Unknown scrolls on DL1 were harmless (Blessing ask 45, Light ask 118); an unknown potion was Boldness and gave a level (ask 58) because first-use ID xp counts.
+- By ask 124 no &#x27;&gt;&#x27; found on DL1 in ~2 levels explored (~100 asks, mostly walking). Levels are big; a Deep Descent/Magic Mapping (65g) scroll or just more starting gold is what would have paid. 10 gold left unspent was wasted: Magic Mapping needs 65.
+- Opened before play: docs/BRIEF.md, knowledge/MANUAL-GAPS.md, LEARNED.md, sonnet-1.md, guide.rst (1-150), command.rst (run/rest/throw), strategy-manual README + ch10 exploration. (ask 1)
+- Contradiction: store-bought scrolls/potions ARE identified in the pack after purchase (shop showed Phase Door {unseen} before, plain after; pack listed &#x27;6 Scrolls of Phase Door&#x27;), though the purchase message said &#x27;Scrolls titled ...&#x27;. Selling gives 0 au for everything here (ask 26: &#x27;Give which item? ... 0 au&#x27;), so Word of Recall in the starting kit cannot be sold for gold. Mage seed 11 starts with 334 gold, not 146 (Human Mage). Study: command G then book then spell letter (asks 10-12); mac casts spell c; first cast of a spell gave 2 XP (NXT 10 -&gt; 8, ask 14). &#x27;pj20\ny&#x27; bought 20 oil in ONE ask (quantity then any-key confirm) - chained purchases work when the confirm is the last key, &#x27;pn\ny&#x27; too for qty 1. (ask 26)
+- &#x27;,&#x27; (comma) = hold/stay one turn; &#x27;s&#x27; prompts for a direction here (ask 46). Gas trap at DL1 gives Confused ~10+ turns (ask 45). (ask 47)
+- DEATH at ask 48 (turn 1348), DL1, CL1: killed by the small kobold I had hit with one oil flask at ask 42-43. It left view (health bar went to [----------]), I assumed it was gone/dead (NXT still 8 = no kill xp), walked on, hit a gas trap (confused, ask 45), then sent &#x27;,,,,,,,,,,,,,,,,&#x27; (16 holds) blind in ONE ask (ask 47) and the kobold walked up and killed a 10-HP mage during those holds. Rule: when a monster that is not confirmed dead is around and you are disabled, send ONE or TWO keys per ask, never a batch of waits; a batch cannot be interrupted by what the screen would have shown. A hit that leaves the health bar unchanged/dashed is not a kill: no XP gain = no kill. (asks 42, 43, 47, 48)
+- Mage (Human, seed 11): 10 HP at CL1 is one kobold&#x27;s worth. Cast Find Traps/Doors/Stairs (`mac`, 1 mana, first cast +2 xp) on DL1 arrival showed a `&gt;` ~13 cols west and 6 rows south of the `&lt;` (ask 33-34) - detection works, but it shows no floor: path to the &gt; still unknown after 12 asks. A `-more-` swallows the first key of the next string: &#x27; mac&#x27; became &#x27; &#x27; + stray &#x27;m&#x27; (dismissing) then &#x27;a&#x27;,&#x27;c&#x27; ran aim/close (ask 32); send `\e` or &#x27; &#x27; alone, then the command, or prefix with `\e`.
+- `v` shows only THROWING items with their own letters (oil = a), not pack letters (ask 41), so `va&#x27;` / `va5`.</pre>
+<h2>Every decision</h2>
+<details class="ask"><summary><span class="n">1</span><span class="keys">' '</span><span class="why">past splash</span><span class="where">turn 0 · depth 0</span></summary><div class="body"><pre class="screen">
+                                       ^
+                                      ^^^
+                ^                    ^^^^^                   ^
+               ^^^                  ^^^^^^^                 ^^^
+              ^^^^^                ^^^^^^^^^               ^^^^^
+             ^^^^  _              ^ _  ^^^^^^             _  ^^^^
+            ^^^^  / \   _ __   __ _| |__   __ _ _ __   __| | ^^^^^
+           ^^^^  / _ \ | &#x27;_ \ / _` | &#x27;_ \ / _` | &#x27;_ \ / _` | ^^^^^^
+          ^^^^  / ___ \| | | | (_| | |_) | (_| | | | | (_| | ^^^^^^^
+         ^^^^  /_/   \_\_| |_|\__, |_.__/ \__,_|_| |_|\__,_| ^^^^^^^^
+        ^^^^^                 |___/  -g5179d6e-dirty
+       ^^^^^^^^^^^^^^^^^^                     ^^^^  ^^^^^^^^^^^^^^^^^^^
+         &quot;When the world is old and the Powers grow weary, then Morgoth,
+          seeing that the guard sleepeth, shall come back through the
+          Door of Night out of the Timeless Void.  Then shall the Last
+          Battle be gathered...&quot;
+
+                         Website: http://rephial.org/
+                     Forums: https://angband.live/forums/
+
+                           For help press &#x27;?&#x27; in-game
+
+                          [Press any key to continue]
+</pre><p class="note">note: Opened before play: docs/BRIEF.md, knowledge/MANUAL-GAPS.md, LEARNED.md, sonnet-1.md, guide.rst (1-150), command.rst (run/rest/throw), strategy-manual README + ch10 exploration. (ask 1)</p></div></details>
+<details class="ask"><summary><span class="n">2</span><span class="keys">'\\n'</span><span class="why">Human race; plan Mage because Find Traps/Doors/Stairs spell at CL1 detects stairs (strategy manual ch14 s2.3)</span><span class="where">turn 1 · depth 0</span></summary><div class="body"><pre class="screen">
+  Please select your character traits from the menus below:
+
+  Use the movement keys to scroll the menu, Enter to select the current menu
+  item, &#x27;*&#x27; for a random menu item, &#x27;@&#x27; to finish the character with random
+  selections, &#x27;ESC&#x27; to step back through the birth process, &#x27;=&#x27; for the birth
+  options, &#x27;?&#x27; for help, or &#x27;Ctrl-X&#x27; to quit.
+  Race affects stats and skills, and may confer resistances and abilities.
+
+  a) Human         Str:  +0  Dex:  +0
+  b) Half-Elf      Int:  +0  Con:  +0
+  c) Elf           Wis:  +0
+  d) Hobbit
+  e) Gnome         Hit/Shoot/Throw: +0/+0/+0
+  f) Dwarf         Hit die: 10   XP mod: 100%
+  g) Half-Orc      Disarm:  +0/ +0   Devices:  +0
+  i) Half-Troll    Save:    +0   Stealth:  +0
+  m) Dunadan       Infravision:  0 ft
+  n) High-Elf      Digging:      +0
+  o) Kobold        Search:       +0
+
+
+
+
+</pre></div></details>
+<details class="ask"><summary><span class="n">3</span><span class="keys">'b\\n'</span><span class="why">Mage</span><span class="where">turn 1 · depth 0</span></summary><div class="body"><pre class="screen">
+  Please select your character traits from the menus below:
+
+  Use the movement keys to scroll the menu, Enter to select the current menu
+  item, &#x27;*&#x27; for a random menu item, &#x27;@&#x27; to finish the character with random
+  selections, &#x27;ESC&#x27; to step back through the birth process, &#x27;=&#x27; for the birth
+  options, &#x27;?&#x27; for help, or &#x27;Ctrl-X&#x27; to quit.
+  Class affects stats, skills, and other character traits.
+
+  a) Human         a) Warrior       Str:  +3  Dex:  +2
+  b) Half-Elf      b) Mage          Int:  -2  Con:  +2
+  c) Elf           c) Druid         Wis:  -2
+  d) Hobbit        d) Priest
+  e) Gnome         e) Necromancer   Hit/Shoot/Throw: +70/+55/+55
+  f) Dwarf         f) Paladin       Hit die: 19   XP mod: 100%
+  g) Half-Orc      g) Rogue         Disarm: +25/+20   Devices: +18
+  i) Half-Troll    i) Ranger        Save:   +18   Stealth:  +0
+  m) Dunadan       m) Blackguard    Digging:      +0
+  n) High-Elf                       Search:       +10
+  o) Kobold
+                                    Relentless [30]
+                                    No Magic
+                                    Shield Bash
+
+</pre></div></details>
+<details class="ask"><summary><span class="n">4</span><span class="keys">'a\\n'</span><span class="why">point-based</span><span class="where">turn 1 · depth 0</span></summary><div class="body"><pre class="screen">
+  Please select your character traits from the menus below:
+
+  Use the movement keys to scroll the menu, Enter to select the current menu
+  item, &#x27;*&#x27; for a random menu item, &#x27;@&#x27; to finish the character with random
+  selections, &#x27;ESC&#x27; to step back through the birth process, &#x27;=&#x27; for the birth
+  options, &#x27;?&#x27; for help, or &#x27;Ctrl-X&#x27; to quit.
+  Choose how to generate your intrinsic stats. Point-based is recommended.
+
+  a) Human         a) Warrior       a) Point-based
+  b) Half-Elf      b) Mage          b) Standard roller
+  c) Elf           c) Druid
+  d) Hobbit        d) Priest
+  e) Gnome         e) Necromancer
+  f) Dwarf         f) Paladin
+  g) Half-Orc      g) Rogue
+  i) Half-Troll    i) Ranger
+  m) Dunadan       m) Blackguard
+  n) High-Elf
+  o) Kobold
+
+
+
+
+</pre></div></details>
+<details class="ask"><summary><span class="n">5</span><span class="keys">'\\n'</span><span class="why">accept name</span><span class="where">turn 1 · depth 0</span></summary><div class="body"><pre class="screen">Enter a name for your character (* for a random name): sonnet-3
+ Name                Age             18          Self  RB  CB  EB   Best
+ Race   Human        Height        5&#x27;3&quot;   STR:     17  +0  -3  +0     14
+ Class  Mage         Weight    12st 0lb   INT:     16  +0  +3  +0  18/10
+ Title  Novice       Turns used:          WIS:     10  +0  +0  +0     10
+ HP     10/10        Game             1   DEX:     10  +0  +0  +0     10
+ SP     2/2          Standard         0   CON:     16  +0  -2  +0     14
+                     Resting          0
+
+ Level                  1    Armor        [0,+0]    Saving Throw     31%
+ Cur Exp                0                           Stealth         Poor
+ Max Exp                0    Melee        1d1,+0    Disarm - phys.   32%
+ Adv Exp               10    To-hit        12,+0    Disarm - magic   39%
+                             Blows      1.0/turn    Magic Devices     40
+ Gold                   0                           Searching        11%
+ Burden            0.0 lb    Shoot to-dam     +0    Infravision     0 ft
+ Overweight      -95.9 lb    To-hit         7,+0    Speed         Normal
+ Max Depth           Town    Shots      0.0/turn
+
+ You are one of several children of a Serf.  You are a credit to the
+ family.  You have blue eyes, wavy brown hair, and a dark complexion.
+
+
+
+</pre></div></details>
+<details class="ask"><summary><span class="n">6</span><span class="keys">'y'</span><span class="why">accept history</span><span class="where">turn 1 · depth 0</span></summary><div class="body"><pre class="screen">Accept character history? [y/n]
+ Name   sonnet-3     Age             18          Self  RB  CB  EB   Best
+ Race   Human        Height        5&#x27;3&quot;   STR:     17  +0  -3  +0     14
+ Class  Mage         Weight    12st 0lb   INT:     16  +0  +3  +0  18/10
+ Title  Novice       Turns used:          WIS:     10  +0  +0  +0     10
+ HP     10/10        Game             1   DEX:     10  +0  +0  +0     10
+ SP     2/2          Standard         0   CON:     16  +0  -2  +0     14
+                     Resting          0
+
+ Level                  1    Armor        [0,+0]    Saving Throw     31%
+ Cur Exp                0                           Stealth         Poor
+ Max Exp                0    Melee        1d1,+0    Disarm - phys.   32%
+ Adv Exp               10    To-hit        12,+0    Disarm - magic   39%
+                             Blows      1.0/turn    Magic Devices     40
+ Gold                   0                           Searching        11%
+ Burden            0.0 lb    Shoot to-dam     +0    Infravision     0 ft
+ Overweight      -95.9 lb    To-hit         7,+0    Speed         Normal
+ Max Depth           Town    Shots      0.0/turn
+
+ You are one of several children of a Serf.  You are a credit to the
+ family.  You have blue eyes, wavy brown hair, and a dark complexion.
+
+
+
+</pre></div></details>
+<details class="ask"><summary><span class="n">7</span><span class="keys">' '</span><span class="why">continue</span><span class="where">turn 1 · depth 0</span></summary><div class="body"><pre class="screen">
+ Name   sonnet-3     Age             18          Self  RB  CB  EB   Best
+ Race   Human        Height        5&#x27;3&quot;   STR:     17  +0  -3  +0     14
+ Class  Mage         Weight    12st 0lb   INT:     16  +0  +3  +0  18/10
+ Title  Novice       Turns used:          WIS:     10  +0  +0  +0     10
+ HP     10/10        Game             1   DEX:     10  +0  +0  +0     10
+ SP     2/2          Standard         0   CON:     16  +0  -2  +0     14
+                     Resting          0
+
+ Level                  1    Armor        [0,+0]    Saving Throw     31%
+ Cur Exp                0                           Stealth         Poor
+ Max Exp                0    Melee        1d1,+0    Disarm - phys.   32%
+ Adv Exp               10    To-hit        12,+0    Disarm - magic   39%
+                             Blows      1.0/turn    Magic Devices     40
+ Gold                   0                           Searching        11%
+ Burden            0.0 lb    Shoot to-dam     +0    Infravision     0 ft
+ Overweight      -95.9 lb    To-hit         7,+0    Speed         Normal
+ Max Depth           Town    Shots      0.0/turn
+
+ You are one of several children of a Serf.  You are a credit to the
+ family.  You have blue eyes, wavy brown hair, and a dark complexion.
+
+
+      [&#x27;ESC&#x27; to step back, &#x27;S&#x27; to start over, or any other key to continue]
+</pre></div></details>
+<details class="ask"><summary><span class="n">8</span><span class="keys">'i'</span><span class="why">look at inventory</span><span class="where">turn 1 · depth 0</span></summary><div class="body"><pre class="screen">You can learn 1 more spell.
+Human                            ###         ######              ###
+Novice                         ###.# #########....## ####       ##.## ####
+Mage                         ###...###.#...##@.....###..#       #...###..#
+LEVEL      1             ### #....................##....#      #:...##...##
+NXT       10             #.####........###..............#######:..........#
+AU       334       #######..###........##8.................#:.:...........#
+|    ~             #....#....#...................t..............:.........#
+STR:      14   #####............:.:.:.................:..:.###...:.:::....#
+INT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##
+WIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####
+DEX:      10  #.............7##...::....##4....#2#...............::.:..::...#
+CON:      14  #.............................................................#
+              #.............................................................#
+Cur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##
+HP   10/  10   ###............:.###....:.##....####..:###::..###....:......#
+SP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##
+                  #.........:.:.......:..:...........:## :.........:.::...##
+                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#
+                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#
+                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##
+                     #..###   #####...######.##          #.######...##....#
+Town                 ####         #####    ###           ###    ###########
+             Light 1  Study (1) Fed 89 % Down staircase
+</pre></div></details>
+<details class="ask"><summary><span class="n">9</span><span class="keys">'\\eG'</span><span class="why">study</span><span class="where">turn 1 · depth 0</span></summary><div class="body"><pre class="screen">Select Item: (Inven: a-c, / for Equip, ESC)
+Human        a) a Book of Magic Spells [First Spells]      3.0 lb
+Novice       b) 2 Rations of Food                          1.6 lb
+Mage         c) a Scroll of Word of Recall                 0.5 lb
+LEVEL      1
+NXT       10             #.####........###..............#######:..........#
+AU       334       #######..###........##8.................#:.:...........#
+|    ~             #....#....#...................t..............:.........#
+STR:      14   #####............:.:.:.................:..:.###...:.:::....#
+INT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##
+WIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####
+DEX:      10  #.............7##...::....##4....#2#...............::.:..::...#
+CON:      14  #.............................................................#
+              #.............................................................#
+Cur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##
+HP   10/  10   ###............:.###....:.##....####..:###::..###....:......#
+SP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##
+                  #.........:.:.......:..:...........:## :.........:.::...##
+                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#
+                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#
+                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##
+                     #..###   #####...######.##          #.######...##....#
+Town                 ####         #####    ###           ###    ###########
+             Light 1  Study (1) Fed 89 % Down staircase
+</pre></div></details>
+<details class="ask"><summary><span class="n">10</span><span class="keys">'a'</span><span class="why">pick book</span><span class="where">turn 1 · depth 0</span></summary><div class="body"><pre class="screen">Study which book? (Inven: a-a, ESC)
+Human          a) a Book of Magic Spells [First Spells]      3.0 lb
+Novice
+Mage                         ###...###.#...##@.....###..#       #...###..#
+LEVEL      1             ### #....................##....#      #:...##...##
+NXT       10             #.####........###..............#######:..........#
+AU       334       #######..###........##8.................#:.:...........#
+|    ~             #....#....#...................t..............:.........#
+STR:      14   #####............:.:.:.................:..:.###...:.:::....#
+INT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##
+WIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####
+DEX:      10  #.............7##...::....##4....#2#...............::.:..::...#
+CON:      14  #.............................................................#
+              #.............................................................#
+Cur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##
+HP   10/  10   ###............:.###....:.##....####..:###::..###....:......#
+SP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##
+                  #.........:.:.......:..:...........:## :.........:.::...##
+                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#
+                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#
+                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##
+                     #..###   #####...######.##          #.######...##....#
+Town                 ####         #####    ###           ###    ###########
+             Light 1  Study (1) Fed 89 % Down staircase
+</pre></div></details>
+<details class="ask"><summary><span class="n">11</span><span class="keys">'c'</span><span class="why">learn Find Traps/Doors/Stairs first: descending is the goal; oil handles kills</span><span class="where">turn 1 · depth 0</span></summary><div class="body"><pre class="screen">Study which spell? (&#x27;?&#x27; to toggle description)
+Human          Name                             Lv Mana Fail Info
+Novice         a) Magic Missile                  1    1  16% unknown
+Mage           b) Light Room                     1    2  20% unknown
+LEVEL      1   c) Find Traps, Doors &amp; Stairs     1    1  14% unknown
+NXT       10   d) Phase Door                     2    2  19% difficult
+AU       334   e) Electric Arc                   2    2  31% difficult
+|    ~         f) Detect Monsters                3    2  24% difficult
+STR:      14   g) Fire Ball                      6    5  50% difficult
+INT:   18/10
+WIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####
+DEX:      10  #.............7##...::....##4....#2#...............::.:..::...#
+CON:      14  #.............................................................#
+              #.............................................................#
+Cur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##
+HP   10/  10   ###............:.###....:.##....####..:###::..###....:......#
+SP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##
+                  #.........:.:.......:..:...........:## :.........:.::...##
+                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#
+                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#
+                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##
+                     #..###   #####...######.##          #.######...##....#
+Town                 ####         #####    ###           ###    ###########
+             Light 1  Study (1) Fed 89 % Down staircase
+</pre></div></details>
+<details class="ask"><summary><span class="n">12</span><span class="keys">'mac'</span><span class="why">cast for first-cast xp</span><span class="where">turn 11 · depth 0</span></summary><div class="body"><pre class="screen">You have learned the spell of Find Traps, Doors &amp; Stairs.
+Human                            ###         ######              ###
+Novice                         ###.# #########....## ####       ##.## ####
+Mage                         ###...###.#...##@.....###..#       #...###..#
+LEVEL      1             ### #....................##....#      #:...##...##
+NXT       10             #.####........###..............#######:..........#
+AU       334       #######..###........##8.................#:.:...........#
+|    ~             #....#....#...................t..............:.........#
+STR:      14   #####............:.:.:.................:..:.###...:.:::....#
+INT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##
+WIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####
+DEX:      10  #.............7##...::....##4....#2#...............::.:..::...#
+CON:      14  #.............................................................#
+              #.............................................................#
+Cur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##
+HP   10/  10   ###............:.###....:.##....####..:###::..###....:......#
+SP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##
+                  #.........:.:.......:..:...........:## :.........:.::...##
+                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#
+                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#
+                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##
+                     #..###   #####...######.##          #.######...##....#
+Town                 ####         #####    ###           ###    ###########
+             Light 1  Fed 89 % Down staircase
+</pre></div></details>
+<details class="ask"><summary><span class="n">13</span><span class="keys">' 2222222226662'</span><span class="why">walk to General store 1</span><span class="where">turn 11 · depth 0</span></summary><div class="body"><pre class="screen">You sense no traps. You sense no doors. -more-
+Human                            ###         ######              ###
+Novice                         ###.# #########....## ####       ##.## ####
+Mage                         ###...###.#...##@.....###..#       #...###..#
+LEVEL      1             ### #....................##....#      #:...##...##
+NXT       10             #.####........###..............#######:..........#
+AU       334       #######..###........##8.................#:.:...........#
+|    ~             #....#....#...................t..............:.........#
+STR:      14   #####............:.:.:.................:..:.###...:.:::....#
+INT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##
+WIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####
+DEX:      10  #.............7##...::....##4....#2#...............::.:..::...#
+CON:      14  #.............................................................#
+              #.............................................................#
+Cur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##
+HP   10/  10   ###............:.###....:.##....####..:###::..###....:......#
+SP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##
+                  #.........:.:.......:..:...........:## :.........:.::...##
+                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#
+                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#
+                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##
+                     #..###   #####...######.##          #.######...##....#
+Town                 ####         #####    ###           ###    ###########
+             Light 1  Fed 89 % Down staircase
+</pre></div></details>
+<details class="ask"><summary><span class="n">14</span><span class="keys">'2'</span><span class="why">enter General store</span><span class="where">turn 151 · depth 0</span></summary><div class="body"><pre class="screen">
+Human                            ###         ######              ###
+Novice                         ###.# #########....## ####       ##.## ####
+Mage                         ###...###.#...##&gt;.....###..#       #...###..#
+LEVEL      1             ### #....................##....#      #:...##...##
+NXT        8             #.####........###..............#######:..........#
+AU       334       #######..###........##8.................#:.:...........#
+|    ~             #....#....#..................................:.........#
+STR:      14   #####............:.:.:.................:..:.###...:.:::....#
+INT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##
+WIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####
+DEX:      10  #.............7##...::....##4....#2#...............::.:..::...#
+CON:      14  #.............................................................#
+              #.........................t.......@...........................#
+Cur AC     0  ##...........:..:.#5#...:........#1##......:...3##..:.:......##
+HP   10/  10   ###............:.###....:.##....####..:###::..###....:......#
+SP    1/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##
+                  #.........:.:.......:..:...........:## :.........:.::...##
+                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#
+                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#
+                    ##....## #:..##....## #..##  #::##   #.....#....#.:...##
+                     #..###   #####...######.##          #.######...##....#
+Town                 ####         #####   ####           ###    ###########
+             Light 1  Fed 89 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">15</span><span class="keys">'pj20\\ny'</span><span class="why">buy 20 flasks of oil</span><span class="where">turn 151 · depth 0</span></summary><div class="body"><pre class="screen">
+ Bilbo the Friendly (Hobbit)                              General Store (5000)
+
+ Store Inventory                                          Weight      Price
+ a) 16 Hard Biscuits                                      0.2 lb          1
+ c) 17 Slime Molds                                        0.2 lb          2
+ f) 40 Rations of Food                                    0.8 lb          3
+ h) 5 Flasks of Whisky                                    0.5 lb          1
+ j) 40 Flasks of oil                                      2.0 lb          3
+ m) 40 Wooden Torches (5000 turns)                        2.2 lb          6
+ n) 40 Cloaks [1,+0]                                      1.0 lb          6
+ o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66
+ q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176
+ r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1
+ u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1
+ v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:       334
+</pre></div></details>
+<details class="ask"><summary><span class="n">16</span><span class="keys">'pn\\n'</span><span class="why">buy cloak (default qty 1?)</span><span class="where">turn 151 · depth 0</span></summary><div class="body"><pre class="screen">You bought 20 Flasks of oil for 60 gold. You have 20 Flasks of oil (c).
+ Bilbo the Friendly (Hobbit)                              General Store (5000)
+
+ Store Inventory                                          Weight      Price
+ a) 16 Hard Biscuits                                      0.2 lb          1
+ c) 17 Slime Molds                                        0.2 lb          2
+ f) 40 Rations of Food                                    0.8 lb          3
+ h) 5 Flasks of Whisky                                    0.5 lb          1
+ j) 40 Flasks of oil                                      2.0 lb          3
+ m) 40 Wooden Torches (5000 turns)                        2.2 lb          6
+ n) 40 Cloaks [1,+0]                                      1.0 lb          6
+ o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66
+ q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176
+ r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1
+ u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1
+ v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:       274
+</pre></div></details>
+<details class="ask"><summary><span class="n">17</span><span class="keys">'y'</span><span class="why">confirm</span><span class="where">turn 151 · depth 0</span></summary><div class="body"><pre class="screen">Buy a Cloak [1,+0]? [ESC, any other key to accept]
+Price: 6
+
+ Store Inventory                                          Weight      Price
+ a) 16 Hard Biscuits                                      0.2 lb          1
+ c) 17 Slime Molds                                        0.2 lb          2
+ f) 40 Rations of Food                                    0.8 lb          3
+ h) 5 Flasks of Whisky                                    0.5 lb          1
+ j) 40 Flasks of oil                                      2.0 lb          3
+ m) 40 Wooden Torches (5000 turns)                        2.2 lb          6
+ n) 40 Cloaks [1,+0]                                      1.0 lb          6
+ o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66
+ q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176
+ r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1
+ u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1
+ v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:       274
+</pre></div></details>
+<details class="ask"><summary><span class="n">18</span><span class="keys">'we'</span><span class="why">wear cloak</span><span class="where">turn 151 · depth 0</span></summary><div class="body"><pre class="screen">You bought a Cloak [1,+0] for 6 gold. You have a Cloak [1,+0] (e).
+ Bilbo the Friendly (Hobbit)                              General Store (5000)
+
+ Store Inventory                                          Weight      Price
+ a) 16 Hard Biscuits                                      0.2 lb          1
+ c) 17 Slime Molds                                        0.2 lb          2
+ f) 40 Rations of Food                                    0.8 lb          3
+ h) 5 Flasks of Whisky                                    0.5 lb          1
+ j) 40 Flasks of oil                                      2.0 lb          3
+ m) 40 Wooden Torches (5000 turns)                        2.2 lb          6
+ n) 40 Cloaks [1,+0]                                      1.0 lb          6
+ o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66
+ q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176
+ r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1
+ u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1
+ v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:       268
+</pre></div></details>
+<details class="ask"><summary><span class="n">19</span><span class="keys">'pm\\ny'</span><span class="why">spare torch</span><span class="where">turn 151 · depth 0</span></summary><div class="body"><pre class="screen">You are wearing a Cloak [1,+0] (i).
+ Bilbo the Friendly (Hobbit)                              General Store (5000)
+
+ Store Inventory                                          Weight      Price
+ a) 16 Hard Biscuits                                      0.2 lb          1
+ c) 17 Slime Molds                                        0.2 lb          2
+ f) 40 Rations of Food                                    0.8 lb          3
+ h) 5 Flasks of Whisky                                    0.5 lb          1
+ j) 40 Flasks of oil                                      2.0 lb          3
+ m) 40 Wooden Torches (5000 turns)                        2.2 lb          6
+ n) 40 Cloaks [1,+0]                                      1.0 lb          6
+ o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66
+ q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176
+ r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1
+ u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1
+ v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:       268
+</pre></div></details>
+<details class="ask"><summary><span class="n">20</span><span class="keys">' \\e8444444444444444'</span><span class="why">leave, walk west along street toward Alchemist 5</span><span class="where">turn 151 · depth 0</span></summary><div class="body"><pre class="screen">You bought a Wooden Torch (5000 turns) for 6 gold. -more-
+ Bilbo the Friendly (Hobbit)                              General Store (5000)
+
+ Store Inventory                                          Weight      Price
+ a) 16 Hard Biscuits                                      0.2 lb          1
+ c) 17 Slime Molds                                        0.2 lb          2
+ f) 40 Rations of Food                                    0.8 lb          3
+ h) 5 Flasks of Whisky                                    0.5 lb          1
+ j) 40 Flasks of oil                                      2.0 lb          3
+ m) 40 Wooden Torches (5000 turns)                        2.2 lb          6
+ n) 40 Cloaks [1,+0]                                      1.0 lb          6
+ o) 40 Shovels (1d2) (+0,+0)                              6.0 lb         66
+ q) 40 Picks (1d3) (+0,+0)                               18.0 lb        176
+ r) 40 Bolts (1d5) (+0,+0)                                0.3 lb          1
+ u) 40 Arrows (1d4) (+0,+0)                               0.2 lb          1
+ v) 40 Iron Shots (1d4) (+0,+0)                           0.5 lb          3
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:       268
+</pre></div></details>
+<details class="ask"><summary><span class="n">21</span><span class="keys">'442'</span><span class="why">enter Alchemist</span><span class="where">turn 321 · depth 0</span></summary><div class="body"><pre class="screen">
+Human                            ###         ######              ###
+Novice                         ###.# #########....## ####       ##.## ####
+Mage                         ###...###.#...##&gt;.....###..#       #...###..#
+LEVEL      1             ### #....................##....#      #:...##...##
+NXT        8             #.####........###..............#######:..........#
+AU       262       #######..###........##8.................#:.:...........#
+|    ~ (           #....#....#..................................:.........#
+STR:      14   #####............:.:.:.................:..:.###...:.:::....#
+INT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##
+WIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####
+DEX:      10  #.............7##...::....##4....#2#...............::.:..::...#
+CON:      14  #.............................................................#
+              #....................@........................................#
+Cur AC     1  ##...........:..:.#5#...:........#1##......:...3##..:.:......##
+HP   10/  10   ###............:.###....:.##....####..:###::..###....:......#
+SP    1/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##
+                  #.........:.:.......:..:...........:## :.........:.::...##
+                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#
+                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#
+                    ##....## #:..##....## #..## ##::##   #.....#....#.:...##
+                     #..###   #####...######.##          #.######...##....#
+Town                 ####         #####   ####           ###    ###########
+             Light 1  Fed 89 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">22</span><span class="keys">'ph6\\ny'</span><span class="why">buy 6 Phase Door</span><span class="where">turn 341 · depth 0</span></summary><div class="body"><pre class="screen">
+ Ga-nat the Greedy (Gnome)                                Alchemy Shop (15000)
+
+ Store Inventory                                          Weight      Price
+ a) 40 Potions of Cure Light Wounds {unseen}              0.4 lb         20
+ c) 13 Potions of Boldness {unseen}                       0.4 lb          8
+ f) 15 Potions of Resist Heat {unseen}                    0.4 lb         30
+ h) 40 Scrolls of Phase Door {unseen}                     0.5 lb         15
+ j) 2 Scrolls of Magic Mapping {unseen}                   0.5 lb         65
+ m) 13 Scrolls of Detect Invisible {unseen}               0.5 lb         15
+ n) 40 Scrolls of Remove Curse {unseen}                   0.5 lb        100
+ o) 40 Scrolls of Word of Recall                          0.5 lb        125
+ q) 5 Scrolls of Recharging {unseen}                      0.5 lb        200
+ r) 23 Scrolls of Holy Chant {unseen}                     0.5 lb         40
+
+
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:       262
+</pre></div></details>
+<details class="ask"><summary><span class="n">23</span><span class="keys">' pa5\\ny'</span><span class="why">buy 5 CLW</span><span class="where">turn 341 · depth 0</span></summary><div class="body"><pre class="screen">You bought 6 Scrolls titled &quot;lisnas aebeo&quot; for 90 gold. -more-
+ Ga-nat the Greedy (Gnome)                                Alchemy Shop (15000)
+
+ Store Inventory                                          Weight      Price
+ a) 40 Potions of Cure Light Wounds {unseen}              0.4 lb         20
+ c) 13 Potions of Boldness {unseen}                       0.4 lb          8
+ f) 15 Potions of Resist Heat {unseen}                    0.4 lb         30
+ h) 40 Scrolls of Phase Door {unseen}                     0.5 lb         15
+ j) 2 Scrolls of Magic Mapping {unseen}                   0.5 lb         65
+ m) 13 Scrolls of Detect Invisible {unseen}               0.5 lb         15
+ n) 40 Scrolls of Remove Curse {unseen}                   0.5 lb        100
+ o) 40 Scrolls of Word of Recall                          0.5 lb        125
+ q) 5 Scrolls of Recharging {unseen}                      0.5 lb        200
+ r) 23 Scrolls of Holy Chant {unseen}                     0.5 lb         40
+
+
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:       262
+</pre></div></details>
+<details class="ask"><summary><span class="n">24</span><span class="keys">' i'</span><span class="why">inventory check</span><span class="where">turn 341 · depth 0</span></summary><div class="body"><pre class="screen">You bought 5 Misty Potions for 100 gold. -more-
+ Ga-nat the Greedy (Gnome)                                Alchemy Shop (15000)
+
+ Store Inventory                                          Weight      Price
+ a) 40 Potions of Cure Light Wounds {unseen}              0.4 lb         20
+ c) 13 Potions of Boldness {unseen}                       0.4 lb          8
+ f) 15 Potions of Resist Heat {unseen}                    0.4 lb         30
+ h) 40 Scrolls of Phase Door                              0.5 lb         15
+ j) 2 Scrolls of Magic Mapping {unseen}                   0.5 lb         65
+ m) 13 Scrolls of Detect Invisible {unseen}               0.5 lb         15
+ n) 40 Scrolls of Remove Curse {unseen}                   0.5 lb        100
+ o) 40 Scrolls of Word of Recall                          0.5 lb        125
+ q) 5 Scrolls of Recharging {unseen}                      0.5 lb        200
+ r) 23 Scrolls of Holy Chant {unseen}                     0.5 lb         40
+
+
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:       172
+</pre></div></details>
+<details class="ask"><summary><span class="n">25</span><span class="keys">'\\es'</span><span class="why">try selling Word of Recall to see its price</span><span class="where">turn 341 · depth 0</span></summary><div class="body"><pre class="screen">Select Item: (Inven: a-g, / for Equip, ESC)
+ Ga-nat the  a) a Book of Magic Spells [First Spells]      3.0 lb
+             b) 2 Rations of Food                          1.6 lb
+ Store Inven c) 20 Flasks of oil                          40.0 lb
+ a) 40 Potio d) 5 Potions of Cure Light Wounds             2.0 lb
+ c) 13 Potio e) 6 Scrolls of Phase Door                    3.0 lb
+ f) 15 Potio f) a Scroll of Word of Recall                 0.5 lb
+ h) 40 Scrol g) a Wooden Torch (5000 turns)                2.2 lb
+ j) 2 Scroll
+ m) 13 Scrolls of Detect Invisible {unseen}               0.5 lb         15
+ n) 40 Scrolls of Remove Curse {unseen}                   0.5 lb        100
+ o) 40 Scrolls of Word of Recall                          0.5 lb        125
+ q) 5 Scrolls of Recharging {unseen}                      0.5 lb        200
+ r) 23 Scrolls of Holy Chant {unseen}                     0.5 lb         40
+
+
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:        72
+</pre><p class="note">note: Store purchase: `p` + item letter, then quantity prompt has default 1 shown: type the digits then Enter, then a confirm &#x27;ESC, any other key&#x27; (asks 14-24; sending &#x27;ph&#x27; &#x27;15\n&#x27; worked, but chaining extra keys after one purchase got eaten). Store item letters skip (a,c,f,h,j,m,n,o,q,r,u,v,y,z) so read the letter from the list, never count. (ask 25)</p></div></details>
+<details class="ask"><summary><span class="n">26</span><span class="keys">'\\e\\e89666666666666668'</span><span class="why">walk to Armoury 2</span><span class="where">turn 341 · depth 0</span></summary><div class="body"><pre class="screen">Give which item?  (Inven: d-f, ESC)
+ Ga-nat the Gr d) 5 Potions of Cure Light Wounds        0 au   2.0 lb
+               e) 6 Scrolls of Phase Door               0 au   3.0 lb
+ Store Invento f) a Scroll of Word of Recall            0 au   0.5 lb
+ a) 40 Potions
+ c) 13 Potions of Boldness {unseen}                       0.4 lb          8
+ f) 15 Potions of Resist Heat {unseen}                    0.4 lb         30
+ h) 40 Scrolls of Phase Door                              0.5 lb         15
+ j) 2 Scrolls of Magic Mapping {unseen}                   0.5 lb         65
+ m) 13 Scrolls of Detect Invisible {unseen}               0.5 lb         15
+ n) 40 Scrolls of Remove Curse {unseen}                   0.5 lb        100
+ o) 40 Scrolls of Word of Recall                          0.5 lb        125
+ q) 5 Scrolls of Recharging {unseen}                      0.5 lb        200
+ r) 23 Scrolls of Holy Chant {unseen}                     0.5 lb         40
+
+
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:        72
+</pre><p class="note">note: Contradiction: store-bought scrolls/potions ARE identified in the pack after purchase (shop showed Phase Door {unseen} before, plain after; pack listed &#x27;6 Scrolls of Phase Door&#x27;), though the purchase message said &#x27;Scrolls titled ...&#x27;. Selling gives 0 au for everything here (ask 26: &#x27;Give which item? ... 0 au&#x27;), so Word of Recall in the starting kit cannot be sold for gold. Mage seed 11 starts with 334 gold, not 146 (Human Mage). Study: command G then book then spell letter (asks 10-12); mac casts spell c; first cast of a spell gave 2 XP (NXT 10 -&gt; 8, ask 14). &#x27;pj20\ny&#x27; bought 20 oil in ONE ask (quantity then any-key confirm) - chained purchases work when the confirm is the last key, &#x27;pn\ny&#x27; too for qty 1. (ask 26)</p></div></details>
+<details class="ask"><summary><span class="n">27</span><span class="keys">'pm\\ny'</span><span class="why">buy Leather Shield [8]</span><span class="where">turn 511 · depth 0</span></summary><div class="body"><pre class="screen">
+ Kon-Dar the Ugly (Half-Orc)                                    Armoury (5000)
+
+ Store Inventory                                          Weight      Price
+ a) Chain Mail (-2) [32,+2]                              22.0 lb       1476
+ c) Soft Leather Armour of Resist Acid [8,+8] {??}        8.0 lb        986
+ f) Studded Leather Armour of Resist Acid (-1) [12,+3] { 10.0 lb        696
+ h) Studded Leather Armour (-1) [12,+0]                  10.0 lb        150
+ j) 9 Small Metal Shields [5,+0]                          6.0 lb         36
+ m) 9 Leather Shields [8,+0]                              9.0 lb         66
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:        72
+</pre></div></details>
+<details class="ask"><summary><span class="n">28</span><span class="keys">'wi'</span><span class="why">wear shield</span><span class="where">turn 511 · depth 0</span></summary><div class="body"><pre class="screen">You have a Leather Shield [8,+0] (i).
+ Kon-Dar the Ugly (Half-Orc)                                    Armoury (5000)
+
+ Store Inventory                                          Weight      Price
+ a) Chain Mail (-2) [32,+2]                              22.0 lb       1476
+ c) Soft Leather Armour of Resist Acid [8,+8] {??}        8.0 lb        986
+ f) Studded Leather Armour of Resist Acid (-1) [12,+3] { 10.0 lb        696
+ h) Studded Leather Armour (-1) [12,+0]                  10.0 lb        150
+ j) 9 Small Metal Shields [5,+0]                          6.0 lb         36
+ m) 8 Leather Shields [8,+0]                              9.0 lb         66
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:         6
+</pre></div></details>
+<details class="ask"><summary><span class="n">29</span><span class="keys">'\\e1778888888'</span><span class="why">walk back to &gt; staircase</span><span class="where">turn 511 · depth 0</span></summary><div class="body"><pre class="screen">You are wearing a Leather Shield [8,+0] (m).
+ Kon-Dar the Ugly (Half-Orc)                                    Armoury (5000)
+
+ Store Inventory                                          Weight      Price
+ a) Chain Mail (-2) [32,+2]                              22.0 lb       1476
+ c) Soft Leather Armour of Resist Acid [8,+8] {??}        8.0 lb        986
+ f) Studded Leather Armour of Resist Acid (-1) [12,+3] { 10.0 lb        696
+ h) Studded Leather Armour (-1) [12,+0]                  10.0 lb        150
+ j) 9 Small Metal Shields [5,+0]                          6.0 lb         36
+ m) 8 Leather Shields [8,+0]                              9.0 lb         66
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Press &#x27;?&#x27; for help.                                  Gold Remaining:         6
+</pre></div></details>
+<details class="ask"><summary><span class="n">30</span><span class="keys">'R&amp;\\n&gt;'</span><span class="why">rest to full SP then descend</span><span class="where">turn 621 · depth 0</span></summary><div class="body"><pre class="screen">
+Human                            ###         ######              ###
+Novice                         ###.# #########....## ####       ##.## ####
+Mage                         ###...###.#...##@.....###..#       #...###..#
+LEVEL      1             ### #....................##....#      #:...##...##
+NXT        8             #.####........###..............#######:..........#
+AU         6       #######..###........##8.................#:.:...........#
+|    ~ ()          #....#....#...................t..............:.........#
+STR:      14   #####............:.:.:.................:..:.###...:.:::....#
+INT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##
+WIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####
+DEX:      10  #.............7##...::....##4....#2#...............::.:..::...#
+CON:      14  #.............................................................#
+              #.............................................................#
+Cur AC     9  ##...........:..:.#5#...:........#1##......:...3##..:.:......##
+HP   10/  10   ###............:.###....:.##....####..:###::..###....:......#
+SP    1/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##
+                  #.........:.:.......:..:...........:## :.........:.::...##
+                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#
+                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#
+                    ##....## #:..##....## #..## ##::##   #.....#....#.:...##
+                     #..###   #####...######.##          #.######...##....#
+Town                 ####         #####   ####           ###    ###########
+             Light 1  Fed 89 % DTrap Down staircase
+</pre></div></details>
+<details class="ask"><summary><span class="n">31</span><span class="keys">' mac'</span><span class="why">dismiss, cast stair detection on arrival</span><span class="where">turn 701 · depth 1</span></summary><div class="body"><pre class="screen">You enter a maze of down staircases. -more-
+Human                            ###         ######              ###
+Novice                         ###.# #########....## ####       ##.## ####
+Mage                         ###...###.#...##@.....###..#       #...###..#
+LEVEL      1             ### #....................##....#      #:...##...##
+NXT        8             #.####........###..............#######:..........#
+AU         6       #######..###........##8.................#:.:...........#
+|    ~ ()          #....#....#...................t..............:.........#
+STR:      14   #####............:.:.:.................:..:.###...:.:::....#
+INT:   18/10   #.##.........###....#::..###....###...:##:#.###...:::##...##
+WIS:      10  ##............###..:.#....###....###....#::#.##6......:...:####
+DEX:      10  #.............7##...::....##4....#2#...............::.:..::...#
+CON:      14  #.............................................................#
+              #.............................................................#
+Cur AC     9  ##...........:..:.#5#...:........#1##......:...3##..:.:......##
+HP   10/  10   ###............:.###....:.##....####..:###::..###....:......#
+SP    2/   2     ##.......:...#.###.....:##....####...#::#...###.:.:::....##
+                  #.........:.:.......:..:...........:## :.........:.::...##
+                  ##.......:.:::.#.....:.:.:...:.:...# ###.....:.:.::......#
+                   ##......###.:.##...:##:#...##::.#.#   #........:.:......#
+                    ##....## #:..##....## #..## ##::##   #.....#....#.:...##
+                     #..###   #####...######.##          #.######...##....#
+Town                 ####         #####   ####           ###    ###########
+             Light 1  Fed 89 % DTrap Down staircase
+</pre></div></details>
+<details class="ask"><summary><span class="n">32</span><span class="keys">'\\emac'</span><span class="why">retry cast (a stray key was eaten by a -more-)</span><span class="where">turn 701 · depth 1</span></summary><div class="body"><pre class="screen">Direction or &lt;click&gt; (Escape to cancel)?
+Human                                         .
+Novice                                        .
+Mage                                          .
+LEVEL      1                                  .
+NXT        8                                  .
+AU         6                                  .
+|    ~ ()
+STR:      14
+INT:   18/10
+WIS:      10
+DEX:      10                                 #.#
+CON:      14                                 #@#
+                                             ###
+Cur AC     9
+HP   10/  10
+SP    2/   2
+
+
+
+
+
+50&#x27; (L1)
+             LF:2-? Light 2  Fed 89 % Up staircase
+</pre><p class="note">note: Mage (Human, seed 11): 10 HP at CL1 is one kobold&#x27;s worth. Cast Find Traps/Doors/Stairs (`mac`, 1 mana, first cast +2 xp) on DL1 arrival showed a `&gt;` ~13 cols west and 6 rows south of the `&lt;` (ask 33-34) - detection works, but it shows no floor: path to the &gt; still unknown after 12 asks. A `-more-` swallows the first key of the next string: &#x27; mac&#x27; became &#x27; &#x27; + stray &#x27;m&#x27; (dismissing) then &#x27;a&#x27;,&#x27;c&#x27; ran aim/close (ask 32); send `\e` or &#x27; &#x27; alone, then the command, or prefix with `\e`.</p></div></details>
+<details class="ask"><summary><span class="n">33</span><span class="keys">' '</span><span class="why">dismiss more</span><span class="where">turn 701 · depth 1</span></summary><div class="body"><pre class="screen">You sense the presence of traps! You sense the presence of doors! -more-
+Human                                         .
+Novice                                        .
+Mage                                          .
+LEVEL      1                                  .
+NXT        8                                  .
+AU         6                                  .              &#x27;
+|    ~ ()                                         &#x27; &#x27;  +  + +
+STR:      14
+INT:   18/10
+WIS:      10
+DEX:      10                                 #.#      +
+CON:      14                                 #@#                    +
+              + +                            ###                   +
+Cur AC     9   +  +                                  + &#x27;
+HP   10/  10       +
+SP    2/   2   +  &#x27;         ^
+                           &#x27;
+                                &gt;                             +
+                        &#x27;                                    &#x27;  +
+
+
+50&#x27; (L1)     &#x27;
+             LF:2-? Light 2  Fed 89 % Up staircase
+</pre></div></details>
+<details class="ask"><summary><span class="n">34</span><span class="keys">'.8'</span><span class="why">run north along corridor</span><span class="where">turn 711 · depth 1</span></summary><div class="body"><pre class="screen">You sense the presence of stairs!
+Human                                         .
+Novice                                        .
+Mage                                          .
+LEVEL      1                                  .
+NXT        8                                  .
+AU         6                                  .              &#x27;
+|    ~ ()                                         &#x27; &#x27;  +  + +
+STR:      14
+INT:   18/10
+WIS:      10
+DEX:      10                                 #.#      +
+CON:      14                                 #@#                    +
+              + +                            ###                   +
+Cur AC     9   +  +                                  + &#x27;
+HP   10/  10       +
+SP    1/   2   +  &#x27;         ^
+                           &#x27;
+                                &gt;                             +
+                        &#x27;                                    &#x27;  +
+
+
+50&#x27; (L1)     &#x27;
+             LF:2-? Light 2  Fed 89 % DTrap Up staircase
+</pre></div></details>
+<details class="ask"><summary><span class="n">35</span><span class="keys">'8.4'</span><span class="why">step into open area, run west</span><span class="where">turn 741 · depth 1</span></summary><div class="body"><pre class="screen">
+Human                                        ...
+Novice                                       ...
+Mage                                          .
+LEVEL      1                                  .    %
+NXT        8                                  .   .
+AU         6                                  .  .           &#x27;
+|    ~ ()                                         &#x27; &#x27;  +  + +
+STR:      14                                 ...
+INT:   18/10                                 #@#
+WIS:      10                                 #.#
+DEX:      10                                 #.#      +
+CON:      14                                 #&lt;#                    +
+              + +                            ###                   +
+Cur AC     9   +  +                                  + &#x27;
+HP   10/  10       +
+SP    1/   2   +  &#x27;         ^
+                           &#x27;
+                                &gt;                             +
+                        &#x27;                                    &#x27;  +
+
+
+50&#x27; (L1)     &#x27;
+             LF:2-? Light 2  Fed 89 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">36</span><span class="keys">'6666666g'</span><span class="why">get the ~ item</span><span class="where">turn 831 · depth 1</span></summary><div class="body"><pre class="screen">
+Human                                   #..........%
+Novice                                  %..........#
+Mage                                    %..........%
+LEVEL      1                            #..........%
+NXT        8                            #@......~..#
+AU         6                            #.####.##.#          &#x27;
+|    ~ ()                               #.####..  &#x27; &#x27;  +  + +
+STR:      14                            #.......
+INT:   18/10                            ######.#
+WIS:      10                                 #.#
+DEX:      10                                 #.#      +
+CON:      14                                 #&lt;#                    +
+              + +                            ###                   +
+Cur AC     9   +  +                                  + &#x27;
+HP   10/  10       +
+SP    1/   2   +  &#x27;         ^
+                           &#x27;
+                                &gt;                             +
+                        &#x27;                                    &#x27;  +
+
+
+50&#x27; (L1)     &#x27;
+             LF:2-? Light 3  Fed 89 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">37</span><span class="keys">'i'</span><span class="why">check what the ~ was</span><span class="where">turn 902 · depth 1</span></summary><div class="body"><pre class="screen">
+Human                                   #..........%
+Novice                                  %..........#
+Mage                                    %..........%
+LEVEL      1                            #..........%
+NXT        8                            #.......@..#
+AU         6                            #.####.##.#          &#x27;
+|    ~ ()                               #.####..  &#x27; &#x27;  +  + +
+STR:      14                            #.......
+INT:   18/10                            ######.#
+WIS:      10                                 #.#
+DEX:      10                                 #.#      +
+CON:      14                                 #&lt;#                    +
+              + +                            ###                   +
+Cur AC     9   +  +                                  + &#x27;
+HP   10/  10       +
+SP    1/   2   +  &#x27;         ^
+                           &#x27;
+                                &gt;                             +
+                        &#x27;                                    &#x27;  +
+
+
+50&#x27; (L1)     &#x27;
+             LF:2-? Light 3  Fed 89 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">38</span><span class="keys">'\\e.8'</span><span class="why">run north in room</span><span class="where">turn 902 · depth 1</span></summary><div class="body"><pre class="screen">Select Item: (Inven: a-g, / for Equip, ESC)
+Human        a) a Book of Magic Spells [First Spells]      3.0 lb
+Novice       b) 2 Rations of Food                          1.6 lb
+Mage         c) 20 Flasks of oil                          40.0 lb
+LEVEL      1 d) 5 Potions of Cure Light Wounds             2.0 lb
+NXT        8 e) 6 Scrolls of Phase Door                    3.0 lb
+AU         6 f) a Scroll of Word of Recall                 0.5 lb
+|    ~ ()    g) 2 Wooden Torches (5000 turns)              4.4 lb
+STR:      14
+INT:   18/10                            ######.#
+WIS:      10                                 #.#
+DEX:      10                                 #.#      +
+CON:      14                                 #&lt;#                    +
+              + +                            ###                   +
+Cur AC     9   +  +                                  + &#x27;
+HP   10/  10       +
+SP    1/   2   +  &#x27;         ^
+                           &#x27;
+                                &gt;                             +
+                        &#x27;                                    &#x27;  +
+
+
+50&#x27; (L1)     &#x27;
+             LF:2-? Light 3  Fed 89 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">39</span><span class="keys">'69.8'</span><span class="why">go through the north gap</span><span class="where">turn 942 · depth 1</span></summary><div class="body"><pre class="screen">
+Human
+Novice
+Mage
+LEVEL      1
+NXT        8
+AU         6
+|    ~ ()
+STR:      14                         +
+INT:   18/10                          &#x27; %%%%%%%%%%.%
+WIS:      10                            #.......@..%
+DEX:      10                            %..........#
+CON:      14                            %..........%
+                                        #..........%
+Cur AC     9                            #..........#
+HP   10/  10                            #.####.##.#.         &#x27;
+SP    1/   2                            #.####..  &#x27; &#x27;  +  + +
+                                        #.......
+                                        ######.#
+                                             #.#       .
+                                             #.#      + .
+                                             #&lt;#         .          +
+50&#x27; (L1)      + +                            ###          .        +
+             LF:2-? Light 3  Fed 89 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">40</span><span class="keys">'v'</span><span class="why">throw oil at adjacent kobold; look at menu</span><span class="where">turn 992 · depth 1</span></summary><div class="body"><pre class="screen">
+Human
+Novice
+Mage
+LEVEL      1
+NXT        8                                     #k#
+AU         6                                     #@#
+|    ~ ()                                        #.#
+STR:      14                         +           #.#
+INT:   18/10                          &#x27; %%%%%%%%%%.%
+WIS:      10                            #..........%
+DEX:      10                            %..........#
+CON:      14                            %..........%
+                                        #..........%
+Cur AC     9                            #..........#
+HP   10/  10                            #.####.##.#.         &#x27;
+SP    1/   2                            #.####..  &#x27; &#x27;  +  + +
+                                        #.......
+                                        ######.#
+                                             #.#       .
+                                             #.#      + .
+                                             #&lt;#         .          +
+50&#x27; (L1)      + +                            ###          .        +
+             LF:2-? Light 2  Fed 89 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">41</span><span class="keys">"a'"</span><span class="why">throw at nearest</span><span class="where">turn 992 · depth 1</span></summary><div class="body"><pre class="screen">Throw which item? (Throwing items: a-a, / for Inven, ESC)
+Human          a) 20 Flasks of oil     40.0 lb
+Novice
+Mage
+LEVEL      1
+NXT        8                                     #k#
+AU         6                                     #@#
+|    ~ ()                                        #.#
+STR:      14                         +           #.#
+INT:   18/10                          &#x27; %%%%%%%%%%.%
+WIS:      10                            #..........%
+DEX:      10                            %..........#
+CON:      14                            %..........%
+                                        #..........%
+Cur AC     9                            #..........#
+HP   10/  10                            #.####.##.#.         &#x27;
+SP    1/   2                            #.####..  &#x27; &#x27;  +  + +
+                                        #.......
+                                        ######.#
+                                             #.#       .
+                                             #.#      + .
+                                             #&lt;#         .          +
+50&#x27; (L1)      + +                            ###          .        +
+             LF:2-? Light 2  Fed 89 % DTrap Open floor
+</pre><p class="note">note: `v` shows only THROWING items with their own letters (oil = a), not pack letters (ask 41), so `va&#x27;` / `va5`.</p></div></details>
+<details class="ask"><summary><span class="n">42</span><span class="keys">' va5'</span><span class="why">throw again at target</span><span class="where">turn 992 · depth 1</span></summary><div class="body"><pre class="screen">The small kobold is targeted. Your Flask of oil hits the small kobold. -more-
+Human
+Novice
+Mage
+LEVEL      1
+NXT        8                                     #k#
+AU         6                                     #@#
+|    ~ ()                                        #.#
+STR:      14                         +           #.#
+INT:   18/10                          &#x27; %%%%%%%%%%.%
+WIS:      10                            #..........%
+DEX:      10                            %..........#
+CON:      14                            %..........%
+                                        #..........%
+Cur AC     9                            #..........#
+HP   10/  10                            #.####.##.#.         &#x27;
+SP    1/   2                            #.####..  &#x27; &#x27;  +  + +
+                                        #.......
+[**********]                            ######.#
+                                             #.#       .
+                                             #.#      + .
+                                             #&lt;#         .          +
+50&#x27; (L1)      + +                            ###          .        +
+             LF:2-? Light 2  Fed 89 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">43</span><span class="keys">'.8'</span><span class="why">run north</span><span class="where">turn 1012 · depth 1</span></summary><div class="body"><pre class="screen">
+Human
+Novice
+Mage
+LEVEL      1
+NXT        8                                     #.#
+AU         6                                     #@#
+|    ~ ()                                        #.#
+STR:      14                         +           #.#
+INT:   18/10                          &#x27; %%%%%%%%%%.%
+WIS:      10                            #..........%
+DEX:      10                            %..........#
+CON:      14                            %..........%
+                                        #..........%
+Cur AC     9                            #..........#
+HP   10/  10                            #.####.##.#.         &#x27;
+SP    1/   2                            #.####..  &#x27; &#x27;  +  + +
+                                        #.......
+[----------]                            ######.#
+                                             #.#       .
+                                             #.#      + .
+                                             #&lt;#         .          +
+50&#x27; (L1)      + +                            ###          .        +
+             LF:2-? Light 2  Fed 88 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">44</span><span class="keys">'.8'</span><span class="why">continue north</span><span class="where">turn 1122 · depth 1</span></summary><div class="body"><pre class="screen">
+Human
+Novice
+Mage
+LEVEL      1
+NXT        8
+AU         6
+|    ~ ()                                    #.#
+STR:      14                                 #@####
+INT:   18/10                                 #....#
+WIS:      10                                 ####.#
+DEX:      10                                    #.##
+CON:      14                                    #..#
+                                                ##.#
+Cur AC     9                                     #.#
+HP   10/  10                                     #.#
+SP    1/   2                                     #.#
+                                     +           #.#
+[----------]                          &#x27; %%%%%%%%%%.%
+                                        #..........%
+                                        %..........#
+                                        %..........%
+50&#x27; (L1)                                #..........%
+             LF:2-? Light 2  Fed 88 % DTrap Open floor
+</pre></div></details>
+<details class="ask"><summary><span class="n">45</span><span class="keys">'ssssssssss'</span><span class="why">wait out confusion</span><span class="where">turn 1182 · depth 1</span></summary><div class="body"><pre class="screen">You are surrounded by a gas of scintillating colours! You are confused!
+Human
+Novice
+Mage
+LEVEL      1
+NXT        8
+AU         6
+|    ~ ()
+STR:      14
+INT:   18/10
+WIS:      10
+DEX:      10                                .%%#
+CON:      14                                .@.#
+                                            .#.#
+Cur AC     9                                 %.%
+HP   10/  10                                 %.#
+SP    1/   2                                 #.#
+                                             #.####
+[----------]                                 #....#
+                                             ####.#
+                                                #.##
+                                                #..#
+50&#x27; (L1)                                        ##.#
+             LF:2-? Light 2  Confused Fed 88 % Gas trap
+</pre></div></details>
+<details class="ask"><summary><span class="n">46</span><span class="keys">'\\e,,,,,,,,,,'</span><span class="why">hold with comma to wait out confusion</span><span class="where">turn 1182 · depth 1</span></summary><div class="body"><pre class="screen">Direction or &lt;click&gt; (Escape to cancel)?
+Human
+Novice
+Mage
+LEVEL      1
+NXT        8
+AU         6
+|    ~ ()
+STR:      14
+INT:   18/10
+WIS:      10
+DEX:      10                                .%%#
+CON:      14                                .@.#
+                                            .#.#
+Cur AC     9                                 %.%
+HP   10/  10                                 %.#
+SP    1/   2                                 #.#
+                                             #.####
+[----------]                                 #....#
+                                             ####.#
+                                                #.##
+                                                #..#
+50&#x27; (L1)                                        ##.#
+             LF:2-? Light 2  Confused Fed 88 % Gas trap
+</pre></div></details>
+<details class="ask"><summary><span class="n">47</span><span class="keys">',,,,,,,,,,,,,,,,'</span><span class="why">keep holding</span><span class="where">turn 1282 · depth 1</span></summary><div class="body"><pre class="screen">
+Human
+Novice
+Mage
+LEVEL      1
+NXT        8
+AU         6
+|    ~ ()
+STR:      14
+INT:   18/10
+WIS:      10
+DEX:      10                                .%%#
+CON:      14                                .@.#
+                                            .#.#
+Cur AC     9                                 %.%
+HP   10/  10                                 %.#
+SP    1/   2                                 #.#
+                                             #.####
+[----------]                                 #....#
+                                             ####.#
+                                                #.##
+                                                #..#
+50&#x27; (L1)                                        ##.#
+             LF:2-? Light 2  Confused Fed 88 % Gas trap
+</pre><p class="note">note: &#x27;,&#x27; (comma) = hold/stay one turn; &#x27;s&#x27; prompts for a direction here (ask 46). Gas trap at DL1 gives Confused ~10+ turns (ask 45). (ask 47)</p><p class="note">note: DEATH at ask 48 (turn 1348), DL1, CL1: killed by the small kobold I had hit with one oil flask at ask 42-43. It left view (health bar went to [----------]), I assumed it was gone/dead (NXT still 8 = no kill xp), walked on, hit a gas trap (confused, ask 45), then sent &#x27;,,,,,,,,,,,,,,,,&#x27; (16 holds) blind in ONE ask (ask 47) and the kobold walked up and killed a 10-HP mage during those holds. Rule: when a monster that is not confirmed dead is around and you are disabled, send ONE or TWO keys per ask, never a batch of waits; a batch cannot be interrupted by what the screen would have shown. A hit that leaves the health bar unchanged/dashed is not a kill: no XP gain = no kill. (asks 42, 43, 47, 48)</p></div></details>
+</main></body></html>
