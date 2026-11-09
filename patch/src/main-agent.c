@@ -38,8 +38,12 @@ static char agent_directory[1024] = ".";
 static uint32_t agent_seed;
 static bool agent_seeded;
 
-/* The keys still to press, and where we are in them. */
-static char agent_buffer[AGENT_KEYS];
+/* The keys still to press, and where we are in them.
+ *
+ * Keycodes, not bytes: Angband's Enter is KC_ENTER (0x9c), not carriage
+ * return, and a prompt that says "Press Return" will not take 0x0d. Found by
+ * saving the game and watching it sit there. */
+static keycode_t agent_buffer[AGENT_KEYS];
 static size_t agent_at;
 static size_t agent_held;
 
@@ -47,6 +51,13 @@ static size_t agent_held;
  * question and its answer always pair up even when the game asks twice
  * without anything having changed. */
 static long agent_asks;
+
+/* Where the game last put the cursor. A person sees a menu's highlight as
+ * reverse video; our screen is characters only, so without this the agent
+ * cannot tell which item is selected - and Angband's birth menus move the
+ * highlight on a letter and select on Enter. Found by playing it. */
+static int agent_cursor_x;
+static int agent_cursor_y;
 
 static void agent_path(char *out, size_t size, const char *what, long number)
 {
@@ -92,8 +103,13 @@ static void agent_write_screen(const char *path)
  * Wait for the answer file and take the keys out of it.
  *
  * The file is plain text: every byte in it is a key to press, except that a
- * trailing newline is dropped and the two-character escapes \n and \e stand
- * for Enter and Escape, because those cannot be typed into a file by hand.
+ * trailing newline is dropped and the two-character escapes stand for keys
+ * that cannot be typed into a file:
+ *
+ *   \n  Enter   (KC_ENTER, which is what the game's prompts wait for)
+ *   \e  Escape
+ *   \t  Tab
+ *   \\  a literal backslash
  */
 static bool agent_read_keys(const char *path)
 {
@@ -116,18 +132,22 @@ static bool agent_read_keys(const char *path)
         read = 0;
 
     agent_at = agent_held = 0;
-    for (i = 0; i < read && agent_held < sizeof(agent_buffer); i++) {
-        if (raw[i] == '\\' && i + 1 < read && raw[i + 1] == 'n') {
-            agent_buffer[agent_held++] = '\r';
-            i++;
-        } else if (raw[i] == '\\' && i + 1 < read && raw[i + 1] == 'e') {
-            agent_buffer[agent_held++] = ESCAPE;
-            i++;
-        } else if (raw[i] == '\n' && i + 1 == read) {
-            /* the newline a text editor adds, not a key */
-        } else {
-            agent_buffer[agent_held++] = raw[i];
+    for (i = 0; i < read && agent_held < N_ELEMENTS(agent_buffer); i++) {
+        if (raw[i] == '\\' && i + 1 < read) {
+            switch (raw[i + 1]) {
+            case 'n': agent_buffer[agent_held++] = KC_ENTER; i++; continue;
+            case 'e': agent_buffer[agent_held++] = ESCAPE; i++; continue;
+            case 't': agent_buffer[agent_held++] = KC_TAB; i++; continue;
+            case '\\': agent_buffer[agent_held++] = '\\'; i++; continue;
+            default: break;
+            }
         }
+        if (raw[i] == '\n' && i + 1 == read)
+            continue;           /* the newline a text editor adds, not a key */
+        if (raw[i] == '\r' || raw[i] == '\n')
+            agent_buffer[agent_held++] = KC_ENTER;
+        else
+            agent_buffer[agent_held++] = (keycode_t)(unsigned char)raw[i];
     }
     return agent_held > 0;
 }
@@ -145,7 +165,7 @@ static errr agent_event(int wait)
     char screen[1024], question[1024], answer[1024];
 
     if (agent_at < agent_held) {
-        Term_keypress((keycode_t)agent_buffer[agent_at++], 0);
+        Term_keypress(agent_buffer[agent_at++], 0);
         return 0;
     }
 
@@ -165,6 +185,7 @@ static errr agent_event(int wait)
         if (file) {
             file_putf(file, "ask %ld\n", agent_asks);
             file_putf(file, "turn %d\n", (int)turn);
+            file_putf(file, "cursor %d %d\n", agent_cursor_x, agent_cursor_y);
             file_putf(file, "screen %s\n", screen);
             file_putf(file, "answer_to %s\n", answer);
             file_close(file);
@@ -174,7 +195,7 @@ static errr agent_event(int wait)
     if (!agent_read_keys(answer))
         return 1;
     if (agent_at < agent_held)
-        Term_keypress((keycode_t)agent_buffer[agent_at++], 0);
+        Term_keypress(agent_buffer[agent_at++], 0);
     return 0;
 }
 
@@ -201,7 +222,12 @@ static errr agent_xtra(int n, int v)
     }
 }
 
-static errr agent_curs(int x, int y) { return 0; }
+static errr agent_curs(int x, int y)
+{
+    agent_cursor_x = x;
+    agent_cursor_y = y;
+    return 0;
+}
 static errr agent_wipe(int x, int y, int n) { return 0; }
 static errr agent_text(int x, int y, int n, int a, const wchar_t *s) { return 0; }
 

@@ -9,12 +9,18 @@ document that describes it says what was *not* checked.
 |---|---|---|
 | T01 | Pin the tree, build it `--disable-borg`, keyed by commit and patch hash | **done** |
 | T02 | `src/main-agent.c`: screen out, keys in, fed from a buffer | **done** |
-| T03 | The run: seed, cap in keypresses, the question/answer files a session answers | todo |
-| T04 | The record: seed, build identity, every key, every screen, the agent's memory and reason | todo |
-| T05 | The brief a session reads before it plays, and the manuals' pins | todo |
+| T03 | The run: start, ask, answer, stop, and the files a session answers | **done** |
+| T04 | The record: seed, build identity, every key, every screen, the memory and reason | **done** |
+| T05 | [docs/BRIEF.md](docs/BRIEF.md), the brief a session reads before it plays | **done** |
 
-**Gate:** a session plays a game from birth to a death or a cap, and the
-recording replays to the same screens.
+**Gate, met 2026-11-09:** a character is born from the screen (the letter
+moves the menu highlight, `\n` selects), plays, saves and quits with exit 0,
+and the recording — twelve asks, twenty-one keypresses — **replays
+byte-identically**, `identical: true`. `2222` in one answer spent four keys
+and moved the game from turn 1 to turn 41, so the key buffer earns its keep.
+
+**Still only a smoke test:** nobody has played a real game through this yet.
+The next thing is a session that plays until it dies.
 
 **T01 and T02, checked 2026-11-09:** the binary has **zero** `borg` symbols
 and no `inkey_hack`; the game runs `-magent -- -d<dir> -s<seed>`, writes the
@@ -27,8 +33,14 @@ identical screens (T06), and anything about X11 takeover (T07).
 
 | # | Task | Status |
 |---|---|---|
-| T06 | `replay --run D` — feed the keys headless and compare every screen | todo |
-| T07 | `takeover --run D --at-turn N` — a real terminal, the keys to turn N, then the keyboard | todo |
+| T06 | `replay --run D` — feed the keys headless and compare every screen | **done** |
+| T07 | `takeover --run D --at-turn N` — replay to the turn, save, open it in X11 | **done** |
+
+**Gate, met 2026-11-09:** `takeover --at-turn 20` replays identically, stops,
+saves, and prints the command that opens that savefile in X11. Takeover needs
+no new C at all: the game saves on Ctrl-X, so the person opens the same
+savefile and carries on. **Not tried by a person yet** — the X11 window has
+not been opened from a takeover.
 
 ## Milestone 3: the report
 

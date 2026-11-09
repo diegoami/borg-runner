@@ -151,8 +151,15 @@ Per ask, numbered by the ask so a question and its answer always pair up:
 | `question-<n>.txt` | the ask number, the turn, and where to put the answer |
 | `keys-<n>.txt` | **the answer**: every byte is a key to press |
 
-`\n` and `\e` in the answer stand for Enter and Escape, because those cannot
-be typed into a file. Nothing else is interpreted.
+The question also carries `cursor x y`. A person sees a menu's highlight as
+reverse video; the screen dump is characters only, so without the cursor the
+agent cannot tell which item is selected. Four escapes exist in the answer for
+keys that cannot be typed into a file — `\n` Enter, `\e` Escape, `\t` Tab,
+`\\` a backslash. Nothing else is interpreted.
+
+`\n` is `KC_ENTER`, **not** carriage return. Angband's own prompts wait for
+`KC_ENTER` (0x9c); a footer saying "Press Return" ignores 0x0d. The key buffer
+therefore holds keycodes, not bytes.
 
 Files rather than a pipe, for three reasons: a session answers one with a
 single tool call; the run directory *is* the archive, with no separate
@@ -172,6 +179,37 @@ position the agent left it.
 happen in any terminal, including over SSH. This machine has no
 `libncurses-dev`, and installing it needs the owner. X11 works today because
 borg-agent's tests already need `libx11-dev`, and WSLg displays it.
+
+## D12. A run owns its savefile, and the character name is part of the game
+
+Both of these were found by replaying a run and getting a different game.
+
+- **The savefile.** Angband loads a savefile of the character's name if one is
+  there, so the first replay resumed at turn 41 instead of being born. A run
+  therefore deletes any savefile of its name before it starts, and copies its
+  own into `<run>/save` when it finishes. The build tree's `lib/save` is
+  scratch space. (`-dsave=` is accepted by the game and then ignored for the
+  savefile's own path, so it is not used.)
+- **The name.** It is passed as `-u` and the birth prompt arrives with it
+  already filled in, so it *shows on the screen*. A replay reuses the
+  original's name rather than its own directory's, or the screens differ at
+  birth. It is recorded for that reason.
+
+## What running it taught, 2026-11-09
+
+Each of these was a bug or a blind spot found by playing, not by reading:
+
+| What | Why it mattered |
+|---|---|
+| the cursor was invisible | the agent could not tell which menu item was highlighted, so birth was unplayable |
+| `\n` was carriage return | "Saving game... done. Press Return" sat there for ever; the game wanted `KC_ENTER` |
+| stopping terminated the game | it was killed while waiting to be asked, so the savefile — the one thing takeover needs — was never written |
+| the savefile was inherited | the replay resumed instead of being born, and reported every screen as different |
+| the run name reached the screen | a replay under another name differed at the name prompt |
+
+All five are the same shape: **the screen and the keyboard are the only
+contract, and anything we assume about them has to be checked against the
+game.** That is the argument for keeping this frontend as small as it is.
 
 ## What this repository is not
 
