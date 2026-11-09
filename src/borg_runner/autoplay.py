@@ -11,12 +11,20 @@ The model answers with one JSON object. Everything it says about why, and
 everything it chooses to remember, is recorded beside its keys.
 """
 import json
+import os
 import re
 import subprocess
 import time
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 from . import pins, run as run_module
+
+OPENROUTER = 'https://openrouter.ai/api/v1/chat/completions'
+# The variable is named here; its value is read from the environment at call
+# time and never written to a record, a log or a reply.
+KEY_ENV = 'OPENROUTER_API_KEY' 
 
 CALLS = 'model-calls.jsonl'
 # Session ids must start with "ses"; OpenCode refuses anything else.
@@ -60,6 +68,24 @@ Rules: change no setting and no option. Do not call anything a defect. If you
 think a player could do better, say what would settle it.
 
 Play well. Go as deep as you can without throwing the character away."""
+
+
+def keys_reference(limit=80):
+    """The command list, out of the game's own manual at the pin.
+
+    The OpenCode backend can attach the manual as a file; a direct API call
+    cannot, so the keys have to be in the prompt. They are extracted rather
+    than written out, so this says what the manual says - including
+    `Path to nearest unknown grid (p)`, which is the cheapest way down.
+    """
+    manual = pins.clone('angband') / 'docs' / 'command.rst'
+    if not manual.exists():
+        return ''
+    found = re.findall(r'^([A-Z][^(\n]{2,40})\(``([^`]+)``\)',
+                       manual.read_text(), re.M)
+    lines = [f'  {key:<4} {name.strip()}' for name, key in found[:limit]]
+    return ('The commands, from docs/command.rst at the pinned game '
+            f'({pins.commit("angband")[:12]}):\n' + '\n'.join(lines))
 
 
 def first_message(screen, memory=None):
@@ -132,12 +158,79 @@ def decision_of(text):
     return answer if isinstance(answer, dict) and 'keys' in answer else None
 
 
-def autoplay(run, model, process=None, max_asks=200, agent=None, log=print):
+def call_openrouter(messages, model, timeout=300, key_env=KEY_ENV, url=OPENROUTER):
+    """One OpenRouter call. The served model comes back, which matters for a
+    router like jev: the record then says which model made each decision."""
+    key = os.environ.get(key_env)
+    if not key:
+        return {'text': '', 'usage': {}, 'error': f'{key_env} is not set',
+                'returncode': 1, 'stderr': ''}
+    body = json.dumps({'model': model, 'messages': messages}).encode()
+    request = urllib.request.Request(
+        url, data=body,
+        headers={'Authorization': f'Bearer {key}', 'Content-Type': 'application/json'})
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as answer:
+            payload = json.loads(answer.read())
+    except urllib.error.HTTPError as problem:
+        # The body may name the provider's complaint; it never carries the key.
+        return {'text': '', 'usage': {}, 'returncode': problem.code, 'stderr': '',
+                'error': f'HTTP {problem.code}: {problem.read()[:400].decode(errors="replace")}'}
+    except Exception as problem:                      # network, timeout, JSON
+        return {'text': '', 'usage': {}, 'error': repr(problem),
+                'returncode': 1, 'stderr': ''}
+    if 'error' in payload:
+        return {'text': '', 'usage': {}, 'error': json.dumps(payload['error'])[:400],
+                'returncode': 1, 'stderr': ''}
+    choice = (payload.get('choices') or [{}])[0]
+    return {'text': (choice.get('message') or {}).get('content') or '',
+            'usage': {'tokens': payload.get('usage'), 'served_model': payload.get('model')},
+            'error': None, 'returncode': 0, 'stderr': ''}
+
+
+def messages_for(screen, memory, history):
+    """System instructions, the recent past, and now.
+
+    The agent's own memory is what carries continuity, not a transcript: a
+    full history of 300 screens would cost more every ask and read worse.
+    """
+    system = INSTRUCTIONS + '\n\n' + keys_reference()
+    messages = [{'role': 'system', 'content': system}]
+    for past_screen, past_keys in history:
+        messages.append({'role': 'user', 'content': '=== SCREEN ===\n' + past_screen})
+        messages.append({'role': 'assistant', 'content': json.dumps({'keys': past_keys})})
+    messages.append({'role': 'user', 'content': later_message(screen, memory)})
+    return messages
+
+
+def autoplay(run, model, process=None, max_asks=200, agent=None, via='opencode',
+             history_depth=2, manual_name='jev-1', with_pages=False, log=print):
+    """Answer this run's questions with a model until it stops or runs out.
+
+    `via` picks the backend: `opencode` (a session, which holds the owner's
+    credentials and can attach the manual), `openrouter` (a direct chat call),
+    or `decisions` (a decisions model, which answers "which key?" over the
+    keyboard - and which cannot keep a memory, because it never writes text).
+    """
     """Answer this run's questions with a model until it stops or runs out."""
     from . import replay as replay_module
 
     run = Path(run)
     session = SESSION.format(run=re.sub(r'[^a-zA-Z0-9]', '', run.name))
+    the_manual, pages, last_goal = None, {}, None
+    if via == 'decisions':
+        from . import decisions as decisions_module, manual as manual_module
+        the_manual = manual_module.load(manual_name)
+        pages = decisions_module.manual_pages() if with_pages else {}
+        (run / 'manual.json').write_text(json.dumps(
+            {'manual': the_manual['name'], 'sha256': the_manual['sha256'],
+             'keys_described': sorted(the_manual['keys']),
+             'goals': sorted(the_manual['goals']),
+             'strategy_rules': sorted(the_manual['strategy']),
+             'game_manual_pages': sorted(pages)}, indent=2, sort_keys=True) + '\n')
+        log(f'manual: {the_manual["name"]} {the_manual["sha256"][:12]} '
+            f'({len(the_manual["keys"])} keys described, '
+            f'{len(pages)} manual pages in the state)')
     calls = (run / CALLS).open('a')
     answered = 0
     try:
@@ -158,15 +251,58 @@ def autoplay(run, model, process=None, max_asks=200, agent=None, log=print):
             screen += '\n' + asked['screen']
 
             first = answered == 0
-            result = call(
-                first_message(screen, memory) if first else later_message(screen, memory),
-                model, session,
-                attach=manual_files() if first else (),
-                agent=agent, cwd=pins.ROOT)
+            if via == 'decisions':
+                from . import decisions as decisions_module
+                past = run_module.decisions(run)
+                previous = None
+                if past:
+                    before = (run / run_module.ASK /
+                              f'screen-{past[-1]["ask"]}.txt')
+                    previous = before.read_text() if before.exists() else None
+                # Every key pressed while this screen stayed as it is.
+                inert, here = [], asked['screen']
+                for seen in reversed(past):
+                    before = run / run_module.ASK / f'screen-{seen["ask"]}.txt'
+                    if not before.exists() or before.read_text() != here:
+                        break
+                    inert.append(seen['keys'])
+                state = decisions_module.state_for(
+                    asked, memory,
+                    last=past[-1]['keys'] if past else None,
+                    changed=(previous != asked['screen']) if previous is not None else None,
+                    inert=list(dict.fromkeys(reversed(inert))),
+                    goal=last_goal)
+                if pages:
+                    state['the_games_own_manual'] = pages
+                verdict = decisions_module.ask(state, model=model, manual=the_manual)
+                result = {
+                    'text': json.dumps({'keys': decisions_module.keys_for(verdict['choice']),
+                                        'reason': f'{verdict.get("goal") or "-"}: '
+                                                  f'{verdict["choice"]!r} at '
+                                                  f'{verdict.get("confidence")}, '
+                                                  f'weighed {verdict.get("top")}'})
+                            if verdict.get('choice') else '',
+                    'usage': {'tokens': verdict.get('usage'),
+                              'served_model': verdict.get('served_model'),
+                              'confidence': verdict.get('confidence'),
+                              'top': verdict.get('top'),
+                              'goal': verdict.get('goal')},
+                    'error': verdict.get('error'), 'returncode': 0, 'stderr': ''}
+            elif via == 'openrouter':
+                past = run_module.decisions(run)[-history_depth:] if history_depth else []
+                history = [(f'(ask {seen["ask"]}, turn {seen["turn"]})', seen['keys'])
+                           for seen in past]
+                result = call_openrouter(messages_for(screen, memory, history), model)
+            else:
+                result = call(
+                    first_message(screen, memory) if first else later_message(screen, memory),
+                    model, session,
+                    attach=manual_files() if first else (),
+                    agent=agent, cwd=pins.ROOT)
             decision = decision_of(result['text'])
             calls.write(json.dumps({
                 'ask': number, 'turn': asked['turn'], 'model': model,
-                'session': session, 'usage': result['usage'],
+                'via': via, 'session': session, 'usage': result['usage'],
                 'error': result['error'], 'parsed': decision is not None,
                 'reply': result['text'][:4000],
             }, sort_keys=True) + '\n')
@@ -180,7 +316,9 @@ def autoplay(run, model, process=None, max_asks=200, agent=None, log=print):
                               reason=str(decision.get('reason', ''))[:300],
                               memory=decision.get('memory'))
             answered += 1
-            log(f'autoplay: ask {number} turn {asked["turn"]}: '
+            last_goal = (result['usage'] or {}).get('goal') or last_goal
+            log(f'autoplay: ask {number} turn {asked["turn"]} '
+                f'depth {asked.get("depth")}: '
                 f'{decision["keys"]!r} - {decision.get("reason", "")[:70]}')
             if not replay_module.wait_for(run, number + 1, process, timeout=120):
                 log('autoplay: the game asked nothing more')

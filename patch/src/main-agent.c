@@ -185,6 +185,13 @@ static errr agent_event(int wait)
         if (file) {
             file_putf(file, "ask %ld\n", agent_asks);
             file_putf(file, "turn %d\n", (int)turn);
+            /* turn++ happens in the outer game loop, so it lags through a
+             * burst of prompts: -more-, a level feeling, a menu. Depth is the
+             * honest progress signal, and it is the number this project is
+             * about. Both are the game's own counters, not a reading of the
+             * screen. */
+            file_putf(file, "depth %d\n", player ? (int)player->depth : -1);
+            file_putf(file, "max_depth %d\n", player ? (int)player->max_depth : -1);
             file_putf(file, "cursor %d %d\n", agent_cursor_x, agent_cursor_y);
             file_putf(file, "screen %s\n", screen);
             file_putf(file, "answer_to %s\n", answer);

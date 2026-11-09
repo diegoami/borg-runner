@@ -31,7 +31,8 @@ def show(run, number, with_memory=True):
     asked = run_module.question(run, number)
     where = asked.get('cursor')
     cursor = f'  cursor at {where["x"]},{where["y"]}' if where else ''
-    print(f'=== ASK {asked["ask"]}  turn {asked["turn"]}{cursor} ===')
+    print(f'=== ASK {asked["ask"]}  turn {asked["turn"]}  '
+          f'depth {asked.get("depth")}{cursor} ===')
     print(asked['screen'].rstrip('\n'))
     memory = run_module.memory_now(run)
     if with_memory and memory:
@@ -104,7 +105,9 @@ def cmd_autoplay(args):
         return 1
     try:
         answered = autoplay_module.autoplay(run, args.model, process=process,
-                                            max_asks=args.max_asks, agent=args.agent)
+                                            max_asks=args.max_asks, agent=args.agent,
+                                            via=args.via, manual_name=args.manual,
+                                            with_pages=args.manual_pages)
     finally:
         run_module.stop(run, process, log=print)
     record = run_module.write_record(run, process, outcome='autoplay')
@@ -164,6 +167,14 @@ def parser():
     p.add_argument('--name')
     p.add_argument('--agent')
     p.add_argument('--max-asks', type=int, default=200)
+    p.add_argument('--via', choices=('opencode', 'openrouter', 'decisions'),
+                   default='opencode',
+                   help='opencode holds the credential; openrouter calls the API '
+                        'directly and reads OPENROUTER_API_KEY from the environment')
+    p.add_argument('--manual', default='jev-1',
+                   help='the manual in manuals/, for the decisions backend')
+    p.add_argument('--manual-pages', action='store_true',
+                   help="also put the game's own manual pages in the state")
     p.set_defaults(func=cmd_autoplay)
 
     p = sub.add_parser('record', help='write the run record')

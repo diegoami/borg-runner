@@ -108,6 +108,8 @@ def question(run, number):
     screen = (ask / f'screen-{number}.txt').read_text()
     cursor = fields.get('cursor', '').split()
     return {'ask': number, 'turn': int(fields.get('turn', 0)), 'screen': screen,
+            'depth': int(fields.get('depth', -1)),
+            'max_depth': int(fields.get('max_depth', -1)),
             'cursor': {'x': int(cursor[0]), 'y': int(cursor[1])} if len(cursor) == 2 else None}
 
 
@@ -123,7 +125,8 @@ def answer(run, number, keys, reason='', memory=None):
     part = run / ASK / f'.keys-{number}.part'
     part.write_text(keys)
     part.rename(target)                      # the frontend polls for existence
-    entry = {'ask': number, 'turn': question(run, number)['turn'],
+    asked = question(run, number)
+    entry = {'ask': number, 'turn': asked['turn'], 'depth': asked['depth'],
              'keys': keys, 'reason': reason}
     if memory is not None:
         entry['memory'] = memory
@@ -222,6 +225,7 @@ def write_record(run, process=None, outcome=None):
         'asks': len(taken),
         'keypresses': len(keys),
         'final_turn': taken[-1]['turn'] if taken else 0,
+        'max_depth': max((entry.get('depth') or 0) for entry in taken) if taken else 0,
         'screens': len(screens),
         'keys_sha256': hashlib.sha256(keys.encode()).hexdigest(),
         'screens_sha256': hashlib.sha256(

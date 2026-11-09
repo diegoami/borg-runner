@@ -20,7 +20,8 @@ def a_run(tmp_path, asks=(('1', ' '), ('2', 'a'))):
         'build': {'commit': 'x' * 40}}))
     for number, _ in asks:
         (run / run_module.ASK / f'question-{number}.txt').write_text(
-            f'ask {number}\nturn {int(number) * 10}\ncursor 4 9\n')
+            f'ask {number}\nturn {int(number) * 10}\ndepth 1\nmax_depth 2\n'
+            f'cursor 4 9\n')
         (run / run_module.ASK / f'screen-{number}.txt').write_text(f'screen {number}\n')
     return run
 
@@ -30,7 +31,7 @@ def test_a_question_carries_the_turn_the_cursor_and_the_screen(tmp_path):
     run = a_run(tmp_path)
     asked = run_module.question(run, 1)
     assert asked == {'ask': 1, 'turn': 10, 'screen': 'screen 1\n',
-                     'cursor': {'x': 4, 'y': 9}}
+                     'depth': 1, 'max_depth': 2, 'cursor': {'x': 4, 'y': 9}}
 
 
 def test_answering_writes_the_keys_and_records_the_reason(tmp_path):
@@ -38,7 +39,7 @@ def test_answering_writes_the_keys_and_records_the_reason(tmp_path):
     run_module.answer(run, 1, '2222', reason='four steps south', memory='in town')
     assert (run / run_module.ASK / 'keys-1.txt').read_text() == '2222'
     entry, = run_module.decisions(run)
-    assert entry == {'ask': 1, 'turn': 10, 'keys': '2222',
+    assert entry == {'ask': 1, 'turn': 10, 'depth': 1, 'keys': '2222',
                      'reason': 'four steps south', 'memory': 'in town'}
 
 
