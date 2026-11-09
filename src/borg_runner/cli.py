@@ -123,6 +123,13 @@ def cmd_autoplay(args):
     return 0 if answered else 1
 
 
+def cmd_report(args):
+    from . import report as report_module
+
+    print(report_module.write(args.run, args.into))
+    return 0
+
+
 def cmd_record(args):
     print(json.dumps(run_module.write_record(args.run), indent=2, sort_keys=True))
     return 0
@@ -184,6 +191,11 @@ def parser():
     p.add_argument('--manual-pages', action='store_true',
                    help="also put the game's own manual pages in the state")
     p.set_defaults(func=cmd_autoplay)
+
+    p = sub.add_parser('report', help='one run as a self-contained HTML page')
+    p.add_argument('--run', required=True, type=Path)
+    p.add_argument('--into', type=Path)
+    p.set_defaults(func=cmd_report)
 
     p = sub.add_parser('record', help='write the run record')
     p.add_argument('--run', required=True, type=Path)

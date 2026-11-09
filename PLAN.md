@@ -46,8 +46,22 @@ not been opened from a takeover.
 
 | # | Task | Status |
 |---|---|---|
-| T08 | One page per run: the timeline, the screens, and **what the agent believed** beside what was true | todo |
+| T08 | One page per run: the timeline, the screens, and **what the agent believed** beside what was true | **done** |
 | T09 | The leads section: what it would do differently, with the turn and a test | todo |
+
+**First real game, 2026-11-09.** A Sonnet agent played seed 7 from the screen:
+**125 asks, 644 keypresses, 4,659 game turns, depth 1, character level 3,
+alive.** It killed Fang at CL2 with two thrown flasks of oil in a corridor,
+and never found a down staircase on either level it explored. It kept
+**eleven notes**, one of which corrects an earlier note of its own with the
+evidence that disproved it.
+
+The next question is T10: give a second run that notebook and see whether it
+gets deeper.
+
+| # | Task | Status |
+|---|---|---|
+| T10 | Carry a notebook into a later run, and measure whether depth rises | todo |
 
 ## Not planned
 
