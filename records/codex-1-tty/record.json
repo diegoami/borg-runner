@@ -1,0 +1,55 @@
+{
+  "asks": 66,
+  "asks_made": 67,
+  "build": {
+    "binary_sha256": "610d5deed6e58c81e6af502f2b0ec720d90883a58ac5493379ca6fab24f44e24",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "54a4cc8b04a2381c2063b41bf687b65e11984b14e2c1547b7c96991fcfb3f8a6",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 466,
+  "character": "Dunadan Warrior",
+  "character_level": 1,
+  "class": "Warrior",
+  "cost": {
+    "model": "openai/gpt-5.6-luna",
+    "played_by": "codex",
+    "tokens": 16000,
+    "tool_calls": 110
+  },
+  "death_depth": null,
+  "died": false,
+  "exit_code": null,
+  "final_turn": 1860,
+  "gold": 134,
+  "hp": {
+    "max": 21,
+    "now": 21
+  },
+  "keypresses": 255,
+  "keys_sha256": "eeac2f8819e0b353618b8761039751cced7f1e72b14f43d8b482a3aad77160a8",
+  "killed_by": null,
+  "max_character_level": 1,
+  "max_depth": 1,
+  "notebook_lines": 1,
+  "notebook_sha256": "5cbaf09fd5cb2a229b09812070012e5ce77546e38202419d66046369902d4a24",
+  "outcome": "ended",
+  "race": "Dunadan",
+  "read_before_playing": "Read files before starting: PLAYGAME.txt, docs/BRIEF.md, manuals/INSTRUCTIONS.md, knowledge/NOTES.md, records/OVERVIEW.md. Seed 103 chosen for runtime retry. (ask 1)",
+  "read_its_own_playbook": false,
+  "run": "codex-1-tty",
+  "savefile_sha256": "f0177081a7271be1cecbd70da33c406e5c4b32594469e99ca4983777f076ae05",
+  "schema": "borg-runner/run-record@1",
+  "screens": 67,
+  "screens_sha256": "611b3709f4d2c9596fd9315a54404a94f7d86c73a667dca71fad20084bb3465e",
+  "seed": 103,
+  "wealth": 600
+}

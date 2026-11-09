@@ -1,0 +1,66 @@
+{"ask": 1, "depth": 0, "keys": "\\n", "reason": "clear the title screen with Enter", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "*\\n", "reason": "draw the race as required", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "*\\n", "reason": "draw the class as required", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "a\\n", "reason": "accept the recommended point-based allocation", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "\\ny ", "reason": "accept the run name and continue through history", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "i", "reason": "inspect starting inventory before spending gold", "turn": 1}
+{"ask": 7, "depth": 0, "keys": "\\eM", "reason": "leave inventory and inspect the town map", "turn": 1}
+{"ask": 8, "depth": 0, "keys": " 4444", "reason": "move toward the nearby stores while watching the terrain", "turn": 1}
+{"ask": 9, "depth": 0, "keys": "2222", "reason": "walk south along the open floor toward the alchemist", "turn": 41}
+{"ask": 10, "depth": 0, "keys": "4444444", "reason": "head west along the corridor to the central shops", "turn": 61}
+{"ask": 11, "depth": 0, "keys": "22", "reason": "move down to the store row", "turn": 131}
+{"ask": 12, "depth": 0, "keys": "4", "reason": "step onto the alchemist store entrance", "turn": 151}
+{"ask": 13, "depth": 0, "keys": "6", "reason": "check the adjacent shop tile", "turn": 161}
+{"ask": 14, "depth": 0, "keys": "2", "reason": "step onto the alchemist entrance below", "turn": 171}
+{"ask": 15, "depth": 0, "keys": "66", "reason": "enter the alchemist store from its south-side approach", "turn": 181}
+{"ask": 16, "depth": 0, "keys": "2222", "reason": "go around the store wall to find its entrance", "turn": 201}
+{"ask": 17, "depth": 0, "keys": "88888", "reason": "return north toward the store marker", "turn": 241}
+{"ask": 18, "depth": 0, "keys": "M", "reason": "recheck the town layout before moving", "turn": 291}
+{"ask": 19, "depth": 0, "keys": " 666666662", "reason": "approach the visible alchemist marker from the west", "turn": 291}
+{"ask": 20, "depth": 0, "keys": "2666", "reason": "circle around the alchemist building toward its doorway", "turn": 341}
+{"ask": 21, "depth": 0, "keys": "8", "reason": "try the alchemist entrance from below", "turn": 381}
+{"ask": 22, "depth": 0, "keys": "*<g", "reason": "use the known-staircase path to return to the town entrance", "turn": 381}
+{"ask": 23, "depth": 0, "keys": "444444444888888", "reason": "return west and north to the visible down staircase", "turn": 391}
+{"ask": 24, "depth": 0, "keys": "888", "reason": "move north to the staircase tile", "turn": 520}
+{"ask": 25, "depth": 0, "keys": "2666666", "reason": "reach the visible down staircase in town", "turn": 550}
+{"ask": 26, "depth": 0, "keys": "8666666666", "reason": "go around the wall to the staircase", "turn": 560}
+{"ask": 27, "depth": 0, "keys": "2", "reason": "step toward the staircase opening", "turn": 630}
+{"ask": 28, "depth": 0, "keys": "66666", "reason": "walk to the down staircase", "turn": 640}
+{"ask": 29, "depth": 0, "keys": "> ", "reason": "descend from the town staircase", "turn": 690}
+{"ask": 30, "depth": 1, "keys": "2222", "reason": "explore south from the arrival staircase", "turn": 690}
+{"ask": 31, "depth": 1, "keys": "6666", "reason": "follow the open corridor east", "turn": 730}
+{"ask": 32, "depth": 1, "keys": "8888", "reason": "check the room north of the corridor", "turn": 770}
+{"ask": 33, "depth": 1, "keys": "44444", "reason": "backtrack to the junction", "turn": 770}
+{"ask": 34, "depth": 1, "keys": "8", "reason": "try the north branch at the junction", "turn": 810}
+{"ask": 35, "depth": 1, "keys": "888888", "reason": "continue through the north corridor", "turn": 820}
+{"ask": 36, "depth": 1, "keys": "< ", "reason": "leave this explored dead-end level via the up staircase", "turn": 850}
+{"ask": 37, "depth": 0, "keys": "> ", "reason": "reroll the level layout by descending again", "turn": 850}
+{"ask": 38, "depth": 1, "keys": "4444", "reason": "explore west from the new arrival room", "turn": 850}
+{"ask": 39, "depth": 1, "keys": "444444", "reason": "follow the newly revealed corridor west", "turn": 890}
+{"ask": 40, "depth": 1, "keys": "666666", "reason": "explore east through the open room", "turn": 930}
+{"ask": 41, "depth": 1, "keys": "66666", "reason": "continue east toward the known staircase", "turn": 990}
+{"ask": 42, "depth": 1, "keys": "2", "reason": "check the southern branch for a down staircase", "turn": 1010}
+{"ask": 43, "depth": 1, "keys": "*xg", "reason": "ask the game's targeting pathfinder for unexplored space", "turn": 1010}
+{"ask": 44, "depth": 1, "keys": "2222", "reason": "follow the newly revealed southern corridor", "turn": 1030}
+{"ask": 45, "depth": 1, "keys": "8888", "reason": "retreat from the grey mold without engaging it", "turn": 1060}
+{"ask": 46, "depth": 1, "keys": "]", "reason": "check whether the explored level contains visible items", "turn": 1100}
+{"ask": 47, "depth": 1, "keys": " 6666", "reason": "return to the known up staircase after surveying the dead end", "turn": 1100}
+{"ask": 48, "depth": 1, "keys": "< ", "reason": "return safely to town from depth 1", "turn": 1120}
+{"ask": 49, "depth": 0, "keys": "R&\\n", "reason": "rest in town to recover after the grey mold", "turn": 1120}
+{"ask": 50, "depth": 0, "keys": "> ", "reason": "descend for a second depth-1 layout", "turn": 1360}
+{"ask": 51, "depth": 1, "keys": "888888", "reason": "follow the long north corridor", "turn": 1360}
+{"ask": 52, "depth": 1, "keys": "666666", "reason": "search the open room eastward", "turn": 1420}
+{"ask": 53, "depth": 1, "keys": "6666", "reason": "continue to the room's eastern edge", "turn": 1480}
+{"ask": 54, "depth": 1, "keys": "2222", "reason": "take the southern exit from the room", "turn": 1520}
+{"ask": 55, "depth": 1, "keys": "444444", "reason": "sweep back west along the room", "turn": 1540}
+{"ask": 56, "depth": 1, "keys": "2", "reason": "try the central southern passage", "turn": 1600}
+{"ask": 57, "depth": 1, "keys": "4444444", "reason": "reach the western side passage", "turn": 1600}
+{"ask": 58, "depth": 1, "keys": "2222", "reason": "take the side passage south", "turn": 1670}
+{"ask": 59, "depth": 1, "keys": "66666", "reason": "align with the central passage", "turn": 1670}
+{"ask": 60, "depth": 1, "keys": "2", "reason": "enter the southern passage", "turn": 1720}
+{"ask": 61, "depth": 1, "keys": "888888", "reason": "retreat north through the explored room toward the arrival staircase", "turn": 1720}
+{"ask": 62, "depth": 1, "keys": "22222222", "reason": "follow the explored corridor back to the up staircase", "turn": 1760}
+{"ask": 63, "depth": 1, "keys": "44", "reason": "align with the revealed central opening", "turn": 1800}
+{"ask": 64, "depth": 1, "keys": "2", "reason": "take the central downward opening", "turn": 1820}
+{"ask": 65, "depth": 1, "keys": "2222", "reason": "continue down the revealed passage", "turn": 1830}
+{"ask": 66, "depth": 1, "keys": "< ", "reason": "return to town safely from the second surveyed layout", "turn": 1860}

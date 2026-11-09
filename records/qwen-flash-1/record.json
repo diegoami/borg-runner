@@ -1,0 +1,60 @@
+{
+  "asks": 73,
+  "asks_made": 73,
+  "build": {
+    "binary_sha256": "610d5deed6e58c81e6af502f2b0ec720d90883a58ac5493379ca6fab24f44e24",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "54a4cc8b04a2381c2063b41bf687b65e11984b14e2c1547b7c96991fcfb3f8a6",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 96,
+  "character": "High-Elf Druid",
+  "character_level": 1,
+  "class": "Druid",
+  "cost": {
+    "model": "alibaba-token-plan/qwen3.8-flash",
+    "model_calls": 73,
+    "models": [
+      "alibaba-token-plan/qwen3.8-flash"
+    ],
+    "played_by": "opencode",
+    "seconds_per_decision": 39.7,
+    "tokens": 51226,
+    "usd": null
+  },
+  "death_depth": 0,
+  "died": true,
+  "exit_code": null,
+  "final_turn": 570,
+  "gold": 379,
+  "hp": {
+    "max": 13,
+    "now": -1
+  },
+  "keypresses": 204,
+  "keys_sha256": "bfa865ba400140a62957cd202572c9fef5558d51f2409aab18fbe3a294e0445a",
+  "killed_by": "a scruffy little dog",
+  "max_character_level": 1,
+  "max_depth": 0,
+  "notebook_lines": 68,
+  "notebook_sha256": "e1c1729174ba732d3971fb5bf24e6ce8e99eb5affad5d1b03be64b2e9159953a",
+  "outcome": "died",
+  "race": "High-Elf",
+  "read_before_playing": null,
+  "read_its_own_playbook": null,
+  "run": "qwen-flash-1",
+  "savefile_sha256": "7045eebea108d4ce4a138c9e47530193d43a92fd1a76b55c71f7934168a7ff11",
+  "schema": "borg-runner/run-record@1",
+  "screens": 73,
+  "screens_sha256": "8508848481d3fbd1ed2ebf005de0c4006ba92442d20b5b287f9a6180850c6512",
+  "seed": 23,
+  "wealth": 475
+}

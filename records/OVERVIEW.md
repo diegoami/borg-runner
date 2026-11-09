@@ -10,6 +10,8 @@ runs of the same family months apart are not the same experiment.
 
 | run | seed | model | character | depth | level | wealth | asks | keys | turn | outcome | tokens | inherited | read its class | replay |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| [codex-1-tty](codex-1-tty/) | 103 | openai/gpt-5.6-luna | Dunadan Warrior | 1 | 1 | 600 (134 gold + 466 carried) | 66 | 255 | 1,860 | ended | 16,000 | — | False | [watch](codex-1-tty/report.html) |
+| [qwen-flash-1](qwen-flash-1/) | 23 | alibaba-token-plan/qwen3.8-flash | High-Elf Druid | 0 | 1 | 475 (379 gold + 96 carried) | 73 | 204 | 570 | died: a scruffy little dog | 51,226 | — | — | [watch](qwen-flash-1/report.html) |
 | [sonnet-1](sonnet-1/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 1 | 3 | 723 (10 gold + 713 carried) | 125 | 644 | 4,659 | ended | 162,466 | — | — | [watch](sonnet-1/report.html) |
 | [sonnet-2](sonnet-2/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 6 | 6 | 1,189 (91 gold + 1,098 carried) | 153 | 637 | 6,056 | ended | 172,221 | sonnet-1.md | True | [watch](sonnet-2/report.html) |
 | [sonnet-2-again](sonnet-2-again/) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 7 | 8 | 2,025 (161 gold + 1,864 carried) | 291 | 1,107 | 10,416 | stopped | 142,837 | notebook.md | True | [watch](sonnet-2-again/report.html) |
