@@ -131,10 +131,14 @@ def manual_files():
     through a provider gets what a session playing here gets; it would be a
     poor comparison otherwise.
     """
-    game = pins.clone('angband')
-    wanted = [game / 'docs' / 'command.rst', game / 'docs' / 'guide.rst',
-              run_module.KNOWLEDGE / 'MANUAL-GAPS.md',
-              run_module.KNOWLEDGE / 'LEARNED.md']
+    # The distillate, not the raw manuals: 23 KB that gets read against 66 KB
+    # that gets skimmed. Three runs recorded what they opened and every one
+    # read a section or two of command.rst and a fraction of chapter 15.
+    wanted = [pins.ROOT / 'manuals' / 'INSTRUCTIONS.md',
+              run_module.KNOWLEDGE / 'NOTES.md']
+    if not any(path.exists() for path in wanted):       # before the distillate
+        game = pins.clone('angband')
+        wanted = [game / 'docs' / 'command.rst', game / 'docs' / 'guide.rst']
     return [path for path in wanted if path.exists()]
 
 

@@ -138,10 +138,18 @@ notes are what survives, and a later run may be given them to start from.
 
 ## What to read
 
-**Read these before your first key, and make your first note say which files
-you actually opened.** Nothing else records it, so without that note nobody
-can tell whether a run was played by a reader or a guesser — and the whole
-question here is what a reader does differently.
+**Read these two, before your first key, and make your first note say which
+files you actually opened.** Nothing else records it, so without that note
+nobody can tell whether a run was played by a reader or a guesser — and the
+whole question here is what a reader does differently.
+
+| | |
+|---|---|
+| [manuals/INSTRUCTIONS.md](../manuals/INSTRUCTIONS.md) | the game's manual and the strategy manual distilled into what a player needs, in the order a player needs it, with **a block for every class** — find the one you drew. Every line is labelled FACT, POLICY or UNTESTED, and says where it came from |
+| [knowledge/NOTES.md](../knowledge/NOTES.md) | what earlier runs found out, each line marked with how many runs saw it. **Where the two disagree, NOTES wins**: it is evidence and the other is reading |
+
+Those two are about 23 KB together and they are the reading. Everything below
+is **lookup** — go to it when you need a number or a page, not before.
 
 The game's own manual, at the pin:
 
