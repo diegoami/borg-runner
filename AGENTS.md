@@ -6,11 +6,11 @@ out, then [PLAN.md](PLAN.md).
 
 **There are two different jobs here, and they must not be confused.**
 
-## If you are here to build the harness
+## If you are here to build the frontend
 
 Normal work: take the first `todo` task of the milestone in progress, branch,
-test, open a PR, merge it when it is green. The harness holds **no tactics, no
-thresholds and no opinion about how to play** — that is the whole discipline of
+test, open a PR, merge it when it is green. The frontend holds **no tactics,
+no thresholds and no opinion about how to play** — that is the whole discipline of
 this repository. If you find yourself writing "if hit points are below", stop:
 that belongs to the model, in the prompt.
 

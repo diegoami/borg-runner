@@ -32,8 +32,8 @@ Four parts, and nothing else:
 
 1. **Play** — the agent sees the screen and sends keys. It reads the game's
    manual and a strategy manual, and it keeps its **own** memory of what it
-   carries, what it has learned and what it is trying to do. The harness
-   remembers nothing on its behalf.
+   carries, what it has learned and what it is trying to do. Nothing here
+   remembers anything on its behalf.
 2. **Record** — the seed, the build, and **every key**. That is the whole
    recording; it needs nothing else to be exact.
 3. **Replay or take over** — play the keys back, stop at any turn, and hand
@@ -50,7 +50,7 @@ shaping the play:
 - **Four of five commands it issued were a single `walk` step.** The cost of
   this game is traversal, and the game already answers it: Run (`.`) and the
   pathfinding commands walk many squares for one key, with the *game* deciding
-  when to stop. A harness that walks for you cannot use them.
+  when to stop. Anything that walks for you cannot use them.
 - **29% of that run was lost to one tie** broken by the direction order of our
   breadth-first search — our bug, reported as if it were gameplay.
 - Monster health and sleep came through as `null`, the level feeling arrived as

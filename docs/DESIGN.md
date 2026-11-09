@@ -20,18 +20,26 @@ process that could have played it.
 the proven path and it was rejected on purpose — the point is a player with no
 Borg in it.
 
-## D2. Our own hook, and the headless frontend
+## D2. A frontend of our own, and no change to the game
 
-One patch, applied to the pinned tree at build time and kept in `patch/`:
+Angband asks its *frontend* for input — `main-x11.c`, `main-gcu.c` and
+`main-test.c` are the ones it ships. So we add one more, `src/main-agent.c`,
+and the game's own code is untouched. There is nothing between the agent and
+the keyboard: no process driving the game, no translation layer, nothing with
+a view about how to play.
 
-- a hook of our own in `src/ui-input.c`, outside the `ALLOW_BORG` guard, called
-  from `inkey_ex()` exactly where the Borg's was;
-- the frontend is `main-test.c` (`-mtest`), which borg-agent already builds
-  headless, so the terminal exists as a grid in memory with no display.
+It hangs on `TERM_XTRA_EVENT`, which is the game saying "I want a key". If our
+key buffer still has keys, it presses the next one. If it is empty, it writes
+the screen and waits.
 
-The hook does three things and holds no opinions: write the screen, read keys,
-feed them one at a time. **It never decides anything**, which is what keeps a
-finding about the game from being a finding about us.
+The three upstream files the patch edits are `CMakeLists.txt`, `src/main.c` and
+`src/main.h`, and all three only to compile and register the frontend.
+
+**Measured, not assumed** (2026-11-09): the binary built this way contains
+**zero** symbols matching `borg`, and no `inkey_hack` at all — `ALLOW_BORG` is
+what defines it, so with the Borg off the Borg's own hook does not exist. The
+seed is set through the game's public `Rand_state_init()` from the frontend, so
+even reproducibility needs no patch to the game.
 
 ## D3. The round trip is screen out, keys in
 
@@ -57,13 +65,13 @@ The agent presses `i` once and **remembers** the inventory. It presses `e` and
 unless it burnt, dropped, used or lost it — and when it is unsure, it spends a
 keypress to look rather than guessing.
 
-That memory is **the agent's own note, carried in the prompt**. The harness
-does not maintain it, does not correct it and does not parse the screen to
-check it. Two reasons:
+That memory is **the agent's own note, carried in the prompt**. Nothing here
+maintains it, corrects it or parses the screen to check it. Two reasons:
 
 1. a wrong belief about one's own inventory is a real failure mode of a player,
-   and if the harness fixes it silently we can never see it;
-2. anything the harness maintains is a thing the harness has an opinion about.
+   and if the frontend fixes it silently we can never see it;
+2. anything the frontend maintains is a thing the frontend has an opinion
+   about, and this one is meant to have none.
 
 Mechanically: each answer may carry a `memory` field; the newest one is put in
 the next prompt. It is recorded with the run, so the report can show **what the
@@ -132,6 +140,38 @@ they are treated here: following one and being hurt by it is a result.
 It may **not** read another run's conclusions before playing. A fresh session
 per run is the point — its judgement at a position has to be independent, or
 the comparison with the Borg is worthless.
+
+## D10. The exchange is plain files in the run directory
+
+Per ask, numbered by the ask so a question and its answer always pair up:
+
+| File | What |
+|---|---|
+| `screen-<n>.txt` | the screen, 24 lines, as the game drew it |
+| `question-<n>.txt` | the ask number, the turn, and where to put the answer |
+| `keys-<n>.txt` | **the answer**: every byte is a key to press |
+
+`\n` and `\e` in the answer stand for Enter and Escape, because those cannot
+be typed into a file. Nothing else is interpreted.
+
+Files rather than a pipe, for three reasons: a session answers one with a
+single tool call; the run directory *is* the archive, with no separate
+recording step; and a replay is a diff of screens rather than a re-enactment.
+
+The frontend waits for its answer with no timeout. The agent's thinking time is
+not the game's business, and a run that waits is better than a run that invents
+a key; limits belong to whoever started the run.
+
+## D11. One binary, two frontends
+
+`-magent` is headless and is what plays and replays. For taking over, the same
+binary is built with **X11** (`-mx11`), so the game opens a window in the
+position the agent left it.
+
+*Noted honestly:* ncurses (`-mgcu`) was the first choice, so a takeover could
+happen in any terminal, including over SSH. This machine has no
+`libncurses-dev`, and installing it needs the owner. X11 works today because
+borg-agent's tests already need `libx11-dev`, and WSLg displays it.
 
 ## What this repository is not
 
