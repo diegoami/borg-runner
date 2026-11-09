@@ -92,6 +92,28 @@ def cmd_takeover(args):
     return 0 if verdict['savefile_written'] else 1
 
 
+def cmd_autoplay(args):
+    """Start a game and let a model play it through OpenCode."""
+    from . import autoplay as autoplay_module
+
+    run = run_module.directory(args.name)
+    process = run_module.start(run, args.seed, log=print)
+    if not replay_module.wait_for(run, 1, process, timeout=60):
+        run_module.stop(run, process)
+        print('the game never asked for a key; see game.log', file=sys.stderr)
+        return 1
+    try:
+        answered = autoplay_module.autoplay(run, args.model, process=process,
+                                            max_asks=args.max_asks, agent=args.agent)
+    finally:
+        run_module.stop(run, process, log=print)
+    record = run_module.write_record(run, process, outcome='autoplay')
+    print(json.dumps({'run': str(run), 'asks_answered': answered,
+                      'final_turn': record['final_turn'],
+                      'keypresses': record['keypresses']}, indent=2))
+    return 0 if answered else 1
+
+
 def cmd_record(args):
     print(json.dumps(run_module.write_record(args.run), indent=2, sort_keys=True))
     return 0
@@ -134,6 +156,15 @@ def parser():
     p.add_argument('--at-turn', type=int, required=True)
     p.add_argument('--into', type=Path)
     p.set_defaults(func=cmd_takeover)
+
+    p = sub.add_parser('autoplay', help='let a model play, through OpenCode')
+    p.add_argument('--seed', type=int, required=True)
+    p.add_argument('--model', required=True,
+                   help='as OpenCode names it, e.g. openrouter/typesafe/jev-router')
+    p.add_argument('--name')
+    p.add_argument('--agent')
+    p.add_argument('--max-asks', type=int, default=200)
+    p.set_defaults(func=cmd_autoplay)
 
     p = sub.add_parser('record', help='write the run record')
     p.add_argument('--run', required=True, type=Path)
