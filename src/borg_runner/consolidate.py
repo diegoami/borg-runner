@@ -259,7 +259,7 @@ def uncited(path=INSTRUCTIONS):
     """
     text = Path(path).read_text() + VOLUME_TWO.read_text()
     def cited(name):
-        # A whole name, so `sonnet-2` is not found inside `sonnet-2-again`.
+        # A whole name, so `sonnet-2` is not found inside `sonnet-2.2`.
         return re.search(rf'(?<![A-Za-z0-9_.-]){re.escape(name)}'
                          rf'(?![A-Za-z0-9_.-])', text)
     return [book.stem for book in notebooks() if not cited(book.stem)]

@@ -462,10 +462,10 @@ the ones that levelled and got rich - character level and net worth, with
 depth as context and never the score.
 <a href="https://github.com/diegoami/borg-runner/blob/main/ACCUMULATED_BEHAVIOUR.md">ACCUMULATED_BEHAVIOUR.md</a>
 says who they are and what they did:
-<a href="{base}sonnet-2-again/report.html">sonnet-2-again</a>,
+<a href="{base}sonnet-2.2/report.html">sonnet-2.2</a>,
 <a href="{base}sonnet-2/report.html">sonnet-2</a>,
 <a href="{base}sonnet-1/report.html">sonnet-1</a>,
-<a href="{base}minimaxflash-1-again/report.html">minimaxflash-1-again</a>,
+<a href="{base}minimaxflash-1.2/report.html">minimaxflash-1.2</a>,
 <a href="{base}minimaxflash-3/report.html">minimaxflash-3</a>.</p>
 <div class="controls">
   <label for="alive">Alive</label>
