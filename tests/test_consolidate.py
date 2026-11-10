@@ -93,3 +93,41 @@ def test_the_real_page_cites_runs_that_exist():
              for reference in claim['cited']}
     assert cited, 'the page should rest on runs somewhere'
     assert cited <= set(consolidate.recorded_runs())
+
+
+def test_a_theme_several_runs_raise_must_be_on_the_page(repo):
+    """The page's job: a thing that comes back is answered once, there."""
+    a_run_with_a_notebook(repo, 'one', notes='- the panel scrolls (ask 2)\n')
+    a_run_with_a_notebook(repo, 'two', notes='- nothing (ask 2)\n')
+    (repo / 'records' / 'one').mkdir(parents=True, exist_ok=True)
+    (repo / 'records' / 'one' / 'REPORT.md').write_text(
+        '# one\n\nI never found a `>`.\n')
+    (repo / 'records' / 'two').mkdir(parents=True, exist_ok=True)
+    (repo / 'records' / 'two' / 'REPORT.md').write_text(
+        '# two\n\nthe staircase hunt took everything.\n')
+    silent = a_page(repo, '# page\n\nnothing about any of that.\n')
+    raised = {row['slug']: row for row in
+              consolidate.themes(silent, repo / 'records')}
+    assert raised['depth-is-the-only-plan']['raised_by'] == ['one', 'two']
+    assert not raised['depth-is-the-only-plan']['answered']
+    assert any(row['slug'] == 'depth-is-the-only-plan'
+               for row in consolidate.unanswered(silent, repo / 'records'))
+    answers = a_page(repo, '# page\n\n## Depth is not the objective\n\nso.\n')
+    assert consolidate.unanswered(answers, repo / 'records') == []
+
+
+def test_themes_are_counted_from_notebooks_too(repo):
+    """Some of the best lines never reach a report."""
+    a_run_with_a_notebook(
+        repo, 'one',
+        notes='- the store letters AFTER the removed one move (ask 24)\n'
+              '- to-hit against AC 24 is hopeless (ask 30)\n')
+    raised = {row['slug']: row for row in
+              consolidate.themes(a_page(repo, '#\n'), repo / 'records')}
+    assert raised['armour-class-decides-the-fight']['raised_by'] == ['one']
+
+
+def test_the_real_page_answers_every_recurring_theme():
+    """If this fails, a theme has come back and nobody wrote it down."""
+    waiting = consolidate.unanswered()
+    assert not waiting, ', '.join(row['slug'] for row in waiting)

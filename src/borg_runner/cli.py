@@ -65,7 +65,12 @@ def cmd_answer(args):
     if not (run / run_module.ASK / f'question-{args.number}.txt').exists():
         print(f'there is no question {args.number} in {run}', file=sys.stderr)
         return 1
-    run_module.answer(run, args.number, keys_from(args.keys),
+    keys = keys_from(args.keys)
+    if keys != args.keys:
+        print("note: a real newline in your keys became the escape \\n, which "
+              "is what the game's prompts wait for; the frontend drops a "
+              "trailing newline byte as a text editor's, not a key")
+    run_module.answer(run, args.number, keys,
                       reason=args.reason, memory=args.memory)
     if args.note:
         run_module.remember(run, args.note, ask=args.number)
@@ -83,8 +88,17 @@ def cmd_answer(args):
 
 
 def keys_from(text):
-    r"""The keys as the frontend reads them: \n is Enter and \e is Escape."""
-    return text
+    r"""The keys as the frontend reads them: \n is Enter and \e is Escape.
+
+    A real newline byte is translated to the two-character escape, because the
+    frontend drops a **trailing** one on purpose - it is the newline a text
+    editor adds, not a key (`patch/src/main-agent.c`) - and a player that
+    sends `$'...\n'` from a shell therefore loses its last Enter silently, with
+    the prompt left open and every later key eaten by it. Measured, five asks
+    (minimaxflash-2#72). Translating here keeps the recording canonical and
+    costs nothing: the frontend turns the escape into KC_ENTER either way.
+    """
+    return text.replace('\r\n', '\\n').replace('\n', '\\n').replace('\r', '\\n')
 
 
 def cmd_replay(args):
@@ -194,6 +208,36 @@ def cmd_playbook(args):
     print('write what is missing when you stop, with the run it came from: '
           f'python -m borg_runner playbook --family {args.family} '
           f'--start <your run name>')
+    return 0
+
+
+def cmd_consolidate(args):
+    """What the reports say that the page does not."""
+    from . import consolidate as consolidate_module
+
+    if args.inputs:
+        print(json.dumps(consolidate_module.inputs(), indent=1, sort_keys=True))
+        return 0
+    if args.check:
+        problems = consolidate_module.check()
+        for problem in problems:
+            print(problem, file=sys.stderr)
+        print(f'the page: {len(problems)} problems')
+        return 1 if problems else 0
+    for row in consolidate_module.themes():
+        mark = 'on the page' if row['answered'] else 'NOT on the page'
+        raised = ', '.join(row['raised_by']) or 'nobody yet'
+        print(f"{row['slug']:<34} {len(row['raised_by']):>2} runs     "
+              f"{mark:<15} {raised}")
+    waiting = consolidate_module.unanswered()
+    if waiting:
+        print('\nthese recur and the page says nothing: '
+              + ', '.join(row['slug'] for row in waiting))
+        print('a theme that comes back is the page\'s fault, not the '
+              'players\': docs/CONSOLIDATE.md')
+    unread = consolidate_module.uncited()
+    if unread:
+        print(f"\nnot cited anywhere on the page yet: {', '.join(unread)}")
     return 0
 
 
@@ -450,6 +494,15 @@ def parser():
     p.add_argument('--check', action='store_true',
                    help='check the layout of every playbook')
     p.set_defaults(func=cmd_playbook)
+
+    p = sub.add_parser('consolidate',
+                       help='the recurring themes in the reports, and whether '
+                            'the page answers them')
+    p.add_argument('--check', action='store_true',
+                   help='every claim on the page names a run that exists')
+    p.add_argument('--inputs', action='store_true',
+                   help='what a consolidating session is given, as JSON')
+    p.set_defaults(func=cmd_consolidate)
 
     p = sub.add_parser('tools',
                        help='the shared screen tools runs may use and add to')

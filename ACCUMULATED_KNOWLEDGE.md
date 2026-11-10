@@ -1,7 +1,9 @@
 # ACCUMULATED KNOWLEDGE — what the runs found that no manual says
 
-Edition 1, 2026-11-10. *(Revised the same day: the first draft repeated things
-the manuals already say. See "What is deliberately not here".)*
+Edition 2, 2026-11-10. *(Edition 1, the same day, repeated things the manuals
+already say; see "What is deliberately not here". Edition 2 adds the eleventh
+run, a Mage, and the caveat in section 1 that the runs never questioned their
+own objective.)*
 
 **Who this is for.** [borg-reborn-rs](https://github.com/diegoami/borg-rs),
 the Rust Borg being rebuilt, and anyone else outside this repository. The
@@ -31,9 +33,10 @@ The prompts do not mention it.
 
 ## The corpus
 
-Ten runs, 2,332 asks, 10,403 keypresses, deepest **depth 7**, two deaths. One
-session was played by a person (`diego-1`), which is the control. Every
-character was drawn, not chosen.
+Eleven runs, 2,490 asks, 11,566 keypresses, deepest **depth 7**, two deaths.
+One session was played by a person (`diego-1`), which is the control. Ten
+characters were drawn; one was asked for (a Gnome Mage, to test a class
+nobody had drawn).
 
 | run | model | character | depth | level | asks | turns | ended |
 |---|---|---|---|---|---|---|---|
@@ -46,6 +49,7 @@ character was drawn, not chosen.
 | [minimaxflash-1](records/minimaxflash-1/REPORT.md) | minimax/MiniMax-M3.1-Flash | High-Elf Druid | 1 | 1 | 148 | 7,433 | alive, budget |
 | [minimaxflash-1-again](records/minimaxflash-1-again/REPORT.md) | minimax/MiniMax-M3 | High-Elf Druid | 2 | 4 | 401 | 10,898 | alive, budget |
 | [minimaxflash-1.3](records/minimaxflash-1.3/REPORT.md) | minimax/MiniMax-M3 | High-Elf Druid | 1 | 4 | 610 | 17,281 | alive, budget |
+| [minimaxflash-2](records/minimaxflash-2/REPORT.md) | minimax/MiniMax-M3.1-Flash | Gnome Mage (asked for) | 1 | 1 | 158 | 8,001 | alive, budget |
 | [diego-1](records/diego-1/REPORT.md) | a person | Kobold Priest | 1 | 2 | 418 | 4,741 | alive, saved |
 
 Every row links a report, and every report links a replay that steps through
@@ -77,10 +81,24 @@ first level because they had not found the way off it.
   wrote, reached depth 1, and never tried the game's commands. Its next life
   used the game's and got further on fewer asks.
 
+**The caveat that matters as much as the finding: no run ever questioned the
+objective.** All eleven treated the down staircase as the only thing worth
+finding, and the two that died were at character level 1 while doing it. The
+alternative was never tested: explore the level you are on, take the
+experience and the gold, go back up - you arrive on an *up* staircase, and the
+town's shops restock daily - and descend when the character can pay for the
+depth. The one run that reached depth 7 is in fact evidence for that plan
+rather than against it, because it arrived at **character level 8**, after an
+earlier life of the same character had spent its asks levelling and shopping.
+So read section 1 as *where the decisions went*, not as proof that descent is
+the only way to spend them.
+
 **For the consumer:** the manuals describe descent as the objective and say
-nothing about its cost. Measure decisions-per-descent, not per turn. A policy
-that spends 80% of its decisions on floor coverage has 20% left for everything
-the manuals are about.
+nothing about its cost. Measure decisions-per-descent, but also
+decisions-per-character-level: a policy that spends 80% of its decisions on
+floor coverage has 20% left for everything the manuals are about, and a
+policy that descends on a character that cannot pay for the depth is how both
+deaths here happened.
 
 ## 2. What the generator does, which decides whether searching can work
 
@@ -96,20 +114,55 @@ manuals.
   `dungeon_profile.txt` "classic" `params:11:50:200:2`), against a 66×22 view.
   Via `minimaxflash-1`. With the uniform placement above, this is the whole
   explanation of section 1.
+- **You start the game standing on the town's own down staircase.**
+  `town_gen_layout()` (`src/gen-cave.c`) sets `FEAT_MORE` on the player's
+  square and then places the player on it, so the first descent needs no
+  search at all - and no run before the eleventh knew it (GAME SOURCE, via
+  `minimaxflash-2`).
+- **The down staircase is a dead end, at least a quarter of the level away
+  from the up staircase.** `alloc_stairs()` (`src/gen-util.c`) wants a floor
+  square with **exactly three adjacent walls**, relaxing only if the level has
+  none, and `handle_level_stairs()` sets the minimum separation to
+  `MIN(width, height) / 4` = 16 tiles. So it is not in the staircase room -
+  the up staircase is (GAME SOURCE, via `minimaxflash-2`).
+- **Only a Mage or a Rogue can find a staircase it has not seen, and the
+  arithmetic is brutal.** `DETECT_STAIRS` with `effect-yx:22:40` reads the
+  *real* grid and memorises what it finds (`effect-handler-general.c:1467`),
+  so it reveals an unseen staircase - in an **81x45 window, about 28% of a
+  level**, which takes three positions across and two down, six casts. It
+  reports only ground it has not already scanned (two casts from one place
+  give nothing), and when no staircase is in the window it says **nothing at
+  all** rather than "no stairs". At character level 1 one spell point is about
+  **71 player actions** of regeneration (`player_regen_mana`:
+  `msp x 197 + 524` in 65536ths, doubled while resting), so six casts and
+  their travel are the whole of a 150-decision budget - which is what the one
+  Mage run spent, with eleven casts from inside a single 40-tile band (GAME
+  SOURCE + ONE RUN, `minimaxflash-2`).
 - **A level is regenerated when you leave it.** The depth 1 a character
   returned to after a Word of Recall was demonstrably not the level it had
   left — different corridors, the up staircase elsewhere, and the game's own
   jump to a *known* down staircase found nothing, so the staircase it had used
   was not merely unseen but not remembered (ONE RUN, `minimaxflash-1.3#437`).
-  A staircase found is not a staircase an heir inherits.
-- **The game's own long walk crosses unknown ground.** `find_path`
-  (`player-path.c:1069`) tries a known-only path and then falls back to one
-  through unknown grids, and the targeting cursor is clamped to the level, not
-  to the view — so a destination can be aimed at ground never seen. Measured
-  at 170–440 game turns and 17–44 tiles **per decision**, against ten or
-  twenty turns for the nearest-frontier command (ONE RUN,
-  `minimaxflash-1.3`). Aim short and the destination lands inside a wall and
-  nothing happens, with no message.
+  A staircase found is not a staircase an heir inherits — and, the other way
+  round, **a map of a level has no second use and position is not
+  information.** Nothing in this game asks a player to return to a place:
+  stairs are connected, both directions are exits, and `<` then `>` is a
+  fresh level of the same depth for two or three decisions. Two runs reported
+  "I could not tell where on the level I was" as the thing that beat them;
+  with one staircase placed uniformly per level, the answer to a level that
+  will not yield is another level, not a better map.
+- **The game's own long walk is worth 17–44 tiles a decision — aimed at
+  something already seen.** `find_path` (`player-path.c:1069`) tries a
+  known-only path and falls back to one through unknown grids, and the
+  targeting cursor is clamped to the level rather than the view, so any
+  square can be aimed at. Measured at 170–440 game turns and 17–44 tiles per
+  decision (ONE RUN, `minimaxflash-1.3`) — but a later run measured the
+  fallback misbehaving: aimed into unexplored ground it assumes unknown
+  squares are passable and the reconstructed path can be nonsense, a 20-tile
+  aim walking **zero** steps while a 3-tile aim walked three (ONE RUN,
+  `minimaxflash-2#90`). The two agree about the game and disagree about what
+  was known when they aimed: **aim at a landmark you have seen**, and use the
+  nearest-frontier command for the dark.
 - **A reroll of the level is two or three decisions** (`<` then `>`; stairs
   are connected: 3 RUNS). Against a uniform placement, a fresh level is
   exactly as likely to be hard — which makes the comparison *decisions spent
@@ -134,8 +187,15 @@ The corpus' direct corrections. Each cost a run something.
 
 ## 4. Numbers the manuals do not give
 
-- **Armour class decides whether a thrown flask connects at all.**
-  `hit_chance()` needs `to_hit ≥ AC × 2/3` to beat the flat 12% always-hit, so
+- **Armour class decides whether anything connects at all**, in both
+  directions. `hit_chance()` (`src/player-attack.c:196`) is
+  `12% + 83% × (to_hit − 2 × AC / 3) / to_hit`, so a to-hit below `2AC/3`
+  leaves you on the flat 12% floor: at depth 1 a giant black ant and a small
+  kobold are AC 24 and need to-hit 16, which a Mage's rapier (9) and its
+  thrown oil (11) do not have - that character could not fight most of the
+  level and starved for experience instead (ONE RUN, `minimaxflash-2`). Read
+  the other way, 200 gold of armour took it from AC 1 to **AC 21**, which puts
+  most of depth 1 on its own 12% floor. It needs so
   Grip (AC 36) could not be hurt at range 2 and died at range 1 at about 77%,
   while AC 1–4 targets (worm mass, mould, patch, mouse) are worth throwing at
   from anywhere (GAME SOURCE + ONE RUN, `minimaxflash-1-again`). One flask
@@ -226,17 +286,29 @@ worth carrying into a death analyser.
 
 Read these as open. A consumer's own evidence would be the first.
 
-1. **Can depth 1's staircase be found by coverage?** No run has spent a full
+1. **Is descending even the right plan at character level 1-4?** Nobody has
+   tested the alternative: clear a level, take the experience and the gold, go
+   back up, buy armour, and descend when the character can pay. Both deaths
+   here were characters at level 1 looking for a staircase, and the deepest
+   run arrived at depth 7 at level 8. What would settle it: two runs on one
+   seed, one diving, one levelling first, compared on where each stood at ask
+   150.
+2. **Can depth 1's staircase be found by coverage?** No run has spent a full
    budget on the long aimed walk while checking every view for a `>`.
-2. **Does Magic Mapping ever show a staircase?** One reading, nothing in
-   radius.
 3. **Explore or reroll?** Two or three decisions against perhaps a hundred,
-   with a uniform prior either way. Unmeasured.
-4. **What governs Deep Descent's depth**, `level:` or `alloc:`? One was found
+   with a uniform prior either way. Unmeasured, and it is the cheapest
+   experiment left: the same seed, one run that rerolls on arrival and one
+   that explores.
+4. **Does Magic Mapping ever show a staircase?** One reading, nothing in
+   radius.
+5. **Can a Mage's detection be aimed at all** without knowing its own
+   coordinates? Six casts cover a level; eleven from one band cover one
+   window.
+6. **What governs Deep Descent's depth**, `level:` or `alloc:`? One was found
    on depth 1 against `level:10`.
-5. **Is depth 5–20 survivable by a player of this kind?** Nobody has been
+7. **Is depth 5–20 survivable by a player of this kind?** Nobody has been
    below depth 7; our own volume 2 is written entirely from game data.
-6. **Do the strategy manual's numeric policies hold anywhere?** They are
+8. **Do the strategy manual's numeric policies hold anywhere?** They are
    explicitly "a starting policy to be measured", and this corpus measured
    them at depth 0–2.
 

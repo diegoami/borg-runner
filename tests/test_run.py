@@ -642,3 +642,16 @@ def test_a_drawn_character_says_so(tmp_path):
     record = run_module.write_record(run, outcome='stopped')
     assert record['character_drawn'] is True
     assert 'born_as_asked' not in record
+
+
+def test_a_real_newline_in_the_keys_becomes_the_escape():
+    """The frontend drops a trailing newline byte, so sending one loses it.
+
+    A player that wrote `$'...\\n'` from a shell lost its Enter silently and
+    had every later key eaten by the prompt that stayed open
+    (minimaxflash-2#72, five asks). The tool translates it instead.
+    """
+    from borg_runner import cli
+    assert cli.keys_from('R*\n') == 'R*\\n'
+    assert cli.keys_from('a\r\nb') == 'a\\nb'
+    assert cli.keys_from('va\\n ') == 'va\\n '      # an escape stays as it is
