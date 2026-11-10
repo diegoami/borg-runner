@@ -167,14 +167,17 @@ staircase under your feet is always an exit in one direction.
   `.3` CL1, 645, died to a crow) - the cleanest process and the emptiest
   outcome. `.2` bought perfect safety and reached character level 1: a CL1
   mage's problem is *finding* kills, not fighting them. `.3` did the
-  arithmetic right - descended where a kill pays double, turned a Yellow
-  Potion into 5 experience, found the staircase with a detection cast - and
-  then aimed the game's walk at a **locked door**, failed the pick, and was
-  killed at it by a crow that never sleeps, with 2 Phase Door and 4 Cure
-  Light Wounds in the pack (`mmf-mage.3#191`, `#192`). Read the pair as one
-  lesson: a plan can be right everywhere except the one decision that
-  matters, and a door is a better escape than a wall but a clear path is
-  what the walk should target.
+  arithmetic right - turned a Yellow Potion into 5 experience, found the
+  staircase with a detection cast - and then acted on the wrong conclusion:
+  it dived to depth 2 at CL1 for the doubled experience, with 8 hit points
+  and 1 of 2 spell points, met a crow (two bites of 1d3 at speed 120) at a
+  junction, and spent the turn on a locked door instead of the up staircase
+  five tiles west (`mmf-mage.3#191`, `#192`). Read the pair as one lesson: the plan can
+  be right everywhere except the gate - **do not enter a depth whose worst
+  round you cannot survive, retreat to the staircase you came down when
+  awake monsters appear, and rest to full spell points whenever the ground
+  is safe.** A door is a better escape than a wall, but a clear path is what
+  the walk should target.
 - **The other three deaths** (`sonnet-3`, `qwen-flash-1`,
   `minimaxflash-2.2`) - each did more wrong than right by the only vote
   that counts. Their deaths are section 6 of ACCUMULATED_KNOWLEDGE.md;

@@ -248,7 +248,7 @@ The corpus' direct corrections. Each cost a run something.
 | Word of Recall is not an escape (c15 ESC-04) | right, and the number behind it: the counter ticks in `process_world`, once per ten game turns, so 15+1d20 ticks is **150–340 game turns** — one run gave up after about forty (`qwen-flash-1`). Read in town before ever leaving it, it goes to depth 1, and arriving in town heals (GAME SOURCE + 2 RUNS). **The way to wait it out is one rest**: a full rest is about 61 player actions for a single key, comfortably over the 15-34 maximum, interrupted only if a monster reaches you (ONE RUN, `mmf-mage.2#91`) |
 | our own earlier distillate: "one spell point per TEN pounds of armour over the allowance" (a run's correction of the manual) | the manual was right and the run was wrong: `cur_wgt` is in tenths of a pound as well, so `(cur_wgt - spell_weight) / 10` is **pounds** over, one spell point each (GAME SOURCE; the claim is corrected in `agents/minimax/` where it stood) |
 | nothing in any manual mentions locked doors | one closed door in four is locked with strength `randint1(7)` (`gen-util.c`), walking into it picks it at `MAX(2, disarm-phys - 4 x strength)` per cent, and the skill is divided by ten if the lock is unseen or you are blind (`player-calcs.c calc_unlocking_chance()`). Three costs no manual states: **a failed pick prints `Cancelled` and eats the rest of that decision's keys** (`minimaxflash-1.4#616`); **a picked lock leaves you outside the door** (`minimaxflash-2.2#162`); and **the game's aimed walk ends on a door and turns into lock-picking**, so a walk aimed at a locked door stops there and you stand at it - a CL1 mage aimed at a door the detection spell had marked on depth 2, failed the pick, and was killed at it (`mmf-mage.3#191`, GAME SOURCE + ONE RUN) |
-| a level's monsters are placed asleep (the strategy manual) | only a race with a sleep value is: `place_new_monster_one()` (`src/mon-make.c`) sleeps a monster **`if (sleep && race->sleep)`**, so a race with **`sleepiness:0` is placed awake**. Two depth-2 monsters have it: the **crow** and the **wild cat** (both speed 120, 9 hit points, AC 14, two blows of 1d3, 8 experience). A CL1 mage at 8 hit points met a crow at a junction and never got a turn (`mmf-mage.3#192`, GAME SOURCE + ONE RUN) |
+| a level's monsters are placed asleep (the strategy manual) | only a race with a sleep value is: `place_new_monster_one()` (`src/mon-make.c`) sleeps a monster **`if (sleep && race->sleep)`**, so a race with **`sleepiness:0` is placed awake**. The depth-2 **crow** and **wild cat** are the examples (both speed 120, 9 hit points, AC 14, two blows of 1d3, 8 experience). **Read the race's row before you descend; the placement being asleep is not the race's sleepiness** (`mmf-mage.3#192`, GAME SOURCE + ONE RUN) |
 | an unknown item is identified by use, or by a Scroll of Identify (the manuals' model) | **giving it to the store that buys its type identifies the kind for nothing**: `do_cmd_sell()` calls `object_flavor_aware()` and learns the runes *before* the item changes hands (`store.c`), so with `birth_no_selling` on you get 0 gold, lose the item and know every future copy. With selling off this is the only way to identify something you dare not use (GAME SOURCE) |
 | the manuals list the mushroom patches | they do not say that the **grey mould is mobile** — no `NEVER_MOVE`, and it chases (GAME SOURCE + `minimaxflash-1.2#174`, `codex-1-tty`, which lost 5 of 21 hit points to spores without ever meleeing it) |
 | nothing in any manual describes fear | **fear is -20 to-hit, +8 armour class, and no attacks** (`player-calcs.c`: `OF_AFRAID` adjusts all three; the attack refusal is `do_cmd_walk_test`'s "You are too afraid to attack"). The +8 AC is visible on the sidebar and the -20 is not, and nothing cures it but the timer. Two crows held a druid at 3 hit points for about eight decisions while it could do nothing at all - the fifth death is mostly this row (`minimaxflash-1.5`, GAME SOURCE + ONE RUN) |
@@ -473,19 +473,22 @@ were at character level 1, one at 2 and three at 4; the deepest was depth 2.
   `MULTIPLY` monster one at a time is how the pack grows, and the string was
   spent before the warning could be read. It is the death that decided T11.*
 - **`mmf-mage.3`, Gnome Mage, 8 hit points, character level 1, depth 2, turn
-  8,019, a crow.** The seventh death, and the cleanest one in the corpus to
-  read off the frames: it aimed the game's walk at a **closed door** the
-  detection spell had marked, the door was **locked**, and the walk became
-  lock-picking. The corridor was a one-tile junction - the crow in the north
-  doorway, a person in the south one, the up staircase five tiles west - and
-  the crow (`sleepiness:0`, speed 120, two bites of 1d3) bit twice a turn
-  while the mage failed the lock. Five bites landed and it died at -2/8 with
-  **11 experience, one short of CL2**; it had 2 Phase Door scrolls, 4 Cure
-  Light Wounds and 23 flasks of oil and used none (`mmf-mage.3#191`,
-  `#192`). It had descended with **1 of 2 spell points**.
-  *The failure is a walk aimed at a door, not at open ground, with an awake
-  monster behind it and no escape spent. The door is a better escape than a
-  wall - it is passable - but a clear path is what the walk should target.*
+  8,019, a crow.** The seventh death, and the one with the clearest order of
+  mistakes. **It should not have been on depth 2 at all**: it descended at
+  CL1 for the doubled experience, with 8 hit points and 1 of 2 spell points,
+  onto a depth whose crow does two bites of 1d3 at speed 120 - the table
+  says two rounds is 10 or more against 8 hit points. At the junction
+  it met - the crow in the north doorway, a person in the south one, the
+  **up staircase five tiles west** - the right move was to retreat to the
+  staircase it had just come down; instead it aimed the game's walk at a
+  **locked door** east, failed the pick, and stood there while the crow bit
+  twice a turn. Five bites landed and it died at -2/8 with **11 experience,
+  one short of CL2**; it had 2 Phase Door scrolls, 4 Cure Light Wounds and
+  23 flasks of oil and used none (`mmf-mage.3#191`, `#192`).
+  *The failure is in this order: a CL1 dive it could not pay for, no retreat
+  to the up staircase when awake monsters appeared, and a walk aimed at a
+  door rather than open ground. The door is a better escape than a wall - it
+  is passable - but a clear path is what the walk should target.*
 
 ## 7. The classes, where play said something data does not
 
@@ -523,10 +526,12 @@ were at character level 1, one at 2 and three at 4; the deepest was depth 2.
   studied** while the screen prints the whole book, and a letter moves the
   cursor rather than selecting (a second press or Enter selects), so
   "casting" an unstudied spell casts the studied one instead (`mmf-mage.3`);
-  **arrive on a new depth with a full spell bar**, because a CL1 mage at 8
-  hit points with 1 of 2 points has no answer to anything awake; and the
-  depth-2 **crow and wild cat are placed awake** (`sleepiness:0`) and act
-  twice a turn (section 6 has the death).
+  **rest to full spell points whenever the ground is safe** - a mage's bar is
+  its attack, and 1 of 2 points is not a bar; **do not dive to depth 2 at
+  CL1**, because the doubled experience is not worth a round you cannot
+  survive; and the depth-2 **crow and wild cat act twice a turn** (speed
+  120, two blows of 1d3) - read their table rows before you descend (section
+  6 has the death).
 - **Priest** (2 runs, one the person and one a Dwarf): **no prayer before CL5
   detects anything**, and prayers are given at random rather than chosen
   (`class.txt`), so a Priest has no magical route to a staircase — which,
