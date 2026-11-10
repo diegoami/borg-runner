@@ -1,9 +1,10 @@
 # ACCUMULATED BEHAVIOUR — the characters worth imitating, and what they did
 
-Edition 2, 2026-11-10. *(Edition 1 was written the same day. Edition 2 adds
-the first Priest and the sixth death: the Warrior that was right for 139
-decisions and lost the run on the 140th, which is now the clearest case here
-of a character that had learned the game and not yet learned to stop.)*
+Edition 3, 2026-11-10. *(Edition 1 was written the same day. Edition 2 added
+the first Priest and the sixth death. Edition 3 adds the mage lineage's
+second archived life and its death at a locked door: the clearest case here
+of a character that did the arithmetic right and lost the run on the one
+decision that mattered.)*
 
 **Who this is for.** [borg-reborn-rs](https://github.com/diegoami/borg-rs),
 the Rust Borg being rebuilt, and anyone else outside this repository. It is
@@ -14,7 +15,7 @@ No player reads either (D16 - the export aggregates what a player is denied).
 **The criteria, stated because they are a decision, not a default:**
 **character level and net worth** (gold plus the game's own valuation of what
 the character carries). Maximum dungeon depth is recorded and is **not** a
-success criterion: eighteen runs chased the down staircase and the one thing
+success criterion: nineteen runs chased the down staircase and the one thing
 they never questioned was the chasing. Depth appears below as context only.
 
 **The unit is the character, not the run.** A character can live several
@@ -25,7 +26,7 @@ and third life. Every entry below gives the whole lineage, because what a
 life did is only readable against what it inherited.
 
 **The caveats, stated because they are the difference between this and
-astrology:** the corpus is eighteen runs. Every shape below is one character,
+astrology:** the corpus is nineteen runs. Every shape below is one character,
 on one seed, by one model - a lead, not a result. Nothing here is true of
 any seed but its own, and the seed-specific parts are left out. Where a run
 was lucky, the luck is named; what you imitate is what it did with it.
@@ -162,11 +163,18 @@ staircase under your feet is always an exit in one direction.
 
 ## Not on the list, and why
 
-- **`mmf-mage.2`** (CL1, 576, alive) - the cleanest process in the corpus
-  and the emptiest outcome: it bought perfect safety and reached character
-  level 1. Its own diagnosis is the finding: a CL1 mage's problem is
-  *finding* kills, not fighting them. Read it as the proof that a plan can
-  be right everywhere except its objective.
+- **`mmf-mage`'s character** (two archived lives: `.2` CL1, 576, alive;
+  `.3` CL1, 645, died to a crow) - the cleanest process and the emptiest
+  outcome. `.2` bought perfect safety and reached character level 1: a CL1
+  mage's problem is *finding* kills, not fighting them. `.3` did the
+  arithmetic right - descended where a kill pays double, turned a Yellow
+  Potion into 5 experience, found the staircase with a detection cast - and
+  then aimed the game's walk at a **locked door**, failed the pick, and was
+  killed at it by a crow that never sleeps, with 2 Phase Door and 4 Cure
+  Light Wounds in the pack (`mmf-mage.3#191`, `#192`). Read the pair as one
+  lesson: a plan can be right everywhere except the one decision that
+  matters, and a door is a better escape than a wall but a clear path is
+  what the walk should target.
 - **The other three deaths** (`sonnet-3`, `qwen-flash-1`,
   `minimaxflash-2.2`) - each did more wrong than right by the only vote
   that counts. Their deaths are section 6 of ACCUMULATED_KNOWLEDGE.md;

@@ -294,12 +294,16 @@ into unexplored ground it assumes the unknown squares are passable, and the
 path it reconstructs can be nonsense: one run measured a 20-tile aim that
 walked **0 steps** and a 3-tile aim that walked 3 (OBSERVED,
 minimaxflash-2#90). So aim at a landmark - a staircase, the far corner of a
-room you have lit - and use `lxg` for the frontier. **A door is a stop, not a
-waypoint:** the walk ends on the door's square, and if the door is locked the
-game turns the step into lock-picking, which is a roll you may not have, and
-you stand there. A CL1 mage aimed at a door on depth 2, failed the pick, and
-was killed at it by a crow it had not looked for (OBSERVED, mmf-mage.3#191).
-Look (`l`) or list (`[`) before you aim. The two runs
+room you have lit - and use `lxg` for the frontier. **A door is a better
+escape than a wall, but a clear path takes priority over a door.** A door is
+passable, and a known open door is a route; the problem is the *aimed walk*:
+it ends on the door's square, and if the door is locked the game turns the
+step into lock-picking - a roll you may not have - and you stand there. So
+aim at open floor or a staircase first, and treat a door as a destination
+only when it is open or you can pick the lock. A CL1 mage aimed at a door on
+depth 2, failed the pick, and was killed at it by a crow it had not looked
+for (OBSERVED, mmf-mage.3#191). Look (`l`) or list (`[`) before you aim. The
+two runs
 do not disagree about the game: they disagree about what was known when they
 aimed, and that is the thing to check before you spend an ask on it.
 

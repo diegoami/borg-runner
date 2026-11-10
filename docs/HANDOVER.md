@@ -25,20 +25,22 @@ own** - see "The worktree model" below.
 
 ## Where the work stands
 
-- **18 runs archived** in `records/`, one played by a person (`diego-1`).
-  Deepest: depth 7 (`sonnet-2.2`). **Six deaths**, none of them a big
+- **19 runs archived** in `records/`, one played by a person (`diego-1`).
+  Deepest: depth 7 (`sonnet-2.2`). **Seven deaths**, none of them a big
   hit: three low-CON characters, the Warrior that stood still beside its
-  Word of Recall, the Druid that met crows with no escape in its pack, and
-  the Warrior that walked a 60-key chain into a breeder pack.
+  Word of Recall, the Druid that met crows with no escape in its pack, the
+  Warrior that walked a 60-key chain into a breeder pack, and the Mage that
+  aimed its walk at a locked door.
 - **The dashboard** is <https://diegoami.github.io/borg-runner/>, rebuilt by
   `overview` on the main checkout and published by pushing `main`. It leads
   with **characters**, not runs: multi-life characters have a page under
   `records/characters/`, single-life ones link their replay.
 - **450 fast tests** (`pytest -q`). The slow ones build and play the game
   (`pytest -q -m slow`); CI does not run them.
-- **One run is playing**: `mmf-mage.3` (the mage carry-on) in
-  `/home/diego/projects/mmf-mage.2-next`, depth 1. It was started before
-  the flush rule below, so it plays on with the buffer kept (D17).
+- **Nothing is playing.** The last run, `mmf-mage.3` (the mage carry-on),
+  died on depth 2 to a crow at ask 199 and is merged and consolidated. It
+  was the last run started before the flush rule (D17), so the next new run
+  is the first to play with `flush: honour` from birth.
 - **Every death report shows the death.** The reports of all six dead runs
   carry the frames the game drew *between* the asks; `minimaxflash-3`'s
   scrubber plays the spider killing it.
@@ -73,7 +75,7 @@ folding sections into the page bodies is still a nothing-is-playing task.
 | `manuals/INSTRUCTIONS.md` (+ `_2` for depth 5-20) | **the page**: the game's manual and a strategy manual distilled, with what runs found folded in, every line labelled FACT / OBSERVED / POLICY / UNTESTED and sourced | every player, before its first keypress |
 | `knowledge/<run>.md` + `records/<run>/` | the **evidence**: each run's own notebook, decisions, keys and replay | a consolidating session; a player only for a line it wants to check |
 | `agents/<family>/COMMON.md` and `<CLASS>.md` | the **playbook**: one model family's own account, written for its own next session | that family only |
-| `ACCUMULATED_KNOWLEDGE.md` | the **export**, outward to borg-reborn-rs; nothing the manuals already say. **Edition 5** covers all 18 runs. `ACCUMULATED_BEHAVIOUR.md` is its companion: who is worth imitating, by character level and net worth, lineage first. The owner calls this the reason the repository exists - its correctness outranks everything else here | the consumer, not players |
+| `ACCUMULATED_KNOWLEDGE.md` | the **export**, outward to borg-reborn-rs; nothing the manuals already say. **Edition 6** covers all 19 runs. `ACCUMULATED_BEHAVIOUR.md` is its companion: who is worth imitating, by character level and net worth, lineage first. The owner calls this the reason the repository exists - its correctness outranks everything else here | the consumer, not players |
 | `prompts/` | the **briefs** worth running twice. A brief is an objective added to `PLAYGAME.txt`, never a replacement | one player each |
 
 **A tip lives on the page, not in a prompt.** `borg_runner prompts` enforces
@@ -115,7 +117,7 @@ the played (first) answer and name the rest in `duplicate_answers`; the audit
 warns on a
 re-answered log; a replay regenerates its scratch directory; the splash's git
 describe is not a screen difference (build identity lives in the record's
-hashes). All 18 runs replay `identical: true` under this.
+hashes). All 19 runs replay `identical: true` under this.
 
 **The frame dump.** The frontend used to write the screen only when the key
 buffer emptied, so everything the game showed while spending a buffered
@@ -156,8 +158,12 @@ diffs every ask byte for byte.
    correction), both from `minimaxflash-3`. The beam-search planners, the
    sweep and the `where` helper were read and left in their records: they
    hold a routing or depth-1 tactic the library is not supposed to have.
-10. **Edition 5 of the export** and **edition 2 of the companion**; the
+10. **Edition 6 of the export** and **edition 3 of the companion**; the
     dashboard and `records/OVERVIEW.md` lead with characters.
+11. `mmf-mage.3` merged and consolidated: audit 20/20, replay `identical`
+    (199/199, 0 differences), and its lesson put on the page (a door is a
+    better escape than a wall, but a clear path takes priority over a door;
+    a `sleepiness:0` race is placed awake).
 11. The `-again` runs renamed to the lineage convention
     (`minimaxflash-1.2`, `sonnet-2.2`).
 12. **The throw mystery solved.** `mmx-war-1`'s four wasted decisions were
@@ -183,13 +189,18 @@ new runs replay identically under the new build with `-k`.
 
 ## What is waiting, in order
 
-1. **`mmf-mage.3` is still playing** (depth 1). Let it finish, merge
-   `run/mmf-mage.3`, then rebuild the dashboard on main. It plays under the
-   old flush rule, by design.
+1. **Start the next run.** Nothing is playing, and the next new run is the
+   first to play with the flush rule from birth (`flush: honour`) and the
+   first to read the page's new door rule.
 2. **The coverage measurement nobody has made** (ACCUMULATED section 8,
    question 2): how much of a level a sweep actually remembers, counted off
    `minimaxflash-1.4`'s replay rather than believed.
-3. **Offered and not taken up**: CI for `pytest -m slow`, and an Angband MCP
+3. **The mage lineage's first life is unarchived.** `runs/mmf-mage` (39 asks,
+   depth 1, CL1, 600) has a notebook and decisions but no report, so the
+   character page shows 2 of its 3 lives and the corpus is 19, not 20.
+   Reconstruct a short report from its notebook and decisions, then `archive`
+   it.
+4. **Offered and not taken up**: CI for `pytest -m slow`, and an Angband MCP
    server.
 
 ## Rules that are not obvious and have each cost something

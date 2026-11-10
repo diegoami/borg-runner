@@ -1,6 +1,6 @@
 # ACCUMULATED KNOWLEDGE — what the runs found that no manual says
 
-Edition 5, 2026-11-10. *(Edition 1, the same day, repeated things the manuals
+Edition 6, 2026-11-10. *(Edition 1, the same day, repeated things the manuals
 already say; see "What is deliberately not here". Edition 2 added the eleventh
 run and the caveat in section 1 that the runs never questioned their own
 objective. Edition 3 added three runs and corrected the single most
@@ -8,10 +8,12 @@ load-bearing claim of edition 2: a level has three or four down staircases,
 not one. Edition 4 added two runs - a Gnome Mage played to the page's plan
 and a fifth Druid life that found the staircase and died past it - the fifth
 death, the fear mechanic, and the map facts that make "no staircase on the M
-map" real evidence. **Edition 5 adds the first Priest and Dwarf, and the
-sixth death: a Half-Elf Warrior killed by a breeder pack it walked into with
-a 60-key chain - the second death of that shape, which is why the harness now
-lets the game end a key string (D17).**)*
+map" real evidence. Edition 5 added the first Priest and Dwarf, and the sixth
+death: a Half-Elf Warrior killed by a breeder pack it walked into with a
+60-key chain. **Edition 6 adds the mage carry-on's death - the seventh - and
+two corrections it paid for: a locked door stops the aimed walk and turns it
+into lock-picking, and not every monster is placed asleep (a race with
+`sleepiness:0` is placed awake).**)*
 
 **Who this is for.** [borg-reborn-rs](https://github.com/diegoami/borg-rs),
 the Rust Borg being rebuilt, and anyone else outside this repository. The
@@ -22,7 +24,7 @@ from time to time, not after every run.
 own manual, the strategy manual and `lib/gamedata` itself, at leisure and in
 full — a program has time a player in a 150-decision budget does not. So
 nothing here is in those documents. What is here is the residue: **what
-eighteen runs measured, what they corrected, and what had to be read out of
+nineteen runs measured, what they corrected, and what had to be read out of
 the source because no manual states it.**
 
 **Not for the players.** A run here is denied exactly one thing: another run's
@@ -41,11 +43,11 @@ The prompts do not mention it.
 
 ## The corpus
 
-Eighteen runs, 5,081 asks, 37,037 keypresses, deepest **depth 7**, six
+Nineteen runs, 5,280 asks, 38,099 keypresses, deepest **depth 7**, seven
 deaths. One session was played by a person (`diego-1`), which is the control.
 Three characters were asked for (two Gnome Mages and the Warrior that
 followed them); the rest were drawn. By class: six Warrior runs, six Druid
-runs (five of them lives of one character), four Mages, and two Priests (one
+runs (five of them lives of one character), five Mages, and two Priests (one
 the person, one a Dwarf) - **Blackguard, Paladin, Ranger, Rogue and
 Necromancer have never been played here.**
 
@@ -65,6 +67,7 @@ Necromancer have never been played here.**
 | [minimaxflash-1.4](records/minimaxflash-1.4/REPORT.md) | minimax/MiniMax-M3.1-Flash | High-Elf Druid | 2 | 4 | 759 | 24,105 | alive, budget |
 | [minimaxflash-3](records/minimaxflash-3/REPORT.md) | minimax/MiniMax-M3.1-Flash | Human Warrior (asked for) | 3 | 4 | 152 | 8,394 | **died**, cave spider |
 | [mmf-mage.2](records/mmf-mage.2/REPORT.md) | minimax/MiniMax-M3.1-Flash | Gnome Mage (asked for) | 3 | 1 | 146 | 4,872 | alive, stopped |
+| [mmf-mage.3](records/mmf-mage.3/REPORT.md) | minimax-coding-plan/MiniMax-M3.1-Flash | Gnome Mage (asked for) | 3 | 1 | 199 | 8,019 | **died**, crow |
 | [minimaxflash-1.5](records/minimaxflash-1.5/REPORT.md) | minimax/MiniMax-M3.1-Flash | High-Elf Druid (life 5) | 2 | 4 | 893 | 29,966 | **died**, an acolyte |
 | [diego-1](records/diego-1/REPORT.md) | a person | Kobold Priest | 1 | 2 | 418 | 4,741 | alive, saved |
 | [mmx-pri-1](records/mmx-pri-1/REPORT.md) | minimax-coding-plan/MiniMax-M3.1-Flash | Dwarf Priest (asked for) | 1 | 2 | 149 | 9,952 | alive, stopped |
@@ -77,7 +80,7 @@ screen by screen: <https://diegoami.github.io/borg-runner/>.
 
 ## 1. Descent is the whole problem, and nothing in the manuals says how
 
-Fourteen of eighteen runs ended at depth 0, 1 or 2, and the six deaths are
+Fifteen of nineteen runs ended at depth 0, 1 or 2, and the seven deaths are
 all in that band too. The twelve that stopped were alive. They were still
 on the first level because they had not found the way off it.
 
@@ -100,8 +103,8 @@ on the first level because they had not found the way off it.
   used the game's and got further on fewer asks.
 
 **The caveat that matters as much as the finding: no run ever questioned the
-objective.** All eighteen treated the down staircase as the only thing worth
-finding, and the six that died were at character level 4 or lower while
+objective.** All nineteen treated the down staircase as the only thing worth
+finding, and the seven that died were at character level 4 or lower while
 doing it. The one run that planned to level instead (`mmf-mage.2`, asked to
 play a Gnome Mage by the page's own arithmetic) found the plan's real
 bottleneck: not the fighting but the *finding* - a CL1 kill on depth 1 pays
@@ -122,7 +125,7 @@ the only way to spend them.
 **For the consumer:** the manuals describe descent as the objective and say
 nothing about its cost. Measure decisions-per-descent, but also
 decisions-per-character-level: a policy that spends 80% of its decisions on
-floor coverage has 20% left for everything the manuals are about. The six
+floor coverage has 20% left for everything the manuals are about. The seven
 deaths are their own finding (section 6): none was a big hit, and none was
 at a depth the character had no business being at.
 
@@ -244,7 +247,8 @@ The corpus' direct corrections. Each cost a run something.
 | a shop's stock is the seed's stock (inferred by a run) | `store_maint()` runs once per game **day** and the shopkeeper shuffles (`store.c:1425`): "the Alchemist had no Magic Mapping this seed" was true of one day only, and a later visit found three at 65 gold under a different shopkeeper (ONE RUN, `minimaxflash-1.2#399`) |
 | Word of Recall is not an escape (c15 ESC-04) | right, and the number behind it: the counter ticks in `process_world`, once per ten game turns, so 15+1d20 ticks is **150–340 game turns** — one run gave up after about forty (`qwen-flash-1`). Read in town before ever leaving it, it goes to depth 1, and arriving in town heals (GAME SOURCE + 2 RUNS). **The way to wait it out is one rest**: a full rest is about 61 player actions for a single key, comfortably over the 15-34 maximum, interrupted only if a monster reaches you (ONE RUN, `mmf-mage.2#91`) |
 | our own earlier distillate: "one spell point per TEN pounds of armour over the allowance" (a run's correction of the manual) | the manual was right and the run was wrong: `cur_wgt` is in tenths of a pound as well, so `(cur_wgt - spell_weight) / 10` is **pounds** over, one spell point each (GAME SOURCE; the claim is corrected in `agents/minimax/` where it stood) |
-| nothing in any manual mentions locked doors | one closed door in four is locked with strength `randint1(7)` (`gen-util.c`), walking into it picks it at `MAX(2, disarm-phys - 4 x strength)` per cent, and the skill is divided by ten if the lock is unseen or you are blind (`player-calcs.c calc_unlocking_chance()`). Two costs no manual states: **a failed pick prints `Cancelled` and eats the rest of that decision's keys** (`minimaxflash-1.4#616`), and **a picked lock leaves you outside the door** (`minimaxflash-2.2#162`) |
+| nothing in any manual mentions locked doors | one closed door in four is locked with strength `randint1(7)` (`gen-util.c`), walking into it picks it at `MAX(2, disarm-phys - 4 x strength)` per cent, and the skill is divided by ten if the lock is unseen or you are blind (`player-calcs.c calc_unlocking_chance()`). Three costs no manual states: **a failed pick prints `Cancelled` and eats the rest of that decision's keys** (`minimaxflash-1.4#616`); **a picked lock leaves you outside the door** (`minimaxflash-2.2#162`); and **the game's aimed walk ends on a door and turns into lock-picking**, so a walk aimed at a locked door stops there and you stand at it - a CL1 mage aimed at a door the detection spell had marked on depth 2, failed the pick, and was killed at it (`mmf-mage.3#191`, GAME SOURCE + ONE RUN) |
+| a level's monsters are placed asleep (the strategy manual) | only a race with a sleep value is: `place_new_monster_one()` (`src/mon-make.c`) sleeps a monster **`if (sleep && race->sleep)`**, so a race with **`sleepiness:0` is placed awake**. Two depth-2 monsters have it: the **crow** and the **wild cat** (both speed 120, 9 hit points, AC 14, two blows of 1d3, 8 experience). A CL1 mage at 8 hit points met a crow at a junction and never got a turn (`mmf-mage.3#192`, GAME SOURCE + ONE RUN) |
 | an unknown item is identified by use, or by a Scroll of Identify (the manuals' model) | **giving it to the store that buys its type identifies the kind for nothing**: `do_cmd_sell()` calls `object_flavor_aware()` and learns the runes *before* the item changes hands (`store.c`), so with `birth_no_selling` on you get 0 gold, lose the item and know every future copy. With selling off this is the only way to identify something you dare not use (GAME SOURCE) |
 | the manuals list the mushroom patches | they do not say that the **grey mould is mobile** — no `NEVER_MOVE`, and it chases (GAME SOURCE + `minimaxflash-1.2#174`, `codex-1-tty`, which lost 5 of 21 hit points to spores without ever meleeing it) |
 | nothing in any manual describes fear | **fear is -20 to-hit, +8 armour class, and no attacks** (`player-calcs.c`: `OF_AFRAID` adjusts all three; the attack refusal is `do_cmd_walk_test`'s "You are too afraid to attack"). The +8 AC is visible on the sidebar and the -20 is not, and nothing cures it but the timer. Two crows held a druid at 3 hit points for about eight decisions while it could do nothing at all - the fifth death is mostly this row (`minimaxflash-1.5`, GAME SOURCE + ONE RUN) |
@@ -403,12 +407,12 @@ The corpus' direct corrections. Each cost a run something.
   but the run that sent the keys still spent them, and a player that has not
   learned to stop has only had the decision taken away from it, not made.
 
-## 6. How the six deaths happened
+## 6. How the seven deaths happened
 
 Not one of them was a big hit, none was at a depth the character had no
 business being at, and **none is the kind of death a hit-point threshold
-prevents** — which is the part worth carrying into a death analyser. Two were
-at character level 1, one at 2 and three at 4; the deepest was depth 2.
+prevents** — which is the part worth carrying into a death analyser. Three
+were at character level 1, one at 2 and three at 4; the deepest was depth 2.
 
 - **`sonnet-3`, Human Mage, 10 hit points, depth 1, turn 1,348, small
   kobold.** A wounded kobold was believed dead because its health bar went
@@ -468,6 +472,20 @@ at character level 1, one at 2 and three at 4; the deepest was depth 2.
   *The failure is an uncancellable batch aimed at a breeder: killing a
   `MULTIPLY` monster one at a time is how the pack grows, and the string was
   spent before the warning could be read. It is the death that decided T11.*
+- **`mmf-mage.3`, Gnome Mage, 8 hit points, character level 1, depth 2, turn
+  8,019, a crow.** The seventh death, and the cleanest one in the corpus to
+  read off the frames: it aimed the game's walk at a **closed door** the
+  detection spell had marked, the door was **locked**, and the walk became
+  lock-picking. The corridor was a one-tile junction - the crow in the north
+  doorway, a person in the south one, the up staircase five tiles west - and
+  the crow (`sleepiness:0`, speed 120, two bites of 1d3) bit twice a turn
+  while the mage failed the lock. Five bites landed and it died at -2/8 with
+  **11 experience, one short of CL2**; it had 2 Phase Door scrolls, 4 Cure
+  Light Wounds and 23 flasks of oil and used none (`mmf-mage.3#191`,
+  `#192`). It had descended with **1 of 2 spell points**.
+  *The failure is a walk aimed at a door, not at open ground, with an awake
+  monster behind it and no escape spent. The door is a better escape than a
+  wall - it is passable - but a clear path is what the walk should target.*
 
 ## 7. The classes, where play said something data does not
 
@@ -486,7 +504,7 @@ at character level 1, one at 2 and three at 4; the deepest was depth 2.
   whip costs about thirty** - damage per hit point spent is what decides a
   druid's fight, and the spell is about five times better (`minimaxflash-1.5`,
   ONE RUN). It also learned what kills druids: crows. Section 6 has the death.
-- **Mage** (4 runs, two died): one spell at CL1, and the choice of which
+- **Mage** (5 runs, three died): one spell at CL1, and the choice of which
   decided whether it had an attack at all. The second run settled the choice:
   **Magic Missile first** - 1 spell point, `$Dd4` with the dice count
   `(CL-1)/5+3`, so **3d4 (3 to 12) from CL1 to CL5**, never resisted, which is
@@ -500,7 +518,15 @@ at character level 1, one at 2 and three at 4; the deepest was depth 2.
   bottleneck was finding anything it could kill at 8 hit points
   (`mmf-mage.2`, ONE RUN; it left a room of three sleeping cave spiders
   unfought, correctly). The two choices are not a disagreement: take Magic
-  Missile when you can win fights, detection when you cannot.
+  Missile when you can win fights, detection when you cannot. Three costs the
+  third life paid for: **the cast menu's rows are the spells you have
+  studied** while the screen prints the whole book, and a letter moves the
+  cursor rather than selecting (a second press or Enter selects), so
+  "casting" an unstudied spell casts the studied one instead (`mmf-mage.3`);
+  **arrive on a new depth with a full spell bar**, because a CL1 mage at 8
+  hit points with 1 of 2 points has no answer to anything awake; and the
+  depth-2 **crow and wild cat are placed awake** (`sleepiness:0`) and act
+  twice a turn (section 6 has the death).
 - **Priest** (2 runs, one the person and one a Dwarf): **no prayer before CL5
   detects anything**, and prayers are given at random rather than chosen
   (`class.txt`), so a Priest has no magical route to a staircase — which,
