@@ -1288,3 +1288,58 @@ likely to repeat.
   actions of walking (`player_regen_mana()`: `msp × 197 + 524` in 65536ths
   per action). A rest is interrupted by anything that reaches you, so it is
   only worth asking on swept ground.
+
+## From `mmx-ran-1`, 2026-11-10
+
+## What mmx-ran-1 measured (seed 137, a Hobbit Ranger, 150 asks, depth 1, alive)
+
+**The key string is cut by a DISTURBANCE, not by a wall.** This is the most
+expensive thing I have learned about this harness, and it explains a mystery
+that our own notes have had wrong for a while. `player-util.c:1674` is inside
+`disturb()`, and `disturb()` signals `EVENT_INPUT_FLUSH`; the patch
+(`patch/src/main-agent.c`) drops the rest of the key string whenever the game
+flushes. So **anything that disturbs the player ends the string**: a visible
+monster attacking me (a hit **or a miss** - `mon-attack.c` calls `disturb(p)`
+in the "visible monster missed player" branch), picking up gold or an item
+(`cmd-pickup.c:423` disturbs before every autopickup), opening a door, a
+failed lock pick, a failed disarm.
+
+What it looks like: I sent a 24-key chain and got **one** step, six asks in a
+row, while two awakened giant white mice were beside me. The message line was
+empty every time, because `msg_flush()` erases the line after the `-more-`, so
+"the giant white mouse misses you" was never on the screen that followed. Our
+own COMMON.md says "a digit string stops at the first wall and the rest is
+dropped" - that is the symptom. **The rule for the next session: a chain that
+does nothing is usually a monster biting you; look at the monster list (`[`,
+one ask) before you blame the path.**
+
+**Two more key facts, both measured.**
+
+- **A `-more-` eats the first key of the next ask**, and so does the whole
+  level map's "Hit any key to continue". Ask 61 pressed `M` and ask 62's nine
+  keys became eight moves for exactly this reason. Start a chain with a space
+  when the previous screen ends in a prompt.
+- **A diagonal step is refused when one of its two orthogonal neighbours is a
+  wall.** The vein tiles (`%`) around a room are full of wall corners, and a
+  chain that plans diagonals through them stops there.
+
+**The aimed walk is the fastest move in the game, and it is worth knowing.**
+`*` + `p` + many digits + `g`: `find_path` with an unknown destination
+rebuilds a path backwards from the destination through ground it assumes is
+passable, so the walk crosses unexplored corridors and stops at the first real
+wall. Measured on one level: **9, 19, 23, 23 and 20 actions in single asks**.
+The message it prints ("Target Aborted.") is about the *target*, not the walk,
+and the walk has already happened. `explore.py` suggests the aim (the level's
+corner, where the cursor clamps) and it grew my coverage of the level from 3%
+to 7% in twenty asks. Compare: `lxg` gave one tile an ask, a digit chain gave
+one to nine, and **a run stops in an open room** (`run_test` in
+`player-path.c` stops when the squares around the direction of travel are
+"non-adjacent new directions") while in a corridor it runs to the end of it.
+**A run is a corridor tool and the aimed walk is the everywhere tool.**
+
+**My own tool is in the run and in the library now**: `tools/screen/chain.py`
+(kept in `records/mmx-ran-1/tools/chain.py` as I played it) plans a chain of
+direction keys over the panel so that it does not meet a wall before its end,
+and it refuses a diagonal whose corners are not known floor - that rule is
+worth more than the rest of the tool put together. I wrote it before I
+understood the aimed walk, and I would rather have spent those asks playing.

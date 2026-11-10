@@ -1,0 +1,151 @@
+{"ask": 1, "depth": 0, "keys": " ", "reason": "intro screen: press space to reach the birth menus", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "*", "reason": "race was not given, so draw it with * as the rules say", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "i", "reason": "class was given as Ranger; read its letter off the screen (i) and move the menu cursor there", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "\\n", "reason": "cursor is on i) Ranger (cursor at 19,16 and the traits below now read Extra Shots/Spell Choice), so Enter selects it", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "a", "reason": "roller menu: take the easy option, point-based (a)", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "\\n", "reason": "accept the allocation the game filled in (20/20 points already spent), do not move points", "turn": 1}
+{"ask": 7, "depth": 0, "keys": "\\n", "reason": "name prompt is pre-filled with the run name; accept it with Enter", "turn": 1}
+{"ask": 8, "depth": 0, "keys": "y", "reason": "accept the character history prompt with y", "turn": 1}
+{"ask": 9, "depth": 0, "keys": " ", "reason": "finish the birth sequence and get into the town", "turn": 1}
+{"ask": 10, "depth": 0, "keys": "1411111111411474414741,", "reason": "walk the computed route to the Alchemist (5) and press , to enter the store", "turn": 1}
+{"ask": 11, "depth": 0, "keys": "*p4444444444444222g", "reason": "aim at the known Alchemist tile 13 W and 3 S and let the game pathfind there in one ask", "turn": 91}
+{"ask": 12, "depth": 0, "keys": "411474414741", "reason": "12-step route west to the Alchemist tile", "turn": 101}
+{"ask": 13, "depth": 0, "keys": "474414741", "reason": "9-step route west to the Alchemist tile", "turn": 131}
+{"ask": 14, "depth": 0, "keys": "l4g", "reason": "test the game's own look-mode pathfind: look, jump west to the next interesting square, walk there", "turn": 151}
+{"ask": 15, "depth": 0, "keys": "\\e", "reason": "leave the Weaponsmith: it stocks no arrows, only bolts and shot", "turn": 151}
+{"ask": 16, "depth": 0, "keys": "l8g", "reason": "look-mode walk: up jumps to the General Store (the best 'up' interesting square by target_pick's cone rule) and g walks me onto it", "turn": 161}
+{"ask": 17, "depth": 0, "keys": ".8", "reason": "run north: the General Store is 2 tiles up, and a run is one command so nothing can cut it", "turn": 191}
+{"ask": 18, "depth": 0, "keys": "8", "reason": "one step north onto the General Store tile, which opens the store", "turn": 201}
+{"ask": 19, "depth": 0, "keys": "ph12\\ny", "reason": "buy 12 flasks of oil at 3 gold each: the main ranged attack (9-36 damage)", "turn": 201}
+{"ask": 20, "depth": 0, "keys": "pq15\\ny", "reason": "buy 15 arrows at 1 gold each; the bow is free damage if the oil runs out", "turn": 201}
+{"ask": 21, "depth": 0, "keys": " j2\\ny", "reason": "the -more- eats the first key, so start with a space; then buy 2 torches (5000 turns each)", "turn": 201}
+{"ask": 22, "depth": 0, "keys": "\b2\\ny", "reason": "the quantity field holds a stray y; one backspace clears the whole field, then 2 torches, Enter, accept", "turn": 201}
+{"ask": 23, "depth": 0, "keys": " pf2\\ny", "reason": "space clears the -more-, then p, f (rations), quantity 2, Enter, accept", "turn": 201}
+{"ask": 24, "depth": 0, "keys": "\\e", "reason": "leave the General Store", "turn": 201}
+{"ask": 25, "depth": 0, "keys": "l1g", "reason": "look-mode walk down-left to the Alchemist, the only interesting square in that direction", "turn": 211}
+{"ask": 26, "depth": 0, "keys": ".1", "reason": "run down-left toward the Alchemist; a run stops next to an interesting feature (the store)", "turn": 231}
+{"ask": 27, "depth": 0, "keys": "448", "reason": "two steps west then one north onto the Alchemist tile, which opens the store", "turn": 251}
+{"ask": 28, "depth": 0, "keys": "22", "reason": "two steps south onto the Alchemist tile, which opens the store", "turn": 281}
+{"ask": 29, "depth": 0, "keys": "pa1\\ny", "reason": "buy 1 Potion of Cure Light Wounds (20 gold) - the heal I will actually reach for", "turn": 291}
+{"ask": 30, "depth": 0, "keys": " po1\\ny", "reason": "space clears the -more-, then buy 1 Scroll of Phase Door (15 gold) - the escape", "turn": 291}
+{"ask": 31, "depth": 0, "keys": "\\e", "reason": "leave the Alchemy Shop", "turn": 291}
+{"ask": 32, "depth": 0, "keys": "\\e", "reason": "the previous Escape only cleared the -more-; Escape again to leave the store", "turn": 291}
+{"ask": 33, "depth": 0, "keys": "l>g", "reason": "the game's own pathfind to the known down staircase under which the town put me", "turn": 301}
+{"ask": 34, "depth": 0, "keys": "3339969999999969", "reason": "16-step route to the town's down staircase at (35,2)", "turn": 361}
+{"ask": 35, "depth": 0, "keys": "969999999969", "reason": "12-step route on to the down staircase", "turn": 401}
+{"ask": 36, "depth": 0, "keys": "999999969", "reason": "9-step route on to the down staircase", "turn": 431}
+{"ask": 37, "depth": 0, "keys": "99966999", "reason": "8-step route to the tile just south of the down staircase", "turn": 441}
+{"ask": 38, "depth": 0, "keys": "8", "reason": "step north onto the town's down staircase", "turn": 521}
+{"ask": 39, "depth": 0, "keys": "> ", "reason": "take the down staircase to depth 1; the trailing space clears the level-change -more-", "turn": 531}
+{"ask": 40, "depth": 1, "keys": "lxg", "reason": "depth 1: use the game's own frontier walk (look, jump to the nearest unexplored square, walk there)", "turn": 531}
+{"ask": 41, "depth": 1, "keys": "lp66666666666666666666g", "reason": "aim 20 tiles east in look mode (free mode) and let the game pathfind there: the look-mode aimed walk, because the '*' mode flushes the string", "turn": 541}
+{"ask": 42, "depth": 1, "keys": ".2", "reason": "run south down the corridor: a run is one command, covers many tiles, and stops before a monster, a trap, rubble or a corner", "turn": 551}
+{"ask": 43, "depth": 1, "keys": "M", "reason": "press M: the whole remembered level in one ask, to see how much I have covered and whether a down staircase is remembered", "turn": 571}
+{"ask": 44, "depth": 1, "keys": " .2", "reason": "space clears the M map, then run south along the corridor", "turn": 571}
+{"ask": 45, "depth": 1, "keys": "2222222222", "reason": "walk south down the corridor: a digit string ignores the 'interesting feature' rule that stops a run, and the corridor is one tile wide", "turn": 591}
+{"ask": 46, "depth": 1, "keys": "12122", "reason": "follow the corridor southwest", "turn": 601}
+{"ask": 47, "depth": 1, "keys": "lp6666666666666666666666666g", "reason": "aim 25 tiles east in the open room and let the game pathfind there", "turn": 641}
+{"ask": 48, "depth": 1, "keys": "666666666666", "reason": "walk east across the room with a digit string", "turn": 651}
+{"ask": 49, "depth": 1, "keys": "8844444444444444", "reason": "step north into the room and walk west across it", "turn": 651}
+{"ask": 50, "depth": 1, "keys": "M", "reason": "whole-level map again: how much have I covered and is a staircase remembered", "turn": 741}
+{"ask": 51, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333g", "reason": "explore.py says most of the dark is south-east; aim the cursor at the clamped level corner and let the game pathfind through the unknown", "turn": 741}
+{"ask": 52, "depth": 1, "keys": "84444444444444", "reason": "sweep west across the room: north one, then 13 west", "turn": 751}
+{"ask": 53, "depth": 1, "keys": ".6", "reason": "run east along the open room: one command, and a run stops only at a monster, a trap, rubble, a door or a corner", "turn": 771}
+{"ask": 54, "depth": 1, "keys": "[", "reason": "list the monsters I can see: one ask tells me what is adjacent and its name", "turn": 781}
+{"ask": 55, "depth": 1, "keys": "lxg", "reason": "frontier walk: the nearest unknown square should be at the edge of this wide room", "turn": 781}
+{"ask": 56, "depth": 1, "keys": "6666", "reason": "four steps east across known floor: a controlled test of whether a digit string survives", "turn": 781}
+{"ask": 57, "depth": 1, "keys": "232437272961827291829268", "reason": "send the 24-key chain my planner built over the panel, ending in the dark", "turn": 821}
+{"ask": 58, "depth": 1, "keys": "221278318818912298218932", "reason": "chain: known floor first, then a dash into the dark", "turn": 851}
+{"ask": 59, "depth": 1, "keys": "244884444228864864662266", "reason": "chain from the planner: known floor first, then the dash into the dark", "turn": 871}
+{"ask": 60, "depth": 1, "keys": "M", "reason": "whole-level map: coverage, position and any remembered down staircase", "turn": 881}
+{"ask": 61, "depth": 1, "keys": "666666222", "reason": "west along the room's north edge and south onto the gold tile at (24,14); gold is picked up automatically", "turn": 881}
+{"ask": 62, "depth": 1, "keys": "2666666666666622", "reason": "round the rodents and cross the room to the gold pile at (24,14)", "turn": 961}
+{"ask": 63, "depth": 1, "keys": " 26666666666666666666622", "reason": "round the room's south edge and cross to the gold pile at (24,14); a leading space is harmless and protects the first real key from any pending prompt", "turn": 1051}
+{"ask": 64, "depth": 1, "keys": " 4444444444444444444422", "reason": "west along the room's south edge (4 is LEFT) and north onto the gold pile at (24,14)", "turn": 1081}
+{"ask": 65, "depth": 1, "keys": " 666622444446666666888844", "reason": "chain from my planner: east to the alcove, then the dash into the dark", "turn": 1121}
+{"ask": 66, "depth": 1, "keys": ".4", "reason": "run west along the room's south edge: a run is one command and stops only at a monster, a trap, rubble, a door or a corner", "turn": 1131}
+{"ask": 67, "depth": 1, "keys": "lxg", "reason": "frontier walk: the game's own path to the nearest unexplored square", "turn": 1141}
+{"ask": 68, "depth": 1, "keys": "666888888888888222222222", "reason": "chain from the planner: north along the alcove and then the dash into the dark", "turn": 1151}
+{"ask": 69, "depth": 1, "keys": "44444444", "reason": "eight steps west along known floor: a controlled test of whether a short chain completes", "turn": 1161}
+{"ask": 70, "depth": 1, "keys": "4444444444444444", "reason": "sixteen steps west: does a longer chain give more than one action?", "turn": 1171}
+{"ask": 71, "depth": 1, "keys": "44488", "reason": "close on the rat at (38,14) and hit it", "turn": 1181}
+{"ask": 72, "depth": 1, "keys": "7", "reason": "attack the rat that is biting at me from the north-west", "turn": 1191}
+{"ask": 73, "depth": 1, "keys": "7", "reason": "hit the mouse again", "turn": 1199}
+{"ask": 74, "depth": 1, "keys": "v", "reason": "open the throw prompt to learn its own letters, so I can kill the mice from range", "turn": 1206}
+{"ask": 75, "depth": 1, "keys": "va'", "reason": "throw a flask of oil at the closest mouse (the throw prompt numbers its own list: the oil is 'a')", "turn": 1206}
+{"ask": 76, "depth": 1, "keys": " 8", "reason": "space clears the -more-, then up: the direction to throw the oil at the mouse two tiles north", "turn": 1206}
+{"ask": 77, "depth": 1, "keys": " 44442", "reason": "space clears the -more-, then west and south through the gap in the room's south wall at (36,17) into new ground", "turn": 1206}
+{"ask": 78, "depth": 1, "keys": "44442", "reason": "west along the room's south edge and down through the gap at (36,17) into unexplored ground", "turn": 1216}
+{"ask": 79, "depth": 1, "keys": "7", "reason": "hit the mouse that is biting me", "turn": 1226}
+{"ask": 80, "depth": 1, "keys": "7", "reason": "hit the mouse again before it beats me down", "turn": 1234}
+{"ask": 81, "depth": 1, "keys": "444222828282828282828282", "reason": "chain: west to the gap in the room's south wall and south into the dark", "turn": 1241}
+{"ask": 82, "depth": 1, "keys": "88444444444", "reason": "north into the room's west end and west along row 15 toward the mouse at (25,15) and the gold at (24,14)", "turn": 1281}
+{"ask": 83, "depth": 1, "keys": "444444", "reason": "six steps west along row 16 toward the mouse and the gold", "turn": 1291}
+{"ask": 84, "depth": 1, "keys": "44", "reason": "two steps west; the mouse is coming toward me and I want it inside my light radius", "turn": 1351}
+{"ask": 85, "depth": 1, "keys": "4448848", "reason": "west to the mouse, hit it, and step onto the gold pile at (24,14)", "turn": 1371}
+{"ask": 86, "depth": 1, "keys": "78", "reason": "step onto the gold pile at (24,14)", "turn": 1409}
+{"ask": 87, "depth": 1, "keys": "8622.2", "reason": "down through the gap at (25,17) and run south into the unknown: a run covers a corridor in one ask", "turn": 1429}
+{"ask": 88, "depth": 1, "keys": ".6", "reason": "run east along the corridor", "turn": 1669}
+{"ask": 89, "depth": 1, "keys": "M", "reason": "whole-level map: coverage and any remembered down staircase", "turn": 1689}
+{"ask": 90, "depth": 1, "keys": " *7777777777777777777777777777777777777777777777g", "reason": "space clears the M map prompt, then aim at the level's north-west corner (where most of the dark is) and let the game pathfind through the unknown", "turn": 1689}
+{"ask": 91, "depth": 1, "keys": "M", "reason": "whole-level map after the aimed walk: where is the dark now?", "turn": 1879}
+{"ask": 92, "depth": 1, "keys": " *9999999999999999999999999999999999999999999999g", "reason": "space clears the M map prompt, then aim at the north-east corner where most of the dark is", "turn": 1879}
+{"ask": 93, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "another aimed walk to the north-east corner", "turn": 1969}
+{"ask": 94, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333g", "reason": "aimed walk to the south-east corner", "turn": 2099}
+{"ask": 95, "depth": 1, "keys": "M", "reason": "whole-level map: where am I and where is the dark", "turn": 2109}
+{"ask": 96, "depth": 1, "keys": " *7777777777777777777777777777777777777777777777g", "reason": "space clears the M map prompt, then aim at the north-west corner where most of the dark is", "turn": 2109}
+{"ask": 97, "depth": 1, "keys": "*4444444444444444444444444444444444444444444444g", "reason": "aimed walk to the level's west edge", "turn": 2339}
+{"ask": 98, "depth": 1, "keys": " M", "reason": "space clears the -more-, then the whole-level map", "turn": 2349}
+{"ask": 99, "depth": 1, "keys": " *3333333333333333333333333333333333333333333333g", "reason": "space clears the M map prompt, then aim at the south-east corner where most of the dark is", "turn": 2349}
+{"ask": 100, "depth": 1, "keys": "M", "reason": "whole-level map: has the coverage grown?", "turn": 2579}
+{"ask": 101, "depth": 1, "keys": " 226688888884466222222244", "reason": "space clears the M map prompt, then the planner's chain: south out of the corridor and the dash into the dark", "turn": 2579}
+{"ask": 102, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "aimed walk to the north-east corner", "turn": 2599}
+{"ask": 103, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "aimed walk to the north-east corner", "turn": 2619}
+{"ask": 104, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "aimed walk to the north-east corner", "turn": 2639}
+{"ask": 105, "depth": 1, "keys": "222828282828282828282828", "reason": "planner chain: sweep the room for the mice", "turn": 2649}
+{"ask": 106, "depth": 1, "keys": "848888888888882822222222", "reason": "planner chain: sweep the room for the mice", "turn": 2669}
+{"ask": 107, "depth": 1, "keys": "668888888882828222222222", "reason": "planner chain: sweep the room for the mice", "turn": 2719}
+{"ask": 108, "depth": 1, "keys": "668888888888282222222222", "reason": "planner chain: sweep the room for the mice", "turn": 2819}
+{"ask": 109, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "aimed walk, rotating the corners, to sweep the known part of the level", "turn": 2839}
+{"ask": 110, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333g", "reason": "aimed walk, rotating the corners, to sweep the known part of the level", "turn": 2849}
+{"ask": 111, "depth": 1, "keys": "*1111111111111111111111111111111111111111111111g", "reason": "aimed walk, rotating the corners, to sweep the known part of the level", "turn": 2859}
+{"ask": 112, "depth": 1, "keys": "*7777777777777777777777777777777777777777777777g", "reason": "aimed walk, rotating the corners, to sweep the known part of the level", "turn": 3019}
+{"ask": 113, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "aimed walk, rotating the corners, to sweep the known part of the level", "turn": 3289}
+{"ask": 114, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333g", "reason": "aimed walk, rotating the corners, to sweep the known part of the level", "turn": 3299}
+{"ask": 115, "depth": 1, "keys": "M", "reason": "whole-level map: has the aimed-walk sweep grown the coverage?", "turn": 3469}
+{"ask": 116, "depth": 1, "keys": " *7777777777777777777777777777777777777777777777g", "reason": "aimed walk, rotating the corners: the coverage is growing this way", "turn": 3469}
+{"ask": 117, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "aimed walk, rotating the corners: the coverage is growing this way", "turn": 3589}
+{"ask": 118, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333g", "reason": "aimed walk, rotating the corners: the coverage is growing this way", "turn": 3709}
+{"ask": 119, "depth": 1, "keys": "*1111111111111111111111111111111111111111111111g", "reason": "aimed walk, rotating the corners: the coverage is growing this way", "turn": 3749}
+{"ask": 120, "depth": 1, "keys": " *7777777777777777777777777777777777777777777777g", "reason": "aimed walk, rotating the corners: the coverage is growing this way", "turn": 3959}
+{"ask": 121, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "aimed walk, rotating the corners: the coverage is growing this way", "turn": 3969}
+{"ask": 122, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333g", "reason": "aimed walk, rotating the corners: the coverage is growing this way", "turn": 4189}
+{"ask": 123, "depth": 1, "keys": "*1111111111111111111111111111111111111111111111g", "reason": "aimed walk, rotating the corners: the coverage is growing this way", "turn": 4209}
+{"ask": 124, "depth": 1, "keys": "M", "reason": "whole-level map: coverage and any remembered down staircase", "turn": 4449}
+{"ask": 125, "depth": 1, "keys": " *9999999999999999999999999999999999999999999999g", "reason": "aimed walk to the north-east, where most of the dark is", "turn": 4449}
+{"ask": 126, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333g", "reason": "aimed walk to the north-east, where most of the dark is", "turn": 4669}
+{"ask": 127, "depth": 1, "keys": "*7777777777777777777777777777777777777777777777g", "reason": "aimed walk to the north-east, where most of the dark is", "turn": 4689}
+{"ask": 128, "depth": 1, "keys": "*1111111111111111111111111111111111111111111111g", "reason": "aimed walk to the north-east, where most of the dark is", "turn": 4699}
+{"ask": 129, "depth": 1, "keys": " *9999999999999999999999999999999999999999999999g", "reason": "aimed walk to the north-east, where most of the dark is", "turn": 4719}
+{"ask": 130, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333g", "reason": "aimed walk to the north-east, where most of the dark is", "turn": 4729}
+{"ask": 131, "depth": 1, "keys": "*7777777777777777777777777777777777777777777777g", "reason": "aimed walk to the north-east, where most of the dark is", "turn": 4749}
+{"ask": 132, "depth": 1, "keys": "*1111111111111111111111111111111111111111111111g", "reason": "aimed walk to the north-east, where most of the dark is", "turn": 4759}
+{"ask": 133, "depth": 1, "keys": " *9999999999999999999999999999999999999999999999g", "reason": "aimed walk to the north-east, where most of the dark is", "turn": 4779}
+{"ask": 134, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333g", "reason": "aimed walk to the north-east, where most of the dark is", "turn": 4789}
+{"ask": 135, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "aimed walk north-east, toward the ant at (34,8)", "turn": 4809}
+{"ask": 136, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "aimed walk north-east, toward the ant at (34,8)", "turn": 4819}
+{"ask": 137, "depth": 1, "keys": "*9999999999999999999999999999999999999999999999g", "reason": "aimed walk north-east, toward the ant at (34,8)", "turn": 4829}
+{"ask": 138, "depth": 1, "keys": "*6666666666666666666666666666666666666666666666g", "reason": "aimed walk east, toward the ant", "turn": 4839}
+{"ask": 139, "depth": 1, "keys": "*6666666666666666666666666666666666666666666666g", "reason": "aimed walk east, toward the ant", "turn": 4959}
+{"ask": 140, "depth": 1, "keys": "*6666666666666666666666666666666666666666666666g", "reason": "aimed walk east, toward the ant", "turn": 4959}
+{"ask": 141, "depth": 1, "keys": "va' 6", "reason": "throw a flask of oil east at the ant, which is adjacent to my east", "turn": 4959}
+{"ask": 142, "depth": 1, "keys": " *9999999999999999999999999999999999999999999999g", "reason": "aimed walk, rotating the corners, hunting the remaining experience", "turn": 4969}
+{"ask": 143, "depth": 1, "keys": "*1111111111111111111111111111111111111111111111g", "reason": "aimed walk, rotating the corners, hunting the remaining experience", "turn": 5059}
+{"ask": 144, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333g", "reason": "aimed walk, rotating the corners, hunting the remaining experience", "turn": 5109}
+{"ask": 145, "depth": 1, "keys": "*7777777777777777777777777777777777777777777777g", "reason": "aimed walk, rotating the corners, hunting the remaining experience", "turn": 5119}
+{"ask": 146, "depth": 1, "keys": "C", "reason": "character sheet: my exact skills and experience for the report", "turn": 5149}
+{"ask": 147, "depth": 1, "keys": "\\e", "reason": "leave the character sheet", "turn": 5149}
+{"ask": 148, "depth": 1, "keys": "*4444444444444444444444444444444444444444444444g", "reason": "final aimed walks, looking for the last experience", "turn": 5149}
+{"ask": 149, "depth": 1, "keys": "*8888888888888888888888888888888888888888888888g", "reason": "final aimed walks, looking for the last experience", "turn": 5159}
+{"ask": 150, "depth": 1, "keys": "\u0018", "reason": "the run was stopped", "turn": 5219}
+{"ask": 151, "depth": 1, "keys": "\\e", "reason": "the run was stopped", "turn": 5219}
