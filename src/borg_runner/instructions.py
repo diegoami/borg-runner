@@ -29,6 +29,7 @@ nothing checks.
 """
 import bisect
 import functools
+import json
 import re
 import unicodedata
 from dataclasses import dataclass, field
@@ -348,6 +349,143 @@ def missile_dice(spells, level):
             count = {'-': count - value, '+': count + value,
                      '*': count * value, '/': count // value}[op]
     return f'{count}d{match[2]}'
+
+
+def monster_rounds(limit=2):
+    """[(worst round, name)] for every monster at `limit` depth or shallower."""
+    rows = []
+    for entry in gd.load('monster.txt')[0]:
+        depth = entry.first('depth')
+        if depth is None or int(depth) > limit:
+            continue
+        total = 0
+        for blow in entry.all('blow'):
+            parts = blow.split(':')
+            dice = re.fullmatch(r'(\d+)d(\d+)', parts[2].strip()) if len(parts) > 2 else None
+            total += int(dice[1]) * int(dice[2]) if dice else 0
+        rows.append((total, entry.value))
+    return sorted(rows, reverse=True)
+
+
+def died_records():
+    """{run: record} for every archived run that died."""
+    found = {}
+    for path in sorted((pins.ROOT / 'records').glob('*/record.json')):
+        try:
+            record = json.loads(path.read_text())
+        except (ValueError, OSError):
+            continue
+        if record.get('died'):
+            found[path.parent.name] = record
+    return found
+
+
+@extractor('thin characters', minimum=20)
+def thin_characters(c):
+    """What a character with eight hit points is up against, and what killed
+    the three that died. The page's gate on descending."""
+    races = {e.value.lower(): e for e in gd.load('p_race.txt')[0]}
+    classes = {e.value.lower(): e for e in gd.load('class.txt')[0]}
+
+    def at_level_one(race, character_class):
+        return (int(races[race].first('hitdie')) +
+                int(classes[character_class].first('hitdie')))
+
+    found = c.search(r'\*\*(\d+)\*\* for a Gnome\s*\nMage, \*\*(\d+)\*\* for a Human Mage, '
+                     r'\*\*(\d+)\*\* for a High-Elf Druid', name='the thin hit points')
+    if found:
+        for group, (race, kind) in enumerate([('gnome', 'mage'), ('human', 'mage'),
+                                              ('high-elf', 'druid')], start=1):
+            c.emit('thin', found.start(group), f'{race} {kind} hit points at CL1',
+                   int(found[group]), at_level_one(race, kind))
+    found = c.search(r'Each level adds a\s*\nroll of `randint1\(hit die\)`, 1 to (\d+) for that '
+                     r'Gnome mage \(FACT,\s*\n`src/player-birth\.c roll_hp\(\)`\), so \*\*about '
+                     r'(\d+) hit points at CL4 and (\d+) at\s*\nCL5\*\* on average, and as few as '
+                     r'(\d+) at CL5', name='the hit-point roll')
+    if found:
+        die = at_level_one('gnome', 'mage')
+        source = gd.read_source('src/player-birth.c') or ''
+        c.emit('thin', found.start(), 'a level adds randint1(hitdie)', True,
+               'randint1(player->hitdie)' in source)
+        c.emit('thin', found.start(1), 'the gnome mage hit die', int(found[1]), die)
+        for group, level in ((2, 4), (3, 5)):
+            average = die + (level - 1) * (die + 1) / 2
+            c.emit('thin', found.start(group), f'average hit points at CL{level}',
+                   int(found[group]), round(average),
+                   ok=abs(int(found[group]) - average) <= 1)
+        c.emit('thin', found.start(4), 'the worst roll at CL5',
+               int(found[4]), die + 4)
+    rounds = monster_rounds()
+    found = c.search(r'is a \*\*soldier\*\*, 2 x 1d7 =\s*\n\s*\*\*(\d+) damage\*\*', name='the worst round')
+    if found:
+        c.emit('thin', found.start(1), 'the worst round at depth 2 or shallower',
+               int(found[1]), rounds[0][0])
+        c.emit('thin', found.start(1), 'and it is the soldier that does it',
+               'soldier', rounds[0][1])
+    found = c.search(r'\*\*(\d+) of the (\d+) monsters at depth 2 or shallower can take 8\s*\n'
+                     r'\s*hit points in one round, and (\d+) of them can take 10\*\*',
+                     name='how many can kill eight hit points')
+    if found:
+        c.emit('thin', found.start(2), 'monsters at depth 2 or shallower',
+               int(found[2]), len(rounds))
+        c.emit('thin', found.start(1), 'how many can take 8 hit points in a round',
+               int(found[1]), sum(1 for total, _ in rounds if total >= 8))
+        c.emit('thin', found.start(3), 'how many can take 10',
+               int(found[3]), sum(1 for total, _ in rounds if total >= 10))
+    found = c.search(r'a \*\*cave spider\*\* comes in a group of \*\*(\d+d\d+)\*\* of them, each '
+                     r'(\d+d\d+), at speed\s*\n\s*(\d+)', name='the cave spider group')
+    if found:
+        spider = next((e for e in gd.load('monster.txt')[0] if e.value == 'cave spider'), None)
+        friends = (spider.all('friends') + spider.all('friends-base')) if spider else []
+        c.emit('thin', found.start(1), 'cave spider group size',
+               found[1], friends[0].split(':')[1] if friends else 'no friends line')
+        c.emit('thin', found.start(2), 'cave spider blow',
+               found[2], spider.all('blow')[0].split(':')[2] if spider else None)
+        c.emit('thin', found.start(3), 'cave spider speed',
+               int(found[3]), int(spider.first('speed')) if spider else None)
+    found = c.search(r'A battle-scarred veteran hits for (\d+d\d+) = (\d+) and\s*\n'
+                     r'\s*a mean-looking mercenary for (\d+d\d+) = (\d+), both at depth (\d+)',
+                     name='what the town hits for')
+    if found:
+        for dice_group, total_group, name in ((1, 2, 'battle-scarred veteran'),
+                                              (3, 4, 'mean-looking mercenary')):
+            entry = next((e for e in gd.load('monster.txt')[0] if e.value == name), None)
+            blow = entry.all('blow')[0].split(':')[2] if entry else None
+            c.emit('thin', found.start(dice_group), f'{name} blow', found[dice_group], blow)
+            dice = re.fullmatch(r'(\d+)d(\d+)', found[dice_group])
+            c.emit('thin', found.start(total_group), f'{name} worst blow',
+                   int(found[total_group]), int(dice[1]) * int(dice[2]) if dice else None)
+            c.emit('thin', found.start(5), f'{name} depth',
+                   int(found[5]), int(entry.first('depth')) if entry else None)
+    deaths = died_records()
+    for pattern, run, fields in (
+            (r'the dog took the last point \(qwen-flash-1#\d+\)', 'qwen-flash-1',
+             {'killed_by': 'a scruffy little dog', 'death_depth': 0, 'character_level': 1}),
+            (r'kobold walked up during them.*?\(sonnet-3#\d+\)', 'sonnet-3',
+             {'killed_by': 'a small kobold', 'death_depth': 1, 'character_level': 1}),
+            (r'the whole game and did not read until it was at 2 \(minimaxflash-2\.2#\d+\)',
+             'minimaxflash-2.2',
+             {'killed_by': 'a metallic green centipede', 'death_depth': 2,
+              'character_level': 2})):
+        found = c.search(pattern, re.S, name=f"the death of {run}")
+        if not found:
+            continue
+        record = deaths.get(run, {})
+        for field, claimed in fields.items():
+            c.emit('death', found.start(), f'{run} {field.replace("_", " ")}',
+                   claimed, record.get(field, f'no record for {run}'))
+    found = c.search(r'CL1 Druid was clawed from (\d+) to 1', name="the druid's hit points")
+    if found:
+        c.emit('death', found.start(1), 'qwen-flash-1 max hit points',
+               int(found[1]), (deaths.get('qwen-flash-1', {}).get('hp') or {}).get('max'))
+    found = c.search(r'a (\d+)-hit-point Mage, blind', name="the mage's hit points")
+    if found:
+        c.emit('death', found.start(1), 'sonnet-3 max hit points',
+               int(found[1]), (deaths.get('sonnet-3', {}).get('hp') or {}).get('max'))
+    found = c.search(r'a CL2 Mage stood at 4 of (\d+) hit points', name='the gnome mage at four')
+    if found:
+        c.emit('death', found.start(1), 'minimaxflash-2.2 max hit points',
+               int(found[1]), (deaths.get('minimaxflash-2.2', {}).get('hp') or {}).get('max'))
 
 
 @extractor('staircases per level', minimum=8)

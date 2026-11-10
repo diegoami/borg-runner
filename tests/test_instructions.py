@@ -59,7 +59,7 @@ from borg_runner import gamedata, instructions
 
 # Floors, set just below what the page yields today. Raising the page's claims
 # raises these; lowering them means checks were lost, and should be a decision.
-TOTAL_FLOOR = 590
+TOTAL_FLOOR = 620
 KIND_FLOORS = {
     'object cost': 12, 'table cost': 15, 'table level': 15, 'table alloc': 15,
     'race hitdie': 10, 'class hitdie': 15, 'race exp': 3,
@@ -68,7 +68,7 @@ KIND_FLOORS = {
     'store always': 20, 'store normal': 8, 'shop digit': 16, 'cost 0': 30,
     'citation': 60, 'quotation': 4, 'manual says': 10, 'price semantics': 25,
     'experience': 18, 'spell experience': 6, 'spell damage': 4,
-    'monster experience': 2, 'staircases': 8,
+    'monster experience': 2, 'staircases': 8, 'thin': 20, 'death': 10,
 }
 
 
@@ -126,6 +126,12 @@ def test_every_extractor_found_something(report):
 DOCTORED = [
     ('Hobbit 7;', 'Hobbit 8;', ['Hobbit hit die', "8", "7"]),
     ('CL5 70, CL6 100', 'CL5 75, CL6 100', ['experience for CL5', '75', '70']),
+    ('2 x 1d7 =\n  **14 damage**', '2 x 1d7 =\n  **13 damage**',
+     ['the worst round at depth 2 or shallower', '13', '14']),
+    ('**5 of the 52 monsters', '**6 of the 52 monsters',
+     ['how many can take 8 hit points in a round', '6', '5']),
+    ('a CL2 Mage stood at 4 of 16 hit points', 'a CL2 Mage stood at 4 of 18 hit points',
+     ['minimaxflash-2.2 max hit points', '18', '16']),
     ('both ask for **3 or 4 down staircases', 'both ask for **2 or 4 down staircases',
      ['classic_gen staircase counts', '(2, 4, 1, 2)', '(3, 4, 1, 2)']),
     ('/ 4` = 16 squares apart', '/ 4` = 12 squares apart',
