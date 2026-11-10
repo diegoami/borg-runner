@@ -58,6 +58,25 @@ evidence behind each OBSERVED line, run and ask; `knowledge/MANUAL-GAPS.md`
 has the long cheat sheets; `manuals/INSTRUCTIONS_2.md` is depth 5 to 20 and no
 run has been there. Go to any of them for a number or a page, not before.
 
+The manuals themselves are **not** in git: `scripts/setup.sh` clones them at
+the commits `pins.json` names, so the text is the same text for every run.
+
+    vendor/angband/docs/*.rst          the game's own manual: guide, playing,
+                                       command, attack, birth, dungeon
+    vendor/angband/lib/gamedata/*.txt  its data: every object, monster, class,
+                                       store and trap, with the real numbers
+    vendor/angband/src/*.c             what the game actually does
+    vendor/strategy-manual             seventeen chapters and ten appendices,
+                                       read through git rather than opened:
+                                         cd vendor/strategy-manual
+                                         git cat-file -p HEAD:docs/c-manual/README.md
+                                         git cat-file -p HEAD:docs/c-manual/15-notes-for-the-borg.md
+
+INSTRUCTIONS.md is those two cut to what a player uses, and every line of it
+says which of them it came from - so going to a source is a lookup for one
+number or one page, not a second reading. The appendices are tables: grep them
+when you meet something, never read them through.
+
 Do not read other runs' decisions or write-ups for your own seed - general
 notes are knowledge, a transcript of your seed is a solution key.
 
