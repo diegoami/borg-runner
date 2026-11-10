@@ -55,6 +55,12 @@ def rows(where=None):
         model = cost.get('model') or ', '.join(cost.get('models') or []) or None
         found.append({
             'run': record.get('run') or record_path.parent.name,
+            # The character the game was played as, from started.json: the
+            # lineage key. Lives of one character share it (minimaxflash-1,
+            # minimaxflash-1.2, ...), so characters - not runs - can head the
+            # page.
+            'lineage': started.get('character') or record.get('run')
+                       or record_path.parent.name,
             'seed': record.get('seed'),
             'model': model,
             'character': record.get('character'),
@@ -228,12 +234,67 @@ PAGES = ('index.html', 'records/overview.html')
 SITE = 'https://diegoami.github.io/borg-runner'
 
 
+def characters(found):
+    """The runs grouped by character (the lineage key), each with its lives
+    in order and its best numbers. A character with one recording gets no
+    page of its own - the sections treat it differently."""
+    by_name = {}
+    for row in found:
+        by_name.setdefault(row['lineage'], []).append(row)
+    out = []
+    for name, lives in sorted(by_name.items()):
+        lives = sorted(lives, key=lambda row: row['run'])
+        out.append({
+            'name': name,
+            'lives': lives,
+            'best_level': max((row['character_level'] or 0) for row in lives),
+            'best_wealth': max((row['wealth'] or 0) for row in lives),
+            'deaths': sum(1 for row in lives if (row['outcome'] or '').startswith('died')),
+        })
+    return out
+
+
+def character_page(character, base='../'):
+    """One page for a multi-life character: the lives in order, each with
+    its numbers and its replay. It is written under records/characters/, so
+    the replays are one directory up."""
+    rows = []
+    for row in character['lives']:
+        outcome = row['outcome'] or '?'
+        rows.append(
+            f"<li><strong>{html.escape(row['run'])}</strong> - CL {row['character_level']}, "
+            f"worth {row['wealth']}, depth {row['max_depth']}, {html.escape(outcome)} "
+            f"(<a href=\"{base}{row['run']}/report.html\">replay</a> · "
+            f"<a href=\"https://github.com/diegoami/borg-runner/blob/main/records/{row['run']}/REPORT.md\">report</a>)</li>")
+    return f"""<!doctype html>
+<html><head><meta charset="utf-8"><title>{html.escape(character['name'])}</title>
+<style>{PAGE_STYLE}</style></head><body><main>
+<h1>{html.escape(character['name'])}</h1>
+<p class="sub">{len(character['lives'])} lives of one character, in order.
+Best: character level {character['best_level']}, worth {character['best_wealth']}.
+The whole set of characters is on the <a href="../overview.html">overview</a>;
+who is worth imitating and why is in
+<a href="https://github.com/diegoami/borg-runner/blob/main/ACCUMULATED_BEHAVIOUR.md">ACCUMULATED_BEHAVIOUR.md</a>.</p>
+<ul>{''.join(rows)}</ul>
+</main></body></html>
+"""
+
+
 def write_all(found=None, log=print):
-    """Every form of the table: the markdown and both pages."""
+    """Every form of the table: the markdown, both pages, and a page per
+    multi-life character."""
     found = found if found is not None else rows()
     written = [write_markdown(found)]
     for where in PAGES:
         written.append(write_page(found, into=run_module.pins.ROOT / where))
+    characters_dir = run_module.RECORDS / 'characters'
+    characters_dir.mkdir(exist_ok=True)
+    for character in characters(found):
+        if len(character['lives']) < 2:
+            continue        # one recording: a page of its own is overkill
+        path = characters_dir / f"{character['name']}.html"
+        path.write_text(character_page(character))
+        written.append(path)
     for path in written:
         log(f'overview: {path}')
     return written
@@ -446,6 +507,37 @@ def page(found=None, standalone=True, base=''):
     # The rows are the page's data; nothing is fetched. They may not close
     # the script element, and they carry run names and outcomes, so they are
     # escaped as JSON rather than interpolated as HTML.
+    # The page leads with characters, not runs: multi-life characters get a
+    # page each under records/characters/, single-life characters link their
+    # one replay directly.
+    cast = characters(found)
+    multi = [c for c in cast if len(c['lives']) > 1]
+    single = [c for c in cast if len(c['lives']) == 1]
+    def by_results(character):
+        return (-character['best_level'], -character['best_wealth'])
+    multi_html = ''.join(
+        f'<li><a href="{base}characters/{html.escape(c["name"])}.html">'
+        f'<strong>{html.escape(c["name"])}</strong></a> - '
+        f'{len(c["lives"])} lives, best CL {c["best_level"]}, '
+        f'worth {c["best_wealth"]}'
+        + (f', {c["deaths"]} died' if c['deaths'] else '') + '</li>'
+        for c in sorted(multi, key=by_results))
+    single_html = ''.join(
+        f'<li><a href="{base}{html.escape(c["lives"][0]["run"])}/report.html">'
+        f'<strong>{html.escape(c["lives"][0]["run"])}</strong></a> - '
+        f'CL {c["best_level"]}, worth {c["best_wealth"]}, '
+        f'{html.escape(c["lives"][0]["outcome"] or "?")}</li>'
+        for c in sorted(single, key=by_results))
+    character_sections = (
+        '<h2>Characters</h2>\n'
+        '<p class="sub">The runs above belong to characters; a character can '
+        'live several lives, and the lives inherit each other\'s notes. '
+        'These have more than one recording - each has its own page.</p>\n'
+        f'<ul>{multi_html}</ul>\n'
+        '<h2>Single-life characters</h2>\n'
+        '<p class="sub">One recording each, so no page of their own - the '
+        'link is the replay.</p>\n'
+        f'<ul>{single_html}</ul>\n')
     script = PAGE_SCRIPT.replace('RUNS', json.dumps(found).replace('</', '<\\/'))
     return f"""{head}<title>Borg runner runs</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -461,12 +553,8 @@ started from. Click a column to sort.</p>
 the ones that levelled and got rich - character level and net worth, with
 depth as context and never the score.
 <a href="https://github.com/diegoami/borg-runner/blob/main/ACCUMULATED_BEHAVIOUR.md">ACCUMULATED_BEHAVIOUR.md</a>
-says who they are and what they did:
-<a href="{base}sonnet-2.2/report.html">sonnet-2.2</a>,
-<a href="{base}sonnet-2/report.html">sonnet-2</a>,
-<a href="{base}sonnet-1/report.html">sonnet-1</a>,
-<a href="{base}minimaxflash-1.2/report.html">minimaxflash-1.2</a>,
-<a href="{base}minimaxflash-3/report.html">minimaxflash-3</a>.</p>
+says who they are and what they did.</p>
+{character_sections}
 <div class="controls">
   <label for="alive">Alive</label>
   <select id="alive"><option value="all">all</option>{alive_options}</select>
