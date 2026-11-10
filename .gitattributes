@@ -1,0 +1,10 @@
+# Three runs of one model family play at once, and each one appends its own
+# section to agents/<family>/COMMON.md when it stops. Union merge keeps both
+# sides of a concurrent append instead of stopping a rebase on a conflict:
+# the sections are independent, so taking all of them is right, and a later
+# consolidation merges them into the body.
+agents/**/*.md merge=union
+
+# The same for the promoted notebooks, which are appended per run and never
+# edited (knowledge/<run>.md is one run's own words).
+knowledge/*.md merge=union

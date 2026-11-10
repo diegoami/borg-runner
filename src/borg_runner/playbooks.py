@@ -25,6 +25,7 @@ family's playbook is allowed and worth saying in the first note - knowledge is
 not private here - but editing it would put words in another player's mouth,
 and the file says in its own first lines whose experience it is.
 """
+import datetime
 import re
 from pathlib import Path
 
@@ -127,6 +128,65 @@ def elsewhere(family, character_class=None, where=None):
             found.append({'path': page, 'family': other.name, 'what': what,
                           'lines': len(page.read_text().splitlines())})
     return found
+
+
+def live_runs(mine=None):
+    """Runs that are playing right now, which is who else may write here.
+
+    A run's record does not say which family it belongs to until `record` is
+    run at the end, so this cannot tell a sibling from a stranger. It counts
+    games in progress and lets the caller say the careful thing: if any of
+    them is of your family, do not rewrite the page.
+    """
+    from . import run as run_module
+    try:
+        standing = run_module.status()
+    except Exception:
+        return []
+    return [row['run'] for row in standing
+            if row['state'] in ('playing', 'waiting') and row['run'] != mine]
+
+
+def append(family, text, run, character_class=None, where=None):
+    """Add a section to a family's page without rewriting what is there.
+
+    Three runs of one family play at once, and each one's write-up lands in
+    the same file: a whole-file rewrite by the last of them erases the other
+    two. This appends under a heading of its own, under an exclusive lock, and
+    re-reads the file inside the lock - so two runs finishing in the same
+    second both survive, and a later session merges the sections into the body
+    when nothing is playing.
+    """
+    import fcntl
+
+    home = directory(family, where)
+    home.mkdir(parents=True, exist_ok=True)
+    page = home / (class_file(character_class) if character_class else COMMON)
+    lock = home / f'.{page.name}.lock'
+    with open(lock, 'w') as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        before = page.read_text() if page.exists() else SKELETON.format(
+            family=slug(family), run=run)
+        heading = f'## From `{run}`, {datetime.date.today().isoformat()}'
+        body = text.strip('\n')
+        page.write_text(f"{before.rstrip()}\n\n{heading}\n\n{body}\n")
+    return page
+
+
+def sections(family, character_class=None, where=None):
+    """The per-run sections appended to a page, oldest first.
+
+    What a consolidating session has to fold into the body. A page with many
+    of these is a page nobody has merged yet, not a page nobody wrote.
+    """
+    home = directory(family, where)
+    page = home / (class_file(character_class) if character_class else COMMON)
+    if not page.exists():
+        return []
+    return [{'run': found.group('run'), 'date': found.group('date')}
+            for found in re.finditer(
+                r'^## From `(?P<run>[^`]+)`, (?P<date>\d{4}-\d{2}-\d{2})\s*$',
+                page.read_text(), re.MULTILINE)]
 
 
 def touched_since(family, when, where=None):

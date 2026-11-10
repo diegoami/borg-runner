@@ -276,6 +276,23 @@ class has one or has earned one. Three rules:
   any player should have belongs in your notebook, where `keep` promotes it
   into `knowledge/`.
 
+**If any other run is playing, append - do not rewrite.** Several runs of one
+family play here at once and they all write to these same pages, so the last
+whole-file rewrite erases the others. `playbook --family {AGENT}` says how
+many games are in progress. To add your part without touching anyone else's:
+
+    .venv/bin/python -m borg_runner playbook --family {AGENT} \
+        --append - --from {RUNNAME} <<'MD'
+    ## What I measured
+
+    ... your lines, with the asks they came from ...
+    MD
+
+It takes a lock, re-reads the file inside it, and adds your section under a
+heading of its own, so two runs that finish in the same second both survive.
+Rewriting the body - folding the sections into the page - is work for a
+session with nothing playing, not for you.
+
 If your family has no COMMON.md yet, start one:
 
     .venv/bin/python -m borg_runner playbook --family {AGENT} --start {RUNNAME}

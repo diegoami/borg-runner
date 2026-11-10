@@ -203,3 +203,51 @@ def test_the_knowledge_directory_is_now_evidence_only():
     kept = sorted(path.name for path in run_module.KNOWLEDGE.glob('*.md')
                   if path.stem not in runs)
     assert not kept, f'{kept} are in knowledge/ and are not a run notebook'
+
+
+def test_two_runs_appending_at_once_both_survive(tmp_path):
+    """Three sessions of one family play at once and all write this page."""
+    a_playbook(tmp_path, family='fam', text='# COMMON\n\nfrom sonnet-1.\n')
+    playbooks.append('fam', 'I measured A.', 'run-a', where=tmp_path)
+    playbooks.append('fam', 'I measured B.', 'run-b', where=tmp_path)
+    text = (tmp_path / 'fam' / playbooks.COMMON).read_text()
+    assert 'from sonnet-1.' in text, 'what was there is kept'
+    assert 'I measured A.' in text and 'I measured B.' in text
+    assert text.index('I measured A.') < text.index('I measured B.')
+    kept = playbooks.sections('fam', where=tmp_path)
+    assert [row['run'] for row in kept] == ['run-a', 'run-b']
+
+
+def test_appending_to_a_family_with_no_page_starts_one(tmp_path):
+    page = playbooks.append('newcomer', 'first.', 'newcomer-1', where=tmp_path)
+    assert page.name == playbooks.COMMON
+    assert 'newcomer-1' in page.read_text() and 'first.' in page.read_text()
+
+
+def test_a_class_page_takes_appends_too(tmp_path):
+    a_playbook(tmp_path, family='fam', text='# COMMON\n\nfrom sonnet-1.\n')
+    page = playbooks.append('fam', 'mage things.', 'run-c',
+                            character_class='Mage', where=tmp_path)
+    assert page.name == 'MAGE.md'
+    assert playbooks.sections('fam', 'Mage', where=tmp_path)[0]['run'] == 'run-c'
+
+
+def test_the_lock_file_is_not_part_of_the_repository(tmp_path):
+    playbooks.append('fam', 'x.', 'run-a', where=tmp_path)
+    locks = list((tmp_path / 'fam').glob('.*.lock'))
+    assert locks, 'the append takes a lock beside the page'
+    ignored = (pins.ROOT / '.gitignore').read_text()
+    assert 'agents/**/.*.lock' in ignored
+
+
+def test_concurrent_appends_merge_instead_of_conflicting():
+    """Two runs committing appends must not stop each other's rebase."""
+    attributes = (pins.ROOT / '.gitattributes').read_text()
+    assert 'agents/**/*.md merge=union' in attributes
+
+
+@pytest.mark.parametrize('name', PROMPTS)
+def test_both_prompts_say_to_append_when_others_are_playing(name):
+    prose = ' '.join((pins.ROOT / name).read_text().split())
+    assert 'append - do not rewrite' in prose
+    assert '--append - --from' in prose

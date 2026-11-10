@@ -62,6 +62,31 @@ Three rules for writing one:
   their character — but editing it would put words in another player's mouth,
   and each page says in its first lines whose experience it is.
 
+## When several runs of one family play at once
+
+They all write these same pages, and the last whole-file rewrite erases the
+others — the same failure that once destroyed a run's own report here. So a
+run adds its part instead of rewriting:
+
+```sh
+python -m borg_runner playbook --family minimax --append - --from minimaxflash-3 <<'MD'
+## What I measured
+
+...
+MD
+```
+
+`append` takes an exclusive lock, re-reads the page inside it, and puts the
+text under `## From \`<run>\`, <date>`, so two runs finishing in the same
+second both survive. `.gitattributes` gives these pages `merge=union`, so two
+commits of two appends merge rather than stopping a rebase. And
+`playbook --family <family>` says how many games are in progress before you
+write, plus how many appended sections are waiting.
+
+**Folding those sections into the body is separate work**, for a session with
+nothing playing: that is where a page stays readable whole, which is the only
+property that makes it worth reading at all.
+
 ## Borrowing, when your family has nothing yet
 
 A family's first run of a class has no page of its own, and should not start

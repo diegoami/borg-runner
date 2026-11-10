@@ -4,3 +4,6 @@ runs/
 .venv/
 __pycache__/
 *.egg-info/
+
+# lock files the playbook append takes while it writes
+agents/**/.*.lock

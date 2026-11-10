@@ -182,6 +182,27 @@ def cmd_playbook(args):
     if args.start:
         print(playbooks.start(args.family, run=args.start))
         return 0
+    if args.append:
+        if not args.from_run:
+            print('say which run is writing: --from <run>', file=sys.stderr)
+            return 1
+        text = (sys.stdin.read() if args.append == '-'
+                else Path(args.append).read_text())
+        print(playbooks.append(args.family, text, args.from_run,
+                               character_class=args.klass))
+        return 0
+    playing = playbooks.live_runs(mine=args.from_run)
+    if playing:
+        print(f"{len(playing)} runs are playing right now "
+              f"({', '.join(playing)}). If any of them is a {args.family} run "
+              f"it will write to these same pages when it stops, and a "
+              f"whole-file rewrite would erase it. Add your part instead:")
+        print(f'    python -m borg_runner playbook --family {args.family} '
+              f'--append - --from <your run>   # your section, on stdin')
+    kept = playbooks.sections(args.family, args.klass)
+    if kept:
+        print(f"{len(kept)} appended sections wait to be folded into the body: "
+              + ', '.join(row['run'] for row in kept))
     missing = 0
     for row in playbooks.paths(args.family, args.klass):
         where = row['path'].relative_to(run_module.pins.ROOT)
@@ -491,6 +512,11 @@ def parser():
     p.add_argument('--start', metavar='RUN',
                    help="create the family's COMMON.md if it has none, "
                         'naming the run that writes it')
+    p.add_argument('--append', metavar='FILE',
+                   help="add a section to the family's page without rewriting "
+                        "it; FILE may be - for standard input")
+    p.add_argument('--from', dest='from_run', metavar='RUN',
+                   help='the run writing the section, which heads it')
     p.add_argument('--check', action='store_true',
                    help='check the layout of every playbook')
     p.set_defaults(func=cmd_playbook)
