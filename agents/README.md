@@ -111,7 +111,7 @@ naming where it came from.
 ## What is here now
 
 `minimax/` — four lives: three of one High-Elf Druid on seed 23
-(`minimaxflash-1`, `minimaxflash-1-again`, `minimaxflash-1.3`) and one of a
+(`minimaxflash-1`, `minimaxflash-1.2`, `minimaxflash-1.3`) and one of a
 Gnome Mage on seed 41 (`minimaxflash-2`), written by the player of those runs:
 [COMMON.md](minimax/COMMON.md), [DRUID.md](minimax/DRUID.md) and
 [MAGE.md](minimax/MAGE.md).

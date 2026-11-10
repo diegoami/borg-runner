@@ -50,12 +50,12 @@ Necromancer have never been played here.**
 |---|---|---|---|---|---|---|---|
 | [sonnet-1](records/sonnet-1/REPORT.md) | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 1 | 3 | 125 | 4,659 | alive, budget |
 | [sonnet-2](records/sonnet-2/REPORT.md) | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 6 | 6 | 153 | 6,056 | alive, budget |
-| [sonnet-2-again](records/sonnet-2-again/REPORT.md) | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | **7** | 8 | 291 | 10,416 | alive, budget |
+| [sonnet-2.2](records/sonnet-2.2/REPORT.md) | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | **7** | 8 | 291 | 10,416 | alive, budget |
 | [sonnet-3](records/sonnet-3/REPORT.md) | anthropic/claude-sonnet-5-5 | Human Mage | 1 | 1 | 47 | 1,348 | **died**, small kobold |
 | [codex-1-tty](records/codex-1-tty/REPORT.md) | openai/gpt-5.6-luna | Dunadan Warrior | 1 | 1 | 66 | 1,860 | alive, in town |
 | [qwen-flash-1](records/qwen-flash-1/REPORT.md) | alibaba-token-plan/qwen3.8-flash | High-Elf Druid | 0 | 1 | 73 | 570 | **died** in the town, scruffy little dog |
 | [minimaxflash-1](records/minimaxflash-1/REPORT.md) | minimax/MiniMax-M3.1-Flash | High-Elf Druid | 1 | 1 | 148 | 7,433 | alive, budget |
-| [minimaxflash-1-again](records/minimaxflash-1-again/REPORT.md) | minimax/MiniMax-M3 | High-Elf Druid | 2 | 4 | 401 | 10,898 | alive, budget |
+| [minimaxflash-1.2](records/minimaxflash-1.2/REPORT.md) | minimax/MiniMax-M3 | High-Elf Druid | 2 | 4 | 401 | 10,898 | alive, budget |
 | [minimaxflash-1.3](records/minimaxflash-1.3/REPORT.md) | minimax/MiniMax-M3 | High-Elf Druid | 1 | 4 | 610 | 17,281 | alive, budget |
 | [minimaxflash-2](records/minimaxflash-2/REPORT.md) | minimax/MiniMax-M3.1-Flash | Gnome Mage (asked for) | 1 | 1 | 158 | 8,001 | alive, budget |
 | [minimaxflash-2.2](records/minimaxflash-2.2/REPORT.md) | minimax/MiniMax-M3 | Gnome Mage | 2 | 2 | 354 | 10,811 | **died**, metallic green centipede |
@@ -85,7 +85,7 @@ on the first level because they had not found the way off it.
   down. Three in five of the person's keypresses moved one square; the run
   command was used 32 times in 418 (`diego-1`).
 - **The one run that changed this changed one thing**: it used the game's own
-  routing to walk to a staircase it had seen (`sonnet-2-again#228`–`#230`, 11
+  routing to walk to a staircase it had seen (`sonnet-2.2#228`–`#230`, 11
   steps and 110 game turns in a single decision), and reached depth 7. The
   corpus' only other descent was a Deep Descent scroll found by luck
   (`sonnet-2#77`).
@@ -233,15 +233,15 @@ The corpus' direct corrections. Each cost a run something.
 | the manuals say | what the runs found |
 |---|---|
 | the level feeling is a number to compare against a danger table (strategy manual c15) | the game prints `10 - mon_feeling`, so **the digit on screen is inverted** against that table: higher is worse (GAME SOURCE). A session was told *"naught but cobwebs"* and stayed 4,290 turns (`diego-1`) |
-| `M` shows the whole-level map | it shows the **whole level, scaled to 78×22** (`display_map` computes row and column for every square of the 198×66 dungeon), but only the **remembered** squares are drawn in it (2 RUNS, `minimaxflash-1#104`, `minimaxflash-1-again#181`). Two things the manuals do not say, both read out of the source (`minimaxflash-1.5`): a staircase can never be hidden by the scaling - up and down staircases carry the highest terrain **priority** (25; `terrain.txt`), so a remembered `>` always wins its cell and "no `>` on the M map" is real evidence of absence; and positions are recoverable from it, because the panel scrolls in jumps of 33 columns and 11 rows (`verify_panel_int`), so panel columns are not level columns and the M map is the only honest grid |
+| `M` shows the whole-level map | it shows the **whole level, scaled to 78×22** (`display_map` computes row and column for every square of the 198×66 dungeon), but only the **remembered** squares are drawn in it (2 RUNS, `minimaxflash-1#104`, `minimaxflash-1.2#181`). Two things the manuals do not say, both read out of the source (`minimaxflash-1.5`): a staircase can never be hidden by the scaling - up and down staircases carry the highest terrain **priority** (25; `terrain.txt`), so a remembered `>` always wins its cell and "no `>` on the M map" is real evidence of absence; and positions are recoverable from it, because the panel scrolls in jumps of 33 columns and 11 rows (`verify_panel_int`), so panel columns are not level columns and the M map is the only honest grid |
 | the Armoury's prices (c11 tables) | gear is priced by **power**, not by its `cost:` line (`src/obj-power.c: object_value_real`): Leather Shield 66, Studded Leather 150, far above the tables (2 RUNS, `sonnet-3#27`, `minimaxflash-1`) |
 | Deep Descent is found from depth 1 (our own earlier distillate) | `object.txt` gives it `level:10` with `alloc:20:1 to 100`, and one *was* found and read on depth 1 (`sonnet-2#76`). Which field governs the depth is still unread (`obj-make.c`) |
-| a shop's stock is the seed's stock (inferred by a run) | `store_maint()` runs once per game **day** and the shopkeeper shuffles (`store.c:1425`): "the Alchemist had no Magic Mapping this seed" was true of one day only, and a later visit found three at 65 gold under a different shopkeeper (ONE RUN, `minimaxflash-1-again#399`) |
+| a shop's stock is the seed's stock (inferred by a run) | `store_maint()` runs once per game **day** and the shopkeeper shuffles (`store.c:1425`): "the Alchemist had no Magic Mapping this seed" was true of one day only, and a later visit found three at 65 gold under a different shopkeeper (ONE RUN, `minimaxflash-1.2#399`) |
 | Word of Recall is not an escape (c15 ESC-04) | right, and the number behind it: the counter ticks in `process_world`, once per ten game turns, so 15+1d20 ticks is **150–340 game turns** — one run gave up after about forty (`qwen-flash-1`). Read in town before ever leaving it, it goes to depth 1, and arriving in town heals (GAME SOURCE + 2 RUNS). **The way to wait it out is one rest**: a full rest is about 61 player actions for a single key, comfortably over the 15-34 maximum, interrupted only if a monster reaches you (ONE RUN, `mmf-mage.2#91`) |
 | our own earlier distillate: "one spell point per TEN pounds of armour over the allowance" (a run's correction of the manual) | the manual was right and the run was wrong: `cur_wgt` is in tenths of a pound as well, so `(cur_wgt - spell_weight) / 10` is **pounds** over, one spell point each (GAME SOURCE; the claim is corrected in `agents/minimax/` where it stood) |
 | nothing in any manual mentions locked doors | one closed door in four is locked with strength `randint1(7)` (`gen-util.c`), walking into it picks it at `MAX(2, disarm-phys - 4 x strength)` per cent, and the skill is divided by ten if the lock is unseen or you are blind (`player-calcs.c calc_unlocking_chance()`). Two costs no manual states: **a failed pick prints `Cancelled` and eats the rest of that decision's keys** (`minimaxflash-1.4#616`), and **a picked lock leaves you outside the door** (`minimaxflash-2.2#162`) |
 | an unknown item is identified by use, or by a Scroll of Identify (the manuals' model) | **giving it to the store that buys its type identifies the kind for nothing**: `do_cmd_sell()` calls `object_flavor_aware()` and learns the runes *before* the item changes hands (`store.c`), so with `birth_no_selling` on you get 0 gold, lose the item and know every future copy. With selling off this is the only way to identify something you dare not use (GAME SOURCE) |
-| the manuals list the mushroom patches | they do not say that the **grey mould is mobile** — no `NEVER_MOVE`, and it chases (GAME SOURCE + `minimaxflash-1-again#174`, `codex-1-tty`, which lost 5 of 21 hit points to spores without ever meleeing it) |
+| the manuals list the mushroom patches | they do not say that the **grey mould is mobile** — no `NEVER_MOVE`, and it chases (GAME SOURCE + `minimaxflash-1.2#174`, `codex-1-tty`, which lost 5 of 21 hit points to spores without ever meleeing it) |
 | nothing in any manual describes fear | **fear is -20 to-hit, +8 armour class, and no attacks** (`player-calcs.c`: `OF_AFRAID` adjusts all three; the attack refusal is `do_cmd_walk_test`'s "You are too afraid to attack"). The +8 AC is visible on the sidebar and the -20 is not, and nothing cures it but the timer. Two crows held a druid at 3 hit points for about eight decisions while it could do nothing at all - the fifth death is mostly this row (`minimaxflash-1.5`, GAME SOURCE + ONE RUN) |
 | nothing in any manual describes the shrieker mushroom patch | it shrieks when you come near, and the shriek **wakes everything in line of sight** (`monster_spell.txt`: `effect:WAKE`, "shriek for help" - it wakes monsters up, it does not summon new ones). Lethal to stand next to at 3 hit points, and part of the fifth death (`minimaxflash-1.5`, GAME SOURCE + ONE RUN) |
 
@@ -258,7 +258,7 @@ The corpus' direct corrections. Each cost a run something.
   most of depth 1 on its own 12% floor. It needs so
   Grip (AC 36) could not be hurt at range 2 and died at range 1 at about 77%,
   while AC 1–4 targets (worm mass, mould, patch, mouse) are worth throwing at
-  from anywhere (GAME SOURCE + ONE RUN, `minimaxflash-1-again`). One flask
+  from anywhere (GAME SOURCE + ONE RUN, `minimaxflash-1.2`). One flask
   killed each depth-6 `p` human it met (`sonnet-2#124`, `#131`, `#145`).
 - **A monster's hit dice are not its damage against you**: Grip's 1d4 bite did
   2–4 against AC 12 (ONE RUN). Armour eats most of a small die.
@@ -266,7 +266,7 @@ The corpus' direct corrections. Each cost a run something.
   (`player_regen_mana`, `player-util.c:487`: `msp × 197 + 524` in 65536ths,
   doubled while resting). One spell point is roughly 22 turns of rest, and the
   Druid's only attack spell costs two: 20 turns of resting bought **nothing**
-  (ONE RUN, `minimaxflash-1-again#363`). A class whose weapon arrives at CL3
+  (ONE RUN, `minimaxflash-1.2#363`). A class whose weapon arrives at CL3
   cannot pay for it at CL3.
 - **A player-cast ball never hits its caster** (`PROJECT_PLAY` is not set:
   `effect-handler-attack.c:594`, `project.c:519`), so radius-2 poison is safe
@@ -335,9 +335,9 @@ The corpus' direct corrections. Each cost a run something.
   it never happened.
 - **The one escape that was used, worked.** Phase Door broke away from a
   +10-speed unique twice in one run, for one decision each
-  (`minimaxflash-1-again#332`, `#345`).
+  (`minimaxflash-1.2#332`, `#345`).
 - **The town is not free.** A street urchin took 8 of 26 gold and a cutpurse
-  lifted a flask (`minimaxflash-1-again#394`); the next life of that character
+  lifted a flask (`minimaxflash-1.2#394`); the next life of that character
   arrived with 3 gold and could not reach a shop at all, which made the
   previous life's own advice — buy the 65-gold Magic Mapping — unactionable
   (`minimaxflash-1.3`). The corpus' second death was in the town

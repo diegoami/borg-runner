@@ -11,7 +11,7 @@ carry-on of `minimaxflash-1.4`, which stopped alive on depth 1 at ask 759.*
 `docs/BRIEF.md` (all), `manuals/INSTRUCTIONS.md` (all),
 `manuals/INSTRUCTIONS_2.md` (all), my own playbook `agents/minimax/COMMON.md`
 (all) and `agents/minimax/DRUID.md` (all), my own four write-ups
-`runs/minimaxflash-1/REPORT.md`, `runs/minimaxflash-1-again/REPORT.md`,
+`runs/minimaxflash-1/REPORT.md`, `runs/minimaxflash-1.2/REPORT.md`,
 `runs/minimaxflash-1.3/REPORT.md` and `runs/minimaxflash-1.4/REPORT.md`, the
 inherited notebook `runs/minimaxflash-1.5/notebook.md`, and in
 `vendor/angband` the source and the data for the questions I had:

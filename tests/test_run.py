@@ -708,8 +708,8 @@ def test_a_lineage_is_numbered_rather_than_renamed_each_time():
     assert run_module.next_generation('rogue-1.2') == 'rogue-1.3'
     assert run_module.next_generation('rogue-1.9') == 'rogue-1.10'
     # The two runs that predate this were generation 2.
-    assert run_module.next_generation('minimaxflash-1-again') == 'minimaxflash-1.3'
-    assert run_module.next_generation('sonnet-2-again') == 'sonnet-2.3'
+    assert run_module.next_generation('minimaxflash-1.2') == 'minimaxflash-1.3'
+    assert run_module.next_generation('sonnet-2.2') == 'sonnet-2.3'
     # A path is accepted as readily as a name.
     assert run_module.next_generation('runs/rogue-1/') == 'runs/rogue-1.2'
 

@@ -20,7 +20,7 @@ Original keyset: digits walk (`1-9`, `5` stays), letters are commands. Keys you 
 - Send each **alone in its ask**: any key after `g` interrupts the walk after one step, so `lxglxglxg` gives one-square hops, not three walks.
 - With no staircase known yet, `>` in look mode does nothing (the game rings a bell) and the cursor stays put. Keep exploring with `lxg` until one is on the map.
 
-OBSERVED, sonnet-2-again#156 to sonnet-2-again#230: this is how the only deliberate descent in any run happened — depth 6 to depth 7, after four runs and some 350 asks had never found a staircase at all. One ask walked 11 steps and 110 game turns onto the stairs.
+OBSERVED, sonnet-2.2#156 to sonnet-2.2#230: this is how the only deliberate descent in any run happened — depth 6 to depth 7, after four runs and some 350 asks had never found a staircase at all. One ask walked 11 steps and 110 game turns onto the stairs.
 
 Two runs went wrong here in ways worth not repeating. One spent ~100 asks walking a level blind and found nothing. One wrote itself a 143-line pathfinder, used it for 148 asks, reached depth 1, and never tried `lxg` — the game already had what it was building. **Check the game's own commands before you write code.**
 
@@ -92,7 +92,7 @@ its decisions under `records/`.
 - **Look or targeting mode can be left standing**, and then it eats the first
   keys of the next ask. The tell is `Press '?' for help.` on the bottom line,
   or a look description in the message line with a turn counter that has not
-  moved. Press `\e` first (minimaxflash-2#72, minimaxflash-1-again#221).
+  moved. Press `\e` first (minimaxflash-2#72, minimaxflash-1.2#221).
 - **A key after a movement command is swallowed by whatever it opened.** A
   walk, a run or an aimed `g` leaves the game ready for the next command, and
   the first key of the next string is read as one: a stray `a` became "Aim a
@@ -133,7 +133,7 @@ failure.** It is cheap and it pays:
   heals you on arrival;
 - the town's shops **restock daily** and the shopkeepers rotate, so the Magic
   Mapping scroll that was not there on day one may be there on day two
-  (`store.c store_maint()`, OBSERVED minimaxflash-1-again#399);
+  (`store.c store_maint()`, OBSERVED minimaxflash-1.2#399);
 - experience and gold both come from the level you are on, and armour bought
   with that gold is what decides whether the next fight can touch you at all
   (see section 5 on hit chance);
@@ -249,10 +249,10 @@ either manual.
   already said `Down staircase`).
 - **The staircase under you is never drawn.** The map draws `@`, not the
   terrain beneath it; only the status line's last field names it (OBSERVED,
-  minimaxflash-1-again#163). After going down you arrive on an **up**
+  minimaxflash-1.2#163). After going down you arrive on an **up**
   staircase, so `< ` then `> ` is a two-key reroll of the level you have just
   landed in, and in the town the `<` puts you back on its `>` (2 runs:
-  sonnet-1#67, minimaxflash-1-again#163). A player scanning the map for a
+  sonnet-1#67, minimaxflash-1.2#163). A player scanning the map for a
   glyph will never see the one it is on.
 - **The level is 198x66 and you see 66x22 of it.** FACT,
   `constants.txt` (`world:dungeon-wid:198`, `world:dungeon-hgt:66`) against the map panel,
@@ -293,7 +293,7 @@ x=120). It is not. **Nothing in this game asks you to go back to a place.**
   work of building one buys nothing.
 - **Stairs are connected, and both directions are exits.** You arrive on an
   up staircase; `< ` and then `> ` is a fresh level of the same depth for two
-  or three asks (2 runs: sonnet-1#67, sonnet-2-again#231). Going **up** is as
+  or three asks (2 runs: sonnet-1#67, sonnet-2.2#231). Going **up** is as
   good a way out of a bad level as going down.
 - **This is not that other game.** Levels do not persist, there is nothing to
   come back for, and a coordinate is worth only what the next few steps need:
@@ -326,7 +326,7 @@ you as this one was - at two asks instead of a hundred.
 - Step: a digit. Moving into a monster attacks it, into a door opens it, into a **visible trap tries to disarm it**; `W` + digit walks onto a trap on purpose. `o`/`c` open/close, `D` disarm or lock, `T` tunnel (rubble, veins), `g` pick up, `,` or `5` stay a turn. Stepping onto a square picks up **gold, always and for free**, but only *notices* anything else - the message is "You see %s." (`src/obj-pile.c`) - because the `pickup_always` option is off (FACT, `src/cmd-pickup.c do_autopickup()`, "Always pickup gold, effortlessly", and options may not be changed here); an object takes the `g` (OBSERVED, mmf-mage.2#43, an ask spent learning it).
 - Run: `.` then a digit; it follows the corridor until you must choose or something disturbs you (`playing`, Disturb: a hit or spell on you, an object or monster in the next square, a known trap, a new level). A count repeats a command: `0`, number, command.
 - `n` repeats the previous command. A keypress interrupts a run, rest or path (Space/Esc are safe).
-- **Walk to a known place for one command** (see 'The one thing to take from this page' above; OBSERVED, sonnet-2-again#156 to #230, no longer untested) (`playing`, Targeting and Pathfinding, which lists `<`, `>`, `p` as up, down, unknown "respectively"; `src/ui-target.c` agrees): `*` or `l`, then `>` moves the cursor to the nearest *known* down staircase (`<` up), `x` to the nearest square next to unexplored space, then `g` walks you there along the shortest path, stopping when disturbed; `n` resumes. The `autoexplore_commands` option does the same on bare `>`, `<`, `p`, but options may not be changed here.
+- **Walk to a known place for one command** (see 'The one thing to take from this page' above; OBSERVED, sonnet-2.2#156 to #230, no longer untested) (`playing`, Targeting and Pathfinding, which lists `<`, `>`, `p` as up, down, unknown "respectively"; `src/ui-target.c` agrees): `*` or `l`, then `>` moves the cursor to the nearest *known* down staircase (`<` up), `x` to the nearest square next to unexplored space, then `g` walks you there along the shortest path, stopping when disturbed; `n` resumes. The `autoexplore_commands` option does the same on bare `>`, `<`, `p`, but options may not be changed here.
 - Level feeling, bottom status line `LF:a-b`: **a is danger, higher = worse** (1 quiet ... 9 omens of death; `src/ui-display.c prt_level_feeling`), `?` until explored; b is loot. Chapter 15's STAIR-01 is not wrong, it is written for a different reader: internally 1 is the most dangerous (`src/generate.c calc_mon_feeling`, and the game's own comment in `src/ui-display.c`, "1 to 9 are feelings from omens of death to quiet"), and the screen prints `10 - feeling` to make it a danger number. A borg reads the struct; you read the reversal. So its `K_LF_LEAVE = 2` means 'leave the worst' on the internal scale and 'leave the two quietest' on yours - do not apply it to the screen. `^f` repeats the feeling text.
 - Terrain on the status line names where you stand ("Up staircase", "Down staircase", "Open floor"). `>` and `<` work only on those.
 - Stairs are connected (`birth`): after `>` you stand on an up staircase; after `<` on a down one. **So you never arrive without a way back: the staircase under your feet the moment you arrive is the exit in the other direction, one action away, and monsters do not follow you through it.** Taking it does not restore the level you left - leaving a level destroys it, and taking a staircase always gives a new one - but it always leaves the one you are in.
@@ -348,7 +348,7 @@ you as this one was - at two asks instead of a hundred.
 - **Armour class mostly buys misses, not padding.** When a blow does land, armour removes `damage x min(AC, 240) / 400` of it (FACT, `src/mon-attack.c adjust_dam_armor()`) - **2.5% at AC 10**. What AC really buys is the monster missing more often (it is the defence value in the hit roll, `src/mon-attack.c`), which is the formula below. So a 100-gold armour for +4 AC is a poor trade for a class that can fight, and a **Potion of Berserk Strength** - which heals 30, gives **+75 to-hit** and fear immunity and takes **10 off your armour class** (FACT, `src/player-calcs.c`, the berserk timer) - is a bargain at that level, because the 10 AC it costs is worth 2.5% of one blow (measured by minimaxflash-3, which drank one and watched `Cur AC` fall from 10 to 0 while winning the fight; its report has the numbers).
 - **Throw** `v`, the item, then a target. At the `Direction?` prompt: `'` = closest monster, `5` or `t` = the current target, `*` = choose (Space next, `t` select, Esc/`q` quit), a digit = that direction (`playing`, Targeting). `'` alone, as a command, targets the closest monster. Fire: `f`, ammo, target; **`h`** (or Tab) fires the first quiver ammo at the nearest visible monster.
 - **Armour class decides whether you can hit at all.** FACT,
-`src/player-attack.c:196 hit_chance()`: the chance is `12% + 83% x (to_hit - 2 x AC / 3) / to_hit`, so against AC `A` a to-hit below `2A/3` leaves you on the flat **12%** floor and nothing else. At depth 1 a giant black ant and a small kobold are AC 24, so they need to-hit 16: a character with to-hit 9-11 (a Mage's rapier, or its thrown oil) cannot fight them at all and must pick low-armour targets - worm mass, mould, mushroom patch, icky thing, mouse are AC 1-8 (OBSERVED, minimaxflash-1-again on Grip at AC 36, minimaxflash-2#91 with to-hit 11). The same formula is what your own AC does for you: 200 gold of armour took one Mage from AC 1 to **AC 21**, which puts most of depth 1 on its 12% floor against eight hit points.
+`src/player-attack.c:196 hit_chance()`: the chance is `12% + 83% x (to_hit - 2 x AC / 3) / to_hit`, so against AC `A` a to-hit below `2A/3` leaves you on the flat **12%** floor and nothing else. At depth 1 a giant black ant and a small kobold are AC 24, so they need to-hit 16: a character with to-hit 9-11 (a Mage's rapier, or its thrown oil) cannot fight them at all and must pick low-armour targets - worm mass, mould, mushroom patch, icky thing, mouse are AC 1-8 (OBSERVED, minimaxflash-1.2 on Grip at AC 36, minimaxflash-2#91 with to-hit 11). The same formula is what your own AC does for you: 200 gold of armour took one Mage from AC 1 to **AC 21**, which puts most of depth 1 on its 12% floor against eight hit points.
 - **Flask of oil** FACT (`object`, c4 4.11 from `src/player-attack.c`): 1d4 x3 (throwing weight multiplier) x3 (EXPLODE) = **9 to 36 per hit, about 22**, damage that fire-resistant monsters take too. Range up to 10 squares. OBSERVED, one run each: one flask killed each of the depth-6 `p` humans it met - apprentice, gallant, tamer (sonnet-2#124, sonnet-2#131, sonnet-2#145); and Fang died at character level 2 to two flasks in a corridor and then melee, which cost 20 of 31 hit points (sonnet-1#84, sonnet-1#90). Daggers and Spears are `THROWING` too (x3 and x6 on dice).
 - Spells: `b` browse, `G` study (new spells show "Study" on the status line; **Priests and Paladins** are given a random one, others choose), `m` + book + spell casts. First cast of each spell pays experience (the last field of a `class` `spell:` line). Casting with too little mana is allowed and can paralyse you and drain CON (c14 0.2): do not.
 - Early dangers, `monster`, hit points / worst melee per **your** turn (a +10 speed monster acts twice):

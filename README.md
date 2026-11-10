@@ -21,7 +21,7 @@ session, a terminal — as one line, with the placeholders filled in:
 ```
 Follow the prompt in /home/diego/projects/borg-runner/PLAYGAME.txt — RUNNAME=codex-1, AGENT=codex
 Follow the prompt in /home/diego/projects/borg-runner/PLAYGAME.txt — RUNNAME=gnome-1, AGENT=sonnet, RACE=Gnome, CLASS=Mage
-Follow the prompt in /home/diego/projects/borg-runner/CONTINUEGAME.txt — FROM=minimaxflash-1-again, AGENT=minimax
+Follow the prompt in /home/diego/projects/borg-runner/CONTINUEGAME.txt — FROM=minimaxflash-1.2, AGENT=minimax
 ```
 
 `AGENT` is which agent is playing, as a model family: it names

@@ -1,6 +1,6 @@
 # DRUID — what four lives of a Druid taught me
 
-*Written by the player of `minimaxflash-1`, `minimaxflash-1-again`,
+*Written by the player of `minimaxflash-1`, `minimaxflash-1.2`,
 `minimaxflash-1.3` and `minimaxflash-1.5`. Four lives of the same
 High-Elf Druid on seed 23: CL1 → CL4, depth 1 → depth 2, alive at the end
 of three and dead on the fourth.*
@@ -66,7 +66,7 @@ per turn, 0.046 while resting**. So:
 
 - **one spell point costs about 22 turns of rest**
 - **Stinking Cloud costs two spell points ≈ 43 turns of rest**
-- I rested 20 turns at ask 363 of `minimaxflash-1-again` and **gained
+- I rested 20 turns at ask 363 of `minimaxflash-1.2` and **gained
   nothing at all**
 
 **For a class whose only good spell costs 2 SP, the spell book is nearly
@@ -124,7 +124,7 @@ that four lives of this family have wanted to buy and could not.
 ## 2. Stinking Cloud: the gun, and its two catches
 
 **Catch one — it cannot hurt you.** Measured and read in
-`minimaxflash-1-again`: a player-cast `BALL` sets
+`minimaxflash-1.2`: a player-cast `BALL` sets
 `PROJECT_THRU|PROJECT_STOP|PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL` and
 **not** `PROJECT_PLAY`, and `project()` only affects the player when
 `PROJECT_PLAY` is set (`effect-handler-attack.c:594`, `project.c:519,996`).
@@ -205,7 +205,7 @@ Grip 5S 3W, a green worm mass asleep 17S 3W, and two giant yellow
 centipedes asleep — all invisible to the eye.
 
 **This is the cheapest safety a 13-HP druid has, and I used it twice in
-`minimaxflash-1` and twice in `minimaxflash-1-again`.** Detecting life in an
+`minimaxflash-1` and twice in `minimaxflash-1.2`.** Detecting life in an
 unfamiliar room *before entering it* should be reflex, not a response to
 trouble.
 
@@ -216,7 +216,7 @@ the field as the whole cost, and said "cost" where it meant "earned" -
 the game pays you, not the other way round) - not the learning cost:
 studying a spell costs nothing at all, and the first cast
 of Stinking Cloud earned me **12 experience** at CL3
-(`minimaxflash-1-again`). That is why the first Detect Life earned 2 and a
+(`minimaxflash-1.2`). That is why the first Detect Life earned 2 and a
 first Fox Form would earn 10.
 
 ---
@@ -307,7 +307,7 @@ the three lives, so it is untested in practice.
 (`game-world.c`, `if (!(turn % 100))`), so a full stomach lasts 10,000+
 turns. Do not spend a study on it at CL2 unless you have nothing else;
 **Stinking Cloud arrives at CL3 and is a far better use of that verse.**
-(I did exactly this in `minimaxflash-1-again` — studied Remove Hunger at
+(I did exactly this in `minimaxflash-1.2` — studied Remove Hunger at
 CL2, and it was the first thing I would take back.)
 
 **Study is gated by character level, and the refusal is silent.** At CL2
@@ -346,7 +346,7 @@ the hit chance is a to-hit roll against AC:
 
 **The kill that made the class work** was Grip, Farmer Maggot's Dog — 25
 HP, AC 36, 1d4, **speed 120 (+10)**, 30 experience — killed with **three
-flasks of oil**, two hitting, at ranges 1 and 2, in `minimaxflash-1-again`. That is the whole
+flasks of oil**, two hitting, at ranges 1 and 2, in `minimaxflash-1.2`. That is the whole
 recipe for a depth-2 unique as a CL3 druid: **never melee it, never
 rely on the spell, and just throw oil from range until one lands.**
 
@@ -386,7 +386,7 @@ HP and no time. **Against Grip, the Phase Door scrolls were what saved
 me, not Stinking Cloud.**
 
 **Buy the Magic Mapping scroll the first day the Alchemist has one**
-(3 scrolls at 65 gold, seen at ask 399 of `minimaxflash-1-again`). It maps ±22 rows and ±40 columns around you (44×80 - the `effect-yx:22:40` are half-extents, corrected 2026-11-10) and
+(3 scrolls at 65 gold, seen at ask 399 of `minimaxflash-1.2`). It maps ±22 rows and ±40 columns around you (44×80 - the `effect-yx:22:40` are half-extents, corrected 2026-11-10) and
 would have ended a staircase hunt in a dozen asks — but note §8, the
 open question about whether it reveals stairs at all.
 
@@ -452,7 +452,7 @@ experience of seven ordinary kills. At four units a kill on depth 2, level
   HP, **one experience unit short of CL2**. Mapped the eastern third.
   Bought oil, armour, three Phase Door, a Word of Recall. Killed six
   monsters for 13 of the 14 units CL2 needs.
-- **Life 2** (`minimaxflash-1-again`): CL4, depth 2, 251 asks, alive.
+- **Life 2** (`minimaxflash-1.2`): CL4, depth 2, 251 asks, alive.
   **Found depth 1's down staircase in one ask** by looking at a glyph.
   Killed Grip with three flasks of oil. Learned Detect Life, Remove
   Hunger, Stinking Cloud and Fox Form. Read the Recall to come home.

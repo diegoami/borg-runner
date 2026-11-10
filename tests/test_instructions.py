@@ -26,7 +26,7 @@ What it does NOT check, and so what a pass does not mean:
   not tested. A POLICY line is only checked for the numbers it quotes from
   chapter 15 and for the rule id existing; whether the rule is good, or is what
   the chapter means, is not.
-* **OBSERVED evidence.** Run names, ask numbers and what a run did (`sonnet-2-again`
+* **OBSERVED evidence.** Run names, ask numbers and what a run did (`sonnet-2.2`
   asks 156-230, "one run paid 65") are not in the game data.
 * **Keys and the screen.** What `lxg`, `l>g`, `h`, `v`, `R` and the rest do, and what
   the 80x24 screen shows, comes from the build's own patch and the docs; no

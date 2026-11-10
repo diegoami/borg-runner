@@ -14,79 +14,69 @@ the character carries). Maximum dungeon depth is recorded and is **not** a
 success criterion: sixteen runs chased the down staircase and the one thing
 they never questioned was the chasing. Depth appears below as context only.
 
-**The caveats, stated because they are the difference between this and
-astrology:** the corpus is sixteen runs. Every shape below is one run, on one
-seed, by one model - a lead, not a result. Nothing here is true of any seed
-but its own, and the seed-specific parts are left out. Where a run was lucky,
-the luck is named; what you imitate is what it did with it.
+**The unit is the character, not the run.** A character can live several
+lives (`carry-on` replays the earlier keys into the next generation, with
+the notebook inherited), and a lineage is named after it: `minimaxflash-1`,
+`minimaxflash-1.2`, `minimaxflash-1.3`, ... is one character's first, second
+and third life. Every entry below gives the whole lineage, because what a
+life did is only readable against what it inherited.
 
-Each entry: the numbers, what it did right, what it did wrong, and the shape
-to copy, with `run#ask` citations into `records/`.
+**The caveats, stated because they are the difference between this and
+astrology:** the corpus is sixteen runs. Every shape below is one character,
+on one seed, by one model - a lead, not a result. Nothing here is true of
+any seed but its own, and the seed-specific parts are left out. Where a run
+was lucky, the luck is named; what you imitate is what it did with it.
+
+Each entry: the lineage, the numbers, what it did right, what it did wrong,
+and the shape to copy, with `run#ask` citations into `records/`.
 
 ---
 
-## sonnet-2-again — Half-Troll Warrior, character level 8, worth 2,025, alive
+## sonnet-2's character — two lives: `sonnet-2`, `sonnet-2.2` (Half-Troll Warrior)
 
-The most successful character in the corpus on both criteria, and the only
-one whose success was built across two lives: it was carried on from
-`sonnet-2` with its notebook, and it levelled from 6 to 8.
+**Character level 8, worth 2,025, alive.** The most successful character in
+the corpus on both criteria, and the only one built openly across two lives:
+the second life inherited the first's notebook and took the character from
+level 6 to 8.
 
-**What it did right.** It used the game's own routing and nothing else:
-`lxg` as a free autoexplore hop, `l>g` to walk to a known down staircase,
-`l<g` back up - each alone in its ask, because a key after `g` cuts the walk
-to one step (`sonnet-2-again#156`-`#164`, measured both ways). Its descent to
-depth 7 was three asks: cursor to the known staircase, walk, `>`
-(`sonnet-2-again#228`-`#230`). It rerolled bad levels for two asks instead
-of exploring them for a hundred (`#231`-`#232`), and it read the terrain
-after every dead end, which is where its DL6 staircase was hiding.
+**What it did right.** The first life treated an unknown scroll as a pool
+with odds rather than a risk to avoid, and one read - a Deep Descent found
+on DL1 (`sonnet-2#76`-`#79`) - opened the depth-6 economy the second life
+lived on. The second life moved by the game's own routing and nothing else:
+`lxg` as a free autoexplore hop, `l>g` to a known down staircase, `l<g` back
+up, each alone in its ask because a key after `g` cuts the walk to one step
+(`sonnet-2.2#156`-`#164`, measured both ways). Its descent to depth 7 was
+three asks (`sonnet-2.2#228`-`#230`). It rerolled bad levels for two asks
+instead of exploring them for a hundred (`sonnet-2.2#231`-`#232`), and it
+read the terrain after every dead end, which is where its DL6 staircase was
+hiding.
 
-**What it did wrong.** It aimed an unknown wand at a sleeping tamer and it
-was Haste Monster: about 15 asks and 50 hit points to survive its own test
-(`sonnet-2-again`). It also never wrote its report - this summary exists
-because the record was reconstructed from its decisions and notebook.
+**What it did wrong.** The second life aimed an unknown wand at a sleeping
+tamer and it was Haste Monster: about 15 asks and 50 hit points to survive
+its own test. And neither life wrote a report on time - `sonnet-2.2`'s
+summary is reconstructed from its decisions and notebook.
 
 **The shape to copy:** inherit notes; move by the game's routing only;
-reroll instead of grind; fight what the arithmetic says you beat; take the
-escalator when the dungeon offers one.
+reroll instead of grind; unknown consumables are a priced bet - know the
+pool and pay it when the downside is survivable; take the escalator when
+the dungeon offers one.
 
-[report](records/sonnet-2-again/REPORT.md) ·
-[replay](https://diegoami.github.io/borg-runner/records/sonnet-2-again/report.html)
+[life 1: sonnet-2](records/sonnet-2/REPORT.md) ·
+[replay](https://diegoami.github.io/borg-runner/records/sonnet-2/report.html) ·
+[life 2: sonnet-2.2](records/sonnet-2.2/REPORT.md) ·
+[replay](https://diegoami.github.io/borg-runner/records/sonnet-2.2/report.html)
 
-## sonnet-2 — Half-Troll Warrior, character level 6, worth 1,189, alive
+## sonnet-1 — one life (Half-Troll Warrior)
 
-The first life of the same character. Its depth 6 came from **one lucky
-scroll** - a Deep Descent found on DL1 and read at once (`sonnet-2#76`-`#79`)
-- but its level 6 and its wealth came from what it did there: it kept
-fighting what paid and kept its escapes in reach.
-
-**What it did right.** It treated an unknown scroll as a pool with odds
-rather than a risk to avoid - and that one read is the whole reason a
-depth-6 economy existed for its second life. It fought Fang's cousins at
-one flask each (`sonnet-2#124`, `#131`, `#145`). It wrote the notebook its
-successor won with.
-
-**What it did wrong.** It looked for the staircase by walking, like every
-run before the routing was understood; its depth came from luck, not
-search. Its own leads say as much.
-
-**The shape to copy:** unknown consumables are a priced bet - know the pool
-and pay it when the downside is survivable. Luck is not a plan, but having
-the character that can cash it is.
-
-[report](records/sonnet-2/REPORT.md) ·
-[replay](https://diegoami.github.io/borg-runner/records/sonnet-2/report.html)
-
-## sonnet-1 — Half-Troll Warrior, character level 3, worth 723, alive
-
-The first run of all, with nothing inherited. It never found a down
-staircase - and it is on this list because it did everything else right.
+**Character level 3, worth 723, alive.** The first run of all, with nothing
+inherited. It never found a down staircase - and it is on this list because
+it did everything else right.
 
 **What it did right.** Shopped with a plan (15 oil, 3 Phase Door, 2 cures,
-`sonnet-1` asks 14-22). Killed Fang at CL2 in a corridor with two thrown
-flasks and melee, never below 20 HP (asks 81-90). Rerolled a twisty level
-by the connected stairs (ask 67). Tested an unknown potion at full health
-and levelled off it (asks 29-67). **Surviving is the floor every dead run
-fell through.**
+asks 14-22). Killed Fang at CL2 in a corridor with two thrown flasks and
+melee, never below 20 HP (asks 81-90). Rerolled a twisty level by the
+connected stairs (ask 67). Tested an unknown potion at full health and
+levelled off it. **Surviving is the floor every dead run fell through.**
 
 **What it did wrong.** It rerolled thirty asks late (its own verdict: the
 cave was twisty at ask 35). It walked into unlit rooms without looking and
@@ -98,33 +88,53 @@ ranged attack, escapes before depth, and no fight you do not have to take.
 [report](records/sonnet-1/REPORT.md) ·
 [replay](https://diegoami.github.io/borg-runner/records/sonnet-1/report.html)
 
-## minimaxflash-1-again — High-Elf Druid, character level 4, worth 317, alive
+## minimaxflash-1's character — five lives: `minimaxflash-1`, `1.2`, `1.3`, `1.4`, `1.5` (High-Elf Druid)
 
-The poorest of the CL4 pack, and the one that taught the corpus the most
-per gold piece: the staircase its first life missed was **on its own map
-the whole time**, one step from where it stopped.
+**Best life: character level 4, worth 382.** The corpus' longest
+apprenticeship: one character, five lives, all on seed 23, each one
+inheriting the last one's notes. Read it as one learning curve rather than
+five runs.
 
-**What it did right.** It looked. One `l` on the right square - *"You see a
-down staircase, 1 S, 1 W"* (`minimaxflash-1-again#161`) - ended a 148-ask
-failure of the previous life. It is the cleanest demonstration in the
-corpus that the game's own commands (`l`, `[`, `M`) answer questions that
-custom tools do not.
+- **Life 1** (`minimaxflash-1`) spent 148 asks driving a 143-line
+  breadth-first search it wrote, reached depth 1, and never tried the
+  game's own commands. The corpus' cautionary tale about writing tools.
+- **Life 2** (`minimaxflash-1.2`) found the staircase life 1 missed - it
+  was on the map the whole time, one step from where life 1 stopped. One
+  `l` on the right square (*"You see a down staircase, 1 S, 1 W"*,
+  `minimaxflash-1.2#161`) is the cleanest demonstration in the corpus that
+  the game's own commands answer what custom tools do not.
+- **Lives 3 and 4** (`minimaxflash-1.3`, `minimaxflash-1.4`) reached CL4
+  and stayed poor, and life 4 spent about 140 decisions sweeping two thirds
+  of a level for a staircase it believed was unique - the measurement that
+  forced the three-or-four-staircases correction.
+- **Life 5** (`minimaxflash-1.5`) was the best player of the five and the
+  one that died: it found the staircase deliberately, reached depth 2,
+  measured the M map's geometry (the whole level scaled; a staircase can
+  never be hidden on it), and then met crows with no Phase Door and no
+  Recall in the pack - fear took its attacks away and it died collecting
+  gold at 3 hit points (`minimaxflash-1.5#892`). Its report is the richest
+  single document of the lineage.
 
-**What it did wrong.** It is a Druid with a whip: its class arithmetic is
-elsewhere (ACCUMULATED section 7), and its wealth says what a careful
-weak fighter earns.
+**What it did right, as a lineage:** every life wrote down what the next
+one needed, and the next one measurably played better. **What it did
+wrong:** it never solved what it is - a Druid with a whip and 13 hit
+points, whose real weapon (Stinking Cloud, CL3) it kept not having in the
+fight that mattered.
 
-**The shape to copy:** when the map disagrees with your model of it,
-believe the map and spend one ask on `l`.
+**The shape to copy:** the inheritance discipline, and life 5's measurement
+habits. Not the ending.
 
-[report](records/minimaxflash-1-again/REPORT.md) ·
-[replay](https://diegoami.github.io/borg-runner/records/minimaxflash-1-again/report.html)
+[life 2](records/minimaxflash-1.2/REPORT.md) ·
+[life 3](records/minimaxflash-1.3/REPORT.md) ·
+[life 4](records/minimaxflash-1.4/REPORT.md) ·
+[life 5](records/minimaxflash-1.5/REPORT.md) ·
+[replay, life 5](https://diegoami.github.io/borg-runner/records/minimaxflash-1.5/report.html)
 
-## minimaxflash-3 — Human Warrior, character level 4, worth 903, died (cave spider)
+## minimaxflash-3 — one life (Human Warrior)
 
-Included because it did more right than wrong - and because its one wrong
-is the most instructive in the corpus. The best wealth of any CL4 run; the
-only death that made the page twice.
+**Character level 4, worth 903, died (cave spider).** The best wealth of
+any CL4 run, included because it did more right than wrong - and because
+its one wrong is the most instructive decision in the corpus.
 
 **What it did right.** The whole middle of the run: gold found and taken,
 a kobold shaman killed for the level, locked doors treated as rolls not
@@ -154,16 +164,12 @@ staircase under your feet is always an exit in one direction.
   level 1. Its own diagnosis is the finding: a CL1 mage's problem is
   *finding* kills, not fighting them. Read it as the proof that a plan can
   be right everywhere except its objective.
-- **The other four deaths** (`sonnet-3`, `qwen-flash-1`, `minimaxflash-2.2`,
-  `minimaxflash-1.5`) - each did more wrong than right by the only vote
-  that counts, though `minimaxflash-1.5`'s measurement work (the M map, the
-  panel geometry) was the best of its lineage. Their deaths are section 6
-  of ACCUMULATED_KNOWLEDGE.md; that is where they teach.
-- **`minimaxflash-1.3`, `minimaxflash-1.4`** (both CL4, alive, worth under
-  350) - alive but poor, and the sweep that defined them is what
-  `minimaxflash-1.5` corrected.
-- **The CL1 survivors** (`codex-1-tty`, `minimaxflash-1`, `minimaxflash-2`)
-  - alive, level 1: no shape worth copying yet.
+- **The other three deaths** (`sonnet-3`, `qwen-flash-1`,
+  `minimaxflash-2.2`) - each did more wrong than right by the only vote
+  that counts. Their deaths are section 6 of ACCUMULATED_KNOWLEDGE.md;
+  that is where they teach.
+- **The CL1 survivors** (`codex-1-tty`, `minimaxflash-2`) - alive, level 1:
+  no shape worth copying yet.
 - **`diego-1`** (CL2, the person) - the control, not a candidate: it saved
   early and sold nothing, so its numbers say little about play. Its value
   is that a person and a model made the same decisions on the same ground.

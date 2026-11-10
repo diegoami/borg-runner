@@ -44,7 +44,7 @@
   "race": "High-Elf",
   "read_before_playing": "Files opened for this run: manuals/INSTRUCTIONS.md (whole), knowledge/NOTES.md (whole), records/OVERVIEW.md, PLAYGAME.txt, CONTINUEGAME.txt (to check it did not apply). Seed 23 chosen: OVERVIEW.md shows only seeds 7 and 11, so 23 is free. Run name minimaxflash-1. (ask 1)",
   "read_its_own_playbook": false,
-  "run": "minimaxflash-1-again",
+  "run": "minimaxflash-1.2",
   "savefile_sha256": "6aa724c1ff6e440cda9da770e5c326dec2ee75420486669b52764b3e1dddf93e",
   "schema": "borg-runner/run-record@1",
   "screens": 401,

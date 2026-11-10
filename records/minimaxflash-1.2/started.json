@@ -19,7 +19,7 @@
     "-magent",
     "-uminimaxflash-1",
     "--",
-    "-d/home/diego/projects/borg-runner/runs/minimaxflash-1-again/ask",
+    "-d/home/diego/projects/borg-runner/runs/minimaxflash-1.2/ask",
     "-s23"
   ],
   "pid": 498605,

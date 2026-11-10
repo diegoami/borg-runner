@@ -1,6 +1,6 @@
 # COMMON — what seven runs of minimax have learned about playing Angband
 
-*Begun by the player of `minimaxflash-1`, `minimaxflash-1-again` and
+*Begun by the player of `minimaxflash-1`, `minimaxflash-1.2` and
 `minimaxflash-1.3` — three lives of a High-Elf Druid on seed 23, 610 asks —
 and folded together on 2026-11-10 with what `minimaxflash-2`,
 `minimaxflash-2.2`, `minimaxflash-1.4` and `minimaxflash-3` added: a Gnome
@@ -44,7 +44,7 @@ ways down does not mention it.
 
 **CORRECTED: a level has THREE OR FOUR down staircases, not one.** This page
 said "exactly one down staircase per level, placed uniformly at random" for
-three lives, read at ask 285 of `minimaxflash-1-again` out of
+three lives, read at ask 285 of `minimaxflash-1.2` out of
 `gen-cave.c:1584` — which is the **labyrinth** generator, and labyrinths are
 not what this build plays at these depths. `classic_gen` and `modified_gen`,
 the only two profiles with an `alloc` at depth 1 (90 and 97 in
@@ -69,12 +69,12 @@ but it can be anywhere else, and "anywhere else" is 13,000 squares.
 **So the staircase must be *seen*, not computed.** Everything the game
 offers — the `>` jump to a known staircase, Magic Mapping, Detect Stairs —
 requires the staircase to be known already. The only discovery route is
-**reading every glyph on every map**. `minimaxflash-1-again` found depth
+**reading every glyph on every map**. `minimaxflash-1.2` found depth
 1's staircase in **one ask** (`l` on a square whose `>` glyph had been on the
 map since ask 160) after 148 asks of the previous life had walked past it.
 
 **A staircase you are standing on is not drawn.** When I stood on depth 1's
-`>` in `minimaxflash-1-again`, the map drew `.@` with no glyph. On depth 2
+`>` in `minimaxflash-1.2`, the map drew `.@` with no glyph. On depth 2
 I stood on an up staircase and the map drew `#@#` with no `<`. **Only the status line names the
 staircase you are on.** A player scanning the map for `>` will never see
 their own.
@@ -210,7 +210,7 @@ one ask, not a fight.**
 
 **`M` is not the whole level.** It is a scaled view of the *remembered*
 region, and on depth 2 it was **smaller** than the main map could show (a
-7×3 blob at ask 181 of `minimaxflash-1-again`, when the main map had just
+7×3 blob at ask 181 of `minimaxflash-1.2`, when the main map had just
 drawn a 13-wide room). I spent 8 asks on `M` in that life and got nothing. **The manual's "whole-level
 map" reads as if it revealed the level; it does not.**
 
@@ -227,14 +227,14 @@ text dump — the *list* is the point**, and the manual never says so.
 direction and it jumps to the next monster, item, door or staircase along
 that line, skipping plain floor; press again and it goes further along the
 same line. That enumerates the neighbourhood exactly, in one ask, with no
-turn cost — in `minimaxflash-1-again` the room west of me came out as *"ant 5W, yellow patch 6W+1S,
+turn cost — in `minimaxflash-1.2` the room west of me came out as *"ant 5W, yellow patch 6W+1S,
 book 9W+1N, closed door 10W; grey mould 4E"*. **This is how to reconstruct
 geometry without reading a pixel of the map, and it is not in the manual.**
 
 **Look mode stays active and eats your next key.** After `l`, the look mode
 is still up and swallows the first key of whatever you send next. The tell
 is **a look description in the message line and a turn counter that does
-not move** — in `minimaxflash-1-again` I lost four asks to this, sending
+not move** — in `minimaxflash-1.2` I lost four asks to this, sending
 `va'` and `va1`
 while look mode was still up, watching nothing get thrown. **Press `\e`
 first.**
@@ -587,7 +587,7 @@ an ask.
 **AC decides what oil can hit, and it decides it hard.** Oil does 9–36
 damage, but the throw is a to-hit roll against the monster's AC, and
 `hit_chance()` needs `to_hit ≥ AC×2/3` to beat the flat 12% always-hit.
-Measured in `minimaxflash-1-again`: a giant black ant and a small kobold
+Measured in `minimaxflash-1.2`: a giant black ant and a small kobold
 (AC 24) could be hit from one tile and **missed from two**; a small
 kobold needed two flasks at range 1; **Grip (AC 36) could not be hurt by
 oil at range 2** — one throw missed outright — but at range 1 the rate
@@ -613,7 +613,7 @@ is worse for a druid than for other classes is in
 
 **A monster's own hit dice are not its damage against you.** Grip bites
 for 1d4 and did **2–4** against my AC 12, not 4. Armour class cuts most of
-a small die. (`minimaxflash-1-again`.)
+a small die. (`minimaxflash-1.2`.)
 
 **The manual's class blocks are right about the weak points and silent
 about the costs.** Each one says what kills the class; none of them says
@@ -708,7 +708,7 @@ whip swings.
 ## 4. The town is not a safe place to keep things
 
 **Thieves take gold and items, and they can take nearly all of it.** In
-`minimaxflash-1-again` a filthy street urchin took 8 of my 26 gold (ask
+`minimaxflash-1.2` a filthy street urchin took 8 of my 26 gold (ask
 394); in `minimaxflash-1.3` the same urchin took **15 more** (18 → 3,
 ask 412), and a cutpurse took a flask of oil (*"One of your Flasks of oil
 (c) was stolen!"*). The countermeasure does not exist, because with
@@ -717,7 +717,7 @@ gold before you walk far, and do not carry a fortune around town.**
 
 **The Alchemist restocks daily and the stock rotates.** `store_update()`
 (`store.c:1422`) runs once per game day and the shopkeeper shuffles on a
-1-in-`store_shuffle` chance. In `minimaxflash-1-again` the Alchemist had
+1-in-`store_shuffle` chance. In `minimaxflash-1.2` the Alchemist had
 **3 Scrolls of Magic Mapping at 65 gold** (ask 399); in `minimaxflash-1`
 the same shop had none, and that one visit is why that life concluded
 "the Alchemist did not stock one this seed". **That was true of that day only.** The Black Market's
@@ -729,7 +729,7 @@ you.** Read in the dungeon it sets a timer (`randint0(20) + 15` turns,
 `effect-handler-general.c:1145`), shows "Recall" on the status line, and
 fires with *"You feel yourself yanked upwards!"*. **The timer is a plain
 countdown and is not interrupted by damage**, so it is exactly what
-c15 ESC-04 says — not an escape. But in `minimaxflash-1-again` arriving
+c15 ESC-04 says — not an escape. But in `minimaxflash-1.2` arriving
 in town healed me from 28/33 to 33/33 and gave back 2 spell points, and
 the character regenerates there.
 
@@ -756,32 +756,32 @@ These are the decisions I would take back, and they are the same three
 mistakes in different clothes.
 
 1. **Look at every glyph, from the first ask.** The whole staircase
-   problem on depth 1 was solved in **one ask** in `minimaxflash-1-again`,
+   problem on depth 1 was solved in **one ask** in `minimaxflash-1.2`,
    and I spent that life's first three asks on inventory, equipment and
    character screens whose contents I already knew from the inherited
    notes. `i` and `e` are worth one ask each, not six.
 2. **Buy the Magic Mapping scroll the first day it is in stock.** It maps
    ±22 rows × ±40 columns around you (44×80; corrected 2026-11-10, this
    block read the half-extents as the window). **But note the correction from
-   `minimaxflash-1-again`: it maps an area, it does not reveal the whole
+   `minimaxflash-1.2`: it maps an area, it does not reveal the whole
    198×66 level, and the earlier note "Magic Mapping (65 g) did not help"
    is not evidence against it.** Whether a `>` appears in the 44×80 window is still
    untested — and it is worth one run to settle, because 65 gold is 2.5
    days of a run's oil income.
 3. **Do not spend the escape ladder early.** `minimaxflash-1.3`
    inherited a character with **no Phase Door and no Word of Recall** —
-   both *spent*, not stolen: `minimaxflash-1-again` burned two Phase Door
+   both *spent*, not stolen: `minimaxflash-1.2` burned two Phase Door
    scrolls escaping Grip and read the Recall to come home. **The advice to buy scrolls stops
    being true the moment you use them**, and a carry-on inherits the
    consequence, not the plan. **If you are going to use a scroll, know
    that the next life has one fewer.**
 4. **Do not rest against a monster you cannot kill.** In
-   `minimaxflash-1-again` I spent about twelve asks trying to regain 1
+   `minimaxflash-1.2` I spent about twelve asks trying to regain 1
    spell point while a +10-speed dog chewed on me, took 30 damage, and had
    to burn two Phase Door scrolls to break away. **The oil was working; I simply used the spell as if it
    were free.**
 5. **Keep to the budget.** The prompt says about 150 decisions.
-   `minimaxflash-1-again` used 251 and `minimaxflash-1.3` used 210. The
+   `minimaxflash-1.2` used 251 and `minimaxflash-1.3` used 210. The
    overrun went on a staircase I could not find, against a generator I did
    not read until ask 285 — by which time the answer was already in the
    source.

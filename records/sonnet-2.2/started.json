@@ -19,7 +19,7 @@
     "-magent",
     "-usonnet-2",
     "--",
-    "-d/home/diego/projects/borg-runner/runs/sonnet-2-again/ask",
+    "-d/home/diego/projects/borg-runner/runs/sonnet-2.2/ask",
     "-s7"
   ],
   "pid": 296688,

@@ -26,7 +26,7 @@ own** - see "The worktree model" below.
 ## Where the work stands
 
 - **16 runs archived** in `records/`, one played by a person (`diego-1`).
-  Deepest: depth 7 (`sonnet-2-again`). **Five deaths**, none of them a big
+  Deepest: depth 7 (`sonnet-2.2`). **Five deaths**, none of them a big
   hit: three low-CON characters, the Warrior that stood still beside its
   Word of Recall, and the Druid that met crows with no escape in its pack.
 - **The dashboard** is <https://diegoami.github.io/borg-runner/>, rebuilt by

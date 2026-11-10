@@ -47,7 +47,7 @@
   "read_before_playing": "Files actually opened before ask 1: docs/BRIEF.md, knowledge/MANUAL-GAPS.md, knowledge/LEARNED.md, the sonnet-1 notebook (printed), vendor/angband docs guide.rst (first 150 lines) and command.rst (Run section), strategy-manual ch15 first 120 lines and the grep of ch14 for Warrior (only headings, not the full playbook). Plan: shop incl. Magic Mapping, then dive. (ask 1)",
   "read_its_own_playbook": true,
   "replay_url": "https://claude.ai/artifact/4j469nhijoVLT6KJXMub3o",
-  "run": "sonnet-2-again",
+  "run": "sonnet-2.2",
   "savefile_sha256": "49dd7ee0a0b2ac42d749bcb90af65b73f75e074af899fcd90cd9afd0b486d0b7",
   "schema": "borg-runner/run-record@1",
   "screens": 291,

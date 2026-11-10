@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>sonnet-2-again replay</title>
+<title>sonnet-2.2 replay</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 :root { --ink:#1b1b1b; --dim:#6b6b6b; --line:#dcdcdc; --bg:#fbfbfa;
@@ -52,6 +52,14 @@ pre.book { background:var(--card); border:1px solid var(--line); border-radius:8
 .said { margin:10px 0 0; min-height:3em }
 .said .keys { font-size:1.05rem }
 .said .why { color:var(--dim) }
+ol.leads { margin:0 0 28px; padding-left:1.4em }
+ol.leads li { margin:0 0 16px }
+ol.leads p { margin:0 0 3px }
+.claim { font-weight:600 }
+.evidence { color:var(--dim) }
+.test { color:var(--flag) }
+.where { color:var(--dim); font-size:.92em; font-variant-numeric:tabular-nums }
+.where a { color:inherit }
 @media (max-width:620px) { .replay pre { font-size:10.5px } }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --ink:#e8e8e6; --dim:#9a9a97; --line:#2f3136;
@@ -63,15 +71,15 @@ pre.book { background:var(--card); border:1px solid var(--line); border-radius:8
         color-scheme:dark }
 </style></head>
 <body><main>
-<h1>sonnet-2-again</h1>
+<h1>sonnet-2.2</h1>
 <p class="sub">One game of Angband, played from the screen one keypress at a
-time. <a href="https://github.com/diegoami/borg-runner/blob/main/records/sonnet-2-again/REPORT.md">What the player wrote</a> · <a href="https://diegoami.github.io/borg-runner/">every run</a></p>
-<table class="facts"><tr><td>run</td><td>sonnet-2-again</td></tr><tr><td>seed</td><td>7</td></tr><tr><td>character</td><td>sonnet-2</td></tr><tr><td>outcome</td><td>stopped</td></tr><tr><td>deepest depth</td><td>7</td></tr><tr><td>final turn</td><td>10416</td></tr><tr><td>asks</td><td>291</td></tr><tr><td>keypresses</td><td>1107</td></tr><tr><td>notebook</td><td>34 lines</td></tr><tr><td>game</td><td>angband/angband e473720ed88a</td></tr><tr><td>patch</td><td>54a4cc8b04a2</td></tr><tr><td>notebook hash</td><td>40aec126d71d</td></tr><tr><td>replay</td><td>DIFFERED</td></tr><tr><td>cost</td><td>142,837 tokens, 147 tool calls</td></tr><tr><td>played by</td><td>subagent</td></tr><tr><td>model</td><td>anthropic/claude-sonnet-5-5</td></tr></table>
+time. <a href="https://github.com/diegoami/borg-runner/blob/main/records/sonnet-2.2/REPORT.md">What the player wrote</a> · <a href="https://diegoami.github.io/borg-runner/">every run</a></p>
+<table class="facts"><tr><td>run</td><td>sonnet-2.2</td></tr><tr><td>seed</td><td>7</td></tr><tr><td>character</td><td>sonnet-2</td></tr><tr><td>outcome</td><td>stopped</td></tr><tr><td>deepest depth</td><td>7</td></tr><tr><td>final turn</td><td>10416</td></tr><tr><td>asks</td><td>291</td></tr><tr><td>keypresses</td><td>1107</td></tr><tr><td>notebook</td><td>34 lines</td></tr><tr><td>game</td><td>angband/angband e473720ed88a</td></tr><tr><td>patch</td><td>54a4cc8b04a2</td></tr><tr><td>notebook hash</td><td>40aec126d71d</td></tr><tr><td>replay</td><td>DIFFERED</td></tr><tr><td>cost</td><td>142,837 tokens, 147 tool calls</td></tr><tr><td>played by</td><td>subagent</td></tr><tr><td>model</td><td>anthropic/claude-sonnet-5-5</td></tr></table>
 <h2>Replay</h2>
 <p class="sub">Every screen the player faced, in order. Arrow keys step, space
 plays; the line underneath is the keys it sent and why.</p>
 
-<section class="replay">
+<section class="replay" id="replay">
   <pre id="screen">(no screens were recorded)</pre>
   <div class="bar">
     <button id="back" title="left arrow">&#9664; step</button>
@@ -123,10 +131,22 @@ plays; the line underneath is the keys it sent and why.</p>
     else if (e.key === 'ArrowLeft') { stop(); show(at - 1); }
     else if (e.key === ' ' && e.target === document.body) { e.preventDefault(); start(); }
   });
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest ? e.target.closest('a[data-ask]') : null;
+    if (!link) { return; }
+    var want = parseInt(link.getAttribute('data-ask'), 10);
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].ask === want) { stop(); show(i); break; }
+    }
+  });
   show(0);
 })();
 </script>
 
+<h2>What it would do differently</h2>
+<p class="sub">The leads the player wrote, each with where it happened and what
+would settle it. An ask is a link into the replay above.</p>
+<p class="empty">the write-up names no leads</p>
 <h2>What it kept</h2>
 <pre class="book"># Notes from sonnet-1
 
