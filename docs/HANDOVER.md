@@ -146,9 +146,10 @@ does not exist.
    with `CONTINUEGAME.txt`; `carry-on --run runs/<name>` names the next
    generation itself.
 2. **The three tools `minimaxflash-3` wrote are not in the library.**
-   `records/minimaxflash-3/tools/open.py`, `.../route.py` and `.../sweep.py`
-   are archived with the run, and `tools` lists them under "written by runs,
-   not in the library".
+   `records/minimaxflash-3/tools/open.py`,
+   `records/minimaxflash-3/tools/route.py` and
+   `records/minimaxflash-3/tools/sweep.py` are archived with the run, and
+   `tools` lists them under "written by runs, not in the library".
    Adopting one is `tools --adopt <path> --from <run>` and means reading it
    first: that run's own report says its hand-written glyph list missed `>`
    for seventy asks, so its code is not above suspicion.
