@@ -1078,7 +1078,7 @@ depth 5.
 
 ## From `mmf-mage.3`, 2026-11-10
 
-## From `mmf-mage.3`, 2026-11-10 (a Gnome Mage that died on depth 2 at 11 experience)
+## What mmf-mage.3 measured (a Gnome Mage, depth 2, dead at 11 experience)
 
 - **A `-more-` takes ONE KEY PER PAGE, and the message line goes back to the
   first page.** Six of my asks were eaten by a three-part message I could

@@ -410,7 +410,7 @@ The three rules I would give the next mage:
 
 ## From `mmf-mage.3`, 2026-11-10
 
-## From `mmf-mage.3`, 2026-11-10 (a Gnome Mage, depth 2, dead at 11 experience)
+## What mmf-mage.3 measured (a Gnome Mage, depth 2, dead at 11 experience)
 
 - **THE SPELL LIST'S ROWS ARE THE SPELLS YOU HAVE LEARNED, while the screen
   prints every spell in the book** with `unknown` or `difficult` beside the
