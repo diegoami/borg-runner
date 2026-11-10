@@ -1,0 +1,146 @@
+{"ask": 1, "depth": 0, "keys": " ", "reason": "replayed from mmf-mage", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "e", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "\\n", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "b", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "\\n", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "\\n", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 7, "depth": 0, "keys": "\\n", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 8, "depth": 0, "keys": "\\n", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 9, "depth": 0, "keys": "y", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 10, "depth": 0, "keys": " ", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 11, "depth": 0, "keys": "i", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 12, "depth": 0, "keys": "\\eG", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 13, "depth": 0, "keys": "a", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 14, "depth": 0, "keys": "c", "reason": "replayed from mmf-mage", "turn": 1}
+{"ask": 15, "depth": 0, "keys": "*33322222222g", "reason": "replayed from mmf-mage", "turn": 11}
+{"ask": 16, "depth": 0, "keys": "111333333", "reason": "replayed from mmf-mage", "turn": 31}
+{"ask": 17, "depth": 0, "keys": "ph20\\ny ", "reason": "replayed from mmf-mage", "turn": 111}
+{"ask": 18, "depth": 0, "keys": "pc3\\ny ", "reason": "replayed from mmf-mage", "turn": 111}
+{"ask": 19, "depth": 0, "keys": "\\e4488888662", "reason": "replayed from mmf-mage", "turn": 111}
+{"ask": 20, "depth": 0, "keys": "pf1\\ny pa1\\ny pm1\\ny ", "reason": "replayed from mmf-mage", "turn": 211}
+{"ask": 21, "depth": 0, "keys": "\\e", "reason": "replayed from mmf-mage", "turn": 211}
+{"ask": 22, "depth": 0, "keys": " ", "reason": "replayed from mmf-mage", "turn": 211}
+{"ask": 23, "depth": 0, "keys": "pj1\\ny ph1\\ny ", "reason": "replayed from mmf-mage", "turn": 211}
+{"ask": 24, "depth": 0, "keys": "\\e8444444444444444448444444442", "reason": "replayed from mmf-mage", "turn": 211}
+{"ask": 25, "depth": 0, "keys": "pa1\\ny pn1\\ny ", "reason": "replayed from mmf-mage", "turn": 491}
+{"ask": 26, "depth": 0, "keys": "\\ee", "reason": "replayed from mmf-mage", "turn": 491}
+{"ask": 27, "depth": 0, "keys": "\\ew", "reason": "replayed from mmf-mage", "turn": 491}
+{"ask": 28, "depth": 0, "keys": "wonwm", "reason": "replayed from mmf-mage", "turn": 501}
+{"ask": 29, "depth": 0, "keys": "8666666666666666666666888886", "reason": "replayed from mmf-mage", "turn": 521}
+{"ask": 30, "depth": 0, "keys": "l>g", "reason": "replayed from mmf-mage", "turn": 771}
+{"ask": 31, "depth": 0, "keys": "8", "reason": "replayed from mmf-mage", "turn": 781}
+{"ask": 32, "depth": 0, "keys": "> ", "reason": "replayed from mmf-mage", "turn": 791}
+{"ask": 33, "depth": 1, "keys": "ma ", "reason": "replayed from mmf-mage", "turn": 791}
+{"ask": 34, "depth": 1, "keys": "c ", "reason": "replayed from mmf-mage", "turn": 791}
+{"ask": 35, "depth": 1, "keys": "M", "reason": "replayed from mmf-mage", "turn": 801}
+{"ask": 36, "depth": 1, "keys": " lxg", "reason": "replayed from mmf-mage", "turn": 801}
+{"ask": 37, "depth": 1, "keys": "lxg", "reason": "replayed from mmf-mage", "turn": 811}
+{"ask": 38, "depth": 1, "keys": ".8", "reason": "replayed from mmf-mage", "turn": 821}
+{"ask": 39, "depth": 1, "keys": ".6", "reason": "replayed from mmf-mage", "turn": 1131}
+{"ask": 40, "depth": 1, "keys": "]", "reason": "list the items on the floor: the '!' seven tiles north is either a flask of oil or a potion, and I must not step on it without knowing which", "turn": 1171}
+{"ask": 41, "depth": 1, "keys": "88888886", "reason": "walk north up the corridor to the flask and step east onto it to pick it up", "turn": 1171}
+{"ask": 42, "depth": 1, "keys": "8", "reason": "step north onto the potion to pick it up (it is 1 tile north of me)", "turn": 1241}
+{"ask": 43, "depth": 1, "keys": "g", "reason": "press g to pick up the potion I am standing on (the game said 'You see a ...', so it is not automatic in this build)", "turn": 1251}
+{"ask": 44, "depth": 1, "keys": "C", "reason": "read the character sheet: how much experience I have (and so whether the Find Traps cast paid its 2 experience), and my constitution", "turn": 1252}
+{"ask": 45, "depth": 1, "keys": "mc", "reason": "cast Find Traps, Doors & Stairs again from the room, 14 tiles east of the first cast: the character sheet says Cur Exp 0, so the first cast FAILED (a success pays 2 exp) and never marked the level, so this window will be clean", "turn": 1252}
+{"ask": 46, "depth": 1, "keys": "\\e\\e", "reason": "the character sheet was still open and my 'mc' opened its rename prompt: two escapes to get back to the game", "turn": 1252}
+{"ask": 47, "depth": 1, "keys": "mc", "reason": "cast Find Traps, Doors & Stairs from this room (the level is clean, this is the first cast that will really run)", "turn": 1252}
+{"ask": 48, "depth": 1, "keys": "ac", "reason": "choose the [First Spells] book and then Find Traps, Doors & Stairs (letter c in the spell list)", "turn": 1252}
+{"ask": 49, "depth": 1, "keys": " M", "reason": "clear the -more- and draw the whole remembered level to see whether the spell found a down staircase", "turn": 1252}
+{"ask": 50, "depth": 1, "keys": " l>g", "reason": "dismiss the M map and use the game's own pathfinder to walk to the nearest known down staircase, which the spell just revealed", "turn": 1262}
+{"ask": 51, "depth": 1, "keys": "l>g", "reason": "walk the last three tiles to the down staircase the spell revealed (the pathfinder knows the real terrain, so it goes around anything I cannot see)", "turn": 1332}
+{"ask": 52, "depth": 1, "keys": "> ", "reason": "take the down staircase to depth 2 (the trailing space clears the -more- the level change prints)", "turn": 1362}
+{"ask": 53, "depth": 2, "keys": "[", "reason": "list the visible monsters with their names and sleep states: three cave spiders four tiles away is a swarm, and I need to know if they are asleep before I move", "turn": 1362}
+{"ask": 54, "depth": 2, "keys": "< ", "reason": "go up out of this chamber: the level's only exits are past the spiders, the blue yeek is about to wake, and I am at 8 HP with no spell points", "turn": 1362}
+{"ask": 55, "depth": 2, "keys": "< ", "reason": "the '[' listing had left a 'press any key' prompt which ate my first '<', so send the up staircase command again", "turn": 1362}
+{"ask": 56, "depth": 1, "keys": "R\b*", "reason": "rest on the down staircase until hit points and spell points are full: the rest prompt comes pre-filled with '& ', and one backspace clears the field", "turn": 1362}
+{"ask": 57, "depth": 1, "keys": "\\n", "reason": "press Enter to start the rest (the two-character escape, not a real newline byte)", "turn": 1362}
+{"ask": 58, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs on this fresh depth 1 to find the way down, so the hunting happens on depth 2 where the kills pay double", "turn": 1972}
+{"ask": 59, "depth": 1, "keys": " M", "reason": "clear the -more- and draw the whole level to see whether a down staircase was revealed", "turn": 1972}
+{"ask": 60, "depth": 1, "keys": " l>g", "reason": "dismiss the map and walk to the down staircase the spell revealed (box 31,16, about 30 tiles west and 10 south)", "turn": 1982}
+{"ask": 61, "depth": 1, "keys": "l>g", "reason": "walk the last two tiles to the down staircase (the previous walk stopped at a trap-detected seam)", "turn": 2002}
+{"ask": 62, "depth": 1, "keys": "> ", "reason": "take the down staircase to depth 2", "turn": 2022}
+{"ask": 63, "depth": 2, "keys": ".4", "reason": "run west along the corridor: a run stops as soon as a monster is in the next square, so it cannot walk me into anything", "turn": 2022}
+{"ask": 64, "depth": 2, "keys": "4", "reason": "step west into the room the corridor opens into", "turn": 2042}
+{"ask": 65, "depth": 2, "keys": ".4", "reason": "run west into the room", "turn": 2052}
+{"ask": 66, "depth": 2, "keys": ".8", "reason": "run north up the corridor to find something worth killing", "turn": 2172}
+{"ask": 67, "depth": 2, "keys": "886666", "reason": "walk to the helm lying on the floor (object.txt: the ']' glyph is a helm) at 4 north and 4 east", "turn": 2192}
+{"ask": 68, "depth": 2, "keys": "4g", "reason": "step west onto the helm and pick it up", "turn": 2252}
+{"ask": 69, "depth": 2, "keys": "4g", "reason": "step onto the helm and pick it up", "turn": 2262}
+{"ask": 70, "depth": 2, "keys": "wo", "reason": "wear the Leather Sandals I just picked up: +1 AC, and the boots slot is empty", "turn": 2273}
+{"ask": 71, "depth": 2, "keys": ".4", "reason": "run west along the hall to find something to kill", "turn": 2283}
+{"ask": 72, "depth": 2, "keys": "mac", "reason": "cast Find Traps on depth 2: the monsters are placed away from the up staircase, so the area I have explored is empty by design, and the staircase the spell reveals is where the monsters are", "turn": 2383}
+{"ask": 73, "depth": 2, "keys": " M", "reason": "clear the -more- and draw the whole level to see where the revealed down staircase is", "turn": 2383}
+{"ask": 74, "depth": 2, "keys": " l>g", "reason": "walk to the down staircase the spell found just east of me (box 33,3 against my box 32,3)", "turn": 2393}
+{"ask": 75, "depth": 2, "keys": "[", "reason": "list the monsters visible from the down staircase: monsters are placed away from the up staircase, so this end of the level should have them", "turn": 2513}
+{"ask": 76, "depth": 2, "keys": " > ", "reason": "clear the monster-listing prompt and take the down staircase to depth 3, where the kills pay three times as much", "turn": 2513}
+{"ask": 77, "depth": 3, "keys": ".4", "reason": "run west on depth 3: the monsters are placed away from the up staircase, and a run stops as soon as one is in the next square", "turn": 2513}
+{"ask": 78, "depth": 3, "keys": "4g", "reason": "step onto the gold pile one tile west and pick it up", "turn": 2533}
+{"ask": 79, "depth": 3, "keys": ".4", "reason": "keep running west along the corridor on depth 3 to find a centipede", "turn": 2543}
+{"ask": 80, "depth": 3, "keys": ".8", "reason": "run north on depth 3; the runs also rebuild my spell bar, which is the currency the staircase hunt costs", "turn": 2593}
+{"ask": 81, "depth": 3, "keys": "*p88888888888888888888888888g", "reason": "aim the cursor 28 tiles north and walk: the game's aimed walk crosses unexplored ground, and my digit runs keep stopping after one tile", "turn": 2603}
+{"ask": 82, "depth": 3, "keys": ".6", "reason": "run east along the corridor; the runs also rebuild the spell bar (1 spell point costs about 71 actions, and a run is 10 to 30)", "turn": 2613}
+{"ask": 83, "depth": 3, "keys": "l<g", "reason": "walk to the up staircase I saw on the map: I am going up to the town to spend the 55 gold, rest safely, and come back down with a full spell bar", "turn": 2623}
+{"ask": 84, "depth": 3, "keys": "< ", "reason": "go up to the town: three '<' presses from depth 3, on fresh levels each time", "turn": 2693}
+{"ask": 85, "depth": 2, "keys": "< < ", "reason": "two more up stairs: depth 2 to depth 1, then depth 1 to the town, each with a space to clear the -more-", "turn": 2693}
+{"ask": 86, "depth": 2, "keys": "r", "reason": "open the read-a-scroll prompt to use my Scroll of Word of Recall: it is the only cheap way to the town from here, because going up needs an UP staircase and depth 2's is unknown", "turn": 2693}
+{"ask": 87, "depth": 2, "keys": "g", "reason": "read the Scroll of Word of Recall (letter g): it takes me to the town after its 15 to 34 player-turn timer", "turn": 2693}
+{"ask": 88, "depth": 2, "keys": "n", "reason": "answer no: I want the Recall to take me to the town, not to set the recall depth to depth 2", "turn": 2693}
+{"ask": 89, "depth": 2, "keys": " .8", "reason": "clear the -more- and run north while the Recall timer runs", "turn": 2693}
+{"ask": 90, "depth": 2, "keys": ".8", "reason": "keep running north while the Recall timer runs down", "turn": 2733}
+{"ask": 91, "depth": 2, "keys": "R\b*\\n", "reason": "rest until the Recall fires: the timer needs 15 to 34 player actions and a rest is 61 actions in one ask, so it fires during the rest", "turn": 2743}
+{"ask": 92, "depth": 0, "keys": " ", "reason": "clear the -more- and arrive in the town", "turn": 2931}
+{"ask": 93, "depth": 0, "keys": "2622662222", "reason": "walk to the Armoury (store 2) to buy a helm; the route is orthogonal and crosses no rubble or store tile", "turn": 2931}
+{"ask": 94, "depth": 0, "keys": "8442222662", "reason": "walk to the General Store to buy oil and a cloak; the Armoury has no helm today (the daily restock rotated the stock)", "turn": 3021}
+{"ask": 95, "depth": 0, "keys": "8442222662", "reason": "walk to the General Store (the store screen had swallowed the previous key string; it is closed now)", "turn": 3031}
+{"ask": 96, "depth": 0, "keys": "ph4\\ny pm1\\ny ", "reason": "buy 4 flasks of oil (row h) and a Cloak for +1 AC (row m); neither sells out, so the letters stay valid", "turn": 3121}
+{"ask": 97, "depth": 0, "keys": "\\e44448888844444444444448444444442", "reason": "leave the General Store and walk west to the Alchemist (store 5) for a heal and an escape", "turn": 3121}
+{"ask": 98, "depth": 0, "keys": "84422", "reason": "step around the townsfolk and onto the Alchemist's tile", "turn": 3431}
+{"ask": 99, "depth": 0, "keys": "pa1\\ny ", "reason": "buy one Potion of Cure Light Wounds (row a, 20 gold)", "turn": 3471}
+{"ask": 100, "depth": 0, "keys": "pn1\\ny ", "reason": "buy one Scroll of Phase Door (row n, 15 gold) -- one purchase per ask, because a queued second purchase selected a row instead", "turn": 3471}
+{"ask": 101, "depth": 0, "keys": "\\es", "reason": "leave the Blessing prompt and try the sell command: giving the store my unknown potion identifies the kind even though selling pays nothing", "turn": 3471}
+{"ask": 102, "depth": 0, "keys": "s", "reason": "try the store's sell command (ui-store.c: 's' or 'd' calls store_sell): giving the shop my unknown potion identifies the kind for the rest of the game even though selling pays nothing", "turn": 3471}
+{"ask": 103, "depth": 0, "keys": "e", "reason": "give the shop my unknown Purple Speckled Potion: the kind is learned for the rest of the game even though the shop pays nothing", "turn": 3471}
+{"ask": 104, "depth": 0, "keys": " ", "reason": "accept the gift so the kind is learned", "turn": 3471}
+{"ask": 105, "depth": 0, "keys": "\\e\\ew", "reason": "leave the shop and open the wear prompt so I can put on the Cloak (+1 AC) I just bought", "turn": 3471}
+{"ask": 106, "depth": 0, "keys": "iR\b*\\n", "reason": "wear the Cloak (letter i) and then rest in the town until I am fully healed and my spell bar is full", "turn": 3481}
+{"ask": 107, "depth": 0, "keys": "> ", "reason": "take the town's down staircase to depth 1 with 2 spell points, AC 17, two heals and two escapes", "turn": 3491}
+{"ask": 108, "depth": 0, "keys": "l>g", "reason": "walk to the town's known down staircase (I am in the wrong place for the '>' I just pressed) and take it down", "turn": 3491}
+{"ask": 109, "depth": 0, "keys": "66666666666666666666688888", "reason": "walk east along the town to the down staircase (the game's 'l>g' walk stopped after one tile)", "turn": 3501}
+{"ask": 110, "depth": 0, "keys": "> mac", "reason": "descend to depth 1 and immediately cast Find Traps there: the space clears the level-change -more-, then m/a/c are the book prompt, the book and the spell", "turn": 3761}
+{"ask": 111, "depth": 1, "keys": "\\e", "reason": "cancel the direction prompt and see what state the cast is in", "turn": 3761}
+{"ask": 112, "depth": 1, "keys": "ma", "reason": "open the cast prompt and choose the [First Spells] book, so the spell list appears", "turn": 3761}
+{"ask": 113, "depth": 1, "keys": "c ", "reason": "cast Find Traps, Doors & Stairs on this fresh depth 1", "turn": 3761}
+{"ask": 114, "depth": 1, "keys": "M", "reason": "draw the whole remembered level to see the staircase the spell just found", "turn": 3771}
+{"ask": 115, "depth": 1, "keys": " l>g", "reason": "walk to the nearest known down staircase (the spell found two, at box 9,7 and box 26,4)", "turn": 3771}
+{"ask": 116, "depth": 1, "keys": "l8g", "reason": "look, jump the cursor to the next interesting square north of me (a door or the staircase the spell found) and walk there", "turn": 3781}
+{"ask": 117, "depth": 1, "keys": "88888888", "reason": "walk north in a straight line: the M map puts the staircase about 15 tiles north and 10 west, and a digit string only stops at a wall", "turn": 3791}
+{"ask": 118, "depth": 1, "keys": ".2", "reason": "run south down the corridor; north of me is a wall, and the staircase the spell found is about twelve tiles west and fifteen north, so I have to go around", "turn": 3791}
+{"ask": 119, "depth": 1, "keys": "44444444", "reason": "walk west along the corridor towards the staircase: the up staircase at panel 17,9 sits at the end of this corridor and the down staircase the spell found is north of it", "turn": 3841}
+{"ask": 120, "depth": 1, "keys": "44444444", "reason": "keep walking west along the corridor", "turn": 3921}
+{"ask": 121, "depth": 1, "keys": "777777777", "reason": "climb the diagonal corridor north-west; the up staircase at panel 17,9 is on this branch and the level's other way up is beyond it", "turn": 3991}
+{"ask": 122, "depth": 1, "keys": ".2", "reason": "sweep the big room south of me looking for a monster: the level has about fifty of them and a room is where the survivors are", "turn": 4081}
+{"ask": 123, "depth": 1, "keys": ".4", "reason": "run west across the room; the run stops at an object in the next square, so it should stop at the flask", "turn": 4121}
+{"ask": 124, "depth": 1, "keys": "44g", "reason": "pick up the flask two tiles west", "turn": 4131}
+{"ask": 125, "depth": 1, "keys": "42g", "reason": "step south-west onto the flask and pick it up", "turn": 4151}
+{"ask": 126, "depth": 1, "keys": ".2", "reason": "run south across the west side of the room, looking for a monster to kill for the experience and for a measurement of the exp formula", "turn": 4172}
+{"ask": 127, "depth": 1, "keys": ".6", "reason": "run east across the south of the room, where the vault door and the scroll are", "turn": 4232}
+{"ask": 128, "depth": 1, "keys": ".8", "reason": "run north across the east side of the room", "turn": 4332}
+{"ask": 129, "depth": 1, "keys": ".4", "reason": "run west across the north part of the room, the part I have not swept", "turn": 4412}
+{"ask": 130, "depth": 1, "keys": ".7", "reason": "run north-west into the last unswept corner of the room", "turn": 4512}
+{"ask": 131, "depth": 1, "keys": ".8", "reason": "run north along the west side of the room", "turn": 4512}
+{"ask": 132, "depth": 1, "keys": "6622262", "reason": "go and open the closed door in the middle of the room: that is a vault, and a vault is where the level puts something", "turn": 4512}
+{"ask": 133, "depth": 1, "keys": "2", "reason": "open the vault door and step through it", "turn": 4572}
+{"ask": 134, "depth": 1, "keys": "88", "reason": "open the vault door and go through it", "turn": 4582}
+{"ask": 135, "depth": 1, "keys": "62", "reason": "reach the vault door and open it", "turn": 4602}
+{"ask": 136, "depth": 1, "keys": "6", "reason": "open the vault door to the east", "turn": 4612}
+{"ask": 137, "depth": 1, "keys": "6", "reason": "step through the open vault door", "turn": 4622}
+{"ask": 138, "depth": 1, "keys": "4226666666", "reason": "sweep the passage south-west of the room, the part of the level I have not walked", "turn": 4632}
+{"ask": 139, "depth": 1, "keys": "8666666666", "reason": "step north and sweep the east-west passage south of the room", "turn": 4662}
+{"ask": 140, "depth": 1, "keys": "88888666666666", "reason": "sweep the east side of the room, the part I have not walked", "turn": 4672}
+{"ask": 141, "depth": 1, "keys": "2222662666666", "reason": "sweep the corridor east of the open door, the last unswept stretch of this level", "turn": 4812}
+{"ask": 142, "depth": 1, "keys": "666666", "reason": "last sweep: the corridor east of the open door, which I have not walked", "turn": 4872}
+{"ask": 143, "depth": 1, "keys": "i", "reason": "last ask: read my pack so the report can say exactly what the character is carrying", "turn": 4872}
+{"ask": 144, "depth": 1, "keys": "\\e", "reason": "close the pack prompt so the game is in a clean state for saving", "turn": 4872}
+{"ask": 145, "depth": 1, "keys": "\u0018", "reason": "the run was stopped", "turn": 4872}
+{"ask": 146, "depth": 1, "keys": "\\e", "reason": "the run was stopped", "turn": 4872}

@@ -1,0 +1,56 @@
+{
+  "asks": 146,
+  "asks_made": 146,
+  "build": {
+    "binary_sha256": "610d5deed6e58c81e6af502f2b0ec720d90883a58ac5493379ca6fab24f44e24",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "54a4cc8b04a2381c2063b41bf687b65e11984b14e2c1547b7c96991fcfb3f8a6",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 569,
+  "character": "Gnome Mage",
+  "character_drawn": true,
+  "character_level": 1,
+  "class": "Mage",
+  "cost": {
+    "model": "minimax-coding-plan/MiniMax-M3.1-Flash",
+    "played_by": "opencode"
+  },
+  "death_depth": null,
+  "died": false,
+  "exit_code": null,
+  "final_turn": 4872,
+  "gold": 7,
+  "hp": {
+    "max": 8,
+    "now": 8
+  },
+  "keypresses": 661,
+  "keys_sha256": "c1968d7a5ade2f6aaf6dc19d44c6950c3876822147712ebaad7bd2e089c1c992",
+  "killed_by": null,
+  "max_character_level": 1,
+  "max_depth": 3,
+  "notebook_lines": 49,
+  "notebook_sha256": "4d9fe78cdb853cfbd11ec2947957447c8626a843fa22464e8aac4df1ba864141",
+  "outcome": "stopped",
+  "own_tools": [],
+  "playbook": "minimax",
+  "race": "Gnome",
+  "read_before_playing": "FILES I OPENED IN THIS LIFE (mmf-mage.2, from the carry-on): PLAYGAME.txt, AGENTS.md, CONTINUEGAME.txt, docs/BRIEF.md, manuals/INSTRUCTIONS.md, and my own family's pages agents/minimax/COMMON.md and agents/minimax/MAGE.md -- the same reading as the first life, and my own playbook is the one I played on. I read no write-up of my own: 'borg_runner history' says this character has no earlier write-up (mmf-mage had none yet), and I read no other run's decisions or report for seed 1.",
+  "read_its_own_playbook": true,
+  "run": "mmf-mage.2",
+  "savefile_sha256": "09a486707887acc5c589fcb6e7d276bdf5166887690cba888fc099202a9a6f0c",
+  "schema": "borg-runner/run-record@1",
+  "screens": 146,
+  "screens_sha256": "778029381f6616c5f7d48460dff01a4358eaa8463d4f2f6f2fdb59cea2100b19",
+  "seed": 1,
+  "wealth": 576
+}

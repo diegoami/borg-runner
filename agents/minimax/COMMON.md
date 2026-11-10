@@ -874,3 +874,64 @@ Phase Door 50, Detect Invisible 50, Blessing 50, Deep Descent 20,
 Summon Monster 10, Darkness 10, and Magic Mapping cannot appear before
 depth 5.
 
+## From `mmf-mage.2`, 2026-11-10
+
+## What mmf-mage measured (a Gnome Mage, seed 1, 145 asks)
+
+- **A level holds about fifty monsters, so the problem is finding them,
+  not fighting them.** `classic_gen` places `level_monster_min +
+  randint1(8) + k` of them (`gen-cave.c`, k = `MAX(MIN(depth/3,10),2)`)
+  with `pick_and_place_distant_monster(c, p->grid, 0, true, depth)`: the
+  "distant" is `dis = 0`, so they are placed at any distance from the up
+  staircase, and they start asleep. Fifty on 198x66 is one per 250
+  squares, so a ten-tile corridor holds a monster about four per cent of
+  the time and a 10x10 room about a third. **A room is worth ten
+  corridors, and the detection spell's doors are a map of where the
+  rooms are.**
+- **On a level you have just entered, the game's own pathfinder cannot
+  walk you anywhere.** `find_path` sets `only_known = square_isknown(start)
+  && square_isknown(dest)`, so a *known* destination with unknown ground
+  in between has no path over remembered ground: `l>g` covered 3, 3, 12
+  and 1 tiles on four levels, and an aimed walk with an unknown
+  destination one tile. Plain digit strings walk the whole way and stop
+  only at a wall, so on a fresh level **digits are the only way to move**
+  — and `lxg` was one tile an ask.
+- **A failed detection cast prints nothing.** After one cast my
+  character sheet read `Cur Exp 0` and the message line was empty,
+  while a success prints "You sense ..." and pays the spell's first-use
+  experience (2 for Find Traps, the last field of its `class.txt` line).
+  **Read `C` after every cast** before you spend another point on the
+  same window.
+- **The store's `s` command identifies a kind for nothing.** The store
+  menu prints only `l`, `p` and `o`, so the trick in §6b of
+  INSTRUCTIONS looks unavailable; `s` (or `d`) opens a "Give which
+  item?" prompt and `do_cmd_sell` learns the runes even with selling
+  off. My unknown potion came back as a Potion of Boldness
+  (`CURE:AFRAID`) — worth more as a measurement than as a potion.
+- **The staircases are paired against the direction you want.** `<`
+  ascends only from an *up* staircase and lands you on a *down*
+  staircase of the level above; `>` descends only from a down one (from
+  a down staircase `<` did nothing at all and the turn counter did not
+  move). The town's down staircase therefore pairs with depth 1's up
+  staircase, and leaving depth 2 for the town takes **two** up
+  staircases — the Scroll of Word of Recall (read in the dungeon: it
+  takes you to the town after 15 to 34 player actions, and a rest of 61
+  actions covers the longest wait) is the cheap way home.
+- **The `]` glyph is used by boots as well as helms** (`object.txt`: the
+  Iron Shod Boots are `graphics:]:U`, the Metal Cap `graphics:]:s`), and
+  a text screen cannot tell them apart: I picked up a pair of Leather
+  Sandals expecting a helm.
+- **A store swallows keys.** A ten-key route sent while the Armoury
+  list was still on the screen lost nine of them to the store, and the
+  tenth was read as movement ("There is a wall in the way!"); a trailing
+  `y` meant as a purchase confirmation landed on the row whose letter
+  is `y` and opened that item instead. **Escape out of a store before
+  you send a route.**
+- **The Character sheet and the monster list are menus that eat keys**:
+  `C` leaves a sheet where `c` means "change name", and `[` leaves a
+  "press any key" prompt. Each cost me a decision.
+- **The shops did not restock inside my game day.** Two visits to the
+  same Armoury on the same day showed the same list minus what I had
+  bought (the Studded Leather Armour gone, the gloves 16 to 15, the
+  gauntlets 6 to 5). The daily restock is real but it did not happen
+  between two shopping trips hours apart in game time.

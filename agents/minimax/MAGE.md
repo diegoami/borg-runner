@@ -42,13 +42,31 @@ spell, and the run's whole budget spent on the level's ground floor.
 never "can I afford this cast" but "can I afford to be in the right place
 when the bar is full".
 
-### The spell order I would use now — `minimaxflash-2.2`
+### The spell order I would use now — `minimaxflash-2.2`, corrected by `mmf-mage`
 
 §3 said: Find Traps, Phase Door, Electric Arc, and that Magic Missile "is
 the best *damage* in the game for one spell point, but oil is better still".
 **Magic Missile first**, as of minimaxflash-2.2: it is 1 SP for 3d4 = 3–12
 damage and **never resists**, so it is **the only damage in the game that
 ignores armour** and the only thing that can hurt Fang's AC 36.
+
+**CORRECTED, `mmf-mage` (a Gnome Mage, seed 1): at CL1 the spell that
+matters is not the damage, it is the finding.** At CL1 on depth 1 a kill
+pays 1 to 5 experience (the small kobold is 5, the soldier ant 3, the
+grey mould 3), CL2 needs 12 for a Gnome, and the level holds about fifty
+monsters on 13,068 squares — one per 250 — so a CL1 mage needs three to
+five kills, and a kill costs **thirty to sixty decisions to find**.
+Magic Missile makes a kill cheaper (one or two casts instead of eight
+flasks of oil against AC 24) and does nothing about the thirty decisions
+it takes to meet the kobold. So `mmf-mage` studied **Find Traps, Doors &
+Stairs first**, and it was right: three casts found **two down
+staircases on depth 1 and two on depth 2**, and the spell is what
+carried that run to depth 3 and to a 55-gold pile. The order I would give
+now: **Find Traps first, Magic Missile at CL2** — because the spell's
+*doors* are worth more than its stairs (a door is a map of where the
+rooms are, and a room is a hundred squares of concentrated search), and
+because a spell's first-use experience (4 for Magic Missile) is worth
+nothing until there is a second study slot to learn it in.
 
 **Studying a spell costs nothing** — `do_cmd_study_spell` calls
 `spell_learn()` and never touches `msp`; only casting does. So take both
@@ -301,11 +319,22 @@ The three rules I would give the next mage:
 
 ### Answers to the open questions, and new ones — `minimaxflash-2.2`
 
-1. **ANSWERED: the staircase hunt takes ONE cast and ONE walk, on a level
-   the spell has not already broken.** See §3 above. The "six casts on a
-   six-position grid" plan is worse than useless. **What would settle the
-   rest:** a mage that casts once on each new level and reports whether a
-   `>` appeared, and how many tiles the walk covered afterwards.
+1. **ANSWERED, and the second half corrected, by `mmf-mage`: the hunt
+   takes ONE cast, and the walk is the hard part.** See §3 above. The
+   "six casts on a six-position grid" plan is worse than useless, and
+   `mmf-mage` confirms the first half: **one cast on a fresh level found
+   two down staircases** (depth 1, at M-map boxes (9,7) and (26,4)
+   against my own box (14,12)) — a level has three or four, so the
+   spell's window sees about half of them. But the walk after the cast
+   covered **3, 3, 12 and 1 tiles** on four different levels, and the
+   reason is `find_path` (`player-path.c`): `only_known =
+   square_isknown(start) && square_isknown(dest)`, so a *known*
+   staircase with unknown ground in between gives no path over
+   remembered ground and the walk stops after a step or two. The
+   detection spell finds the stairs; it does not make the walking
+   possible. **What would settle the rest:** a mage that measures the
+   tiles per `l>g` on a level it has walked and on one it has not, and
+   says which half of the hunt is the expensive one.
 2. **SOLVED: a mage can afford to level, and it is easier than I thought.** A
    wild cat on depth 2 is 9 HP, AC 14 and gives 8 experience; **one flask of
    oil kills it** (my throw is to-hit 11, AC 14 needs to-hit 10, so the
@@ -332,3 +361,48 @@ The three rules I would give the next mage:
    on depth 7 with 16 hit points, which no other run in this repository has
    done.**
 
+## From `mmf-mage.2`, 2026-11-10
+
+## What mmf-mage measured (a Gnome Mage, seed 1, 145 asks, level 1, no kills)
+
+- **The depth 1 potion pool is eleven kinds and the scroll pool eight,
+  from object.txt's own `alloc` weights.** Potions: Cure Light Wounds 80,
+  Neutralize Poison 60, Speed, Heroism and Boldness 40 each, Slime Mold
+  Juice 10, against Sleep, Blindness, Confusion, Poison and Slowness 10
+  each — 270 of 320 good (84 %). Scrolls: Treasure Detection, Light,
+  Phase Door, Detect Invisible and Blessing 50 each against Deep Descent
+  20, Summon Monster 10 and Darkness 10 — **40 of the 290 weight is
+  dangerous (14 %)**, and the first use pays the kind's own level, so a
+  depth 1 scroll is worth about 0.2 experience. Leave depth 1 scrolls
+  alone; the one on my floor stayed there.
+- **Armour costs a mage his throw.** `calc_bonuses` adds a worn item's
+  to-hit to `state->to_h` for everything that is not a weapon or a bow,
+  and `chance_of_missile_hit_base` adds `state->to_h` to the throw for a
+  `THROWING` item — a flask of oil has the flag — so the Studded Leather
+  Armour's (-1) took my oil from to-hit 11 to 10 and the hit rate
+  against an AC 14 target from 27 % to 20 %.
+- **A Robe and a Studded Leather Armour share the body slot**, so in
+  this seed's Armoury — which has **no helms at all**, only robes, soft
+  and scale armour, gloves, gauntlets and boots — buying both wasted the
+  36 gold of the Robe. Gauntlets and Leather Gloves are the same slot
+  too: I ended with the Gauntlets worn and the Gloves in the pack. What
+  a mage can wear for 210 gold is AC 15 (Studded 12, Gauntlets 3), and
+  AC 17 if he spends 6 more on a Cloak.
+- **The experience ladder for a Gnome is 12, 30, 54, 84** (the
+  `player_exp` ladder times the race's 120 %), and a depth 1 kill pays
+  1 to 5 at CL1 (small kobold 5, soldier ant 3, grey mould 3, wild dog
+  1). **CL2 on depth 1 needs three to five kills, and a kill costs
+  thirty to sixty decisions to find** (see COMMON.md on the density).
+  A depth 2 kill pays twice (a giant green frog is 6, so 12 at CL1 on
+  depth 2: one kill is CL2) and a depth 3 kill three times (the metallic
+  blue centipede is 7, so 21 at CL1). **The cheap way to level is to be
+  deep, and the expensive way is to walk there.**
+- **One blue yeek and three cave spiders in a chamber is a fight I
+  should not take at CL1 and 8 hp.** The yeek's sleep is 10 and
+  `monster_reduce_sleep` removes `100/local_noise` a time, so it wakes
+  on the first roll; oil against its AC 16 is a 12 % shot needing eight
+  throws, which is eight bites of 1d5 (about 22 damage at AC 17); and
+  the three spiders beside it (7 hp, AC 19, 1d4, speed 120, so two
+  blows a turn) wake with it. **When the numbers say the fight costs
+  more than the run, the staircases are worth more than the kill** — and
+  the staircase is where the gold was (55 on depth 3).
