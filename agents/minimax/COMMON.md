@@ -1288,3 +1288,140 @@ likely to repeat.
   actions of walking (`player_regen_mana()`: `msp × 197 + 524` in 65536ths
   per action). A rest is interrupted by anything that reaches you, so it is
   only worth asking on swept ground.
+
+## From `mmx-pri-1.2`, 2026-11-10
+
+## What I measured (mmx-pri-1.2, a Dwarf Priest on seed 17, 58 asks, level 3, depth 1)
+
+**The status line's `Light N` is the light of the SQUARE YOU STAND ON, not of
+your torch.** `ui-display.c` `prt_light()` prints
+`square_light(cave, player->grid)`: 1 is a dim corridor, 2 a lit corridor, 3 an
+open room, 0 (in purple) is darkness, and the town shows 1. It rose and fell
+twice in my run without my doing anything and I spent asks wondering why; it
+is a free reading of whether the ground under you is a room or a corridor,
+which is useful when the map panel has scrolled away. (mmx-pri-1.2#205)
+
+**Aiming at a KNOWN square walks a long way; aiming into unknown ground walks
+one tile.** `*p` + 25 east + 16 north + `g`, aimed at the up staircase I had
+drawn on my map, walked me 25 tiles in ONE ask (#186); the same key shape
+aimed into unexplored ground moved me one tile and printed `Target Aborted.`
+(#152). This is the cleanest measurement of the difference our pages keep
+repeating: the destination is known, so `find_path` sets `only_known = true`
+and computes a real path over remembered ground; an unknown destination gets
+the "unknown is passable" fallback and a meaningless short path. **Aim at a
+landmark you can see, never into the dark.**
+
+**A digit chain is one ask and dies at its first wall.** `cmd-cave.c`
+`do_cmd_walk_test()` calls `disturb()` on a known wall, and `disturb()` ends
+with `event_signal(EVENT_INPUT_FLUSH)`, which the agent patch turns into "the
+rest of the key string is dropped". Twenty known-floor steps are one ask
+(#150); a chain that meets a wall halfway is one ask and one wall learned.
+**A door is one key either way**: walking into a locked door picks the lock
+and the pick repeats the walk, so one key opens it and walks through (#173);
+walking into an OPEN door closes it and the close repeats the walk, so one key
+closes it, re-opens it and walks through.
+
+**`l<g` and `l>g` are one ask each and they are the best movement in the
+game.** `l<g` parks the cursor on the nearest KNOWN up staircase and `g`
+walks there over remembered ground - 25 tiles in one ask to a staircase I
+could see on my map (#185). `l>g` does the same for a known down staircase; in
+the town it walked me to the town's down staircase, interrupted twice by
+townfolk on the way (#197).
+
+**The shops rotate daily, so a shopping plan made the day before is a
+gamble.** The Alchemist's `normal:` list is fourteen kinds and `slots:6:10`
+fills six to ten of them a day, so a given normal is there about half the
+time. On seed 17 on day two the Alchemist had no Magic Mapping, no Monster
+Confusion and no Cure Serious Wounds, and had gained Neutralize Poison,
+Berserk Strength, Resist Heat, Resist Cold and Remove Hunger; the same shop
+on the same seed the day before had a different list. **Read the list before
+you plan the trip, and plan the trip to the shop that always has what you
+need.** Phase Door (15), Cure Light Wounds (20) and Boldness (8) are the
+three I would buy every time.
+
+**A Dwarf sees treasure veins three tiles away, every turn.**
+`game-world.c` `process_player()` calls `effect_simple(EF_DETECT_ORE, ...)`
+with radius 3,3 for anyone with the Dwarf's `SEE_ORE` flag, and
+`effect_handler_DETECT_ORE` memorises the square - so a `*` on the map is a
+vein I had not even stepped next to. All the veins I met this run were plain
+`%` (magma or quartz, no treasure), which is why digging never paid.
+
+**Magic Mapping does put a down staircase on the map**, so the scroll is
+worth more than it looks: `effect_handler_MAP_AREA` memorises every NON-FLOOR
+feature in its window, and a staircase is not floor. The window is the
+half-extents 22 by 40 of `object.txt`, so 44 rows by 80 columns, 27 per cent
+of a level, against three or four staircases. That is the one instrument in
+this game that can find a staircase without walking to it, and the question I
+could not answer is whether the Alchemist will ever stock it.
+
+**How much of a level does a run need?** I covered about 15 per cent of one
+depth-1 level (13,068 squares) and 1 per cent of another in 58 asks and saw
+no staircase on either. The `M` map is the instrument for this: it showed
+6.4 per cent at one point, 8.9 per cent at another, 1.0 per cent on the
+fresh level, and the `>` was absent from all three.
+
+## From `mmx-pri-1.2`, 2026-11-10
+
+## What a second life of this Priest found (mmx-pri-1.2, seed 17, 58 asks, level 2 to 3, depth 1, alive)
+
+**What the character arrives with matters more than what it can do.** The
+first life of this character spent both Potions of Cure Serious Wounds, the
+Scroll of Phase Door and the Scroll of Word of Recall, so this life started
+at character level 2 with 8 gold, 18 flasks of oil, a spare Robe, 3 rations
+and **no escape and no heal at all**. Everything good this life did came from
+the 190 gold lying on the floor of depth 1 (two piles, 85 and 105), not from
+the class's abilities. **A Priest's first purchase in the town is the Phase
+Door and the Cure Light Wounds, in that order, before anything else** - and
+they cost 35 of the 92 gold mmx-pri-1 spent on armour and oil.
+
+**Fear is worth eight points of armour class, and it takes your attacks
+away.** A yellow mushroom patch (depth 2, `SPORE:TERRIFY:1d6`) was on a
+depth-1 level - the game's 1-in-25 chance of a deeper monster - and it
+terrorised me: **Cur AC went from 9 to 17**, I could not attack, and it cost
+9 hit points. The fear is a timer and nothing else cures it except time
+(while it lasted I could still walk away, which is how it ended); the only
+item cure is a **Potion of Boldness, 8 gold in the Alchemist**. Buy one, and
+never stand next to a mushroom patch: the grey one confuses and the yellow
+one terrifies, and both sit still.
+
+**The free heal works and it is worth asking for.** Minor Healing at level 3
+healed me 13 (class.txt's `level + 10`) and took me from 24/33 to 33/33 for
+2 spell points, with no gold and no potion. Cast it: `m`, then the book's
+letter, then the spell's letter - the spell list is in class.txt's order, so
+**a) Call Light, b) Detect Evil, c) Minor Healing, d) Bless** and the
+c is Minor Healing. Its first cast was paid for in the first life of this
+character, so at level 3 it pays no experience.
+
+**A second weapon and a second book are worth nothing to a Priest.** The
+Dagger on the floor throws for 1d4 x 6, which is worse than a flask of oil
+(9 to 36), and the blessed Mace already does 4 to 10; the priest's one blow
+a turn is not improved by a better weapon. The spare Holy Book of Prayers is
+25 gold of carried value and nothing else. **Do not pick them up.**
+
+**`?` on the floor is not a scroll.** The item drawn `?` at (10,12) turned
+out to be a second Holy Book of Prayers - my pack read `a) 2 Holy Books of
+Prayers [Novice's Handbook]`. `object.txt` gives scrolls `graphics:?:w`, but
+`object_base.txt` gives a prayer book only a colour ("light green"), so the
+symbol for a book is decided elsewhere. **Look at an item (`l`) before you
+plan around it**, and remember that a flavour name does not identify a kind
+either - the store's own list is the only authority, and the shop's rows name
+the kind even when the purchase message shows a colour.
+
+**The town's stores, for seed 17, measured on the day two of this game:** the
+Alchemist is the tile at (38,14) with its door facing north from (38,13); the
+General Store (1) is at (46,9) with its door at (46,10); the Black Market (7)
+at (31,10); the Bookseller (4) at (18,9); the Magic shop (6) at (18,13); the
+Armoury (2) at (7,13) entered from the north at (7,12); the town's down
+staircase at (42,4). Row 11 and row 12 are open from column 3 to column 58,
+and **column 44 is clear from row 12 up to row 4**, so (44,12) north to
+(44,4) and two steps west is the way from the street to the staircase.
+Walking into a store tile opens the shop by itself; the store's ESC leaves it
+and the town's ESC does not always close a shop that is showing - one of my
+chains was eaten whole by a shop menu that had not closed.
+
+**A depth-1 Priest's ceiling is the monsters.** Four experience in 58 asks:
+a rock lizard (2 experience), a soldier ant (3), a giant yellow centipede (2).
+At level 3 that is 2/3 of an experience unit a kill, and the level carries
+sixteen to twenty-four monsters over thirteen thousand squares. **Without a
+staircase this character cannot level, and the staircase is worth far more
+than any fight.**

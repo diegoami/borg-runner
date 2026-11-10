@@ -147,3 +147,77 @@ gone**, so one ask is a hundred attempts. A '*' on the map is a vein with
 treasure and a Dwarf can open it: the vein I dug gave **90 gold in three
 attempts**. For a Priest, whose only income is kills and whose only attack
 is a flask of oil, that vein was the best thing that happened to me.
+
+## From `mmx-pri-1.2`, 2026-11-10
+
+## What a second life of this Priest found (mmx-pri-1.2, seed 17, 58 asks, level 2 to 3, depth 1, alive)
+
+The general findings of this life - the `Light` field, the chain and door
+mechanics, the aim-walk at a known square, the shops' daily rotation and the
+Dwarf's three-tile treasure detection - are in [COMMON.md](COMMON.md) under
+`From mmx-pri-1.2`. This page is the part that is only true of a Priest.
+
+**What the character arrives with matters more than what it can do.** The
+first life of this character spent both Potions of Cure Serious Wounds, the
+Scroll of Phase Door and the Scroll of Word of Recall, so this life started
+at character level 2 with 8 gold, 18 flasks of oil, a spare Robe, 3 rations
+and **no escape and no heal at all**. Everything good this life did came from
+the 190 gold lying on the floor of depth 1 (two piles, 85 and 105), not from
+the class's abilities. **A Priest's first purchase in the town is the Phase
+Door and the Cure Light Wounds, in that order, before anything else** - and
+they cost 35 of the 92 gold mmx-pri-1 spent on armour and oil. The Phase Door
+is 15 and the Cure Light Wounds 20; the Alchemist has both every day.
+
+**Fear is worth eight points of armour class, and it takes your attacks
+away.** A yellow mushroom patch (depth 2, `SPORE:TERRIFY:1d6`) was on a
+depth-1 level - the game's 1-in-25 chance of a deeper monster - and it
+terrorised me: **Cur AC went from 9 to 17**, I could not attack, and it cost
+9 hit points. The fear is a timer and nothing else cures it except time
+(while it lasted I could still walk away, which is how it ended); the only
+item cure is a **Potion of Boldness, 8 gold in the Alchemist**. Buy one, and
+never stand next to a mushroom patch: the grey one confuses and the yellow
+one terrifies, and both sit still.
+
+**The free heal works and it is worth asking for.** Minor Healing at level 3
+healed me 13 (class.txt's `level + 10`) and took me from 24/33 to 33/33 for
+2 spell points, with no gold and no potion. Cast it: `m`, then the book's
+letter, then the spell's letter - the spell list is in class.txt's order, so
+**a) Call Light, b) Detect Evil, c) Minor Healing, d) Bless** and the
+c is Minor Healing. Its first cast was paid for in the first life of this
+character, so at level 3 it pays no experience. Bless is worth an ask in a
+fight: **+5 AC**, which on a Priest is the difference between a mistake
+costing a potion and a mistake costing the run.
+
+**A second weapon and a second book are worth nothing to a Priest.** The
+Dagger on the floor throws for 1d4 x 6, which is worse than a flask of oil
+(9 to 36), and the blessed Mace already does 4 to 10; the priest's one blow
+a turn is not improved by a better weapon. The spare Holy Book of Prayers is
+25 gold of carried value and nothing else. **Do not pick them up.**
+
+**`?` on the floor is not a scroll.** The item drawn `?` at (10,12) turned
+out to be a second Holy Book of Prayers - my pack read `a) 2 Holy Books of
+Prayers [Novice's Handbook]`. `object.txt` gives scrolls `graphics:?:w`, but
+`object_base.txt` gives a prayer book only a colour ("light green"), so the
+symbol for a book is decided elsewhere. **Look at an item (`l`) before you
+plan around it**, and remember that a flavour name does not identify a kind
+either - the store's own list is the only authority, and the shop's rows name
+the kind even when the purchase message shows a colour.
+
+**The town's stores, for seed 17, measured on the day two of this game:** the
+Alchemist is the tile at (38,14) with its door facing north from (38,13); the
+General Store (1) is at (46,9) with its door at (46,10); the Black Market (7)
+at (31,10); the Bookseller (4) at (18,9); the Magic shop (6) at (18,13); the
+Armoury (2) at (7,13) entered from the north at (7,12); the town's down
+staircase at (42,4). Row 11 and row 12 are open from column 3 to column 58,
+and **column 44 is clear from row 12 up to row 4**, so (44,12) north to
+(44,4) and two steps west is the way from the street to the staircase.
+Walking into a store tile opens the shop by itself; the store's ESC leaves it
+and the town's ESC does not always close a shop that is showing - one of my
+chains was eaten whole by a shop menu that had not closed.
+
+**A depth-1 Priest's ceiling is the monsters.** Four experience in 58 asks:
+a rock lizard (2 experience), a soldier ant (3), a giant yellow centipede (2).
+At level 3 that is 2/3 of an experience unit a kill, and the level carries
+sixteen to twenty-four monsters over thirteen thousand squares. **Without a
+staircase this character cannot level, and the staircase is worth far more
+than any fight.**
