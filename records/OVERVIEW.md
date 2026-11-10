@@ -10,7 +10,7 @@ runs of the same family months apart are not the same experiment.
 
 | run | seed | model | character | depth | level | wealth | asks | keys | turn | outcome | tokens | inherited | read its class | own tools | replay |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| [codex-1-tty](codex-1-tty/) | 103 | openai/gpt-5.6-luna | Dunadan Warrior | 1 | 1 | 600 (134 gold + 466 carried) | 66 | 255 | 1,860 | ended | 16,000 | — | False | — | [watch](https://diegoami.github.io/borg-runner/records/codex-1-tty/report.html) |
+| [codex-1-tty](codex-1-tty/REPORT.md) | 103 | openai/gpt-5.6-luna | Dunadan Warrior | 1 | 1 | 600 (134 gold + 466 carried) | 66 | 255 | 1,860 | ended | 16,000 | — | False | — | [watch](https://diegoami.github.io/borg-runner/records/codex-1-tty/report.html) |
 | [minimaxflash-1](minimaxflash-1/REPORT.md) | 23 | minimax-coding-plan/MiniMax-M3.1-Flash | High-Elf Druid | 1 | 1 | 611 (26 gold + 585 carried) | 148 | 1,081 | 7,433 | ended | — | — | False | — | [watch](https://diegoami.github.io/borg-runner/records/minimaxflash-1/report.html) |
 | [minimaxflash-1-again](minimaxflash-1-again/REPORT.md) | 23 | minimax/MiniMax-M3 | High-Elf Druid | 2 | 4 | 317 (18 gold + 299 carried) | 401 | 1,616 | 10,898 | ended | — | notebook.md | False | — | [watch](https://diegoami.github.io/borg-runner/records/minimaxflash-1-again/report.html) |
 | [qwen-flash-1](qwen-flash-1/) | 23 | alibaba-token-plan/qwen3.8-flash | High-Elf Druid | 0 | 1 | 475 (379 gold + 96 carried) | 73 | 204 | 570 | died: a scruffy little dog | 51,226 | — | — | — | [watch](https://diegoami.github.io/borg-runner/records/qwen-flash-1/report.html) |

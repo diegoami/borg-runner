@@ -518,3 +518,29 @@ def test_no_started_file_means_no_game(tmp_path):
     run = tmp_path / 'bare'
     (run / run_module.ASK).mkdir(parents=True)
     assert run_module.started_process(run) is None
+
+
+def test_the_archived_write_up_links_the_replay(tmp_path):
+    """REPORT.md renders on GitHub; report.html only opens on the site."""
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='x')
+    (run / 'REPORT.md').write_text('# what happened\n\nIt went well.\n')
+    run_module.write_record(run, outcome='stopped')
+    kept = run_module.archive(run, into=tmp_path / 'kept', log=lambda *a: None)
+    text = (kept / 'REPORT.md').read_text()
+    assert 'records/r1/report.html' in text
+    assert 'It went well.' in text, "the player's words are untouched"
+    assert (run / 'REPORT.md').read_text().startswith('# what happened'), \
+        'and the run keeps exactly what was written'
+
+
+def test_archiving_twice_does_not_stack_the_links(tmp_path):
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='x')
+    (run / 'REPORT.md').write_text('# what happened\n\nIt went well.\n')
+    run_module.write_record(run, outcome='stopped')
+    for _ in range(3):
+        run_module.archive(run, into=tmp_path / 'kept', log=lambda *a: None)
+    text = (kept := tmp_path / 'kept' / 'REPORT.md').read_text()
+    assert text.count(run_module.HEADER) == 1
+    assert text.count('It went well.') == 1

@@ -319,6 +319,16 @@ def replay_section(data):
     return REPLAY.replace('FRAMES', payload)
 
 
+SITE = 'https://diegoami.github.io/borg-runner'
+REPO = 'https://github.com/diegoami/borg-runner/blob/main'
+
+
+def links(name):
+    """Back to the write-up, which renders on GitHub rather than here."""
+    return (f'<a href="{REPO}/records/{html.escape(name)}/REPORT.md">What the '
+            f'player wrote</a> · <a href="{SITE}/">every run</a>')
+
+
 def render(data, standalone=True):
     """The page. `standalone=False` leaves out the document skeleton, which is
     what an artifact host supplies itself."""
@@ -335,7 +345,8 @@ def render(data, standalone=True):
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>{STYLE}</style>{opens}<main>
 <h1>{html.escape(name)}</h1>
-<p class="sub">One game of Angband, played from the screen one keypress at a time.</p>
+<p class="sub">One game of Angband, played from the screen one keypress at a
+time. {links(name)}</p>
 <table class="facts">{rows}</table>
 <h2>Replay</h2>
 <p class="sub">Every screen the player faced, in order. Arrow keys step, space

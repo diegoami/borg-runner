@@ -30,8 +30,14 @@ def a_run(tmp_path):
 # on purpose: Angband's own splash screen prints rephial.org and angband.live,
 # so those strings arrive as *game output* inside the replay's data and are no
 # more a request than they are on the terminal.
-FETCHES = ('src=', '<link', '<img', '@import', 'url(', 'href="http',
-           "href='http", '<iframe', 'fetch(', 'XMLHttpRequest')
+# What would make the page *load* something. An <a href> is a navigation, not
+# a fetch: the page renders fully offline whether or not the viewer clicks it,
+# so an external href is checked separately below rather than banned here.
+FETCHES = ('src=', '<link', '<img', '@import', 'url(',
+           '<iframe', 'fetch(', 'XMLHttpRequest')
+# The only places a link may point outside the page.
+OURS = ('https://diegoami.github.io/borg-runner',
+        'https://github.com/diegoami/borg-runner')
 
 
 def test_the_page_fetches_nothing(tmp_path):
@@ -40,6 +46,15 @@ def test_the_page_fetches_nothing(tmp_path):
     for forbidden in FETCHES:
         assert forbidden not in page, forbidden
     assert page.count('<script>') == 1, 'one inline script, and no other'
+
+
+def test_the_only_links_out_are_to_this_project(tmp_path):
+    """Navigation is allowed; an unexpected destination is not."""
+    import re
+    page = report.render(report.read(a_run(tmp_path)))
+    for href in re.findall(r'href="([^"]+)"', page):
+        if href.startswith('http'):
+            assert href.startswith(OURS), href
 
 
 def test_a_url_the_game_printed_is_data_and_not_a_request(tmp_path):
