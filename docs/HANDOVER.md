@@ -28,16 +28,18 @@ The frontend works and is not where the open questions are. What is open is
 **knowledge**: what a player is told before its first keypress, and whether
 that changes how it plays.
 
-- **13 runs archived** in `records/`, one of them played by a person
-  (`diego-1`). Deepest: depth 7 (`sonnet-2-again`). Three deaths, all of them
-  characters below zero on constitution, none of them to a big hit.
+- **14 runs archived** in `records/`, one of them played by a person
+  (`diego-1`). Deepest: depth 7 (`sonnet-2-again`). Four deaths, none of them
+  to a big hit: three were characters below zero on constitution, and the
+  fourth a Warrior with 43 hit points that read Word of Recall and stood still
+  for forty turns.
 - **The dashboard** is <https://diegoami.github.io/borg-runner/>, rebuilt by
   `overview` and published by pushing `main`.
 - **433 fast tests** (`pytest -q`). The slow ones build and play the game
   (`pytest -q -m slow`), and CI does not run them today - an offer the owner
   has not taken up.
-- One run is **still playing** as this is written: `minimaxflash-3`, a Human
-  Warrior, the first Warrior of the minimax line. See "What is waiting".
+- **Nothing is playing.** The last run, `minimaxflash-3`, died on depth 2 to
+  a cave spider; its sections are folded in and the export is current.
 
 ## The one structure to understand: where knowledge lives
 
@@ -126,34 +128,41 @@ does not exist.
    class while its own note named both playbook pages.
 9. **`borg_runner audit`** (added just before this session's work): what a
    finished run should have left, as 18-19 checks. Both prompts end with it.
+10. **The reconcile.** The four `## From <run>` logs in `agents/minimax/` are
+    folded into the bodies by topic with the run named in every heading, and
+    three of their claims are corrected where they stood: "exactly one down
+    staircase per level" (that was the labyrinth generator), "the manual is out
+    by a factor of ten" on the armour-weight penalty (it is not - `cur_wgt` is
+    in tenths of a pound as well), and a CL5 experience target that was too
+    low. `agents/minimax/WARRIOR.md`, which `playbook --start` had left as a
+    COMMON skeleton, is a Warrior page now. `ACCUMULATED_KNOWLEDGE.md` is **edition 3**.
 
 ## What is waiting, in order
 
-1. **`minimaxflash-3` is still playing.** When it stops: `audit --run
-   minimaxflash-3`, and check whether it wrote a WARRIOR.md page
-   in agents/minimax/ (it would be the first Warrior page of that family).
-2. **Reconcile the playbooks.** `playbook --family minimax` says *2 appended
-   sections wait to be folded into the body* (`minimaxflash-2.2`,
-   `minimaxflash-1.4`, plus whatever the Warrior adds). Folding is for a
-   session with **nothing playing**: fold each `## From <run>` section into
-   the body where it belongs, keep every run citation, correct lines that
-   later runs disproved rather than contradicting them further down, then
-   `playbook --check`. Three sessions of one family wrote these pages at once
-   today under `playbook --append`'s lock, which is why they are appended and
-   not folded.
-3. **Export edition 3.** `ACCUMULATED_KNOWLEDGE.md` is at edition 2 and owes
-   three runs: `minimaxflash-2.2`, `minimaxflash-1.4` and `minimaxflash-3`.
-   `docs/EXPORT.md` is the process; the rule that matters is that nothing the
-   manuals already say belongs in it.
-4. **Start the next run.** The owner's next one is a **fresh Gnome Mage**,
+1. **Start the next run.** The owner's next one is a **fresh Gnome Mage**,
    played from the **plain `PLAYGAME.txt`** with `AGENT` set to whatever
-   family is playing - no brief, because the constitution rule is on the page
-   now and in the prompt. Two older runs
-   (`minimaxflash-1.4`'s lineage and anything else) may be carried on with
-   `CONTINUEGAME.txt`.
-5. **T11 is the owner's call**, not a session's: whether the frontend should
-   honour `TERM_XTRA_FLUSH`. See PLAN.md - it would have saved `sonnet-3` and
+   family is playing - no brief, because what a mage needs is on the page now
+   and the prompt points at it. Older characters can be carried on instead
+   with `CONTINUEGAME.txt`; `carry-on --run runs/<name>` names the next
+   generation itself.
+2. **The three tools `minimaxflash-3` wrote are not in the library.**
+   `records/minimaxflash-3/tools/open.py`, `.../route.py` and `.../sweep.py`
+   are archived with the run, and `tools` lists them under "written by runs,
+   not in the library".
+   Adopting one is `tools --adopt <path> --from <run>` and means reading it
+   first: that run's own report says its hand-written glyph list missed `>`
+   for seventy asks, so its code is not above suspicion.
+3. **The measurement nobody has made**, and the cheapest one left: how much of
+   a level a sweep actually remembers. `minimaxflash-1.4` claimed two thirds
+   and found none of the level's three or four staircases; its keys replay, so
+   the number can be counted off the replay instead of believed.
+   `ACCUMULATED_KNOWLEDGE.md` section 8, question 2.
+4. **T11 is the owner's call**, not a session's: whether the frontend should
+   honour `TERM_XTRA_FLUSH`. See PLAN.md - it would have saved `sonnet-3`, and
    it would change what every existing recording replays to.
+5. **Offered and not taken up**: a CI job running `pytest -m slow` with
+   `BORG_RUNNER_NO_X11=1` (CI never builds the game today), and an Angband MCP
+   server so a session could play through tools rather than a CLI.
 
 ## Rules that are not obvious and have each cost something
 
