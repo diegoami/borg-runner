@@ -197,6 +197,37 @@ def cmd_playbook(args):
     return 0
 
 
+def cmd_tools(args):
+    """The shared screen tools, and what runs have written."""
+    from . import tools as tools_module
+
+    if args.check:
+        problems = tools_module.check()
+        for problem in problems:
+            print(problem, file=sys.stderr)
+        print(f'tools/screen: {len(problems)} problems')
+        return 1 if problems else 0
+    if args.adopt:
+        if not args.from_run:
+            print('say which run wrote it: --from <run>', file=sys.stderr)
+            return 1
+        print(tools_module.adopt(args.adopt, args.from_run, name=args.name))
+        return 0
+    for row in tools_module.shared():
+        came = f"from {row['from_run']}" if row['from_run'] else 'for the library'
+        print(f"tools/screen/{row['name']:<12} {row['lines']:>4} lines  "
+              f"{came:<22} {row['summary']}")
+    written = tools_module.by_runs()
+    if written:
+        print('\nwritten by runs, not in the library '
+              '(adopt one with --adopt <path> --from <run>):')
+        for row in written:
+            where = '' if row['archived'] else '  (still playing)'
+            print(f"  {row['run']}/{row['name']:<16} {row['lines']:>4} lines"
+                  f"{where}")
+    return 0
+
+
 def cmd_export(args):
     """The hand-over to the consumer: what the corpus establishes."""
     from . import export as export_module
@@ -419,6 +450,18 @@ def parser():
     p.add_argument('--check', action='store_true',
                    help='check the layout of every playbook')
     p.set_defaults(func=cmd_playbook)
+
+    p = sub.add_parser('tools',
+                       help='the shared screen tools runs may use and add to')
+    p.add_argument('--adopt', metavar='PATH',
+                   help="copy a run's tool into tools/screen/")
+    p.add_argument('--from', dest='from_run', metavar='RUN',
+                   help='the run that wrote it, which the header records')
+    p.add_argument('--name', help='the name it takes in the library')
+    p.add_argument('--check', action='store_true',
+                   help='every tool parses, says where it came from, and does '
+                        'not import borg_runner')
+    p.set_defaults(func=cmd_tools)
 
     p = sub.add_parser('export',
                        help='the hand-over to the consumer (borg-reborn-rs)')

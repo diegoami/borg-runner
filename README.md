@@ -150,6 +150,33 @@ family as `AGENT`, the run reads those pages first and writes back to them
 last, `record --playbook <family>` puts it in the record, and `archive` says
 whether the run wrote back or left the next session where it started.
 
+## Tools runs write, kept for the next run
+
+The screen is all a player has, so runs write code to read it — and the first
+one to write a breadth-first map search had it written again by the next life
+of the same character. [tools/screen/](tools/screen/) is the shared library
+that stops the third: plain scripts that take a screen dump and print, no key
+pressed, no decision made.
+
+```sh
+.venv/bin/python -m borg_runner tools        # the library, and what runs wrote
+python3 tools/screen/look.py runs/mine/ask/screen-42.txt --map   # what is drawn
+python3 tools/screen/aim.py  runs/mine/ask/screen-42.txt --to '>'  # keys to walk
+python3 tools/screen/diff.py screen-41.txt screen-42.txt  # did anything change?
+```
+
+A run's own tools stay in `runs/<run>/tools/` and are archived with it, because
+a run played with a pathfinder it wrote is measuring its code as well as
+itself. When one is worth keeping, `tools --adopt runs/mine/tools/x.py --from
+mine` copies it into the library with a header naming the run, leaving the
+run's copy exactly as it played it. `tools --check` holds that each one parses,
+says where it came from, and runs in a bare checkout.
+
+The rule in the library's [README](tools/screen/README.md) is the one the
+corpus taught: **check the game first.** An aimed cursor plus `g` walks 17 to
+44 tiles in one ask through ground never seen; `aim.py` exists to use that, not
+to replace it.
+
 ## What goes out: the export
 
 One document is written **outward**, for the consumer rather than for the next

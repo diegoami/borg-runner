@@ -124,24 +124,53 @@ Keys: every character you send is a key the game receives. Four escapes exist
 for keys that cannot be typed: \n Enter, \e Escape, \t Tab, \\ a backslash.
 Several keys in one answer are usually right.
 
-== TOOLS YOU WRITE YOURSELF ==
+== TOOLS: THERE ARE SOME ALREADY, AND YOURS CAN BE KEPT ==
 
-You may write tools - a script to parse the screen, a pathfinder, anything -
-and one run wrote a 143-line map parser with breadth-first search. It is
-allowed: it reads only the screen, which is all you have. Two conditions.
+    .venv/bin/python -m borg_runner tools
 
-**Put them in runs/{RUNNAME}/tools/ and say so in your first note.** They are
+lists the shared screen tools in `tools/screen/`, which earlier runs wrote and
+which you may use as they are. They read a screen dump and print; none of them
+presses a key:
+
+    look.py   everything the screen has drawn, nearest first, with the offset
+              from `@` in the game's own form (`3 S, 2 E`)
+    aim.py    a place on the screen -> the keys that make *the game* walk
+              there (`*`, cursor digits, `g`)
+    map.py    the panel with coordinate rulers, and a local route over tiles
+              that are drawn walkable
+    diff.py   what changed between two screens - and whether anything did,
+              which is how you catch a key that did nothing
+    screen.py the reader the others use, if you write your own
+
+They take `runs/{RUNNAME}/ask/screen-<n>.txt` directly:
+
+    python3 tools/screen/look.py runs/{RUNNAME}/ask/screen-42.txt --map
+
+**You may write your own** - a parser, a router, anything that reads the
+screen. Two conditions, and then one thing to do at the end.
+
+**Put yours in runs/{RUNNAME}/tools/ and say so in your first note.** They are
 archived with the run, because a run played with a pathfinder you wrote is
 measuring you *and your code*, and a reader a month later cannot tell the two
 apart unless the code is there.
 
 **Check the game first.** The game already does more than it looks: `l` then
-`x` then `g` walks you to the nearest unexplored edge, and `l` then `>` then
-`g` walks you to a known down staircase - both in one keypress string, both
-using the game's own pathfinding, and both found by reading the manual rather
-than by writing code. A tool that reimplements what the game offers costs you
-the chance to find that out, and what you then write in your notebook is about
-your tool instead of about Angband.
+`x` then `g` walks you to the nearest unexplored edge, `l` then `>` then `g`
+to a known down staircase, and an aimed cursor plus `g` walks 17 to 44 tiles
+in one ask through ground you have never seen. A tool that reimplements what
+the game offers costs you the chance to find that out, and what you then write
+in your notebook is about your tool instead of about Angband. One run spent
+148 asks driving its own 143-line search and never tried the game's.
+
+**When you stop, keep what was worth writing:**
+
+    .venv/bin/python -m borg_runner tools --adopt runs/{RUNNAME}/tools/x.py \
+        --from {RUNNAME}
+
+That copies it into `tools/screen/` with a header naming your run, so the next
+run starts with it instead of writing it again. Your own copy stays exactly as
+you played it. `tools --check` must pass: a shared tool parses, says where it
+came from, and does not import `borg_runner`.
 
 == THE TIP THAT MATTERS MOST ==
 

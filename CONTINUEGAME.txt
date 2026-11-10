@@ -136,6 +136,25 @@ a solution key.
 `answer` prints the next screen. Several keys in one answer are usually right;
 the escapes are \n Enter, \e Escape, \t Tab, \\ a backslash.
 
+== TOOLS: THERE ARE SOME ALREADY, AND YOURS CAN BE KEPT ==
+
+    .venv/bin/python -m borg_runner tools
+
+lists the shared screen tools in `tools/screen/` - `look.py` (what the screen
+has drawn, with offsets from `@`), `aim.py` (a place -> the keys that make the
+*game* walk there), `map.py` (the panel with rulers and a local route),
+`diff.py` (what changed, and whether anything did), `screen.py` (the reader).
+They take `runs/{RUNNAME}/ask/screen-<n>.txt` directly and press no keys.
+
+If you inherited tools from your own earlier life they are in
+`runs/{RUNNAME}/tools/`, copied forward with the run. You may write more;
+check the game's own commands first, because an aimed cursor plus `g` walks 17
+to 44 tiles in one ask and no code of yours will beat it. When you stop, keep
+what was worth writing:
+
+    .venv/bin/python -m borg_runner tools --adopt runs/{RUNNAME}/tools/x.py \
+        --from {RUNNAME}
+
 == WHAT IS DIFFERENT FROM A FRESH RUN ==
 
 - There is no birth. Your character exists, with its level, its gear and its
