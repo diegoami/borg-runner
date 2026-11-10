@@ -108,8 +108,9 @@ the grammar that is stale, not the page.**
 56 twice (a session re-answer appended much later); the game had consumed the
 first answers, and every replay diverged from the record at exactly that
 point. `minimaxflash-2.2` had the same at ask 329. Now: `answer` refuses a
-second answer; `recorded_keys` and the record's `input.txt` take the played
-(first) answer and name the rest in `duplicate_answers`; the audit warns on a
+second answer; `recorded_keys` and the record's key stream (input.txt) take
+the played (first) answer and name the rest in `duplicate_answers`; the audit
+warns on a
 re-answered log; a replay regenerates its scratch directory; the splash's git
 describe is not a screen difference (build identity lives in the record's
 hashes). All 16 runs replay `identical: true` under this.
@@ -152,8 +153,10 @@ diffs every ask byte for byte.
    `minimax/`.
 2. **Merge the run branches** as runs finish (see the worktree model), and
    rebuild the dashboard on main.
-3. **Tools written by runs, not adopted**: `records/minimaxflash-3/tools/`
-   (`open.py`, `route.py`, `sweep.py`) and now
+3. **Tools written by runs, not adopted**:
+   `records/minimaxflash-3/tools/open.py`,
+   `records/minimaxflash-3/tools/route.py`,
+   `records/minimaxflash-3/tools/sweep.py` and now
    `records/minimaxflash-1.5/tools/g.py` (a beam-search walk planner its
    report credits with a 7x sweep rate - and which has the family bug of a
    hardcoded panel slice; read before adopting). `tools --adopt <path>
@@ -168,8 +171,8 @@ diffs every ask byte for byte.
 
 ## Rules that are not obvious and have each cost something
 
-- **The frontend holds no tactics** (D2). A grep of `main-agent.c` for
-  `hit_point`, `danger`, `monster`, `inventory`, `spell` is a test; keep
+- **The frontend holds no tactics** (D2). A grep of `patch/src/main-agent.c`
+  for `hit_point`, `danger`, `monster`, `inventory`, `spell` is a test; keep
   even comments free of them.
 - **No API keys, no provider config** (D8). The session is the player.
 - **A player may read its own history, never another run's transcript of its
