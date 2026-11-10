@@ -208,6 +208,17 @@ from this page". No run has ever found a staircase by walking.
 - You may not call anything a defect. If you think a player could do better,
   say what would settle it.
 - Aim for about 150 decisions unless you are told otherwise, then stop.
+- **Depth is recorded, not scored.** Every run here has chased the down
+  staircase as if it were the point, and two died at character level 1 doing
+  it. Exploring the level you are on, levelling, going back to town for
+  armour - the shops restock daily - and descending when you can pay for it is
+  a plan, and so is deciding not to descend at all. Say in your report what
+  you were buying with the asks you spent.
+- **You never need to know where you are on the level.** A level you leave is
+  regenerated, so no map of it has a second use, and both staircases are
+  exits: `< ` then `> ` gives a fresh level of the same depth in two or three
+  asks. When a level will not give you a staircase, leave it - this is not a
+  game of persistent floors, and nothing here asks you to return to a place.
 
 == WHEN YOU STOP: WRITE IT UP FIRST ==
 

@@ -50,6 +50,35 @@ Before you add a line, check whether the page already says it. If the game's
 own manual says it and a player still had to learn it the hard way, that is
 worth a sentence where the key is explained, not a new section.
 
+## Read what every run wrote, every time
+
+Not occasionally. The same things come back: five runs treated the down
+staircase as the only plan, four measured the level against the view, nine
+lost keys to a prompt. **A theme that recurs and is not on the page is the
+page's fault, not the players'.**
+
+```sh
+.venv/bin/python -m borg_runner consolidate
+```
+
+prints the recurring themes, how many runs raised each, and whether the page
+answers it — counted from both the reports **and** the notebooks, because they
+hold different things. A report says what the reading lacked; a notebook holds
+the thing measured at the ask it was measured, and some of the best lines
+never reach a report at all: that store letters shift only *after* the row you
+bought, so buying the last row first keeps every earlier letter valid; that an
+aim into unexplored ground can walk zero steps.
+
+The theme list is in `consolidate.py` and is maintained by hand on purpose:
+counting is mechanical, deciding that two runs mean the same thing is not. Add
+a theme when a second run raises something the first one did; the patterns
+that identify it are regular expressions over what a run wrote, and the
+pattern that marks it answered is a phrase on the page.
+
+`archive` prints the same thing for one run at the moment its report lands, so
+the player and whoever reads the log both see which themes it raised and
+whether the page already answers them.
+
 ## What belongs on the page, and what belongs to one family
 
 A line on the page has to hold for any player. What one model family found out

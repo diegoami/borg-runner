@@ -155,6 +155,102 @@ def check(path=INSTRUCTIONS):
     return problems
 
 
+# The themes that keep coming back. Reports raise the same handful of things
+# again and again - four runs in a row lost asks to not knowing they were
+# standing on a staircase - and a theme that recurs and is not on the page is
+# the page's fault, not the players'. Each theme is identified in a report by
+# any of `raised`, and counted as answered when the page matches any of
+# `answered`. Hand-maintained on purpose: the counting is mechanical, deciding
+# that two reports mean the same thing is not.
+THEMES = (
+    {'slug': 'the-game-walks-for-you',
+     'raised': (r'\blxg\b', r'\bl>g\b', r'find_path', r'pathfind'),
+     'answered': (r'`lxg` explores',)},
+    {'slug': 'you-start-on-a-staircase',
+     'raised': (r'town .{0,40}down stair', r'start(?:ing)? on (?:it|the stair)',
+                r'standing on it'),
+     'answered': (r"standing on the town's down staircase",)},
+    {'slug': 'the-tile-under-you-is-not-drawn',
+     'raised': (r'not drawn under', r'no `?>`? (?:glyph )?(?:was )?drawn',
+                r'only the status line', r'staircase .{0,30}standing on'),
+     'answered': (r'staircase under you is never drawn',)},
+    {'slug': 'the-level-is-bigger-than-the-view',
+     'raised': (r'\b198\b', r'three screens', r'five screens'),
+     'answered': (r'198x66', r'198 x 66')},
+    {'slug': 'you-cannot-see-where-you-are',
+     'raised': (r'absolute position', r'absolute coordinates',
+                r'where on the level', r'did not know whether I was at'),
+     'answered': (r'and you do not need to',)},
+    {'slug': 'the-town-is-hard-to-cross',
+     'raised': (r'navigat\w+ (?:the )?town', r'town without finding a shop',
+                r'walked \d+ tiles through a town', r'store .{0,20}door'),
+     'answered': (r'Town stores are the digits',)},
+    {'slug': 'a-prompt-eats-the-next-key',
+     'raised': (r'swallow', r'ate the rest', r'eats the next', r'-more-'),
+     'answered': (r'swallows the next key',)},
+    {'slug': 'spell-points-cost-turns',
+     'raised': (r'regen_mana', r'spell point.{0,40}rest', r'turns of rest'),
+     'answered': (r'player_regen_mana',)},
+    {'slug': 'depth-is-the-only-plan',
+     'raised': (r'never (?:saw|found) a `?>`?', r'staircase hunt',
+                r"trying to find (?:the|depth \d+.s) down stair",
+                r'no down staircase'),
+     'answered': (r'Depth is not the objective',)},
+    {'slug': 'armour-class-decides-the-fight',
+     'raised': (r'hit_chance', r'AC 24', r'2 ?[x*/] ?AC', r'to-hit'),
+     'answered': (r'hit_chance',)},
+)
+
+
+def written_by_runs(where=None):
+    """Every run's own words: its report, and its notebook as `keep` left it.
+
+    Both, because they hold different things. A report is where a player says
+    what the reading lacked; a notebook is where it wrote down the thing it
+    measured at the ask it measured it - the store letters that only shift
+    *after* the row you bought, the aim that walked zero steps - and those
+    lines never reach a report at all. A theme counted from reports only
+    would have missed most of what the notebooks know.
+    """
+    from . import run as run_module
+    where = Path(where) if where else run_module.RECORDS
+    found = {}
+    for report in sorted(where.glob('*/REPORT.md')):
+        found.setdefault(report.parent.name, []).append(report)
+    for book in sorted(run_module.KNOWLEDGE.glob('*.md')):
+        found.setdefault(book.stem, []).append(book)
+    return found
+
+
+def themes(path=INSTRUCTIONS, where=None):
+    """Which recurring themes the runs raise, and whether the page answers.
+
+    The loop this serves: after every run, read what it wrote - the report and
+    the notebook - and when a theme comes back, put it on the page. A theme
+    that recurs and is not there is the page's fault, not the players'.
+    """
+    page = Path(path).read_text()
+    wrote = written_by_runs(where)
+    rows = []
+    for theme in THEMES:
+        raised = []
+        for name, paths in sorted(wrote.items()):
+            text = '\n'.join(each.read_text() for each in paths)
+            if any(re.search(pattern, text, re.IGNORECASE)
+                   for pattern in theme['raised']):
+                raised.append(name)
+        rows.append({'slug': theme['slug'], 'raised_by': raised,
+                     'answered': any(re.search(pattern, page, re.IGNORECASE)
+                                     for pattern in theme['answered'])})
+    return rows
+
+
+def unanswered(path=INSTRUCTIONS, where=None, recurring=2):
+    """Themes several reports raise that the page says nothing about."""
+    return [row for row in themes(path, where)
+            if len(row['raised_by']) >= recurring and not row['answered']]
+
+
 def uncited(path=INSTRUCTIONS):
     """Notebooks the page never cites: the input for the next consolidation.
 
@@ -178,5 +274,7 @@ def inputs():
         'volume_two': str(VOLUME_TWO),
         'playbooks': [row['family'] for row in playbooks.families()],
         'not_yet_cited': uncited(),
+        'themes': themes(),
+        'unanswered_themes': [row['slug'] for row in unanswered()],
         'runs': recorded_runs(),
     }

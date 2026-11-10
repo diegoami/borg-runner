@@ -330,8 +330,42 @@ def archive(run, into=None, log=print):
             f'in the repository. Both prompts ask for one.')
 
     log(_playbook_note(run))
+    for line in _theme_notes(target):
+        log(line)
     log(f'archived: {target} ({", ".join(kept)})')
     return target
+
+
+def _theme_notes(archived):
+    """Which recurring themes this run's report raises, and who answers them.
+
+    A report is where a player says what the reading lacked, and the same
+    things come back: four runs in a row lost asks to not knowing they were
+    standing on a staircase. Saying it here, when the report has just been
+    archived, is the only moment both the player and whoever reads the log are
+    looking at it.
+    """
+    report = Path(archived) / 'REPORT.md'
+    if not report.exists():
+        return []
+    try:
+        from . import consolidate
+        rows = consolidate.themes()
+    except Exception as problem:                     # a page that is not there
+        return [f'archive: could not read the themes ({problem})']
+    name = Path(archived).name
+    mine = [row for row in rows if name in row['raised_by']]
+    if not mine:
+        return []
+    said = [f"archive: your report raises {len(mine)} of the recurring themes"]
+    for row in mine:
+        others = [other for other in row['raised_by'] if other != name]
+        where = ('on the page' if row['answered']
+                 else 'NOT on the page - say so to whoever reads this')
+        said.append(f"archive:   {row['slug']}: {where}"
+                    + (f" (also {', '.join(others)})" if others else
+                       ' (first run to raise it)'))
+    return said
 
 
 def _playbook_note(run, log=print):
