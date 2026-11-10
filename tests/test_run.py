@@ -605,6 +605,67 @@ def test_a_run_with_no_tools_says_so(tmp_path):
     assert run_module.write_record(run, outcome='stopped')['own_tools'] == []
 
 
+class FakeProcess:
+    pid = 4321
+
+
+def a_built_tree(tmp_path):
+    """Enough of a build for `start` to run without a compiler."""
+    out = tmp_path / 'built'
+    (out / 'build' / 'game' / 'save').mkdir(parents=True)
+    (out / 'build' / 'game' / 'angband').write_text('')
+    (out / 'build-identity.json').write_text(json.dumps({'commit': 'x' * 40}))
+    return out
+
+
+def test_a_new_run_lets_the_game_end_its_key_string(tmp_path, monkeypatch):
+    """T11: a disturbance drops the rest of the buffer by default.
+
+    A recording made before the rule was played with the buffer kept, so the
+    record says which rule it was made under; a replay reads it back. The
+    frontend takes `-k` for the old rule.
+    """
+    monkeypatch.setattr(run_module, 'RUNS', tmp_path)
+    monkeypatch.setattr(run_module.subprocess, 'Popen',
+                        lambda *a, **k: FakeProcess())
+    out = a_built_tree(tmp_path)
+    (tmp_path / 'r1').mkdir()
+    (tmp_path / 'r2').mkdir()
+
+    run_module.start(tmp_path / 'r1', 7, out=out, log=lambda *a: None)
+    started = json.loads((tmp_path / 'r1' / 'started.json').read_text())
+    assert started['flush'] == 'honour'
+    assert '-k' not in started['command']
+
+    run_module.start(tmp_path / 'r2', 8, out=out, keep_buffer=True,
+                     log=lambda *a: None)
+    started = json.loads((tmp_path / 'r2' / 'started.json').read_text())
+    assert started['flush'] == 'keep'
+    assert '-k' in started['command']
+
+
+def test_a_recording_without_a_flush_field_was_played_with_the_buffer_kept(tmp_path):
+    """Every run archived before 2026-11-10 has no field; it must replay
+    under the rule it was played with, or its keys stop matching (T11)."""
+    run = a_run(tmp_path)
+    record = run_module.write_record(run, outcome='ended')
+    assert record['flush'] == 'keep'
+
+    (run / 'started.json').write_text(json.dumps(
+        {'seed': 7, 'character': 'r1', 'pid': 1, 'flush': 'honour',
+         'command': [], 'savefile': '', 'build': {}}))
+    assert run_module.write_record(run, outcome='ended')['flush'] == 'honour'
+
+
+def test_a_replay_plays_a_recording_by_its_own_flush_rule():
+    """The rule is read from the record and handed to the game, not assumed
+    from the current build - the corpus has both kinds now (T11)."""
+    import inspect
+    source = inspect.getsource(replay.replay)
+    assert "record.get('flush')" in source
+    assert 'keep_buffer=keep_buffer' in source
+
+
 def test_a_game_this_session_did_not_start_can_still_be_polled(tmp_path):
     """After the command that started a game returns, the pid is all there is.
 

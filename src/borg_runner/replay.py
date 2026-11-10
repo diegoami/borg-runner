@@ -58,6 +58,11 @@ def replay(original, into, out=None, seed=None, stop_after=None,
     """
     original, into = Path(original).resolve(), Path(into).resolve()
     record = json.loads((original / run_module.RECORD).read_text())
+    # A recording is played by the rule it was made under. Before 2026-11-10
+    # the frontend kept the rest of a string when the game disturbed the
+    # player; a recording with no field was made that way, and replaying it
+    # under the new rule would drop keys the recording spent (PLAN.md T11).
+    keep_buffer = (record.get('flush') or 'keep') == 'keep'
     keys = recorded_keys(original, played_only=played_only)
     fresh = run_module.directory(into.name) if into.parent == run_module.RUNS else into
     fresh.mkdir(parents=True, exist_ok=True)
@@ -80,7 +85,7 @@ def replay(original, into, out=None, seed=None, stop_after=None,
         fresh, seed if seed is not None else record['seed'], out=out,
         # the original's character name, because the game shows it (D6)
         character=started.get('character', original.name), frames=frames,
-        log=log)
+        keep_buffer=keep_buffer, log=log)
     differences, replayed, reached = [], 0, 0
     try:
         for number, press in enumerate(keys, start=1):
@@ -114,6 +119,9 @@ def replay(original, into, out=None, seed=None, stop_after=None,
         'identical': not differences and replayed > 0,
         'differences': differences[:20],
         'stopped_after_turn': stop_after,
+        # Which rule the replay played by: the recording's own. A run made
+        # after 2026-11-10 says 'honour'; every earlier one 'keep' (T11).
+        'flush': 'keep' if keep_buffer else 'honour',
         # Re-answers of the same ask, kept out of the replay: the game
         # pressed the first answer. Named so a rewritten log is visible
         # rather than silently worked around.
@@ -149,6 +157,12 @@ def carry_on(original, into, out=None, log=print):
     replay check shows - and leaves the game waiting at the next ask with the
     old notebook already in place. The new run's `input.txt` is the whole
     history, old keys and new, so it replays from its seed like any other.
+
+    The character keeps the flush rule it was born under: a life begun before
+    2026-11-10 goes on keeping the key buffer through a disturbance, and only
+    a character born after it lets the game's flush end a string (T11). The
+    rules do not change under a character mid-life, or its own recording would
+    stop replaying.
     """
     original, into = Path(original).resolve(), Path(into).resolve()
     # The run being continued has finished playing by definition, but its game
@@ -185,6 +199,8 @@ def carry_on(original, into, out=None, log=print):
             f'see {into / "replay.json"}')
     log(f'carry_on: {into.name} is waiting at ask '
         f'{verdict["asks_replayed"] + 1}, turn {verdict["turn_reached"]}')
+    log(f'carry_on: it continues under the {verdict["flush"]}-the-flush rule '
+        f'of {original.name}; a character keeps the rule it was born under')
     return verdict
 
 

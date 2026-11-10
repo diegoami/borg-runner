@@ -67,6 +67,22 @@ def test_the_page_filters_by_alive_status_agent_and_class(tmp_path):
     assert 'Mage' in page.split('<select id="klass">')[1].split('</select>')[0]
 
 
+def test_the_markdown_leads_with_characters_not_runs(tmp_path):
+    """OVERVIEW.md is where a reader looks first; it must answer "who are the
+    characters", not only "what runs exist"."""
+    a_record(tmp_path, 'one')
+    a_record(tmp_path, 'two')
+    (tmp_path / 'two' / 'started.json').write_text(
+        json.dumps({'character': 'one'}))
+    text = overview.write_markdown(
+        overview.rows(tmp_path), into=tmp_path / 'OVERVIEW.md').read_text()
+    assert text.startswith('# The characters, and every run')
+    assert '## Characters' in text
+    assert '[one](characters/one.html) - 2 lives' in text
+    assert '## Single-life characters' in text
+    assert '## Every run' in text
+
+
 def test_the_markdown_offers_the_same_three_cuts(tmp_path):
     """A markdown file cannot filter itself, so it carries the views."""
     a_record(tmp_path, 'one', **{'class': 'Druid'})

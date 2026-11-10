@@ -55,8 +55,14 @@ its decisions under `records/`.
   of waits** (sonnet-3#46, sonnet-3#47 - the run died there). It sent sixteen
   hold keys in one ask while confused; a wounded kobold it believed dead
   arrived about seven turns in and killed it from full health, with five Cure
-  Light Wounds in the pack. The game flushes input on a disturbance, and what
-  you sent is still in the buffer afterwards.
+  Light Wounds in the pack. **The game ends your string when it disturbs you**
+  (`patch/src/main-agent.c`): the rest of it is dropped and you are asked
+  again with the screen as it now is. Before the 2026-11-10 build the rest
+  stayed in the buffer, and a 60-key chain into a pack of silver mice died
+  inside the low-hit-point warning it could not answer (mmx-war-1#140, frames
+  33-35). A string the game drops is still a string you paid for: every key
+  you sent counts against your budget, so do not send keys you cannot afford
+  to lose.
 - **A digit string stops at the first wall and the rest is dropped**
   (sonnet-1#96, minimaxflash-1#14, which measured where the wall was). In
   caves `.` plus a digit stopped every two or three squares, where
@@ -204,7 +210,7 @@ health dies; and **the town is not a lobby** - a battle-scarred veteran hits
 for 2d6 = 12 and a mean-looking mercenary for 1d10 = 10, both at depth 0,
 where there is no staircase to flee down and no experience to be had.
 
-And what actually killed the three characters that died here - not one of
+And what actually killed the characters that died here - not one of
 them to a big hit, and each line names the run that saw it:
 
 - a **scruffy little dog**, 2 hit points, biting for 1d1, in the **town**: a
@@ -212,20 +218,28 @@ them to a big hit, and each line names the run that saw it:
   doors over sixty asks, and the dog took the last point (qwen-flash-1#73);
 - a **small kobold** that was not confirmed dead: a 10-hit-point Mage, blind
   and confused from a gas trap, sent sixteen `,` holds **in one ask**, and the
-  kobold walked up during them. A batch of keys cannot be interrupted by what
-  the screen would have shown (sonnet-3#47);
+  kobold walked up during them. That build kept the buffer through the
+  disturbance; the game now ends the string there (above), but the rule
+  stands - do not send a string you could not afford to lose (sonnet-3#47);
 - a **metallic green centipede**, 1d1 and 1d1 at speed 120 - two damage a
   round: a CL2 Mage stood at 4 of 16 hit points with three monsters adjacent,
   throwing oil, with a Scroll of Phase Door in its pack that it had carried
   the whole game and did not read until it was at 2 (minimaxflash-2.2#350).
 
-And the fourth death, which was none of those things: a **Human Warrior** at
+And another death, which was none of those things: a **Human Warrior** at
 **43 maximum hit points**, constitution +5, character level 4, killed on depth
 2 by a **cave spider** at 26 of 43 - because it read a Scroll of Word of
 Recall on arriving at a fresh level and then **stood still for forty turns**
 waiting for it (minimaxflash-3#149). Hit points buy you mistakes; they do not
 buy you standing still. See section 6 for what the Recall's timer actually
 is.
+
+The most recent death is the kobold's shape again: a **Half-Elf Warrior** at
+35 hit points walked a 60-key chain into **eleven** silver mice, killed about
+thirty-five of them, and died at the low-hit-point warning the string would
+not let it answer (mmx-war-1#140). Killing a `MULTIPLY` monster one at a time
+is how the pack grows; that is why the game now ends your string when it
+disturbs you (above).
 
 None of this makes depth 1 safe, and none of it says stay in the town. It
 makes a death a thing you chose rather than a thing that happened while you

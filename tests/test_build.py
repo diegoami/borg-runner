@@ -52,6 +52,16 @@ def test_the_frontend_asks_for_nothing_it_should_not():
         assert forbidden not in source.lower(), f'{forbidden} suggests an opinion'
 
 
+def test_the_frontend_lets_the_game_end_a_key_string():
+    """T11: the game's own flush drops the rest of the buffer, and `-k` keeps
+    it so a recording made before the rule still replays byte for byte."""
+    source = (build.PATCH / 'src' / 'main-agent.c').read_text()
+    flush = source[source.index('case TERM_XTRA_FLUSH'):]
+    assert 'agent_keep_buffer' in flush
+    assert 'agent_at = agent_held = 0' in flush
+    assert '"-k"' in source or "'-k'" in source
+
+
 @pytest.mark.slow
 def test_the_built_binary_contains_no_borg_at_all():
     """D1's gate. Needs a compiler, cmake and libx11-dev."""

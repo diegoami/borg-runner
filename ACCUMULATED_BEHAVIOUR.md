@@ -1,6 +1,9 @@
 # ACCUMULATED BEHAVIOUR — the characters worth imitating, and what they did
 
-Edition 1, 2026-11-10.
+Edition 2, 2026-11-10. *(Edition 1 was written the same day. Edition 2 adds
+the first Priest and the sixth death: the Warrior that was right for 139
+decisions and lost the run on the 140th, which is now the clearest case here
+of a character that had learned the game and not yet learned to stop.)*
 
 **Who this is for.** [borg-reborn-rs](https://github.com/diegoami/borg-rs),
 the Rust Borg being rebuilt, and anyone else outside this repository. It is
@@ -11,7 +14,7 @@ No player reads either (D16 - the export aggregates what a player is denied).
 **The criteria, stated because they are a decision, not a default:**
 **character level and net worth** (gold plus the game's own valuation of what
 the character carries). Maximum dungeon depth is recorded and is **not** a
-success criterion: sixteen runs chased the down staircase and the one thing
+success criterion: eighteen runs chased the down staircase and the one thing
 they never questioned was the chasing. Depth appears below as context only.
 
 **The unit is the character, not the run.** A character can live several
@@ -22,7 +25,7 @@ and third life. Every entry below gives the whole lineage, because what a
 life did is only readable against what it inherited.
 
 **The caveats, stated because they are the difference between this and
-astrology:** the corpus is sixteen runs. Every shape below is one character,
+astrology:** the corpus is eighteen runs. Every shape below is one character,
 on one seed, by one model - a lead, not a result. Nothing here is true of
 any seed but its own, and the seed-specific parts are left out. Where a run
 was lucky, the luck is named; what you imitate is what it did with it.
@@ -168,6 +171,25 @@ staircase under your feet is always an exit in one direction.
   `minimaxflash-2.2`) - each did more wrong than right by the only vote
   that counts. Their deaths are section 6 of ACCUMULATED_KNOWLEDGE.md;
   that is where they teach.
+- **`mmx-war-1`** (CL4, 637, died to a silver mouse) - **right for 139
+  decisions and wrong once.** It spent every coin on oil and a Magic Mapping
+  scroll, read the scroll to turn a hopeless hunt into a possible one, wrote
+  its own beam-search planner, found and fixed a real padding bug in it, and
+  pushed the M map's coverage from 16% to 26% until the staircase appeared
+  (`mmx-war-1#22`, `#92`). Then it saw **eleven** silver mice and sent a
+  60-key chain into them: it killed about thirty-five, the pack replaced
+  them, and it died inside a low-hit-point warning it could not answer
+  (`mmx-war-1#140`). It is the corpus' clearest case of a character that had
+  learned the game and not yet learned to stop - and the death that made the
+  harness let the game end a key string (D17). Read it as a warning, not a
+  model: the run is worth copying up to ask 139 and not one key past it.
+- **`mmx-pri-1`** (CL2, 410, alive, depth 1) - no shape yet, but the most
+  useful *class* document in the corpus: the first Dwarf and the first model
+  Priest, one blow a turn whatever it holds, thrown oil at `35 - distance`,
+  and an income in digging (90 gold from a vein in three decisions). It
+  stopped alive because a mouse nest cost it 22 of its 24 hit points on one
+  walk; the report is the arithmetic behind section 7 of
+  ACCUMULATED_KNOWLEDGE.md, and the play is not yet worth copying.
 - **The CL1 survivors** (`codex-1-tty`, `minimaxflash-2`) - alive, level 1:
   no shape worth copying yet.
 - **`diego-1`** (CL2, the person) - the control, not a candidate: it saved

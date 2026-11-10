@@ -39,6 +39,17 @@ static char agent_directory[1024] = ".";
 static uint32_t agent_seed;
 static bool agent_seeded;
 
+/* Whether a disturbance leaves the rest of the agent's string in the buffer.
+ *
+ * The game flushes input when it disturbs the player - something arrives, a
+ * trap fires, a level feeling interrupts - and the rest of a long string was
+ * decided against a screen that no longer exists. By default that flush now
+ * ends the string and the agent is asked again: it is the game's own rule for
+ * when a command stops (D5). `-k` keeps the old behaviour, because every
+ * recording made before 2026-11-10 was played that way and must replay byte
+ * for byte (D6, PLAN.md T11). */
+static bool agent_keep_buffer;
+
 /* Where to dump the screen at every input event, not just the ones that
  * empty the buffer, and how many we have written for the current ask.
  *
@@ -267,10 +278,13 @@ static errr agent_xtra(int n, int v)
     case TERM_XTRA_EVENT:
         return agent_event(v);
     case TERM_XTRA_FLUSH:
-        /* The game flushes input after a disturbance. Our buffer is the
-         * agent's intent, and dropping it silently would make a key
-         * disappear without record, so we keep it and let the agent see
-         * what happened on the next screen. */
+        /* The game flushes input after a disturbance. The rest of the
+         * agent's string was chosen against a screen that is gone, so it is
+         * dropped and the agent is asked again with the new one. `-k` keeps
+         * the old buffer, for replaying recordings made before this rule
+         * existed. */
+        if (!agent_keep_buffer)
+            agent_at = agent_held = 0;
         return 0;
     case TERM_XTRA_CLEAR:
     case TERM_XTRA_FRESH:
@@ -325,6 +339,8 @@ errr init_agent(int argc, char *argv[])
         } else if (prefix(argv[i], "-s")) {
             agent_seed = (uint32_t)strtoul(argv[i] + 2, NULL, 10);
             agent_seeded = true;
+        } else if (!strcmp(argv[i], "-k")) {
+            agent_keep_buffer = true;
         } else {
             printf("init-agent: bad argument '%s'\n", argv[i]);
             return 1;
@@ -340,6 +356,6 @@ errr init_agent(int argc, char *argv[])
     return 0;
 }
 
-const char help_agent[] = "Agent mode, subopts -d<directory> -s<seed> -f<frame directory>";
+const char help_agent[] = "Agent mode, subopts -d<directory> -s<seed> -f<frame directory> -k (keep the key buffer through a disturbance)";
 
 #endif /* USE_AGENT */

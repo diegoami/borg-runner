@@ -1,14 +1,17 @@
 # ACCUMULATED KNOWLEDGE — what the runs found that no manual says
 
-Edition 4, 2026-11-10. *(Edition 1, the same day, repeated things the manuals
+Edition 5, 2026-11-10. *(Edition 1, the same day, repeated things the manuals
 already say; see "What is deliberately not here". Edition 2 added the eleventh
 run and the caveat in section 1 that the runs never questioned their own
 objective. Edition 3 added three runs and corrected the single most
 load-bearing claim of edition 2: a level has three or four down staircases,
-not one. **Edition 4 adds two runs - a Gnome Mage played to the page's plan
+not one. Edition 4 added two runs - a Gnome Mage played to the page's plan
 and a fifth Druid life that found the staircase and died past it - the fifth
 death, the fear mechanic, and the map facts that make "no staircase on the M
-map" real evidence.**)*
+map" real evidence. **Edition 5 adds the first Priest and Dwarf, and the
+sixth death: a Half-Elf Warrior killed by a breeder pack it walked into with
+a 60-key chain - the second death of that shape, which is why the harness now
+lets the game end a key string (D17).**)*
 
 **Who this is for.** [borg-reborn-rs](https://github.com/diegoami/borg-rs),
 the Rust Borg being rebuilt, and anyone else outside this repository. The
@@ -19,7 +22,7 @@ from time to time, not after every run.
 own manual, the strategy manual and `lib/gamedata` itself, at leisure and in
 full — a program has time a player in a 150-decision budget does not. So
 nothing here is in those documents. What is here is the residue: **what
-sixteen runs measured, what they corrected, and what had to be read out of
+eighteen runs measured, what they corrected, and what had to be read out of
 the source because no manual states it.**
 
 **Not for the players.** A run here is denied exactly one thing: another run's
@@ -38,12 +41,12 @@ The prompts do not mention it.
 
 ## The corpus
 
-Sixteen runs, 4,791 asks, 33,459 keypresses, deepest **depth 7**, five
+Eighteen runs, 5,081 asks, 37,037 keypresses, deepest **depth 7**, six
 deaths. One session was played by a person (`diego-1`), which is the control.
 Three characters were asked for (two Gnome Mages and the Warrior that
-followed them); the rest were drawn. By class: five Warrior runs, six Druid
-runs (five of them lives of one character), four Mages, a Priest (the
-person) and nothing else - **Blackguard, Paladin, Ranger, Rogue and
+followed them); the rest were drawn. By class: six Warrior runs, six Druid
+runs (five of them lives of one character), four Mages, and two Priests (one
+the person, one a Dwarf) - **Blackguard, Paladin, Ranger, Rogue and
 Necromancer have never been played here.**
 
 | run | model | character | depth | level | asks | turns | ended |
@@ -64,6 +67,8 @@ Necromancer have never been played here.**
 | [mmf-mage.2](records/mmf-mage.2/REPORT.md) | minimax/MiniMax-M3.1-Flash | Gnome Mage (asked for) | 3 | 1 | 146 | 4,872 | alive, stopped |
 | [minimaxflash-1.5](records/minimaxflash-1.5/REPORT.md) | minimax/MiniMax-M3.1-Flash | High-Elf Druid (life 5) | 2 | 4 | 893 | 29,966 | **died**, an acolyte |
 | [diego-1](records/diego-1/REPORT.md) | a person | Kobold Priest | 1 | 2 | 418 | 4,741 | alive, saved |
+| [mmx-pri-1](records/mmx-pri-1/REPORT.md) | minimax-coding-plan/MiniMax-M3.1-Flash | Dwarf Priest (asked for) | 1 | 2 | 149 | 9,952 | alive, stopped |
+| [mmx-war-1](records/mmx-war-1/REPORT.md) | minimax-coding-plan/MiniMax-M3.1-Flash | Half-Elf Warrior (asked for) | 2 | 4 | 141 | 10,923 | **died**, silver mouse |
 
 Every row links a report, and every report links a replay that steps through
 screen by screen: <https://diegoami.github.io/borg-runner/>.
@@ -72,8 +77,8 @@ screen by screen: <https://diegoami.github.io/borg-runner/>.
 
 ## 1. Descent is the whole problem, and nothing in the manuals says how
 
-Twelve of sixteen runs ended at depth 0, 1 or 2, and the five deaths are
-all in that band too. The eleven that stopped were alive. They were still
+Fourteen of eighteen runs ended at depth 0, 1 or 2, and the six deaths are
+all in that band too. The twelve that stopped were alive. They were still
 on the first level because they had not found the way off it.
 
 - **Walking a depth-1 level costs on the order of 100 decisions and finds
@@ -95,8 +100,8 @@ on the first level because they had not found the way off it.
   used the game's and got further on fewer asks.
 
 **The caveat that matters as much as the finding: no run ever questioned the
-objective.** All sixteen treated the down staircase as the only thing worth
-finding, and the five that died were at character level 4 or lower while
+objective.** All eighteen treated the down staircase as the only thing worth
+finding, and the six that died were at character level 4 or lower while
 doing it. The one run that planned to level instead (`mmf-mage.2`, asked to
 play a Gnome Mage by the page's own arithmetic) found the plan's real
 bottleneck: not the fighting but the *finding* - a CL1 kill on depth 1 pays
@@ -117,7 +122,7 @@ the only way to spend them.
 **For the consumer:** the manuals describe descent as the objective and say
 nothing about its cost. Measure decisions-per-descent, but also
 decisions-per-character-level: a policy that spends 80% of its decisions on
-floor coverage has 20% left for everything the manuals are about. The five
+floor coverage has 20% left for everything the manuals are about. The six
 deaths are their own finding (section 6): none was a big hit, and none was
 at a depth the character had no business being at.
 
@@ -234,7 +239,7 @@ The corpus' direct corrections. Each cost a run something.
 |---|---|
 | the level feeling is a number to compare against a danger table (strategy manual c15) | the game prints `10 - mon_feeling`, so **the digit on screen is inverted** against that table: higher is worse (GAME SOURCE). A session was told *"naught but cobwebs"* and stayed 4,290 turns (`diego-1`) |
 | `M` shows the whole-level map | it shows the **whole level, scaled to 78×22** (`display_map` computes row and column for every square of the 198×66 dungeon), but only the **remembered** squares are drawn in it (2 RUNS, `minimaxflash-1#104`, `minimaxflash-1.2#181`). Two things the manuals do not say, both read out of the source (`minimaxflash-1.5`): a staircase can never be hidden by the scaling - up and down staircases carry the highest terrain **priority** (25; `terrain.txt`), so a remembered `>` always wins its cell and "no `>` on the M map" is real evidence of absence; and positions are recoverable from it, because the panel scrolls in jumps of 33 columns and 11 rows (`verify_panel_int`), so panel columns are not level columns and the M map is the only honest grid |
-| the Armoury's prices (c11 tables) | gear is priced by **power**, not by its `cost:` line (`src/obj-power.c: object_value_real`): Leather Shield 66, Studded Leather 150, far above the tables (2 RUNS, `sonnet-3#27`, `minimaxflash-1`) |
+| the Armoury's prices (c11 tables) | gear is priced by **power**, not by its `cost:` line (`src/obj-power.c: object_value_real`): Leather Shield 66, Studded Leather 150, far above the tables (2 RUNS, `sonnet-3#27`, `minimaxflash-1`). A Soft Leather Armour has `cost:20` and the Armoury asks **84** - and a Priest with 22 gold after its oil cannot have it, so the shopping order decides whether the AC is bought at all (`mmx-pri-1#17`, `#24`, `#67`) |
 | Deep Descent is found from depth 1 (our own earlier distillate) | `object.txt` gives it `level:10` with `alloc:20:1 to 100`, and one *was* found and read on depth 1 (`sonnet-2#76`). Which field governs the depth is still unread (`obj-make.c`) |
 | a shop's stock is the seed's stock (inferred by a run) | `store_maint()` runs once per game **day** and the shopkeeper shuffles (`store.c:1425`): "the Alchemist had no Magic Mapping this seed" was true of one day only, and a later visit found three at 65 gold under a different shopkeeper (ONE RUN, `minimaxflash-1.2#399`) |
 | Word of Recall is not an escape (c15 ESC-04) | right, and the number behind it: the counter ticks in `process_world`, once per ten game turns, so 15+1d20 ticks is **150–340 game turns** — one run gave up after about forty (`qwen-flash-1`). Read in town before ever leaving it, it goes to depth 1, and arriving in town heals (GAME SOURCE + 2 RUNS). **The way to wait it out is one rest**: a full rest is about 61 player actions for a single key, comfortably over the 15-34 maximum, interrupted only if a monster reaches you (ONE RUN, `mmf-mage.2#91`) |
@@ -244,6 +249,10 @@ The corpus' direct corrections. Each cost a run something.
 | the manuals list the mushroom patches | they do not say that the **grey mould is mobile** — no `NEVER_MOVE`, and it chases (GAME SOURCE + `minimaxflash-1.2#174`, `codex-1-tty`, which lost 5 of 21 hit points to spores without ever meleeing it) |
 | nothing in any manual describes fear | **fear is -20 to-hit, +8 armour class, and no attacks** (`player-calcs.c`: `OF_AFRAID` adjusts all three; the attack refusal is `do_cmd_walk_test`'s "You are too afraid to attack"). The +8 AC is visible on the sidebar and the -20 is not, and nothing cures it but the timer. Two crows held a druid at 3 hit points for about eight decisions while it could do nothing at all - the fifth death is mostly this row (`minimaxflash-1.5`, GAME SOURCE + ONE RUN) |
 | nothing in any manual describes the shrieker mushroom patch | it shrieks when you come near, and the shriek **wakes everything in line of sight** (`monster_spell.txt`: `effect:WAKE`, "shriek for help" - it wakes monsters up, it does not summon new ones). Lethal to stand next to at 3 hit points, and part of the fifth death (`minimaxflash-1.5`, GAME SOURCE + ONE RUN) |
+| the birth sheet's `Melee` line is the character's damage | it is not. A Dwarf Priest's birth sheet said `Melee 1d1,+2` while the equipment screen said `a Mace (2d4)`; the birth line is a class default, not the equipped weapon (ONE RUN, `mmx-pri-1#1`, `#23`). Read damage off the equipment screen or `I` |
+| a Priest's `ZERO_FAIL` means its prayers never fail | it means the class floor is removed, not the stat floor: the spell list's Fail column reads **5%** for the level-1 prayers, because `adj_mag_fail` for WIS 18 is 5, and only a stat can take it below (GAME SOURCE + ONE RUN, `mmx-pri-1#104`) |
+| the depth-1 monster table is the depth-2 table too | it is not, and the difference killed a run: the **silver mouse** has `depth:4` in `monster.txt` and still spawns on depth 2 **in a pack of eleven**, with `MULTIPLY` and an `EAT_LIGHT` blow. Killing them one at a time is how the pack grows, and it eats the torch as it goes (ONE RUN, `mmx-war-1#137`, `#140`) |
+| `v` + item + target throws the item | the prompt names the target and then does not take a finishing key: `v` `a` `'` printed "The apprentice is targeted" and neither `g`, Enter nor a direction key fired it, so the throw was cancelled (ONE RUN, `mmx-war-1#129`-`#132`). **UNTESTED:** which key the throw prompt wants, and whether the page's own recipe is wrong |
 
 ## 4. Numbers the manuals do not give
 
@@ -326,6 +335,33 @@ The corpus' direct corrections. Each cost a run something.
   `calc_digging_chances()` needing over 10 for magma and over 20 for quartz.
   So every vein is a permanent wall for that class, and a `*` - a vein **with
   treasure** - is money it cannot have (GAME SOURCE + `minimaxflash-3`).
+- **A Priest gets exactly one blow a turn, whatever it holds.**
+  `calc_blows()` divides `adj_str_blow[STR]` by `max(weapon weight, class
+  min-weight)`, and the Priest's min-weight is 35 with strength-multiplier 3,
+  so the index is 0 for every weapon and the table gives 100 energy a blow.
+  Melee is not a fallback for this class, it is a rounding error (GAME
+  SOURCE + ONE RUN, `mmx-pri-1`).
+- **Thrown oil's to-hit is `35 - distance`**, so the distance is the thing to
+  manage: at one tile a Priest hits AC 24 about 56% of the time and AC 36
+  about 36%, and every tile further is worse. The class's throw skill (35 for
+  a Priest) is the ceiling, not the roll (GAME SOURCE + ONE RUN,
+  `mmx-pri-1#82`).
+- **Digging repeats until the wall is gone, for one decision.** `T` plus a
+  direction keeps attempting while the game is not disturbed, and a Dwarf's
+  `SKILL_DIGGING` is race 40 + `adj_str_dig[STR]` + `weapon_weight / 10` = 61
+  at STR 18, so quartz falls at 6.8% an attempt and one ask is a hundred
+  attempts. A vein gave **90 gold in three decisions** (ONE RUN,
+  `mmx-pri-1#52`, `#55`, `#56`). The same command tunnelled a corridor through
+  four veins and a granite wall on the next level (`mmx-pri-1#130`-`#145`).
+- **Resting is not a plan inside a decision budget.** `R` then Enter rests
+  until healed in one decision, but it healed **3 hit points in 100 turns**
+  (ONE RUN, `mmx-war-1#105`); the rate, not the command, is what makes it
+  useless mid-run.
+- **A breeding monster is a tax of one to two hit points on every decision.**
+  Silver mice `MULTIPLY`, and a 38-tile walk with the nest at your back cost
+  **22 hit points in one decision** (ONE RUN, `mmx-pri-1#81`, `#82`). A
+  character with 24 hit points and fifty decisions left cannot pay it: kill
+  the nest in a corridor where only one can reach you, or leave the level.
 
 ## 5. What the players did with all this, which is the behavioural finding
 
@@ -360,13 +396,19 @@ The corpus' direct corrections. Each cost a run something.
   the player has open is not the same as a line the player applies - which is
   the strongest argument in this corpus for *checked* knowledge over more
   knowledge.
+- **A long string is a bet on a screen that has not changed.** The two runs
+  that sent sixteen and sixty keys died inside them (section 6), and both had
+  seen what they were walking into. Since 2026-11-10 the game's own flush ends
+  the string at a disturbance (D17), so the harness no longer forces the bet -
+  but the run that sent the keys still spent them, and a player that has not
+  learned to stop has only had the decision taken away from it, not made.
 
-## 6. How the five deaths happened
+## 6. How the six deaths happened
 
 Not one of them was a big hit, none was at a depth the character had no
 business being at, and **none is the kind of death a hit-point threshold
 prevents** — which is the part worth carrying into a death analyser. Two were
-at character level 1, one at 2 and two at 4; the deepest was depth 2.
+at character level 1, one at 2 and three at 4; the deepest was depth 2.
 
 - **`sonnet-3`, Human Mage, 10 hit points, depth 1, turn 1,348, small
   kobold.** A wounded kobold was believed dead because its health bar went
@@ -411,15 +453,31 @@ at character level 1, one at 2 and two at 4; the deepest was depth 2.
   *The failure is the condition nobody had read: fear takes the attacks
   away, and a pack with no escape in it is a decision made in the town that
   kills you on depth 2.*
+- **`mmx-war-1`, Half-Elf Warrior, 35 hit points, character level 4, depth 2,
+  turn 10,923, a silver mouse.** The sixth death and the second of its shape:
+  it saw **eleven** silver mice on the panel at ask 140 and sent a 60-key
+  beam chain into them anyway (`mmx-war-1#140`). It killed about thirty-five
+  of them - reaching character level 4 mid-slaughter - and the pack replaced
+  its dead; the recorded frames show `*** LOW HITPOINT WARNING! ***` at frame
+  33 and a soldier ant joining at 34, and the string still had keys left. It
+  died at 35/35 to dead, with a Word of Recall in the pack that needed 150
+  turns it did not have, having spent its only Phase Door surviving a
+  59-key chain into a grey mould at 4 hit points twelve decisions earlier
+  (`mmx-war-1#104`, `#109`). No Cure Light Wounds was bought at all, against
+  its own family's rule of "one heal, one escape, then oil".
+  *The failure is an uncancellable batch aimed at a breeder: killing a
+  `MULTIPLY` monster one at a time is how the pack grows, and the string was
+  spent before the warning could be read. It is the death that decided T11.*
 
 ## 7. The classes, where play said something data does not
 
-- **Warrior** (5 runs, the deepest): the only class past depth 2 here. Oil is
+- **Warrior** (6 runs, the deepest): the only class past depth 2 here. Oil is
   the whole ranged game and that was enough to depth 7. It **can never dig**
   (section 4), so veins and the treasure in them are scenery for it, and
   armour is a poor buy for a class that can fight (2.5% of a blow at AC 10)
-  while a Potion of Berserk Strength is a good one. The one that died had 43
-  hit points and died of standing still, not of being outmatched.
+  while a Potion of Berserk Strength is a good one. Two died: one of standing
+  still at 43 hit points, one inside a 60-key chain at 35 - neither of being
+  outmatched.
 - **Druid** (6 runs, five of them one character, all seed 23): 13 hit points
   and a 1d1+1 whip at CL1 — five blows to kill a 10-hit-point worm — and the
   mana economy above makes its CL3 spell unpayable. The fifth life reached
@@ -443,10 +501,19 @@ at character level 1, one at 2 and two at 4; the deepest was depth 2.
   (`mmf-mage.2`, ONE RUN; it left a room of three sleeping cave spiders
   unfought, correctly). The two choices are not a disagreement: take Magic
   Missile when you can win fights, detection when you cannot.
-- **Priest** (1 run, the person): **no prayer before CL5 detects anything**,
-  and prayers are given at random rather than chosen (`class.txt`), so a
-  Priest has no magical route to a staircase — which, given section 1, is the
-  class's real problem rather than its combat.
+- **Priest** (2 runs, one the person and one a Dwarf): **no prayer before CL5
+  detects anything**, and prayers are given at random rather than chosen
+  (`class.txt`), so a Priest has no magical route to a staircase — which,
+  given section 1, is the class's real problem rather than its combat. The
+  Dwarf is the best-bodied and worst-armed Priest the game makes: 24 hit
+  points at CL2, +1.75 a level from CON 19, **one blow a turn whatever it
+  holds**, and thrown oil at `35 - distance` as the whole attack (section 4).
+  Its AC is what it buys (Robes to Soft Leather is AC 3 to 9), and its one
+  real income is **digging**: a Dwarf's skill turns a treasure vein into 90
+  gold in three decisions. It reached CL2 and depth 1 and stopped alive with
+  410 carried; its own report's lesson is the mouse tax - a 38-tile walk with
+  a breeding nest at its back cost 22 of its 24 hit points in one decision
+  (`mmx-pri-1#81`, `#82`).
 - **Blackguard, Paladin, Ranger, Rogue and Necromancer have never been played.**
 
 ## 8. What this corpus cannot answer
@@ -461,21 +528,26 @@ Read these as open. A consumer's own evidence would be the first.
    the size of four football pitches, so the experience is gated by the
    staircase, not the killing. What would settle it: two runs on one seed,
    one diving, one levelling first, compared on where each stood at ask 150.
-2. **Can a staircase be found by coverage?** One run has now tried: 140
-   decisions of sweeping on one depth-1 level, fifteen locked doors opened,
-   two thirds of the squares mapped *by its own estimate* - and **no down
-   staircase in any of it** (`minimaxflash-1.4#753`), on a level the generator
-   gave three or four. The honest reading is that the estimate was wrong: `M`
-   draws the squares you remember, and a band of columns you crossed is not
-   the squares inside it. What is still open is the measurement nobody has
-   made: the share of a level's squares actually remembered after N decisions,
-   which the replay of that run could be made to count.
+2. **Can a staircase be found by coverage?** Two runs have tried. One spent
+   140 decisions sweeping a depth-1 level, opened fifteen locked doors and
+   mapped two thirds of the squares *by its own estimate* - and **found no
+   down staircase in any of it** (`minimaxflash-1.4#753`), on a level the
+   generator gave three or four. The other measured the M map's coverage as
+   the instrument: **16% after a Magic Mapping scroll, 26% when the `>` at
+   last appeared**, 99 decisions from arriving to descending
+   (`mmx-war-1#22`, `#92`). The honest reading is that the estimate was
+   wrong: `M` draws the squares you remember, and a band of columns you
+   crossed is not the squares inside it. What is still open is the
+   measurement nobody has made: the share of a level's squares actually
+   remembered after N decisions, which the replay of either run could be made
+   to count.
 3. **Explore or reroll?** Two or three decisions against perhaps a hundred,
    with a uniform prior either way. Unmeasured, and it is the cheapest
    experiment left: the same seed, one run that rerolls on arrival and one
    that explores.
-4. **Does Magic Mapping ever show a staircase?** One reading, nothing in
-   radius.
+4. **Does Magic Mapping ever show a staircase?** Three readings, nothing in
+   radius: `minimaxflash-1.4`, `sonnet-2#47` and `mmx-war-1#22`, whose window
+   was 44 rows x 80 columns - 16% of the level - with no `>` in it.
 5. **Can a Mage's detection be aimed at all** without knowing its own
    coordinates? Six casts cover a level; eleven from one band cover one
    window.

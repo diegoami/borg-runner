@@ -77,7 +77,7 @@ gets deeper.
 | # | Task | Status |
 |---|---|---|
 | T10 | Carry a notebook into a later run, and measure whether depth rises | **done** |
-| T11 | Decide whether the game's own disturbance flushes the key buffer | todo, owner's call |
+| T11 | Honour the game's flush so a disturbance ends a key string | done, 2026-11-10 (D17) |
 
 **T10, 2026-11-09.** Three runs, same frontend and manual. `sonnet-1` on seed
 7 with nothing inherited reached depth 1 in 125 asks. `sonnet-2` on the same
@@ -88,19 +88,25 @@ notes, chose a Mage for the level-1 stair-detection spell, found the staircase
 at once, and then **died on depth 1** to a small kobold. Depth rose, the cause
 was luck, and the knowledge demonstrably changed how all three played.
 
-**T11, the open question the death raised.** `sonnet-3` was confused by a gas
-trap and then spent sixteen "hold" keys in a single ask while a wounded kobold
-was next to it. It had no way to stop part way through, and died at ten hit
-points.
+**T11, decided on 2026-11-10: the game ends the string.** `sonnet-3` was
+confused by a gas trap and then spent sixteen "hold" keys in a single ask
+while a wounded kobold was next to it. It had no way to stop part way
+through, and died at ten hit points. `mmx-war-1` did the same thing with
+sixty keys into a pack of silver mice and died at the low-hit-point warning
+it could not answer: two of the six deaths in the corpus are this shape.
 
-The frontend currently ignores `TERM_XTRA_FLUSH` on purpose
-(`patch/src/main-agent.c:214`): the game raises it when the player is
-disturbed, and we keep the buffer so that nothing the agent asked for
-disappears without record. Honouring it instead would mean **the game**
-decides when a key string is abandoned — which is exactly D5's "the game's own
-router", and it would have saved that character — but it would also change
-what a recording means, so the three runs already kept would no longer replay
-under the new build. That is the owner's call, not a session's.
+The frontend used to ignore `TERM_XTRA_FLUSH` on purpose, to keep every key
+on record. It now honours it: `disturb()` raises `EVENT_INPUT_FLUSH`, the
+game drops the rest of the buffer, and the agent is asked again with the
+screen as it now is. That is the game's own rule for when a command stops
+(D5), and it is the one the real frontends follow.
+
+The cost was real and is paid explicitly: a recording is only replayable
+under the rule it was made under. `started.json` and the record now carry
+`flush: honour|keep`; every run before this date has no field and is read as
+`keep`, and `-k` restores the old frontend behaviour for its replay. A
+character keeps the rule it was born under when it is carried on, so no
+lineage stops replaying mid-life (D17).
 
 ## Not planned
 

@@ -25,21 +25,23 @@ own** - see "The worktree model" below.
 
 ## Where the work stands
 
-- **16 runs archived** in `records/`, one played by a person (`diego-1`).
-  Deepest: depth 7 (`sonnet-2.2`). **Five deaths**, none of them a big
+- **18 runs archived** in `records/`, one played by a person (`diego-1`).
+  Deepest: depth 7 (`sonnet-2.2`). **Six deaths**, none of them a big
   hit: three low-CON characters, the Warrior that stood still beside its
-  Word of Recall, and the Druid that met crows with no escape in its pack.
+  Word of Recall, the Druid that met crows with no escape in its pack, and
+  the Warrior that walked a 60-key chain into a breeder pack.
 - **The dashboard** is <https://diegoami.github.io/borg-runner/>, rebuilt by
-  `overview` on the main checkout and published by pushing `main`.
-- **445 fast tests** (`pytest -q`). The slow ones build and play the game
+  `overview` on the main checkout and published by pushing `main`. It leads
+  with **characters**, not runs: multi-life characters have a page under
+  `records/characters/`, single-life ones link their replay.
+- **450 fast tests** (`pytest -q`). The slow ones build and play the game
   (`pytest -q -m slow`); CI does not run them.
-- **Nothing is playing.** The last run, `minimaxflash-1.5`, died on depth 2
-  to an acolyte after 893 asks - the longest run yet - and is fully
-  consolidated (archive, knowledge, playbook section, dashboard, and now the
-  export).
-- **Every death report now shows the death.** The reports of all four dead
-  runs carry the frames the game drew *between* the asks (see "The frame
-  dump" below); `minimaxflash-3`'s scrubber plays the spider killing it.
+- **One run is playing**: `mmf-mage.3` (the mage carry-on) in
+  `/home/diego/projects/mmf-mage.2-next`, depth 1. It was started before
+  the flush rule below, so it plays on with the buffer kept (D17).
+- **Every death report shows the death.** The reports of all six dead runs
+  carry the frames the game drew *between* the asks; `minimaxflash-3`'s
+  scrubber plays the spider killing it.
 
 ## The worktree model (new today)
 
@@ -71,7 +73,7 @@ folding sections into the page bodies is still a nothing-is-playing task.
 | `manuals/INSTRUCTIONS.md` (+ `_2` for depth 5-20) | **the page**: the game's manual and a strategy manual distilled, with what runs found folded in, every line labelled FACT / OBSERVED / POLICY / UNTESTED and sourced | every player, before its first keypress |
 | `knowledge/<run>.md` + `records/<run>/` | the **evidence**: each run's own notebook, decisions, keys and replay | a consolidating session; a player only for a line it wants to check |
 | `agents/<family>/COMMON.md` and `<CLASS>.md` | the **playbook**: one model family's own account, written for its own next session | that family only |
-| `ACCUMULATED_KNOWLEDGE.md` | the **export**, outward to borg-reborn-rs; nothing the manuals already say. **Edition 4** covers all 16 runs. The owner calls this the reason the repository exists - its correctness outranks everything else here | the consumer, not players |
+| `ACCUMULATED_KNOWLEDGE.md` | the **export**, outward to borg-reborn-rs; nothing the manuals already say. **Edition 5** covers all 18 runs. `ACCUMULATED_BEHAVIOUR.md` is its companion: who is worth imitating, by character level and net worth, lineage first. The owner calls this the reason the repository exists - its correctness outranks everything else here | the consumer, not players |
 | `prompts/` | the **briefs** worth running twice. A brief is an objective added to `PLAYGAME.txt`, never a replacement | one player each |
 
 **A tip lives on the page, not in a prompt.** `borg_runner prompts` enforces
@@ -82,7 +84,7 @@ template it extends.
 ## Every check, and what each one refuses
 
 ```sh
-.venv/bin/python -m pytest -q                         # 445, includes the page check
+.venv/bin/python -m pytest -q                         # 450, includes the page check
 .venv/bin/python -m borg_runner prompts               # nothing is said only in a prompt
 .venv/bin/python -m borg_runner playbook --check      # layout, and spell numbers vs class.txt
 .venv/bin/python -m borg_runner consolidate --check   # every claim on the page names a real run#ask
@@ -113,7 +115,7 @@ the played (first) answer and name the rest in `duplicate_answers`; the audit
 warns on a
 re-answered log; a replay regenerates its scratch directory; the splash's git
 describe is not a screen difference (build identity lives in the record's
-hashes). All 16 runs replay `identical: true` under this.
+hashes). All 18 runs replay `identical: true` under this.
 
 **The frame dump.** The frontend used to write the screen only when the key
 buffer emptied, so everything the game showed while spending a buffered
@@ -143,30 +145,49 @@ diffs every ask byte for byte.
    into `tools/` (a druid wrote its walk-planner beside the record, and only
    `tools/` was archived); the audit warns when one is left behind.
 5. The worktree prompts, above.
-6. The export is **edition 4**.
+6. The export was **edition 4** at that point; it is **edition 5** now.
+7. **T11, decided and built: the game ends a key string** (D17, below).
+8. `mmx-war-1` and `mmx-pri-1` merged, both replay `identical: true`
+   (141/141 and 149/149 asks, 0 differences) and both audit clean (20/20 and
+   19/19); their worktrees are removed.
+9. **The two shared tools that were worth adopting**:
+   `tools/screen/open.py` (unseen ground per direction) and
+   `tools/screen/route.py` (a route from an explicit start, and the rubble
+   correction), both from `minimaxflash-3`. The beam-search planners, the
+   sweep and the `where` helper were read and left in their records: they
+   hold a routing or depth-1 tactic the library is not supposed to have.
+10. **Edition 5 of the export** and **edition 2 of the companion**; the
+    dashboard and `records/OVERVIEW.md` lead with characters.
+11. The `-again` runs renamed to the lineage convention
+    (`minimaxflash-1.2`, `sonnet-2.2`).
+
+## T11: the flush rule, and why old runs still replay
+
+The game flushes input when it disturbs the player (`disturb()` raises
+`EVENT_INPUT_FLUSH`). The frontend used to keep the rest of the buffer, so
+every key an agent sent was spent and recorded - and two characters died
+inside a string they could not stop (T11, D17). It now honours the flush:
+the rest is dropped and the agent is asked again.
+
+A recording is replayed under the rule it was made under. The started and
+record files carry `flush: honour|keep`; a run with no field was made
+before 2026-11-10 and is `keep`. `-k` on the frontend restores the old
+behaviour for its replay, so the corpus stays byte-for-byte reproducible.
+A carried-on character keeps the rule it was born under. **Verified:** both
+new runs replay identically under the new build with `-k`.
 
 ## What is waiting, in order
 
-1. **Start the next run under the new prompts** - it is the first test of
-   the worktree flow, and friction in it is a finding. Nothing is playing.
-   `AGENT` set to the family playing; `agents/` currently has only
-   `minimax/`.
-2. **Merge the run branches** as runs finish (see the worktree model), and
-   rebuild the dashboard on main.
-3. **Tools written by runs, not adopted**:
-   `records/minimaxflash-3/tools/open.py`,
-   `records/minimaxflash-3/tools/route.py`,
-   `records/minimaxflash-3/tools/sweep.py` and now
-   `records/minimaxflash-1.5/tools/g.py` (a beam-search walk planner its
-   report credits with a 7x sweep rate - and which has the family bug of a
-   hardcoded panel slice; read before adopting). `tools --adopt <path>
-   --from <run>`.
-4. **The coverage measurement nobody has made** (ACCUMULATED section 8,
+1. **`mmf-mage.3` is still playing** (depth 1). Let it finish, merge
+   `run/mmf-mage.3`, then rebuild the dashboard on main. It plays under the
+   old flush rule, by design.
+2. **The coverage measurement nobody has made** (ACCUMULATED section 8,
    question 2): how much of a level a sweep actually remembers, counted off
    `minimaxflash-1.4`'s replay rather than believed.
-5. **T11 is the owner's call**: whether the frontend should honour
-   `TERM_XTRA_FLUSH` (PLAN.md). It changes what recordings mean.
-6. **Offered and not taken up**: CI for `pytest -m slow`, and an Angband MCP
+3. **The throw prompt** (ACCUMULATED section 3): `mmx-war-1` could not fire
+   a thrown flask after `v` + item + `'`; one run that finds the finishing
+   key would settle whether the page's recipe is wrong.
+4. **Offered and not taken up**: CI for `pytest -m slow`, and an Angband MCP
    server.
 
 ## Rules that are not obvious and have each cost something

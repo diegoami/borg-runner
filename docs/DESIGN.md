@@ -297,6 +297,30 @@ import. Those live in borg-agent, which has a claim lifecycle and the rule
 that a model never promotes its own; this repository hands over prose with
 provenance, which is what a corpus of ten runs can honestly support.
 
+## D17. The game decides when a key string ends
+
+A string of keys is one answer to one screen, but the game may disturb the
+player part way through it: `disturb()` raises `EVENT_INPUT_FLUSH`, and a real
+frontend drops whatever is still typed. Our frontend used to keep it, so that
+every key the agent sent was spent and recorded - and two characters died to
+a string that could not be stopped when the screen changed under it (T11).
+
+The frontend now honours the flush. The rest of the buffer is dropped and the
+agent is asked again with the screen as it now is. This is the game's own rule
+for when a command stops, which is the same principle as D5, and it means a
+long string is a bet on a screen that has not changed yet.
+
+**A recording is replayed under the rule it was made under.** The record
+carries `flush: honour|keep`; a run with no field was made before this
+decision and is `keep`. `-k` restores the old behaviour for those replays, so
+seed plus keys still reproduces every screen (D6). A carried-on character
+keeps the rule it was born under - the rules do not change mid-life - and only
+a character born after 2026-11-10 gets the new one.
+
+*Ruled out:* applying the new rule to old recordings, which would silently
+change what they mean; and a per-ask opt-out, which would put a tactic in the
+frontend.
+
 ## What this repository is not
 
 - not a Borg, and not a tuning of one: it holds no thresholds and no policy;

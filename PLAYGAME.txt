@@ -385,6 +385,10 @@ What each does:
 - **the commit** puts your run on its branch. You do not merge it and you do
   not rebuild the dashboard: both happen on the main checkout after the runs
   that are playing have finished, so two runs never race for the same files.
+  Concretely: **do not run `borg_runner overview`**, and do not commit
+  `index.html`, `records/overview.html`, `records/OVERVIEW.md` or anything
+  under `records/characters/`. Those files belong to the main checkout, and
+  committing them on your branch is what makes the merge conflict.
   The dashboard is served at <https://diegoami.github.io/borg-runner/> once
   your branch is merged and the overview is rebuilt there. Name your branch
   when you report back.

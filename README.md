@@ -78,11 +78,12 @@ While they play, from anywhere:
 
 ```sh
 .venv/bin/python -m borg_runner status     # depth, asks, pace, dead or alive
-.venv/bin/python -m borg_runner overview   # the table of every archived run
+.venv/bin/python -m borg_runner overview   # the characters, then every archived run
 ```
 
-The table is also a page: **<https://diegoami.github.io/borg-runner/>**, where
-each run links to a replay you can step through, screen by screen.
+The list and the table are also a page:
+**<https://diegoami.github.io/borg-runner/>**, where each character links to
+its lives and each run to a replay you can step through, screen by screen.
 
 By hand, the whole of it is:
 

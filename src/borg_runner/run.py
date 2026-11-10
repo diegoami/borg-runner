@@ -413,7 +413,7 @@ def _playbook_note(run, log=print):
 
 
 def start(run, seed, out=None, character=None, resume=False, asked_for=None,
-          frames=False, log=print):
+          frames=False, keep_buffer=False, log=print):
     """Start the game in `run`, waiting for its first answer.
 
     It is given its own save directory so runs never share one.
@@ -479,6 +479,11 @@ def start(run, seed, out=None, character=None, resume=False, asked_for=None,
         # states the game showed while spending a buffered key string are
         # recorded too (frame-<ask>-<n>.txt). The asks are untouched.
         command.append(f'-f{run / ASK}')
+    if keep_buffer:
+        # The old rule: a disturbance leaves the rest of the string in the
+        # buffer. Only a replay of a recording made before 2026-11-10 asks
+        # for it; a new run lets the game's flush end the string (T11).
+        command.append('-k')
     handle = (run / 'game.log').open('w')
     # Detached, in a session of its own. The game outlives the command that
     # starts it - it sits waiting for key files - and a harness that kills its
@@ -498,6 +503,11 @@ def start(run, seed, out=None, character=None, resume=False, asked_for=None,
         # a chosen class.
         'asked_for': asked_for or None,
         'pid': process.pid,
+        # What happens to the rest of a key string when the game disturbs the
+        # player: 'honour' lets the game's flush end it (the default since
+        # 2026-11-10), 'keep' holds it (every recording before that). A
+        # replay reads this to play the recording by its own rule (T11).
+        'flush': 'keep' if keep_buffer else 'honour',
         'command': command,
         'savefile': str(savefile_of(out, character)),
         'build': json.loads((out / 'build-identity.json').read_text()),
@@ -926,6 +936,9 @@ def write_record(run, process=None, outcome=None, cost=None, playbook=None):
         'run': run.name,
         'seed': started['seed'],
         'build': started['build'],
+        # A recording made before the flush rule existed has no field; it was
+        # played with the buffer kept, which is what a replay must do (T11).
+        'flush': started.get('flush') or 'keep',
         'asks': len(taken),
         'keypresses': len(keys),
         # The furthest turn the game reached, which is the last *question*:
