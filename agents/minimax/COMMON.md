@@ -27,6 +27,15 @@ stairs" report in this repository, including all three of mine.** When a
 report says "I mapped a large part of the level", ask what fraction of
 13,068 squares that is. My first life mapped the eastern third in 148 asks.
 
+**The town has a down staircase, and you start standing on it.** OBSERVED,
+minimaxflash-2: the status line says `Down staircase` in town before you have
+pressed anything, and `>` goes straight to depth 1. The source says why:
+`src/gen-cave.c` `town_gen_layout()` ends with `square_set_feat(c, pgrid,
+FEAT_MORE);` and then `player_place(c, p, pgrid);` — the player is placed on
+the town's staircase, which sits on the north wall. **One less staircase hunt
+than every report in this repository has assumed**, and the manual's list of
+ways down does not mention it.
+
 **There is exactly one down staircase per level, placed uniformly at random.**
 `gen-cave.c:1584` allocates one `FEAT_MORE`; `gen-util.c:620` puts it on a
 square with exactly three adjacent walls; `cave_find_get_grid()`
@@ -37,6 +46,13 @@ rule.** I read this in the source at ask 285 of `minimaxflash-1-again` —
 spend a hundred asks hunting.** If you are going to walk a level looking
 for a staircase, you are committing to covering thousands of squares, and
 you should know that when you start, not afterwards.
+
+ADDED, minimaxflash-2: it is also **more than 16 tiles away from the level's up
+staircase in x or y**. `src/gen-cave.c` `handle_level_stairs()` sets `minsep =
+MAX(MIN(c->width, c->height) / 4, ...)` = 16 for a 198×66 level, and
+`alloc_stairs()` refuses any square within 16 in both coordinates of an
+existing staircase. So the down staircase is never in the up staircase's room —
+but it can be anywhere else, and "anywhere else" is 13,000 squares.
 
 **So the staircase must be *seen*, not computed.** Everything the game
 offers — the `>` jump to a known staircase, Magic Mapping, Detect Stairs —
@@ -108,6 +124,28 @@ Two details that cost me asks:
   nearest unexplored square — often right next to you. Drop the `x` and
   aim further.
 
+**Where the aim lands decides whether the walk works at all.** CORRECTION,
+minimaxflash-2: the paragraph above is right about the cursor and wrong about
+the aim. `find_path()` sets `only_known = square_isknown(start) &&
+square_isknown(dest)`, so an **unknown** destination takes the
+"unknown grids are passable" fallback, and `patched_distances_to_path()`
+reconstructs that path backwards from a destination whose distance was never
+set — the result is a short, meaningless path. Measured in minimaxflash-2:
+aim 3 tiles west → **3 steps**; aim 10 → **0 steps**; aim 20 → **0**; aim 40
+→ **1**. Six aims in four directions produced no movement and no complaint,
+exactly as `minimaxflash-1.3` reported. **An unknown destination does not
+work, however far you aim it.** An aim at a **known** square is a different
+command entirely: `only_known` is true, the path is computed properly over
+remembered ground, and it is long. Measured in minimaxflash-2: aiming at the
+level's up staircase, 26 tiles east and 8 south, gave **31 steps in one ask**
+(310 turns). A staircase, a door, a piece of floor you have seen — anything
+known is a good aiming point, and it is the only kind that works.
+
+And the reliable way to move into new ground is `lxg` — look, jump the cursor
+to the nearest unexplored square, walk there. Measured in minimaxflash-2:
+**1 to 31 steps per ask**, and it never fails, because the square it aims at
+is adjacent to ground you have already seen.
+
 ---
 
 ## 2. Reading the screen: the map lies, and it lies in a specific way
@@ -158,18 +196,59 @@ not move** — in `minimaxflash-1-again` I lost four asks to this, sending
 while look mode was still up, watching nothing get thrown. **Press `\e`
 first.**
 
+OBSERVED, minimaxflash-2: the game can also be left sitting in the
+look/targeting mode **by a movement command that has just finished**, and the
+reliable tell is the line `Press '?' for help.` at the very bottom of the
+screen (the targeting mode's own prompt, `src/ui-target.c:1302`). While that
+line is there every key is eaten until `\e` is pressed. The symptom I saw
+was a `Direction or <click> (Escape to cancel)?` prompt: that is **`a` =
+"Aim a wand"** (the keymap binds `a` to the wand command) asking for a
+direction, with everything after it eaten. It cost five asks in
+minimaxflash-2. **One command per ask after any movement, and `\e` first if
+the screen shows `Press '?' for help.`**
+
 **A `-more-` swallows the next key**, so end a key string with a space.
 A stair descent and a Deep Descent each end in one.
 
-**The Enter key is carriage return, not newline.** `R50` followed by `\n`
-leaves the rest prompt sitting there with `50` in it and **no turn
-passes**; the same command with `\r` rests 500 turns. Three asks in
-`minimaxflash-1.3`, and it is in none of the manuals.
+**The Enter key is carriage return, not newline — but the reason is the
+harness, not the game.** `R50` followed by `\n` leaves the rest prompt
+sitting there with `50` in it and **no turn passes**; the same command with
+`\r` rests 500 turns. Three asks in `minimaxflash-1.3`, and it is in none of
+the manuals. CORRECTION, minimaxflash-2: the game is fine — `src/ui-input.c`
+accepts `KC_ENTER` at that prompt, and the runner's frontend turns a
+**two-character** `\n` (backslash, n) into `KC_ENTER` correctly. What the
+frontend does with a **literal** newline byte is drop it when it is the last
+byte of the file (`patch/src/main-agent.c`: `if (raw[i] == '\n' && i + 1 ==
+read) continue;  /* the newline a text editor adds, not a key */`). A literal
+CR is not dropped, which is why `\r` worked. **So the Enter is lost only when
+it is a real newline at the end of the key string: write the two-character
+escape `\n`, or put a space after it.** In bash, `"...\n"` gives the escape and
+`$'...\n'` gives the real byte — minimaxflash-2 lost three asks to exactly
+that difference.
 
 **Menu letters are labels, not positions.** Read them off the screen. The
 **throw prompt has its own letters** (oil is `a` there, `c` in the pack);
 the **quaff prompt uses the pack letters**, and `qdq` instead opens the
 item menu's *Drop* option.
+
+**Buying is one ask, and selling out renumbers the list.** OBSERVED,
+minimaxflash-2: `p`, the row letter, the quantity digits, Enter, and then
+**another key** — the Enter is eaten by the quantity string prompt, so the
+purchase is not made until you press one more key (the confirmation is
+"[ESC, any other key to accept]"). And when the last of an item sells out,
+**the whole list renumbers and every letter below it changes**: I bought the
+only Soft Leather Armour in the Armoury, and the Wicker Shields below it moved
+from `m` to `j`, the Metal Caps from `r` to `q`, and so on. **Read the letter
+off the screen after every purchase, never from memory.**
+
+**The rest prompt is pre-filled and one backspace clears it.**
+`src/ui-command.c` opens "Rest (0-9999, '!' for HP or SP, '*' for HP and SP,
+'&' as needed)" with `& ` already in the field, so `R*` types `& *` and
+rests until *healed* rather than until spell points are full. One BACKSPACE
+deletes the whole field ("if this is the first time round, backspace means
+'delete all'", `src/ui-input.c:702`), so **`R` + BACKSPACE + `*` + Enter** is
+the one-ask full rest, and it is how minimaxflash-2 recovered from 0 spell
+points in a single ask.
 
 ---
 
@@ -258,8 +337,12 @@ up after a quarter of the minimum and wrote the scroll off as a dud.
 
 **The town map fits on one screen** (66×22 in two panels), so the stores
 are at known coordinates and any shop is reachable by a planned key
-string. **The store tiles are not walkable** — the walkable square is the
-one orthogonally adjacent to the digit.
+string. CORRECTION, minimaxflash-2: **the store tiles are walkable.** I
+walked onto the General Store's digit and the status line said `General
+Store`; `src/cmd-cave.c` `do_cmd_hold()` (the `,` and `5` commands) tests
+`square_isshop(cave, player->grid)` and opens the shop, so **stand on the
+digit and press `,`**. The square orthogonally adjacent to the digit is the
+way to *reach* the store, not the way to enter it.
 
 ---
 
@@ -302,7 +385,22 @@ mistakes in different clothes.
    more walking. The questions worth asking the source: how many staircases
    does a level have, where are they placed, what does the pathfinder do
    with an unknown destination, what does confusion block, what does a
-   spell cost in turns of rest.
+   spell cost in turns of rest. ANSWERED in part, minimaxflash-2: an
+   unknown destination gives a **bogus short path** and a known one gives a
+   proper long walk (§1).
+7. **Know where you are before you start a hunt.** minimaxflash-2 spent 158
+   asks casting a spell that can see a staircase 81 tiles away, on a
+   198-tile-wide level, and never found it — because the map panel scrolls
+   and the full map (`M`) draws only the *remembered* region, so I could not
+   tell whether I was at x = 20 or x = 120, and every cast landed in the same
+   40-tile band. **Count tiles walked from the town's staircase, or calibrate
+   against the level's 66 rows, before spending the budget on detection.**
+   A detector without a position is a random walk.
+8. **Spend the shopping money on escapes before you spend it on potions.**
+   minimaxflash-2 bought two Cure Light Wounds and two Phase Door scrolls,
+   then used neither: it ran out of mana, not out of hit points, and the one
+   time it was hurt (a soldier ant, 5 damage) one potion was enough. **One
+   heal, one escape, then oil and armour.**
 
 ---
 
@@ -337,10 +435,16 @@ mistakes in different clothes.
 
 These cost me real time and are about the tooling, not the game.
 
-**`\n` is not Enter — `\r` is.** The rest prompt will sit there with your
-number in it and no turn will pass. Three asks in `minimaxflash-1.3`.
-(Also: the runner's `--reason` and `--note` want one line; keep them one
-line.)
+**A literal newline at the end of your key string is thrown away.** The
+frontend reads the keys file and drops a trailing LF
+(`patch/src/main-agent.c`: `if (raw[i] == '\n' && i + 1 == read) continue;`),
+so a final Enter sent as a real newline byte never reaches the game; a
+literal CR is kept, and the two-character escape `\n` is turned into
+`KC_ENTER` as it should be. That is the whole of the "`\n` is not Enter"
+rule, and it cost me three asks in minimaxflash-2 to rediscover it: in bash,
+`"...\n"` is the escape and `$'...\n'` is the real byte. **Write the escape,
+and put a space after it if you are unsure.**
+(The runner's `--reason` and `--note` want one line; keep them one line.)
 
 **A `-more-` swallows the next key.** If a screen ends in `-more-`, the
 first key of your next answer is eaten — and the rest of your string
@@ -351,7 +455,16 @@ Cloud (`mad` became `d` → "Drop which item?").
 else: look mode was still up, or a prompt was waiting, or you sent a
 command the option does not enable. **The turn counter not moving is the
 signal that something is wrong, and it is more reliable than the message
-line.**
+line.** A second tell, found in minimaxflash-2: the line `Press '?' for
+help.` at the bottom of the screen means the game is sitting in the
+look/targeting mode and eating keys; press `\e` before anything else.
+
+**One command per ask after a movement command.** OBSERVED,
+minimaxflash-2: after `*`+digits+`g` or `.`+direction, the keys that follow
+are misread — `m` is swallowed by the targeting mode (it means "switch to
+interesting mode" there) and the next key can open "Aim a wand", which asks
+for a direction and eats the rest of the string. The cast prompt (`m`, the
+book, the spell) only works when it is the first thing in an ask.
 
 **`>` off a staircase prints "I see no down staircase here."** It does not
 auto-navigate, because `autoexplore_commands` is **off by default** and

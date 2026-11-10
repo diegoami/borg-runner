@@ -1,0 +1,158 @@
+{"ask": 1, "depth": 0, "keys": " ", "reason": "past the splash", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "e\\n", "reason": "race given: Gnome is row e) on the menu, press e then Enter", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "b\\n", "reason": "class given: Mage is row b) on the class menu, press b then Enter", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "a\\n", "reason": "point-based stats, then accept the game's own filled-in allocation with Enter", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "\\n", "reason": "accept the default name", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "y", "reason": "accept character history", "turn": 1}
+{"ask": 7, "depth": 0, "keys": " ", "memory": "Gnome Mage, seed 41, CL1. HP 8/8, SP 2/2, INT 30 (auto-alloc put 9 pts in INT), CON 15, DEX 12, STR 13, Wis 10. Hit die 8 (1d8/level). Plan: learn Find Traps Doors&Stairs (1SP) -> solves the staircase hunt; buy oil + Cure Light + Phase Door; then descend.", "reason": "finish birth, enter the town", "turn": 1}
+{"ask": 8, "depth": 0, "keys": "G", "reason": "open the spell-study prompt so I can learn Find Traps Doors&Stairs", "turn": 1}
+{"ask": 9, "depth": 0, "keys": "a", "reason": "select the First Spells book in the study prompt", "turn": 1}
+{"ask": 10, "depth": 0, "keys": "c", "reason": "study Find Traps, Doors & Stairs (c): DETECT_STAIRS in src/effect-handler-general.c memorises the stair square, so it finds the level's down staircase inside 22x40 without walking", "turn": 1}
+{"ask": 11, "depth": 0, "keys": "*2222226666666666g", "reason": "aim the targeting cursor at the General Store tile (6 down, 10 right from me) and let the game walk me there", "turn": 11}
+{"ask": 12, "depth": 0, "keys": "336633366,", "reason": "walk to the General Store door (map 44,10) and press , to enter it", "turn": 21}
+{"ask": 13, "depth": 0, "keys": "pj20\\n", "reason": "buy 20 flasks of oil (3 gold each, the ranged attack the mage has)", "turn": 101}
+{"ask": 14, "depth": 0, "keys": " ", "reason": "the store asks 'any other key to accept' after showing Price: 60, so accept the purchase of 20 flasks of oil", "turn": 101}
+{"ask": 15, "depth": 0, "keys": "pn1\\n \\e", "reason": "buy 1 cloak (+1 AC for 8 gold) then Escape out of the store", "turn": 101}
+{"ask": 16, "depth": 0, "keys": "11114744111111777777776,", "reason": "walk to the Armoury (store 2) and enter it", "turn": 111}
+{"ask": 17, "depth": 0, "keys": "pf1\\n pr1\\n \\e", "reason": "buy Soft Leather Armour (AC 8, 104g) and a Metal Cap (AC 3, 24g), then leave the store", "turn": 331}
+{"ask": 18, "depth": 0, "keys": " pq1\\n ", "reason": "clear the pending message, then buy 1 Metal Cap (letter q in the renumbered list)", "turn": 331}
+{"ask": 19, "depth": 0, "keys": " pn1\\n ", "memory": "Gnome Mage, seed 41, CL1. HP 8/8, SP 2/2, INT 30, CON 15, DEX 12, STR 13. Bought: 20 flasks oil, 1 cloak, soft leather armour, metal cap. Gold 164 before this buy. Next: Leather Shield, then Alchemist (store 5) for Cure Light Wounds x3, then wear armour (w+letter), then '>' down the town stair to depth 1.", "reason": "buy 1 Leather Shield (AC 8, 66g) to reach AC 20", "turn": 331}
+{"ask": 20, "depth": 0, "keys": " \\e1114416,", "reason": "clear the message, leave the Armoury, walk to the Alchemist (store 5) and enter it", "turn": 331}
+{"ask": 21, "depth": 0, "keys": "pn2\\n ", "reason": "buy 2 Scrolls of Phase Door (15g each): the mage's guaranteed escape", "turn": 401}
+{"ask": 22, "depth": 0, "keys": " pa2\\n \\e", "reason": "clear the message, buy 2 Potions of Cure Light Wounds (20g each), leave the store", "turn": 401}
+{"ask": 23, "depth": 0, "keys": "\\ei", "reason": "leave the Alchemist and open the pack to learn the item letters for wearing armour", "turn": 401}
+{"ask": 24, "depth": 0, "keys": "\\ewnwmwig", "reason": "escape the item prompt and wear metal cap, leather shield, cloak and soft leather armour, in reverse letter order so the pack letters do not shift under me", "turn": 411}
+{"ask": 25, "depth": 0, "keys": "e", "reason": "check the equipment screen: Cur AC is 12, so the Leather Shield seems not to have been worn", "turn": 441}
+{"ask": 26, "depth": 0, "keys": "\\ewg9639699999996999>", "reason": "wear the Soft Leather Armour (pack letter g), walk to the town down staircase and press > to descend to depth 1", "turn": 441}
+{"ask": 27, "depth": 1, "keys": " m", "reason": "clear the level-change message and open the spell cast prompt", "turn": 611}
+{"ask": 28, "depth": 1, "keys": "m", "reason": "open the cast-spell prompt (the previous m was flushed on arrival at the new level)", "turn": 611}
+{"ask": 29, "depth": 1, "keys": "a", "reason": "select the First Spells book", "turn": 611}
+{"ask": 30, "depth": 1, "keys": "c", "reason": "cast Find Traps, Doors & Stairs to reveal the down staircase within 22x40 of me", "turn": 611}
+{"ask": 31, "depth": 1, "keys": "lxg", "reason": "look, jump to the nearest unexplored square and walk there - the game's own exploration", "turn": 611}
+{"ask": 32, "depth": 1, "keys": "[", "reason": "list visible monsters with positions - the best one-ask scan", "turn": 621}
+{"ask": 33, "depth": 1, "keys": ".4", "reason": "run west along the corridor out of the staircase room", "turn": 621}
+{"ask": 34, "depth": 1, "keys": "*444444444444444444444444444444g", "reason": "aim the targeting cursor 30 tiles west and let the game path me there through unexplored ground", "turn": 631}
+{"ask": 35, "depth": 1, "keys": "[", "reason": "list visible monsters - the walk stopped after 3 steps and I need to know why", "turn": 661}
+{"ask": 36, "depth": 1, "keys": "]", "reason": "list visible items - an object in the next square would stop the run", "turn": 661}
+{"ask": 37, "depth": 1, "keys": "*444444444444444444444444444444g", "reason": "aim 30 tiles west and let the game path me there through unexplored ground", "turn": 661}
+{"ask": 38, "depth": 1, "keys": ".4", "reason": "run west along the corridor", "turn": 691}
+{"ask": 39, "depth": 1, "keys": ".8", "reason": "run north; the corridor turns west at the top", "turn": 691}
+{"ask": 40, "depth": 1, "keys": "*4444444444444444444444444444444444444444g", "reason": "aim 40 tiles west and path there - the pathfinder routes around the maze walls", "turn": 701}
+{"ask": 41, "depth": 1, "keys": "]", "reason": "list visible items - something in the next square is aborting the walk", "turn": 711}
+{"ask": 42, "depth": 1, "keys": "*6666666666666666666666666666666666666666g", "reason": "aim 40 tiles EAST and path there - testing whether the aim reaches, to learn the level's extent", "turn": 711}
+{"ask": 43, "depth": 1, "keys": "*444g", "reason": "aim exactly 3 tiles west - tests whether the cursor aim moves at all, or is clamped", "turn": 721}
+{"ask": 44, "depth": 1, "keys": ".4", "reason": "run west along the corridor to cover new ground for the Find Stairs window", "turn": 751}
+{"ask": 45, "depth": 1, "keys": "*4444444444gmac", "reason": "aim 10 west, path there, then cast Find Traps Doors&Stairs from the new position", "turn": 781}
+{"ask": 46, "depth": 1, "keys": "*44444444444444444444g", "reason": "aim 20 west and path there - testing a longer aim", "turn": 781}
+{"ask": 47, "depth": 1, "keys": ".1", "reason": "run south-west along the diagonal corridor into new ground", "turn": 821}
+{"ask": 48, "depth": 1, "keys": "012", "reason": "test the repeat-count walk: '0' then '12' then the walk command walks south twelve times in one ask", "turn": 821}
+{"ask": 49, "depth": 1, "keys": "*66666666666666666666g", "reason": "aim 20 tiles east and path there", "turn": 821}
+{"ask": 50, "depth": 1, "keys": "*6666g", "reason": "aim 4 tiles east and path there", "turn": 821}
+{"ask": 51, "depth": 1, "keys": "*6666g", "reason": "aim 4 east", "turn": 861}
+{"ask": 52, "depth": 1, "keys": "*6666g", "reason": "aim 4 east", "turn": 901}
+{"ask": 53, "depth": 1, "keys": "*6666g", "reason": "aim 4 tiles east and path there", "turn": 901}
+{"ask": 54, "depth": 1, "keys": "*6666g", "reason": "aim 4 tiles east and path there", "turn": 901}
+{"ask": 55, "depth": 1, "keys": "*6666g", "reason": "aim 4 tiles east and path there", "turn": 901}
+{"ask": 56, "depth": 1, "keys": "lxg", "reason": "look, jump to the nearest unexplored square and walk there - the game's own frontier exploration", "turn": 901}
+{"ask": 57, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 981}
+{"ask": 58, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 991}
+{"ask": 59, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1001}
+{"ask": 60, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1081}
+{"ask": 61, "depth": 1, "keys": "R*\\n", "reason": "rest until HP and SP are full - resting doubles SP regeneration, which is the mage's scarcest resource", "turn": 1091}
+{"ask": 62, "depth": 1, "keys": "*228422gg", "reason": "walk to the item lying in the room and pick it up", "turn": 1181}
+{"ask": 63, "depth": 1, "keys": "*2222gg", "reason": "walk 4 tiles south to the item and pick it up", "turn": 1191}
+{"ask": 64, "depth": 1, "keys": "vc'", "reason": "throw a flask of oil at the white icky thing lying in the room", "turn": 1201}
+{"ask": 65, "depth": 1, "keys": "va'", "reason": "choose the flask of oil and throw it at the closest monster", "turn": 1201}
+{"ask": 66, "depth": 1, "keys": " ", "reason": "clear the message", "turn": 1201}
+{"ask": 67, "depth": 1, "keys": "R*\\n", "reason": "rest until HP and SP are full - the mage's spell points are the scarcest resource and resting doubles their regeneration", "turn": 1201}
+{"ask": 68, "depth": 1, "keys": "R*\\n", "reason": "rest again until SP is full", "turn": 1211}
+{"ask": 69, "depth": 1, "keys": "R\b*\n", "reason": "rest until HP and SP are full: backspace first to clear the pre-filled '& ', then '*'", "turn": 1211}
+{"ask": 70, "depth": 1, "keys": "\u001bR\b*\n", "reason": "escape the stuck look mode, then rest until HP and SP are full (backspace clears the pre-filled '& ')", "turn": 1211}
+{"ask": 71, "depth": 1, "keys": "\\n", "reason": "submit the rest prompt ('*' = rest until HP and SP are full)", "turn": 1211}
+{"ask": 72, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs from this new position", "turn": 1771}
+{"ask": 73, "depth": 1, "keys": "*6666g", "reason": "aim 4 tiles east and path there", "turn": 1771}
+{"ask": 74, "depth": 1, "keys": "*6666g", "reason": "aim 4 tiles east and path there", "turn": 1821}
+{"ask": 75, "depth": 1, "keys": "*6666g", "reason": "aim 4 tiles east and path there", "turn": 1821}
+{"ask": 76, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1821}
+{"ask": 77, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1881}
+{"ask": 78, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1891}
+{"ask": 79, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1901}
+{"ask": 80, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1911}
+{"ask": 81, "depth": 1, "keys": "*6666g", "reason": "sweep south-east: aim 4 tiles toward the next unexplored part of the level", "turn": 1921}
+{"ask": 82, "depth": 1, "keys": "*6666g", "reason": "sweep south-east: aim 4 tiles toward the next unexplored part of the level", "turn": 1921}
+{"ask": 83, "depth": 1, "keys": "*6666g", "reason": "sweep south-east: aim 4 tiles toward the next unexplored part of the level", "turn": 1921}
+{"ask": 84, "depth": 1, "keys": "*2222g", "reason": "sweep south-east: aim 4 tiles toward the next unexplored part of the level", "turn": 1921}
+{"ask": 85, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1941}
+{"ask": 86, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1951}
+{"ask": 87, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1981}
+{"ask": 88, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 1991}
+{"ask": 89, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square", "turn": 2001}
+{"ask": 90, "depth": 1, "keys": "*66666666666666666666666666+22222222+g", "reason": "aim at the known up staircase 26 east and 8 south and let the pathfinder walk me there", "turn": 2011}
+{"ask": 91, "depth": 1, "keys": "*6666666688gmac", "reason": "walk to the room's south-east corner (the level's eastern edge of the panel) and cast Find Stairs there", "turn": 2321}
+{"ask": 92, "depth": 1, "keys": "5", "reason": "give the cast a target to complete it (a detection spell ignores the direction)", "turn": 2331}
+{"ask": 93, "depth": 1, "keys": "\\emac", "reason": "cancel the stray direction prompt and cast Find Traps cleanly", "turn": 2331}
+{"ask": 94, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square, east of the room", "turn": 2331}
+{"ask": 95, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square, east of the room", "turn": 2341}
+{"ask": 96, "depth": 1, "keys": "lxg", "reason": "explore to the nearest unexplored square, east of the room", "turn": 2561}
+{"ask": 97, "depth": 1, "keys": "*6666666666666666666+2+gmac", "reason": "aim at the room's known south-west corner 19 east and 1 south, walk there, then cast Find Stairs from the new position", "turn": 2571}
+{"ask": 98, "depth": 1, "keys": "8", "reason": "supply the direction the cast is asking for (harmless for a detection spell)", "turn": 2581}
+{"ask": 99, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs on its own (after a targeting session the following keys get misread)", "turn": 2581}
+{"ask": 100, "depth": 1, "keys": "lxg", "reason": "explore east to the frontier", "turn": 2581}
+{"ask": 101, "depth": 1, "keys": "lxg", "reason": "explore east to the frontier", "turn": 2591}
+{"ask": 102, "depth": 1, "keys": "*66666666666666666666666666+2+g", "reason": "aim at the room's known south-east floor 25 tiles east and walk there", "turn": 2601}
+{"ask": 103, "depth": 1, "keys": "R\b*\\nmac", "reason": "rest until SP is full (backspace clears the pre-filled '& ', \\n is the Enter escape), then cast Find Stairs from the new position", "turn": 2891}
+{"ask": 104, "depth": 1, "keys": "lxg", "reason": "explore east of the room", "turn": 3611}
+{"ask": 105, "depth": 1, "keys": "lxg", "reason": "explore east of the room", "turn": 3621}
+{"ask": 106, "depth": 1, "keys": "lxg", "reason": "explore east of the room", "turn": 3911}
+{"ask": 107, "depth": 1, "keys": "*666666666666666666666666+2+g", "reason": "aim at the room's known east floor 24 tiles east and walk there", "turn": 3921}
+{"ask": 108, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs from the room's east edge to reveal the next band", "turn": 4221}
+{"ask": 109, "depth": 1, "keys": "lxg", "reason": "explore to the next frontier", "turn": 4221}
+{"ask": 110, "depth": 1, "keys": "lxg", "reason": "explore to the next frontier", "turn": 4231}
+{"ask": 111, "depth": 1, "keys": "lxg", "reason": "explore to the next frontier", "turn": 4541}
+{"ask": 112, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs from the new position", "turn": 4551}
+{"ask": 113, "depth": 1, "keys": "lxg", "reason": "explore to the next frontier", "turn": 4551}
+{"ask": 114, "depth": 1, "keys": "lxg", "reason": "explore to the next frontier", "turn": 4561}
+{"ask": 115, "depth": 1, "keys": "lxg", "reason": "explore to the next frontier", "turn": 4571}
+{"ask": 116, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs from the new position", "turn": 4581}
+{"ask": 117, "depth": 1, "keys": "R\b*\\n", "reason": "rest until SP is full (resting doubles mana regeneration)", "turn": 4581}
+{"ask": 118, "depth": 1, "keys": "\u001bR\b*\\n", "reason": "escape the stuck look mode, then rest until SP is full", "turn": 4581}
+{"ask": 119, "depth": 1, "keys": "\u001blxg", "reason": "escape any stuck look mode, then explore to the next frontier", "turn": 5401}
+{"ask": 120, "depth": 1, "keys": "\u001blxg", "reason": "escape any stuck look mode, then explore to the next frontier", "turn": 5411}
+{"ask": 121, "depth": 1, "keys": "\u001blxg", "reason": "escape any stuck look mode, then explore to the next frontier", "turn": 5421}
+{"ask": 122, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs from the new position", "turn": 5601}
+{"ask": 123, "depth": 1, "keys": "\u001blxg", "reason": "explore to the next frontier, heading south-east", "turn": 5601}
+{"ask": 124, "depth": 1, "keys": "\u001blxg", "reason": "explore to the next frontier, heading south-east", "turn": 5621}
+{"ask": 125, "depth": 1, "keys": "\u001blxg", "reason": "explore to the next frontier, heading south-east", "turn": 5631}
+{"ask": 126, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs from the new position", "turn": 5641}
+{"ask": 127, "depth": 1, "keys": "*6666666666666666666666666666+22222+g", "reason": "aim at the known room floor 28 east and 5 south and walk there", "turn": 5641}
+{"ask": 128, "depth": 1, "keys": "\u001blxg", "reason": "escape the stray direction prompt and explore to the next frontier", "turn": 5781}
+{"ask": 129, "depth": 1, "keys": "*444444+2+gg", "reason": "walk to the item lying on the floor and pick it up", "turn": 5791}
+{"ask": 130, "depth": 1, "keys": "*66666666666666666666666+222+g", "reason": "aim at the room's known east floor 23 tiles east and 3 south, and walk there", "turn": 5801}
+{"ask": 131, "depth": 1, "keys": "M ", "reason": "view the full remembered level map to see where the unexplored area lies", "turn": 5811}
+{"ask": 132, "depth": 1, "keys": "*666666666666666666+222222222+g", "reason": "aim at the known up staircase 18 east and 9 south and walk there, heading for the unscanned southern band of the level", "turn": 5811}
+{"ask": 133, "depth": 1, "keys": "*+2222222222222222222222222222222222222222+xg", "reason": "move the cursor 40 tiles south, then 'x' jumps it to the nearest unexplored square from THERE, and walk there - this aims the exploration at the unscanned southern band", "turn": 5821}
+{"ask": 134, "depth": 1, "keys": "\u001bR\b*\\n", "reason": "escape any stuck mode and rest until SP is full", "turn": 5831}
+{"ask": 135, "depth": 1, "keys": ".2", "reason": "run south along the corridor toward the unscanned southern band", "turn": 6671}
+{"ask": 136, "depth": 1, "keys": "*666666666666666666666666+222222222+g", "reason": "aim at the known up staircase 23 east and 9 south and walk there", "turn": 6691}
+{"ask": 137, "depth": 1, "keys": ".6mac", "reason": "run east and cast Find Traps, Doors & Stairs from the new position", "turn": 6691}
+{"ask": 138, "depth": 1, "keys": "8", "reason": "answer the stray direction prompt harmlessly", "turn": 6701}
+{"ask": 139, "depth": 1, "keys": "\u001blxg", "reason": "explore to the next frontier", "turn": 6701}
+{"ask": 140, "depth": 1, "keys": "\u001blxg", "reason": "explore to the next frontier", "turn": 6741}
+{"ask": 141, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs from the new position", "turn": 6751}
+{"ask": 142, "depth": 1, "keys": "\u001blxg", "reason": "explore to the next frontier", "turn": 6751}
+{"ask": 143, "depth": 1, "keys": "\u001blxg", "reason": "explore to the next frontier", "turn": 6771}
+{"ask": 144, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs again", "turn": 6781}
+{"ask": 145, "depth": 1, "keys": "\u001bR\b*\\n", "reason": "rest until SP is full for the last hunting casts", "turn": 6781}
+{"ask": 146, "depth": 1, "keys": "*666666666666666666666666+2222222222222+g", "reason": "aim at the known up staircase far to the south-east and walk there", "turn": 7771}
+{"ask": 147, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs from the southern position", "turn": 7861}
+{"ask": 148, "depth": 1, "keys": "*6+888888888+g", "reason": "walk north to the potion lying on the floor, which also takes me 9 tiles into new ground for the spell", "turn": 7861}
+{"ask": 149, "depth": 1, "keys": "8", "reason": "continue north towards the potion", "turn": 7921}
+{"ask": 150, "depth": 1, "keys": "mac", "reason": "cast Find Traps, Doors & Stairs from the new position", "turn": 7927}
+{"ask": 151, "depth": 1, "keys": "*66+88888+g", "reason": "walk north to the potion on the floor", "turn": 7931}
+{"ask": 152, "depth": 1, "keys": "\\eva' ", "reason": "cancel the stray prompt and throw a flask of oil at the ant standing next to me", "turn": 7941}
+{"ask": 153, "depth": 1, "keys": " lxg", "reason": "clear the message and explore to the next frontier", "turn": 7941}
+{"ask": 154, "depth": 1, "keys": " lxg", "reason": "clear the message and explore to the next frontier", "turn": 7981}
+{"ask": 155, "depth": 1, "keys": "q", "reason": "open the quaff prompt to drink a Cure Light Wounds at 3/8 hit points", "turn": 7991}
+{"ask": 156, "depth": 1, "keys": "d", "reason": "quaff the Cure Light Wounds to heal back to full", "turn": 7991}
+{"ask": 157, "depth": 1, "keys": "\u0018", "reason": "the run was stopped", "turn": 8001}
+{"ask": 158, "depth": 1, "keys": "\\e", "reason": "the run was stopped", "turn": 8001}

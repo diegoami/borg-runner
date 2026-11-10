@@ -1,0 +1,62 @@
+{
+  "asks": 158,
+  "asks_made": 158,
+  "born_as_asked": true,
+  "build": {
+    "binary_sha256": "610d5deed6e58c81e6af502f2b0ec720d90883a58ac5493379ca6fab24f44e24",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "54a4cc8b04a2381c2063b41bf687b65e11984b14e2c1547b7c96991fcfb3f8a6",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 570,
+  "character": "Gnome Mage",
+  "character_asked_for": {
+    "class": "mage",
+    "race": "gnome"
+  },
+  "character_level": 1,
+  "class": "Mage",
+  "cost": {
+    "model": "minimax-coding-plan/MiniMax-M3.1-Flash",
+    "played_by": "opencode"
+  },
+  "death_depth": null,
+  "died": false,
+  "exit_code": null,
+  "final_turn": 8001,
+  "gold": 4,
+  "hp": {
+    "max": 8,
+    "now": 8
+  },
+  "keypresses": 1163,
+  "keys_sha256": "a28936db338fd2dc7d547e57e44991f1f5ed30f5c15d18927e6200dbbee5873d",
+  "killed_by": null,
+  "max_character_level": 1,
+  "max_depth": 1,
+  "notebook_lines": 12,
+  "notebook_sha256": "9c9c854e196810725d1bece39d8624ee1f40c07a9cbd7ca547cf3a6ac88b3bd8",
+  "outcome": "ended",
+  "own_tools": [
+    "map.py"
+  ],
+  "playbook": "minimax",
+  "race": "Gnome",
+  "read_before_playing": "Files I actually opened before my first keypress: manuals/INSTRUCTIONS.md (all 232 lines), agents/minimax/COMMON.md (all 380), agents/minimax/DRUID.md (all 315), docs/BRIEF.md, records/OVERVIEW.md (to pick an unused seed), vendor/angband/lib/gamedata/class.txt (Mage block) and p_race.txt (Gnome block). I did NOT read knowledge/*.md or any other run's decisions. Seed chosen: 41 (seeds already in use: 7, 11, 23, 103). (ask 1)",
+  "read_its_own_playbook": true,
+  "run": "minimaxflash-2",
+  "savefile_sha256": "eb6492657c4960639796662cb261fc54a72a774084aa688ce127408a2c382983",
+  "schema": "borg-runner/run-record@1",
+  "screens": 158,
+  "screens_sha256": "7f884378909addb678d8da80383c3e14f3d3589ec510e7a1826eb68bc07186f9",
+  "seed": 41,
+  "wealth": 574
+}
