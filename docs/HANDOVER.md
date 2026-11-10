@@ -1,13 +1,26 @@
 # Handover
 
 **Written 2026-11-10 by the session that did the work below. It is for the
-next session, whichever model it is.** Read [AGENTS.md](../AGENTS.md) first
-(it says which of the two jobs you are here for), then this file, then
-[PLAN.md](../PLAN.md) and [docs/DESIGN.md](DESIGN.md).
+next session, whichever model and whichever harness that is.** Read
+[AGENTS.md](../AGENTS.md) first (it says which of the two jobs you are here
+for), then this file, then [PLAN.md](../PLAN.md) and
+[docs/DESIGN.md](DESIGN.md).
+
+Nothing below assumes what you are. Where a step needs a convention of your
+own - how you run a shell command, how your commits are attributed, whether
+you have a browser - follow yours; the repository cares about the files you
+leave, not the tool that wrote them. The one thing it does assume is that you
+can run `.venv/bin/python` from the repository root, which AGENTS.md sets up
+in four commands.
 
 Everything described here is **in the repository and pushed**. Nothing a
-session needs lives in a chat log, and that is a rule now, not an accident:
+session needs lives in a conversation, and that is a rule now, not an accident:
 see "A tip lives on the page" below.
+
+**If you are here to play rather than to maintain**, this file is not yours:
+read `PLAYGAME.txt` (or `CONTINUEGAME.txt`), `manuals/INSTRUCTIONS.md` and
+your own `agents/<family>/` pages, and nothing else from this repository.
+A player's judgement has to be independent of the maintainer's (D9).
 
 ## Where the work stands
 
@@ -20,7 +33,7 @@ that changes how it plays.
   characters below zero on constitution, none of them to a big hit.
 - **The dashboard** is <https://diegoami.github.io/borg-runner/>, rebuilt by
   `overview` and published by pushing `main`.
-- **429 fast tests** (`pytest -q`). The slow ones build and play the game
+- **430 fast tests** (`pytest -q`). The slow ones build and play the game
   (`pytest -q -m slow`), and CI does not run them today - an offer the owner
   has not taken up.
 - One run is **still playing** as this is written: `minimaxflash-3`, a Human
@@ -55,7 +68,7 @@ Run all of these before you commit anything that touches the page, the
 prompts or the playbooks:
 
 ```sh
-.venv/bin/python -m pytest -q                         # 429, includes the page check
+.venv/bin/python -m pytest -q                         # 430, includes the page check
 .venv/bin/python -m borg_runner prompts               # nothing is said only in a prompt
 .venv/bin/python -m borg_runner playbook --check      # layout, and spell numbers vs class.txt
 .venv/bin/python -m borg_runner consolidate --check   # every claim on the page names a real run#ask
@@ -124,8 +137,9 @@ does not exist.
    `docs/EXPORT.md` is the process; the rule that matters is that nothing the
    manuals already say belongs in it.
 4. **Start the next run.** The owner's next one is a **fresh Gnome Mage**,
-   played from the **plain `PLAYGAME.txt`** - no brief, because the
-   constitution rule is on the page now and in the prompt. Two older runs
+   played from the **plain `PLAYGAME.txt`** with `AGENT` set to whatever
+   family is playing - no brief, because the constitution rule is on the page
+   now and in the prompt. Two older runs
    (`minimaxflash-1.4`'s lineage and anything else) may be carried on with
    `CONTINUEGAME.txt`.
 5. **T11 is the owner's call**, not a session's: whether the frontend should
@@ -150,8 +164,11 @@ does not exist.
   another's unfinished work into a commit today.
 - **A rebase can refuse** while live sessions hold unstaged `agents/` files.
   Push without pulling when you are only ahead; do not stash their work.
-- Commits end with `Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>` and
-  carry no other AI attribution.
+- **Attribution**: a commit carries at most the single `Co-Authored-By:` line
+  your own harness tells you to add, naming whatever model you are, and no
+  other AI attribution - no "generated with" footer in a commit message.
+  `git log` shows the shape; follow your harness's line, not the last
+  session's.
 
 ## The two prompts, which are the product
 

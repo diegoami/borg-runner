@@ -54,3 +54,14 @@ def test_every_command_it_shows_is_a_real_command():
     available = set(re.findall(r'[\w-]+', listed.stdout.split('{', 1)[-1].split('}', 1)[0]))
     unknown = {name for name in shown if name not in available}
     assert not unknown, f'the handover names commands that do not exist: {unknown}'
+
+
+def test_it_names_no_model_or_vendor():
+    """It may be read by any model, so it must not be addressed to one. Run
+    names (`sonnet-1`, `minimaxflash-3`) and the family directories are data
+    and stay; product names do not."""
+    forbidden = ('claude', 'opus', 'anthropic', 'openai', 'gpt-', 'gemini',
+                 'copilot')
+    lowered = text().lower()
+    named = [word for word in forbidden if word in lowered]
+    assert not named, f'the handover is addressed to a particular model: {named}'

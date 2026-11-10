@@ -119,10 +119,11 @@ Two modes over the same recording:
 
 That is the point of recording keys rather than a transcript.
 
-## D8. A Claude Code session is the mind, and there are no keys
+## D8. The session is the mind, and there are no keys
 
-No API keys, no provider configuration, no budget. The session that opens this
-repository *is* the player: it reads the brief, reads the manuals, and answers
+No API keys, no provider configuration, no budget - whichever harness or model
+the session happens to be. The session that opens this repository *is* the
+player: it reads the brief, reads the manuals, and answers
 the question files. A model API driver is **not** planned; if cohorts are
 wanted later, that is a decision to take then, with its cost stated.
 
