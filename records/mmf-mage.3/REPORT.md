@@ -5,9 +5,9 @@
 # mmf-mage.3 — a Gnome Mage, one life shorter: what a crow costs, and what a spell list really is
 
 *Seed 1, Gnome Mage, build `e473720ed88a`. Carried on from `mmf-mage.2` (which
-carried on from `mmf-mage`). 54 answers, 1061 keypresses, turn 8019. **Died on
-depth 2, killed by a crow**, with 8 of 8 hit points and **11 experience — one
-short of the 12 a Gnome needs for CL2**. Gold 7, AC 17, 23 flasks of oil, 4
+carried on from `mmf-mage`). 54 answers, 1062 keypresses, turn 8019. **Died on
+depth 2, killed by a crow** (the death sheet reads HP -2/8), with **11
+experience — one short of the 12 a Gnome needs for CL2**. Gold 7, AC 17, 23 flasks of oil, 4
 Cure Light Wounds, 2 Scrolls of Phase Door, 2 Wooden Torches, a Book of Magic
 Spells, one Robe, one pair of Leather Gloves and one unknown Yellow Potion
 left in the pack. Character level 1. Deepest level of this life: 2 (the
