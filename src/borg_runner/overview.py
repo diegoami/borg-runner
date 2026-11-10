@@ -414,8 +414,12 @@ HEADINGS = (('run', 'run'), ('seed', 'seed'), ('model', 'model'),
             ('playbook', 'playbook'))
 
 
-def page(found=None, standalone=True):
-    """The table as a page: filter by model, search, sort, and open a replay."""
+def page(found=None, standalone=True, base=''):
+    """The table as a page: filter by model, search, sort, and open a replay.
+
+    `base` is the path prefix for the replay links the "start here" block
+    points at: the same page is written at the repository root and under
+    records/, and only one of those has records/ in front of it."""
     found = found if found is not None else rows()
     models = sorted({row['model'] for row in found if row['model']})
     options = ''.join(f'<option value="{html.escape(name)}">{html.escape(name)}</option>'
@@ -453,6 +457,16 @@ the pencil for what it wrote. <strong>Wealth</strong> is gold plus the game's ow
 everything carried and worn, so a lucky dive reads differently from a
 well-equipped descent. <strong>Inherited</strong> names the notebook the run
 started from. Click a column to sort.</p>
+<p class="sub"><strong>Start here:</strong> the characters worth imitating are
+the ones that levelled and got rich - character level and net worth, with
+depth as context and never the score.
+<a href="https://github.com/diegoami/borg-runner/blob/main/ACCUMULATED_BEHAVIOUR.md">ACCUMULATED_BEHAVIOUR.md</a>
+says who they are and what they did:
+<a href="{base}sonnet-2-again/report.html">sonnet-2-again</a>,
+<a href="{base}sonnet-2/report.html">sonnet-2</a>,
+<a href="{base}sonnet-1/report.html">sonnet-1</a>,
+<a href="{base}minimaxflash-1-again/report.html">minimaxflash-1-again</a>,
+<a href="{base}minimaxflash-3/report.html">minimaxflash-3</a>.</p>
 <div class="controls">
   <label for="alive">Alive</label>
   <select id="alive"><option value="all">all</option>{alive_options}</select>
@@ -476,5 +490,6 @@ identity and the filter.</p>
 
 def write_page(found=None, into=None, standalone=True):
     into = Path(into) if into else run_module.RECORDS / 'overview.html'
-    into.write_text(page(found, standalone=standalone))
+    base = 'records/' if into.name == 'index.html' else ''
+    into.write_text(page(found, standalone=standalone, base=base))
     return into
