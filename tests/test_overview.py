@@ -49,7 +49,35 @@ def test_every_model_in_the_data_is_in_the_filter(tmp_path):
     page = overview.page(overview.rows(tmp_path))
     assert 'anthropic/claude-sonnet-5-5' in page
     assert 'typesafe/jev-1.14' in page
-    assert page.count('<option') == 3, 'one per model, plus all'
+    model_filter = page.split('<select id="model">')[1].split('</select>')[0]
+    assert model_filter.count('<option') == 3, 'one per model, plus all'
+
+
+def test_the_page_filters_by_alive_status_agent_and_class(tmp_path):
+    """The three cuts a reader asks for, in the order they ask them."""
+    a_record(tmp_path, 'one', **{'class': 'Druid'})
+    a_record(tmp_path, 'two', died=True, killed_by='a small kobold',
+             **{'class': 'Mage'})
+    page = overview.page(overview.rows(tmp_path))
+    for field, want in (('alive', 'alive'), ('agent', 'sonnet'),
+                         ('klass', 'Druid')):
+        cut = page.split(f'<select id="{field}">')[1].split('</select>')[0]
+        assert f'value="{want}"' in cut, f'{field} must offer {want}'
+    assert 'died' in page.split('<select id="alive">')[1].split('</select>')[0]
+    assert 'Mage' in page.split('<select id="klass">')[1].split('</select>')[0]
+
+
+def test_the_markdown_offers_the_same_three_cuts(tmp_path):
+    """A markdown file cannot filter itself, so it carries the views."""
+    a_record(tmp_path, 'one', **{'class': 'Druid'})
+    a_record(tmp_path, 'two', died=True, killed_by='a small kobold',
+             **{'class': 'Mage'})
+    text = overview.write_markdown(overview.rows(tmp_path),
+                                   into=tmp_path / 'OVERVIEW.md').read_text()
+    assert '[Alive](#alive)' in text and '[Died](#died)' in text
+    assert '[Agent sonnet](#agent-sonnet)' in text
+    assert '[Class Druid](#class-druid)' in text
+    assert '### Class Mage' in text
 
 
 def test_a_replay_link_is_used_when_the_record_has_one(tmp_path):

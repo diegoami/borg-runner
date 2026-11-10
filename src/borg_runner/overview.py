@@ -91,7 +91,12 @@ def rows(where=None):
             'replay': (f'{record_path.parent.name}/report.html'
                        if (record_path.parent / 'report.html').exists() else None),
             'seconds_per_decision': cost.get('seconds_per_decision'),
+            # The three things a reader most wants to cut the table by.
+            'alive': 'died' if record.get('died') else 'alive',
+            'class': record.get('class'),
         })
+    for row in found:
+        row['agent'] = agent_of(row)
     return found
 
 
@@ -101,6 +106,32 @@ def shown(value):
     if isinstance(value, int) and not isinstance(value, bool):
         return f'{value:,}'
     return str(value)
+
+
+# The agent is a model FAMILY, not a provider and not a version — `minimax`,
+# not `minimax/MiniMax-M3` (agents/README.md). A run that names the playbook
+# it read is that family by definition; the rest are read off the model,
+# because a filter that only worked for one family would not be a filter.
+FAMILIES = (
+    ('minimax', ('minimax',)),
+    ('sonnet', ('sonnet',)),
+    ('codex', ('gpt-', 'codex')),
+    ('qwen', ('qwen',)),
+    ('glm', ('glm',)),
+    ('jev', ('jev',)),
+    ('human', ('human',)),
+)
+
+
+def agent_of(row):
+    """The model family that played this run."""
+    if row.get('playbook'):
+        return row['playbook']
+    model = (row.get('model') or '').lower()
+    for family, marks in FAMILIES:
+        if any(mark in model for mark in marks):
+            return family
+    return (row.get('model') or '').split('/')[0] or None
 
 
 def markdown(found):
@@ -128,6 +159,60 @@ def markdown(found):
             else:
                 cells.append(shown(row.get(key)))
         lines.append('| ' + ' | '.join(cells) + ' |')
+    return '\n'.join(lines)
+
+
+def filter_views(found):
+    """The same rows, cut three ways: alive status, then agent, then class.
+
+    A markdown file cannot filter itself, so the filter is a set of views of
+    the same table, each with an anchor, and an index of them. The order is
+    the order a reader asks the questions in: did the character live, which
+    agent played it, and what class it was.
+    """
+    views = []
+    for status, label in (('alive', 'Alive'), ('died', 'Died')):
+        cut = [row for row in found if row.get('alive') == status]
+        if cut:
+            views.append((f'{status}', label, f'{status}', cut))
+    for agent in sorted({row['agent'] for row in found if row.get('agent')}):
+        cut = [row for row in found if row.get('agent') == agent]
+        views.append((f'agent-{agent}', f'Agent {agent}', f'agent-{agent}', cut))
+    for klass in sorted({row['class'] for row in found if row.get('class')}):
+        cut = [row for row in found if row.get('class') == klass]
+        # GitHub's anchors are lower-cased, so the anchor of "Class Druid"
+        # is #class-druid even though the heading reads Druid.
+        views.append((f'class-{klass.lower()}', f'Class {klass}',
+                      f'class-{klass.lower()}', cut))
+    return views
+
+
+def filter_markdown(found):
+    """The index of the views, and the views themselves."""
+    views = filter_views(found)
+    lines = ['## Filters', '']
+    lines.append('The table above is every run. These are the same rows cut '
+                 'three ways, in the order the questions are usually asked: '
+                 '**did the character live**, then **which agent played it**, '
+                 'then **what class it was**.')
+    lines.append('')
+    for title, keys in (('Alive status', ('alive', 'died')),
+                        ('Agent', tuple(v[2] for v in views
+                                        if v[2].startswith('agent-'))),
+                        ('Class', tuple(v[2] for v in views
+                                        if v[2].startswith('class-')))):
+        links = []
+        for _, label, anchor, cut in views:
+            if anchor in keys:
+                links.append(f"[{label}](#{anchor}) ({len(cut)})")
+        if links:
+            lines.append(f'- **{title}**: ' + ', '.join(links))
+    lines.append('')
+    for _, label, anchor, cut in views:
+        lines.append(f'### {label}')
+        lines.append('')
+        lines.append(markdown(cut))
+        lines.append('')
     return '\n'.join(lines)
 
 
@@ -168,7 +253,12 @@ def write_markdown(found=None, into=None):
         'started from. A model is written provider/model-version, because two',
         'runs of the same family months apart are not the same experiment.',
         '',
+        '**To cut the table, see [Filters](#filters)** — alive status first,',
+        'then the agent, then the character class.',
+        '',
         markdown(found),
+        '',
+        filter_markdown(found),
         '',
     ]
     into.write_text('\n'.join(body))
@@ -222,6 +312,8 @@ PAGE_SCRIPT = r"""
   var runs = RUNS;
   var body = document.getElementById('body'), count = document.getElementById('count');
   var model = document.getElementById('model'), find = document.getElementById('find');
+  var alive = document.getElementById('alive'), agent = document.getElementById('agent');
+  var klass = document.getElementById('klass');
   var sortKey = 'run', ascending = true;
   var numeric = {seed:1, max_depth:1, character_level:1, wealth:1, asks:1,
                  keypresses:1, final_turn:1, tokens:1};
@@ -236,7 +328,11 @@ PAGE_SCRIPT = r"""
   }
   function draw() {
     var wanted = model.value, text = find.value.toLowerCase();
+    var wantedAlive = alive.value, wantedAgent = agent.value, wantedClass = klass.value;
     var shown = runs.filter(function (r) {
+      if (wantedAlive !== 'all' && (r.alive || '') !== wantedAlive) { return false; }
+      if (wantedAgent !== 'all' && (r.agent || '') !== wantedAgent) { return false; }
+      if (wantedClass !== 'all' && (r.class || '') !== wantedClass) { return false; }
       if (wanted !== 'all' && (r.model || '') !== wanted) { return false; }
       if (!text) { return true; }
       return JSON.stringify(r).toLowerCase().indexOf(text) !== -1;
@@ -301,6 +397,9 @@ PAGE_SCRIPT = r"""
     };
   });
   model.onchange = draw;
+  alive.onchange = draw;
+  agent.onchange = draw;
+  klass.onchange = draw;
   find.oninput = draw;
   draw();
 })();
@@ -321,6 +420,18 @@ def page(found=None, standalone=True):
     models = sorted({row['model'] for row in found if row['model']})
     options = ''.join(f'<option value="{html.escape(name)}">{html.escape(name)}</option>'
                       for name in models)
+    # The three cuts a reader asks for most, in the order they ask them:
+    # did the character live, which agent played it, what class it was.
+    alive_options = ''.join(
+        f'<option value="{value}">{label}</option>'
+        for value, label in (('alive', 'alive'), ('died', 'died'))
+        if any(row.get('alive') == value for row in found))
+    agent_options = ''.join(
+        f'<option value="{html.escape(name)}">{html.escape(name)}</option>'
+        for name in sorted({row['agent'] for row in found if row.get('agent')}))
+    class_options = ''.join(
+        f'<option value="{html.escape(name)}">{html.escape(name)}</option>'
+        for name in sorted({row['class'] for row in found if row.get('class')}))
     heads = ''.join(f'<th data-key="{key}">{html.escape(label)}</th>'
                     for key, label in HEADINGS)
     head = ('<!doctype html>\n<html lang="en"><head><meta charset="utf-8">\n'
@@ -343,6 +454,12 @@ everything carried and worn, so a lucky dive reads differently from a
 well-equipped descent. <strong>Inherited</strong> names the notebook the run
 started from. Click a column to sort.</p>
 <div class="controls">
+  <label for="alive">Alive</label>
+  <select id="alive"><option value="all">all</option>{alive_options}</select>
+  <label for="agent">Agent</label>
+  <select id="agent"><option value="all">all agents</option>{agent_options}</select>
+  <label for="klass">Class</label>
+  <select id="klass"><option value="all">all classes</option>{class_options}</select>
   <label for="model">Model</label>
   <select id="model"><option value="all">all models</option>{options}</select>
   <label for="find">Find</label>
