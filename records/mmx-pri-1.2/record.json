@@ -1,0 +1,66 @@
+{
+  "asks": 206,
+  "asks_made": 206,
+  "build": {
+    "binary_sha256": "e110bc1ecababdb171bd618b0f786e3988f9fb3903ac7297c6b2340ce955b457",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "c3c737df21442d78adccbc33b94248e6359b3baeeed6e1b19f444bd3a2561d60",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 462,
+  "character": "Dwarf Priest",
+  "character_drawn": true,
+  "character_level": 3,
+  "class": "Priest",
+  "cost": {
+    "model": "minimax-coding-plan/MiniMax-M3.1-Flash",
+    "played_by": "opencode"
+  },
+  "death_depth": null,
+  "died": false,
+  "duplicate_answers": [],
+  "exit_code": null,
+  "final_turn": 13883,
+  "flush": "keep",
+  "gold": 163,
+  "hp": {
+    "max": 33,
+    "now": 33
+  },
+  "keypresses": 1544,
+  "keys_sha256": "d191bf89c537aea626a6b757c99af441a35fa272825660667249f3793801e8f6",
+  "killed_by": null,
+  "max_character_level": 3,
+  "max_depth": 1,
+  "notebook_lines": 112,
+  "notebook_sha256": "e4301bff661d9add76a0325d96333d4c8faef0280db4cd076969ae012e636618",
+  "outcome": "stopped",
+  "own_tools": [
+    "beam.py",
+    "ch.sh",
+    "check.sh",
+    "m.py",
+    "play.sh",
+    "st.py",
+    "sweep.py"
+  ],
+  "playbook": "minimax",
+  "race": "Dwarf",
+  "read_before_playing": "FIRST NOTE of mmx-pri-1.2 (carrying on mmx-pri-1, seed 17, a Dwarf Priest, CL2) - the note that says what I opened before the first keypress. Files I actually opened: manuals/INSTRUCTIONS.md (all 575 lines); my own playbook agents/minimax/COMMON.md (all 1248 lines) and agents/minimax/PRIEST.md (all 149 lines); my own past life records/mmx-pri-1/REPORT.md (185 lines) and records/mmx-pri-1/notebook.md (95 lines); runs/mmx-pri-1.2/history.json, which lists mmx-pri-1 as the only previous life of this character; the headers of tools/screen/screen.py, look.py, map.py, route.py and explore.py; and two tools I copied into my run's tools/ from my own family's earlier runs - records/mmx-war-1/tools/beam.py (a beam search that plans a long digit chain into the dark) and records/minimaxflash-3/tools/sweep.py (a tour of every drawn floor tile) - neither of which is a decision or a write-up of this seed. I read the Priest block of vendor/angband/lib/gamedata/class.txt, object.txt, monster.txt, monster_base.txt, store.txt, terrain.txt, and the source of vendor/angband/src/game-world.c, cmd-cave.c, player-path.c, ui-display.c, ui-target.c, effect-handler-general.c, obj-util.c, mon-make.c, mon-init.c, init.c and store.c. NOT opened: agents/minimax/MAGE.md, WARRIOR.md and DRUID.md (listed only - I am a Priest), manuals/INSTRUCTIONS_2.md, the strategy manual, any other run's decisions or write-ups for this seed, and any other family's agents/ directory. I did not open the previous life's report of any other run, and the only write-ups I read are my own character's. (ask 148)",
+  "read_its_own_playbook": true,
+  "run": "mmx-pri-1.2",
+  "savefile_sha256": "45f881977ba3c6e321fa385b58ffcf63abd45f2ba714f907b10095535b380240",
+  "schema": "borg-runner/run-record@1",
+  "screens": 206,
+  "screens_sha256": "9d93d52a58026a11b1b3bf5a65a1204ea428f905cc5f1ff7c35ae4ca7c2b7127",
+  "seed": 17,
+  "wealth": 625
+}
