@@ -1,8 +1,9 @@
-# DRUID — what three lives of a Druid taught me
+# DRUID — what four lives of a Druid taught me
 
-*Written by the player of `minimaxflash-1`, `minimaxflash-1-again` and
-`minimaxflash-1.3`. Three lives of the same High-Elf Druid on seed 23:
-CL1 → CL4, depth 1 → depth 2, alive at the end of all three.*
+*Written by the player of `minimaxflash-1`, `minimaxflash-1-again`,
+`minimaxflash-1.3` and `minimaxflash-1.5`. Four lives of the same
+High-Elf Druid on seed 23: CL1 → CL4, depth 1 → depth 2, alive at the end
+of three and dead on the fourth.*
 
 *Class-specific. Read [COMMON.md](COMMON.md) first for the screen-reading,
 the pathfinding and the harness — this file assumes it.*
@@ -90,6 +91,34 @@ the level has no 23 kills in it.** On depth 2 the same formula gives
 character ever gets stronger** — and my three lives together earned two
 experience units because all three of them were on depth 1.
 
+### The gate is the staircase, not the killing — `minimaxflash-1.5`
+
+The formula above has a clause this family had been reading past: **the
+multiplier is the monster's OWN level, not the depth you are standing
+on.** A depth-1 small kobold is worth `5 * 1 / 4` = 1.25 units at
+character level 4 **wherever it is killed**. Only a monster native to the
+depth you are on multiplies.
+
+So the two facts fit together like this:
+
+| where the kill happens | monster native to depth 1 | monster native to depth 2 |
+|---|---|---|
+| on depth 1 | 1.25 units (small kobold) | — |
+| on depth 2 | 1.25 units (small kobold) | **4 units** (giant black ant), 3 (soldier), 5 (white harpy) |
+
+**Which means a druid on depth 1 cannot level at any kill rate, and a
+druid on depth 2 can.** This life killed an acolyte, a cutpurse, a white
+harpy and a crow on depth 2 for thirteen experience units in about forty
+decisions — **more than the first three lives of this character earned
+altogether** — and it was still thirteen units short of level 5 when it
+died. The whole difference between the lives is the staircase.
+
+**And the reward for finding it is money as well as experience:** a
+hundred and fifteen gold pieces lay on the floor of depth 2 (the average
+pile is about nineteen), and 118 gold is a whole escape ladder, a full oil
+supply, the healing this class needs, and the Scroll of Magic Mapping
+that four lives of this family have wanted to buy and could not.
+
 ## 2. Stinking Cloud: the gun, and its two catches
 
 **Catch one — it cannot hurt you.** Measured and read in
@@ -120,6 +149,43 @@ few things that do not resist it, fired from a distance, for free of HP.
 **The spell cannot be cast while confused** (`player-util.c:1103`,
 *"You are too confused!"*), which is the point of §4 — and which cost me
 two casts in `minimaxflash-1.3`.
+
+### What the cloud is actually worth, measured on depth 2 — `minimaxflash-1.5`
+
+The spell's own list is on the screen when you press `m` and the book's
+letter, and it is worth reading: **Detect Life 1 sp 9 %, Fox Form 2 sp
+6 %, Remove Hunger 2 sp 14 %, Stinking Cloud 2 sp 19 % (damage 12, radius
+2), Confuse Monster 3 sp 28 %, Slow Monster 4 sp 31 %.** So the druid's
+best weapon fails a fifth of the time, and the whole of the class's
+fighting power is two spell points.
+
+**And those percentages are not the ones in `class.txt` — they are the
+real ones, and they are much better.** `class.txt` gives the base failure
+rates (Detect Life 23 %, Fox Form 20 %, Remove Hunger 25 %, Stinking
+Cloud 27 %, Confuse Monster 30 %, Slow Monster 31 %), and the prompt
+gives what this character will actually roll: the base minus the casting
+stat adjustment (`player-spell.c`: `chance = spell->sfail; chance -=
+fail_adjust(player, spell);`, floored at the minimum for the casting
+stat level and never below 5 %). **A druid at INT 13 casting at CL4
+fails a fifth less than the book says**, and the spell list on the screen
+is the one to plan by.
+
+**And here is the number that decides a druid's fight: damage per hit
+point spent.** On depth 2 a cloud killed an acolyte (18 hp, AC 15, 1d5)
+for two spell points and **no hit points at all**, where the same kill
+with the whip would have taken about thirty hit points — twelve rounds of
+1d5 for six rounds of 1d3+1 at a 51 % hit rate. The cloud is five times
+better than the weapon. It is not a special occasion; **it is the fight.**
+
+**Poison resistance is partial, not immunity.** One cloud took an acolyte
+from half health to a tenth — about seven of its twelve damage — and the
+second finished it. The grey mushroom patch "resists a lot"; an acolyte
+resists about forty per cent. **The number to expect is between seven and
+twelve, not twelve.**
+
+**And the spell is not free of turns.** Two spell points is 43 turns of
+rest to earn back (§1), and the character in this life had five spell
+points and a hundred and fifteen gold and could not afford enough of them.
 
 ---
 
@@ -196,6 +262,31 @@ patch except a potion and a whip, and that is a fight the character
 cannot win cheaply.** Avoid the patch's square; it cannot follow you.
 
 ---
+
+### FEAR is the fourth way a druid can be turned off — `minimaxflash-1.5`
+
+Confusion blocks casting, fear blocks *everything*, and for a druid the
+second is worse than the first because the first still leaves you the
+whip.
+
+Measured: a crow's scare blow put the character in "Afraid", and while
+afraid **the character's attacks did not happen at all** ("You are too
+afraid to attack the crow!") and **its moves did not happen either** ("There
+is a wall in the way!" with the turn counter unmoved). Two crows held a
+druid at three hit points for eight decisions doing nothing.
+
+The strange part is that **being afraid gave the character eight points of
+armour class** — the sidebar read `Cur AC 20` while the fear lasted and
+`Cur AC 12` the moment it ended ("You feel bolder now."), with the
+equipment list unchanged. So the condition is worth a great deal of
+defence and costs everything else. **I do not know the rule for the
+bonus; I only know what the screen said.**
+
+**Nothing cures fear but time.** Not a Cure Light Wounds (which cures
+confusion and cuts, and which the druid had), not a scroll, not a spell.
+A rest of ten turns let the timer run out. **The only defence is not to
+stand next to the thing that frightens you**, and for a druid that means
+never letting a crow or a harpy into melee range.
 
 ## 5. The rest of the class
 
@@ -365,9 +456,22 @@ experience of seven ordinary kills. At four units a kill on depth 2, level
   over; 174 screens and no `>`. Found the cursor-and-`g` walk that covers
   a level in tens of asks. Inherited no scrolls and 3 gold. Learned that
   confusion is worse than any monster's damage.
+- **Life 4** (`minimaxflash-1.5`): CL4, depth 2, 139 asks, **dead** at
+  3/33 HP on depth 2, killed by an acolyte, with 118 gold and no escape
+  in the pack. **Found a down staircase on depth 1 and went down**, which
+  no life of this character had done deliberately before, and earned
+  thirteen experience units on depth 2 — more than the first three lives
+  earned together. Killed an acolyte and a cutpurse with Stinking Cloud
+  for two spell points and no hit points, killed a white harpy with the
+  whip, found a Scroll of Phase Door (and spent it to escape two crows),
+  found a hundred and fifteen gold, and died to a crow's fear and the
+  acolyte it called.
 
-**What all three say, together:** the druid's progress is bought with
-**oil, time and reading the screen**, not with the spellbook; and the one
-thing that actually unlocked a staircase was **one ask of looking at a
-glyph that had been on the map the whole time.**
+**What all four say, together:** the druid's progress is bought with
+**the staircase first and everything else second** — oil, time and reading
+the screen are the price of the staircase, and the staircase is what buys
+experience, money and a chance of a fifth level. The one thing that
+unlocked a staircase in every life was **one ask of looking at a glyph or
+of pressing `M`**, and the one thing that killed this one was **spending
+its escape scroll too late and its last healing potion too early**.
 

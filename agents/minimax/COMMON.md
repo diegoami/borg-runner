@@ -411,6 +411,39 @@ short has every glyph on it one column out. I read a scroll as a teleport
 (ask 683), and read the panel shift as a walk in the wrong direction twice
 (asks 679 and 695). The M map has its own grid and no sidebar over it.
 
+### The M map cannot hide a staircase, and the panel is 1:1 but jumps — `minimaxflash-1.5`
+
+Two halves of the same instrument, both measured, and the second one cost
+this life several decisions because I had it wrong for a week.
+
+**The map panel is one tile to one with the level.** It shows 66 × 22 of a
+198 × 66 dungeon, so within one screen every distance is exact. What is not
+exact is the *offset*: `verify_panel_int` (`vendor/angband/src/ui-output.c:587`)
+scrolls the window when the player comes within three squares of an edge,
+and it scrolls to `px - panel_wid`, i.e. in jumps of 33 columns and 11 rows.
+So panel columns are not level columns and they move under you. The fix is
+to compare the two maps once: take the M map, find the player in it, and
+find the player on the panel, and the difference is the offset. (I read
+panel columns as level columns for a week and wrote the wrong figure into
+my own notebook twice; the previous life's "level column ten" was two
+columns out, and the M map proves level columns 0 to 50 had never been
+seen.)
+
+**The M map cannot hide a down staircase.** `display_map` keeps a priority
+array `mp[row][col]` and only overwrites a cell when the new square has a
+*higher* priority — `if (mp[row][col] < tp)` — and in `terrain.txt` both
+`LESS` and `MORE` carry `priority:25`, the highest of any terrain (floor
+5, open door 15, closed door 17, store 20, magma 12). **A remembered
+staircase always wins its cell.** So "there is no `>` on the M map" is
+evidence about the level, not about the drawing, and the M map is the one
+instrument in the game that can answer "have I been past one?".
+
+The M map is also the cheapest coverage instrument there is: I rebuilt the
+whole 198 × 66 level from it cell by cell and read off the percentage of
+the level that had been remembered — 18.4 % when this life inherited the
+character, 29.6 % when it died. **A player who never presses `M` cannot
+know whether the sweep is going anywhere.**
+
 ### Lock picking: the formula, the cancel, and the door that does not open — `minimaxflash-1.4`
 
 `calc_unlocking_chance` (`vendor/angband/src/player-calcs.c:1676`) returns
@@ -457,6 +490,43 @@ corridor to the next door **in one ask**, six to twelve tiles every time.
 `lxg` is the same idea with the frontier instead of the next door; on a
 level with a corridor every third segment it advanced one tile an ask,
 which is why my notes called it slow.
+
+### A DIGIT STRING RUNS THROUGH EVERY TURN — this is how a level gets crossed — `minimaxflash-1.5`
+
+The single most expensive mistake this family has made with the movement
+keys, and it is not in any manual: **a string of direction digits keeps
+going through every turn it can.** It stops at the first wall and the rest
+of the string is dropped — so `"666222"` walks east three and then south
+two, in one ask, provided the path is clear tile by tile.
+
+The fourth life of the druid (`minimaxflash-1.4`) sent **one direction at
+a time**, called every corridor end a wall, and spent a hundred and forty
+decisions sweeping two thirds of a level with a rate of about two tiles an
+ask. This life wrote a beam search over the panel
+(`runs/minimaxflash-1.5/g.py`, kept in the run) that plans a chain of up to
+24 keys through floor and into the dark, and the rate went to fifteen
+tiles an ask. **A player who writes one chain of keys instead of one
+direction per ask covers a level five times faster.**
+
+Two rules the planner needed, both paid for:
+
+- **The first step of a chain must be known floor.** An unknown square may
+  be a wall, and a chain whose first step is a wall moves the character
+  nowhere at all: sixteen asks of exactly nothing before I saw it. A
+  blank on the map is not a floor.
+- **Revisiting a square in a chain is worthless**, and a planner that
+  maximises *steps* will walk down two and up two for ever.
+
+### The aimed walk's message is about the target, not the walk — `minimaxflash-1.5`
+
+`"Target Aborted."` is `textui_target`'s own message
+(`vendor/angband/src/ui-target.c:1028`) and it is printed when the
+*targeting* loop ends without selecting a target. **It says nothing about
+the pathfind that ran inside it.** The character moved ten tiles on the ask
+that printed it, and ten tiles later it was standing beside a down
+staircase. The recipe that worked here was `*`, then `p` to put the cursor
+in free mode, then forty direction digits, then `g`; without `p` a digit
+picks the next *monster* and the walk walks to that instead.
 
 ### `!` cannot be read from a text screen — `minimaxflash-1.4`
 
@@ -588,6 +658,48 @@ manual's "one spell point per pound over" is exactly right. The lesson is the
 one this page keeps learning: check the units before calling the page wrong,
 and `playbook --check` now reads a page's spell numbers against `class.txt`
 for the same reason.
+
+### FEAR gives eight points of armour class and takes your attacks away — `minimaxflash-1.5`
+
+The most expensive condition in this life, and it is in no manual and in
+none of our notes. A crow's scare blow put the druid into "Afraid", and:
+
+- **the character's armour class went from 12 to 20** and went back to 12
+  the moment the fear ended ("You feel bolder now."), with the equipment
+  list unchanged the whole time. So **being afraid is worth eight points
+  of armour class** — and I could not find the rule for it; all I know is
+  what the screen said.
+- **the character could not attack at all**: "You are too afraid to attack
+  the crow!"
+- **the character could not move either**: a step gave "There is a wall in
+  the way!" and the turn counter did not move.
+
+Two crows held a druid at three hit points for about eight decisions
+because the character was doing nothing at all, and the whole of it was
+cured by *time* — a rest of ten turns let the timer run out. **Fear in
+this game is a timer, and nothing else cures it: not a potion of Cure
+Light Wounds (which the druid had and used on hit points instead), not a
+scroll, and not a spell.** The only defence is not to be next to the thing
+that frightens you.
+
+### The depth-2 monster table, from `monster.txt` — `minimaxflash-1.5`
+
+The numbers a player needs to decide whether to fight, for the four `p`
+monsters of depth 2 (all worth 6 experience, so **three experience units
+each** at character level 4 on depth 2):
+
+| Monster | hp | AC | blow | note |
+|---|---|---|---|---|
+| soldier | 23 | 24 | 2 × 1d7 (up to 14 a round) | the whip cannot touch it |
+| cutpurse | 20 | 18 | 1d6 + steals gold | |
+| acolyte | 18 | 15 | 1d5 | the one the druid killed twice |
+| apprentice | 15 | 9 | 1d4 | the only one the whip likes |
+
+And the level-2 natives that pay properly: a **giant black ant** is 11 hp,
+armour class 24, 1d2 and 8 experience (four units at level 4) — **the best
+trade on the level, because it hits for one or two.** A white harpy is
+armour class 24 with 10 experience (five units) and dies to about twelve
+whip swings.
 
 ## 4. The town is not a safe place to keep things
 
@@ -873,6 +985,25 @@ so on depth 2 the scroll weights are Treasure Detection 50, Light 50,
 Phase Door 50, Detect Invisible 50, Blessing 50, Deep Descent 20,
 Summon Monster 10, Darkness 10, and Magic Mapping cannot appear before
 depth 5.
+
+### Four keys of the harness, each of which cost a decision — `minimaxflash-1.5`
+
+- **The pick-up key is `g`. `,` is "stay a turn".** I spent three
+  decisions assuming otherwise, because an earlier life found that `,`
+  picked an item up *in look mode*. The proof that a pick-up failed is the
+  inventory screen: the scroll was not in it.
+- **The pack letters MOVE when items are used up.** A Scroll of Phase Door
+  was picked up at letter `e`; after the last two Potions of Cure Light
+  Wounds were drunk, the potions' slot was freed and the scroll became
+  letter `d`. **A druid that drinks its last potion changes every letter
+  above it.**
+- **The read prompt lists the FLOOR as well as the pack** — "Read which
+  scroll? (Floor: a-a, ESC)" — so an item can be used where it lies, and
+  the pick-up is not needed to read it.
+- **A `-more-` swallows the next key.** It is in the manual; it cost this
+  life one ask anyway, because a quaff message ended in `-more-` and the
+  `4` that was supposed to move the character went into it. **Any ask
+  that follows a screen ending in `-more-` must begin with a space.**
 
 ## From `mmf-mage.2`, 2026-11-10
 

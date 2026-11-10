@@ -1,0 +1,893 @@
+{"ask": 1, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "*", "reason": "replayed from minimaxflash-1.4", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "*", "reason": "replayed from minimaxflash-1.4", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "a\\n", "reason": "replayed from minimaxflash-1.4", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "\\n", "reason": "replayed from minimaxflash-1.4", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "y ", "reason": "replayed from minimaxflash-1.4", "turn": 1}
+{"ask": 7, "depth": 0, "keys": "G", "reason": "replayed from minimaxflash-1.4", "turn": 1}
+{"ask": 8, "depth": 0, "keys": "a", "reason": "replayed from minimaxflash-1.4", "turn": 1}
+{"ask": 9, "depth": 0, "keys": "a", "reason": "replayed from minimaxflash-1.4", "turn": 1}
+{"ask": 10, "depth": 0, "keys": "11233333", "reason": "replayed from minimaxflash-1.4", "turn": 11}
+{"ask": 11, "depth": 0, "keys": "ph30\\ny ", "reason": "replayed from minimaxflash-1.4", "turn": 81}
+{"ask": 12, "depth": 0, "keys": "pm1\\ny ", "reason": "replayed from minimaxflash-1.4", "turn": 81}
+{"ask": 13, "depth": 0, "keys": "\\e 999966699966333333", "reason": "replayed from minimaxflash-1.4", "turn": 81}
+{"ask": 14, "depth": 0, "keys": "99993333", "reason": "replayed from minimaxflash-1.4", "turn": 211}
+{"ask": 15, "depth": 0, "keys": "pa4\\ny ", "reason": "replayed from minimaxflash-1.4", "turn": 281}
+{"ask": 16, "depth": 0, "keys": "pn3\\ny ", "reason": "replayed from minimaxflash-1.4", "turn": 281}
+{"ask": 17, "depth": 0, "keys": "\\e 777777441114447777114111111", "reason": "replayed from minimaxflash-1.4", "turn": 281}
+{"ask": 18, "depth": 0, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 561}
+{"ask": 19, "depth": 0, "keys": "8", "reason": "replayed from minimaxflash-1.4", "turn": 561}
+{"ask": 20, "depth": 0, "keys": "8", "reason": "replayed from minimaxflash-1.4", "turn": 561}
+{"ask": 21, "depth": 0, "keys": "4", "reason": "replayed from minimaxflash-1.4", "turn": 571}
+{"ask": 22, "depth": 0, "keys": "pf1\\ny ", "reason": "replayed from minimaxflash-1.4", "turn": 571}
+{"ask": 23, "depth": 0, "keys": "pj1\\ny ", "reason": "replayed from minimaxflash-1.4", "turn": 571}
+{"ask": 24, "depth": 0, "keys": "\\e 86666662", "reason": "replayed from minimaxflash-1.4", "turn": 571}
+{"ask": 25, "depth": 0, "keys": "62", "reason": "replayed from minimaxflash-1.4", "turn": 651}
+{"ask": 26, "depth": 0, "keys": "ph9\\ny ", "reason": "replayed from minimaxflash-1.4", "turn": 661}
+{"ask": 27, "depth": 0, "keys": "\\e 77777899", "reason": "replayed from minimaxflash-1.4", "turn": 661}
+{"ask": 28, "depth": 0, "keys": "> ", "reason": "replayed from minimaxflash-1.4", "turn": 751}
+{"ask": 29, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 751}
+{"ask": 30, "depth": 1, "keys": "*xg", "reason": "replayed from minimaxflash-1.4", "turn": 751}
+{"ask": 31, "depth": 1, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 751}
+{"ask": 32, "depth": 1, "keys": "*", "reason": "replayed from minimaxflash-1.4", "turn": 761}
+{"ask": 33, "depth": 1, "keys": "xg", "reason": "replayed from minimaxflash-1.4", "turn": 761}
+{"ask": 34, "depth": 1, "keys": "*xg", "reason": "replayed from minimaxflash-1.4", "turn": 771}
+{"ask": 35, "depth": 1, "keys": "i", "reason": "replayed from minimaxflash-1.4", "turn": 781}
+{"ask": 36, "depth": 1, "keys": "\\ewi", "reason": "replayed from minimaxflash-1.4", "turn": 781}
+{"ask": 37, "depth": 1, "keys": "i", "reason": "replayed from minimaxflash-1.4", "turn": 791}
+{"ask": 38, "depth": 1, "keys": "\\ewmwi", "reason": "replayed from minimaxflash-1.4", "turn": 791}
+{"ask": 39, "depth": 1, "keys": "*xg*xg*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 811}
+{"ask": 40, "depth": 1, "keys": "4444744414", "reason": "replayed from minimaxflash-1.4", "turn": 861}
+{"ask": 41, "depth": 1, "keys": "6999633366314", "reason": "replayed from minimaxflash-1.4", "turn": 961}
+{"ask": 42, "depth": 1, "keys": "69744777411144", "reason": "replayed from minimaxflash-1.4", "turn": 1091}
+{"ask": 43, "depth": 1, "keys": "9996333663144", "reason": "replayed from minimaxflash-1.4", "turn": 1221}
+{"ask": 44, "depth": 1, "keys": " 663663144", "reason": "replayed from minimaxflash-1.4", "turn": 1324}
+{"ask": 45, "depth": 1, "keys": "qa ", "reason": "replayed from minimaxflash-1.4", "turn": 1419}
+{"ask": 46, "depth": 1, "keys": "d ", "reason": "replayed from minimaxflash-1.4", "turn": 1419}
+{"ask": 47, "depth": 1, "keys": "477771144", "reason": "replayed from minimaxflash-1.4", "turn": 1429}
+{"ask": 48, "depth": 1, "keys": "7771144", "reason": "replayed from minimaxflash-1.4", "turn": 1478}
+{"ask": 49, "depth": 1, "keys": "44444444444444444444 ", "reason": "replayed from minimaxflash-1.4", "turn": 1548}
+{"ask": 50, "depth": 1, "keys": "669o ", "reason": "replayed from minimaxflash-1.4", "turn": 1748}
+{"ask": 51, "depth": 1, "keys": "5 ", "reason": "replayed from minimaxflash-1.4", "turn": 1778}
+{"ask": 52, "depth": 1, "keys": "\\eg", "reason": "replayed from minimaxflash-1.4", "turn": 1778}
+{"ask": 53, "depth": 1, "keys": "i", "reason": "replayed from minimaxflash-1.4", "turn": 1779}
+{"ask": 54, "depth": 1, "keys": "\\e66666666666666666666 ", "reason": "replayed from minimaxflash-1.4", "turn": 1779}
+{"ask": 55, "depth": 1, "keys": "26666666666666666666666 ", "reason": "replayed from minimaxflash-1.4", "turn": 1849}
+{"ask": 56, "depth": 1, "keys": "qd ", "reason": "replayed from minimaxflash-1.4", "turn": 2074}
+{"ask": 57, "depth": 1, "keys": "va' ", "reason": "replayed from minimaxflash-1.4", "turn": 2084}
+{"ask": 58, "depth": 1, "keys": " va' va' ", "reason": "replayed from minimaxflash-1.4", "turn": 2084}
+{"ask": 59, "depth": 1, "keys": " va' ", "reason": "replayed from minimaxflash-1.4", "turn": 2094}
+{"ask": 60, "depth": 1, "keys": "4444444444474444444444111 ", "reason": "replayed from minimaxflash-1.4", "turn": 2104}
+{"ask": 61, "depth": 1, "keys": "44444444444444444444 ", "reason": "replayed from minimaxflash-1.4", "turn": 2354}
+{"ask": 62, "depth": 1, "keys": "888888888888888888 ", "reason": "replayed from minimaxflash-1.4", "turn": 2364}
+{"ask": 63, "depth": 1, "keys": "7g", "reason": "replayed from minimaxflash-1.4", "turn": 2464}
+{"ask": 64, "depth": 1, "keys": "7", "reason": "replayed from minimaxflash-1.4", "turn": 2464}
+{"ask": 65, "depth": 1, "keys": "14444444444444444 ", "reason": "replayed from minimaxflash-1.4", "turn": 2464}
+{"ask": 66, "depth": 1, "keys": "936666666666666696 ", "reason": "replayed from minimaxflash-1.4", "turn": 2634}
+{"ask": 67, "depth": 1, "keys": "66666666666666666666 ", "reason": "replayed from minimaxflash-1.4", "turn": 2814}
+{"ask": 68, "depth": 1, "keys": "qd ", "reason": "replayed from minimaxflash-1.4", "turn": 2954}
+{"ask": 69, "depth": 1, "keys": " d ", "reason": "replayed from minimaxflash-1.4", "turn": 2959}
+{"ask": 70, "depth": 1, "keys": "44 ", "reason": "replayed from minimaxflash-1.4", "turn": 2964}
+{"ask": 71, "depth": 1, "keys": "888888888888888888 ", "reason": "replayed from minimaxflash-1.4", "turn": 2983}
+{"ask": 72, "depth": 1, "keys": "9g ", "reason": "replayed from minimaxflash-1.4", "turn": 3053}
+{"ask": 73, "depth": 1, "keys": "23g ", "reason": "replayed from minimaxflash-1.4", "turn": 3053}
+{"ask": 74, "depth": 1, "keys": "6g ", "reason": "replayed from minimaxflash-1.4", "turn": 3073}
+{"ask": 75, "depth": 1, "keys": "963342 ", "reason": "replayed from minimaxflash-1.4", "turn": 3084}
+{"ask": 76, "depth": 1, "keys": "9996933333 ", "reason": "replayed from minimaxflash-1.4", "turn": 3134}
+{"ask": 77, "depth": 1, "keys": "777444714411112214444444444444414444444444444479 ", "reason": "replayed from minimaxflash-1.4", "turn": 3234}
+{"ask": 78, "depth": 1, "keys": "99666666669.8 ", "reason": "replayed from minimaxflash-1.4", "turn": 3443}
+{"ask": 79, "depth": 1, "keys": "9.8 ", "reason": "replayed from minimaxflash-1.4", "turn": 3553}
+{"ask": 80, "depth": 1, "keys": ".8 ", "reason": "replayed from minimaxflash-1.4", "turn": 3573}
+{"ask": 81, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 3583}
+{"ask": 82, "depth": 1, "keys": "va' ", "reason": "replayed from minimaxflash-1.4", "turn": 3583}
+{"ask": 83, "depth": 1, "keys": "va' ", "reason": "replayed from minimaxflash-1.4", "turn": 3583}
+{"ask": 84, "depth": 1, "keys": "' ", "reason": "replayed from minimaxflash-1.4", "turn": 3583}
+{"ask": 85, "depth": 1, "keys": "\\e666.8 ", "reason": "replayed from minimaxflash-1.4", "turn": 3583}
+{"ask": 86, "depth": 1, "keys": "8va' ", "reason": "replayed from minimaxflash-1.4", "turn": 3623}
+{"ask": 87, "depth": 1, "keys": " 8va' ", "reason": "replayed from minimaxflash-1.4", "turn": 3633}
+{"ask": 88, "depth": 1, "keys": "\\e2141214411112214444444444444414444444444444479 ", "reason": "replayed from minimaxflash-1.4", "turn": 3643}
+{"ask": 89, "depth": 1, "keys": "4794444444444 ", "reason": "replayed from minimaxflash-1.4", "turn": 4073}
+{"ask": 90, "depth": 1, "keys": "666666666666666666 ", "reason": "replayed from minimaxflash-1.4", "turn": 4113}
+{"ask": 91, "depth": 1, "keys": "va'88 ", "reason": "replayed from minimaxflash-1.4", "turn": 4153}
+{"ask": 92, "depth": 1, "keys": "q d 88887889 ", "reason": "replayed from minimaxflash-1.4", "turn": 4163}
+{"ask": 93, "depth": 1, "keys": "8.8 ", "reason": "replayed from minimaxflash-1.4", "turn": 4253}
+{"ask": 94, "depth": 1, "keys": ".8", "reason": "replayed from minimaxflash-1.4", "turn": 4273}
+{"ask": 95, "depth": 1, "keys": "8.8", "reason": "replayed from minimaxflash-1.4", "turn": 4403}
+{"ask": 96, "depth": 1, "keys": "699369666", "reason": "replayed from minimaxflash-1.4", "turn": 4423}
+{"ask": 97, "depth": 1, "keys": "747.8", "reason": "replayed from minimaxflash-1.4", "turn": 4513}
+{"ask": 98, "depth": 1, "keys": "8999999", "reason": "replayed from minimaxflash-1.4", "turn": 4563}
+{"ask": 99, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 4633}
+{"ask": 100, "depth": 1, "keys": " 74444441111", "reason": "replayed from minimaxflash-1.4", "turn": 4633}
+{"ask": 101, "depth": 1, "keys": "63333221411171", "reason": "replayed from minimaxflash-1.4", "turn": 4743}
+{"ask": 102, "depth": 1, "keys": "39996988777744", "reason": "replayed from minimaxflash-1.4", "turn": 4883}
+{"ask": 103, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 5023}
+{"ask": 104, "depth": 1, "keys": "2", "reason": "replayed from minimaxflash-1.4", "turn": 5023}
+{"ask": 105, "depth": 1, "keys": "663333221411178", "reason": "replayed from minimaxflash-1.4", "turn": 5023}
+{"ask": 106, "depth": 1, "keys": "22222.4", "reason": "replayed from minimaxflash-1.4", "turn": 5173}
+{"ask": 107, "depth": 1, "keys": "144447.4", "reason": "replayed from minimaxflash-1.4", "turn": 5363}
+{"ask": 108, "depth": 1, "keys": "366669888896666666987", "reason": "replayed from minimaxflash-1.4", "turn": 5423}
+{"ask": 109, "depth": 1, "keys": "939996988777741", "reason": "replayed from minimaxflash-1.4", "turn": 5633}
+{"ask": 110, "depth": 1, "keys": "3214444444122221444478", "reason": "replayed from minimaxflash-1.4", "turn": 5783}
+{"ask": 111, "depth": 1, "keys": "maa", "reason": "replayed from minimaxflash-1.4", "turn": 5843}
+{"ask": 112, "depth": 1, "keys": "maa", "reason": "replayed from minimaxflash-1.4", "turn": 5853}
+{"ask": 113, "depth": 1, "keys": "222214", "reason": "replayed from minimaxflash-1.4", "turn": 5863}
+{"ask": 114, "depth": 1, "keys": "8.8", "reason": "replayed from minimaxflash-1.4", "turn": 5923}
+{"ask": 115, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 5943}
+{"ask": 116, "depth": 1, "keys": " 4", "reason": "replayed from minimaxflash-1.4", "turn": 5943}
+{"ask": 117, "depth": 1, "keys": "4.4", "reason": "replayed from minimaxflash-1.4", "turn": 5953}
+{"ask": 118, "depth": 1, "keys": "2.2", "reason": "replayed from minimaxflash-1.4", "turn": 5963}
+{"ask": 119, "depth": 1, "keys": "4.4", "reason": "replayed from minimaxflash-1.4", "turn": 5973}
+{"ask": 120, "depth": 1, "keys": "4va4", "reason": "replayed from minimaxflash-1.4", "turn": 6033}
+{"ask": 121, "depth": 1, "keys": "4.4", "reason": "replayed from minimaxflash-1.4", "turn": 6043}
+{"ask": 122, "depth": 1, "keys": "4.4", "reason": "replayed from minimaxflash-1.4", "turn": 6083}
+{"ask": 123, "depth": 1, "keys": "4.4", "reason": "replayed from minimaxflash-1.4", "turn": 6103}
+{"ask": 124, "depth": 1, "keys": "4.4", "reason": "replayed from minimaxflash-1.4", "turn": 6243}
+{"ask": 125, "depth": 1, "keys": "4.4", "reason": "replayed from minimaxflash-1.4", "turn": 6273}
+{"ask": 126, "depth": 1, "keys": "4.4", "reason": "replayed from minimaxflash-1.4", "turn": 6293}
+{"ask": 127, "depth": 1, "keys": "4.4", "reason": "replayed from minimaxflash-1.4", "turn": 6323}
+{"ask": 128, "depth": 1, "keys": "14444", "reason": "replayed from minimaxflash-1.4", "turn": 6333}
+{"ask": 129, "depth": 1, "keys": "74444444", "reason": "replayed from minimaxflash-1.4", "turn": 6383}
+{"ask": 130, "depth": 1, "keys": "7.8", "reason": "replayed from minimaxflash-1.4", "turn": 6403}
+{"ask": 131, "depth": 1, "keys": "8.8", "reason": "replayed from minimaxflash-1.4", "turn": 6573}
+{"ask": 132, "depth": 1, "keys": "2223.8", "reason": "replayed from minimaxflash-1.4", "turn": 6613}
+{"ask": 133, "depth": 1, "keys": "6.6", "reason": "replayed from minimaxflash-1.4", "turn": 6653}
+{"ask": 134, "depth": 1, "keys": "8.8", "reason": "replayed from minimaxflash-1.4", "turn": 6673}
+{"ask": 135, "depth": 1, "keys": "6.8", "reason": "replayed from minimaxflash-1.4", "turn": 6693}
+{"ask": 136, "depth": 1, "keys": "6.8", "reason": "replayed from minimaxflash-1.4", "turn": 6703}
+{"ask": 137, "depth": 1, "keys": "maa", "reason": "replayed from minimaxflash-1.4", "turn": 6713}
+{"ask": 138, "depth": 1, "keys": "666999", "reason": "replayed from minimaxflash-1.4", "turn": 6723}
+{"ask": 139, "depth": 1, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 6783}
+{"ask": 140, "depth": 1, "keys": "R4\\n ", "reason": "replayed from minimaxflash-1.4", "turn": 6793}
+{"ask": 141, "depth": 1, "keys": "R12\\n ", "reason": "replayed from minimaxflash-1.4", "turn": 6833}
+{"ask": 142, "depth": 1, "keys": "11144441147144444444444122311", "reason": "replayed from minimaxflash-1.4", "turn": 6953}
+{"ask": 143, "depth": 1, "keys": "maa", "reason": "replayed from minimaxflash-1.4", "turn": 7243}
+{"ask": 144, "depth": 1, "keys": "6.6", "reason": "replayed from minimaxflash-1.4", "turn": 7253}
+{"ask": 145, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 7333}
+{"ask": 146, "depth": 1, "keys": " 444444", "reason": "replayed from minimaxflash-1.4", "turn": 7333}
+{"ask": 147, "depth": 1, "keys": ".4", "reason": "replayed from minimaxflash-1.4", "turn": 7393}
+{"ask": 148, "depth": 1, "keys": ".2", "reason": "replayed from minimaxflash-1.4", "turn": 7413}
+{"ask": 149, "depth": 1, "keys": "i", "reason": "replayed from minimaxflash-1.4", "turn": 7433}
+{"ask": 150, "depth": 1, "keys": "e", "reason": "replayed from minimaxflash-1.4", "turn": 7433}
+{"ask": 151, "depth": 1, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 7433}
+{"ask": 152, "depth": 1, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 7433}
+{"ask": 153, "depth": 1, "keys": "C", "reason": "replayed from minimaxflash-1.4", "turn": 7433}
+{"ask": 154, "depth": 1, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 7433}
+{"ask": 155, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 7433}
+{"ask": 156, "depth": 1, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 7433}
+{"ask": 157, "depth": 1, "keys": "R* \\n", "reason": "replayed from minimaxflash-1.4", "turn": 7433}
+{"ask": 158, "depth": 1, "keys": "lx", "reason": "replayed from minimaxflash-1.4", "turn": 8303}
+{"ask": 159, "depth": 1, "keys": "g", "reason": "replayed from minimaxflash-1.4", "turn": 8303}
+{"ask": 160, "depth": 1, "keys": "l1", "reason": "replayed from minimaxflash-1.4", "turn": 8323}
+{"ask": 161, "depth": 1, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 8323}
+{"ask": 162, "depth": 1, "keys": "1", "reason": "replayed from minimaxflash-1.4", "turn": 8323}
+{"ask": 163, "depth": 1, "keys": "> ", "reason": "replayed from minimaxflash-1.4", "turn": 8333}
+{"ask": 164, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8333}
+{"ask": 165, "depth": 2, "keys": "o8", "reason": "replayed from minimaxflash-1.4", "turn": 8333}
+{"ask": 166, "depth": 2, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 8353}
+{"ask": 167, "depth": 2, "keys": "l7777", "reason": "replayed from minimaxflash-1.4", "turn": 8363}
+{"ask": 168, "depth": 2, "keys": "l6666666", "reason": "replayed from minimaxflash-1.4", "turn": 8363}
+{"ask": 169, "depth": 2, "keys": "l4444444444", "reason": "replayed from minimaxflash-1.4", "turn": 8363}
+{"ask": 170, "depth": 2, "keys": "l66", "reason": "replayed from minimaxflash-1.4", "turn": 8363}
+{"ask": 171, "depth": 2, "keys": "l33", "reason": "replayed from minimaxflash-1.4", "turn": 8363}
+{"ask": 172, "depth": 2, "keys": "l777", "reason": "replayed from minimaxflash-1.4", "turn": 8363}
+{"ask": 173, "depth": 2, "keys": "l8", "reason": "replayed from minimaxflash-1.4", "turn": 8363}
+{"ask": 174, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 8363}
+{"ask": 175, "depth": 2, "keys": "3", "reason": "replayed from minimaxflash-1.4", "turn": 8363}
+{"ask": 176, "depth": 2, "keys": "2", "reason": "replayed from minimaxflash-1.4", "turn": 8373}
+{"ask": 177, "depth": 2, "keys": "l", "reason": "replayed from minimaxflash-1.4", "turn": 8383}
+{"ask": 178, "depth": 2, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 8383}
+{"ask": 179, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 8383}
+{"ask": 180, "depth": 2, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 8383}
+{"ask": 181, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8383}
+{"ask": 182, "depth": 2, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 8383}
+{"ask": 183, "depth": 2, "keys": "88888", "reason": "replayed from minimaxflash-1.4", "turn": 8393}
+{"ask": 184, "depth": 2, "keys": "l4", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 185, "depth": 2, "keys": "4", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 186, "depth": 2, "keys": "4", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 187, "depth": 2, "keys": "4", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 188, "depth": 2, "keys": "4", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 189, "depth": 2, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 190, "depth": 2, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 191, "depth": 2, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 192, "depth": 2, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 193, "depth": 2, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 194, "depth": 2, "keys": "8", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 195, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 196, "depth": 2, "keys": "l8", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 197, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 198, "depth": 2, "keys": "444", "reason": "replayed from minimaxflash-1.4", "turn": 8443}
+{"ask": 199, "depth": 2, "keys": "v", "reason": "replayed from minimaxflash-1.4", "turn": 8473}
+{"ask": 200, "depth": 2, "keys": "a'", "reason": "replayed from minimaxflash-1.4", "turn": 8473}
+{"ask": 201, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8473}
+{"ask": 202, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8483}
+{"ask": 203, "depth": 2, "keys": "l", "reason": "replayed from minimaxflash-1.4", "turn": 8483}
+{"ask": 204, "depth": 2, "keys": "l4", "reason": "replayed from minimaxflash-1.4", "turn": 8483}
+{"ask": 205, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 8483}
+{"ask": 206, "depth": 2, "keys": "4", "reason": "replayed from minimaxflash-1.4", "turn": 8483}
+{"ask": 207, "depth": 2, "keys": "va'", "reason": "replayed from minimaxflash-1.4", "turn": 8493}
+{"ask": 208, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8493}
+{"ask": 209, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8493}
+{"ask": 210, "depth": 2, "keys": "b", "reason": "replayed from minimaxflash-1.4", "turn": 8493}
+{"ask": 211, "depth": 2, "keys": "b", "reason": "replayed from minimaxflash-1.4", "turn": 8503}
+{"ask": 212, "depth": 2, "keys": "a", "reason": "replayed from minimaxflash-1.4", "turn": 8503}
+{"ask": 213, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 8503}
+{"ask": 214, "depth": 2, "keys": "Ga", "reason": "replayed from minimaxflash-1.4", "turn": 8503}
+{"ask": 215, "depth": 2, "keys": "d", "reason": "replayed from minimaxflash-1.4", "turn": 8503}
+{"ask": 216, "depth": 2, "keys": "c", "reason": "replayed from minimaxflash-1.4", "turn": 8503}
+{"ask": 217, "depth": 2, "keys": "i", "reason": "replayed from minimaxflash-1.4", "turn": 8513}
+{"ask": 218, "depth": 2, "keys": "q d ", "reason": "replayed from minimaxflash-1.4", "turn": 8513}
+{"ask": 219, "depth": 2, "keys": "q", "reason": "replayed from minimaxflash-1.4", "turn": 8513}
+{"ask": 220, "depth": 2, "keys": "l", "reason": "replayed from minimaxflash-1.4", "turn": 8523}
+{"ask": 221, "depth": 2, "keys": "va'", "reason": "replayed from minimaxflash-1.4", "turn": 8523}
+{"ask": 222, "depth": 2, "keys": "va1", "reason": "replayed from minimaxflash-1.4", "turn": 8523}
+{"ask": 223, "depth": 2, "keys": "\\n", "reason": "replayed from minimaxflash-1.4", "turn": 8523}
+{"ask": 224, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 8523}
+{"ask": 225, "depth": 2, "keys": "v", "reason": "replayed from minimaxflash-1.4", "turn": 8523}
+{"ask": 226, "depth": 2, "keys": "a'", "reason": "replayed from minimaxflash-1.4", "turn": 8523}
+{"ask": 227, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8523}
+{"ask": 228, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8523}
+{"ask": 229, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8523}
+{"ask": 230, "depth": 2, "keys": "44444444", "reason": "replayed from minimaxflash-1.4", "turn": 8533}
+{"ask": 231, "depth": 2, "keys": "l4", "reason": "replayed from minimaxflash-1.4", "turn": 8613}
+{"ask": 232, "depth": 2, "keys": "4", "reason": "replayed from minimaxflash-1.4", "turn": 8613}
+{"ask": 233, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 8613}
+{"ask": 234, "depth": 2, "keys": "va'", "reason": "replayed from minimaxflash-1.4", "turn": 8613}
+{"ask": 235, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8613}
+{"ask": 236, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8623}
+{"ask": 237, "depth": 2, "keys": "maa", "reason": "replayed from minimaxflash-1.4", "turn": 8623}
+{"ask": 238, "depth": 2, "keys": "va'", "reason": "replayed from minimaxflash-1.4", "turn": 8633}
+{"ask": 239, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8633}
+{"ask": 240, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8633}
+{"ask": 241, "depth": 2, "keys": "4444", "reason": "replayed from minimaxflash-1.4", "turn": 8643}
+{"ask": 242, "depth": 2, "keys": "4444444444", "reason": "replayed from minimaxflash-1.4", "turn": 8683}
+{"ask": 243, "depth": 2, "keys": "44444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 8783}
+{"ask": 244, "depth": 2, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 8892}
+{"ask": 245, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8892}
+{"ask": 246, "depth": 2, "keys": "va'", "reason": "replayed from minimaxflash-1.4", "turn": 8892}
+{"ask": 247, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8892}
+{"ask": 248, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 8892}
+{"ask": 249, "depth": 2, "keys": "qdq", "reason": "replayed from minimaxflash-1.4", "turn": 8892}
+{"ask": 250, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 8902}
+{"ask": 251, "depth": 2, "keys": "q", "reason": "replayed from minimaxflash-1.4", "turn": 8902}
+{"ask": 252, "depth": 2, "keys": "d", "reason": "replayed from minimaxflash-1.4", "turn": 8902}
+{"ask": 253, "depth": 2, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 8912}
+{"ask": 254, "depth": 2, "keys": ".4", "reason": "replayed from minimaxflash-1.4", "turn": 8922}
+{"ask": 255, "depth": 2, "keys": "22", "reason": "replayed from minimaxflash-1.4", "turn": 8922}
+{"ask": 256, "depth": 2, "keys": ".2", "reason": "replayed from minimaxflash-1.4", "turn": 8942}
+{"ask": 257, "depth": 2, "keys": ".2", "reason": "replayed from minimaxflash-1.4", "turn": 8982}
+{"ask": 258, "depth": 2, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 8992}
+{"ask": 259, "depth": 2, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 9002}
+{"ask": 260, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9002}
+{"ask": 261, "depth": 2, "keys": "l6", "reason": "replayed from minimaxflash-1.4", "turn": 9002}
+{"ask": 262, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 9002}
+{"ask": 263, "depth": 2, "keys": ".8", "reason": "replayed from minimaxflash-1.4", "turn": 9002}
+{"ask": 264, "depth": 2, "keys": ".8", "reason": "replayed from minimaxflash-1.4", "turn": 9032}
+{"ask": 265, "depth": 2, "keys": ".6", "reason": "replayed from minimaxflash-1.4", "turn": 9072}
+{"ask": 266, "depth": 2, "keys": ".6", "reason": "replayed from minimaxflash-1.4", "turn": 9242}
+{"ask": 267, "depth": 2, "keys": "g", "reason": "replayed from minimaxflash-1.4", "turn": 9272}
+{"ask": 268, "depth": 2, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 9272}
+{"ask": 269, "depth": 2, "keys": "i", "reason": "replayed from minimaxflash-1.4", "turn": 9282}
+{"ask": 270, "depth": 2, "keys": "-", "reason": "replayed from minimaxflash-1.4", "turn": 9282}
+{"ask": 271, "depth": 2, "keys": "a", "reason": "replayed from minimaxflash-1.4", "turn": 9282}
+{"ask": 272, "depth": 2, "keys": "g", "reason": "replayed from minimaxflash-1.4", "turn": 9282}
+{"ask": 273, "depth": 2, "keys": "i", "reason": "replayed from minimaxflash-1.4", "turn": 9283}
+{"ask": 274, "depth": 2, "keys": "rg", "reason": "replayed from minimaxflash-1.4", "turn": 9283}
+{"ask": 275, "depth": 2, "keys": "r", "reason": "replayed from minimaxflash-1.4", "turn": 9283}
+{"ask": 276, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9283}
+{"ask": 277, "depth": 2, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 9293}
+{"ask": 278, "depth": 2, "keys": "9", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 279, "depth": 2, "keys": "l", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 280, "depth": 2, "keys": "l8", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 281, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 282, "depth": 2, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 283, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 284, "depth": 2, "keys": "l>", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 285, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 286, "depth": 2, "keys": "l6", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 287, "depth": 2, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 288, "depth": 2, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 289, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 290, "depth": 2, "keys": ".4", "reason": "replayed from minimaxflash-1.4", "turn": 9303}
+{"ask": 291, "depth": 2, "keys": ".4", "reason": "replayed from minimaxflash-1.4", "turn": 9363}
+{"ask": 292, "depth": 2, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 9513}
+{"ask": 293, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9513}
+{"ask": 294, "depth": 2, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 9513}
+{"ask": 295, "depth": 2, "keys": ".6", "reason": "replayed from minimaxflash-1.4", "turn": 9523}
+{"ask": 296, "depth": 2, "keys": "242", "reason": "replayed from minimaxflash-1.4", "turn": 9523}
+{"ask": 297, "depth": 2, "keys": ".2", "reason": "replayed from minimaxflash-1.4", "turn": 9553}
+{"ask": 298, "depth": 2, "keys": ".2", "reason": "replayed from minimaxflash-1.4", "turn": 9593}
+{"ask": 299, "depth": 2, "keys": ".2", "reason": "replayed from minimaxflash-1.4", "turn": 9603}
+{"ask": 300, "depth": 2, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 9613}
+{"ask": 301, "depth": 2, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 9623}
+{"ask": 302, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9623}
+{"ask": 303, "depth": 2, "keys": "va'", "reason": "replayed from minimaxflash-1.4", "turn": 9623}
+{"ask": 304, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9623}
+{"ask": 305, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9623}
+{"ask": 306, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9623}
+{"ask": 307, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9628}
+{"ask": 308, "depth": 2, "keys": "Ga", "reason": "replayed from minimaxflash-1.4", "turn": 9633}
+{"ask": 309, "depth": 2, "keys": "d", "reason": "replayed from minimaxflash-1.4", "turn": 9633}
+{"ask": 310, "depth": 2, "keys": "mad", "reason": "replayed from minimaxflash-1.4", "turn": 9643}
+{"ask": 311, "depth": 2, "keys": "'", "reason": "replayed from minimaxflash-1.4", "turn": 9643}
+{"ask": 312, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9643}
+{"ask": 313, "depth": 2, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 9653}
+{"ask": 314, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9653}
+{"ask": 315, "depth": 2, "keys": "va'", "reason": "replayed from minimaxflash-1.4", "turn": 9653}
+{"ask": 316, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9653}
+{"ask": 317, "depth": 2, "keys": "88R3\\n", "reason": "replayed from minimaxflash-1.4", "turn": 9663}
+{"ask": 318, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9688}
+{"ask": 319, "depth": 2, "keys": ".8", "reason": "replayed from minimaxflash-1.4", "turn": 9693}
+{"ask": 320, "depth": 2, "keys": "qd", "reason": "replayed from minimaxflash-1.4", "turn": 9703}
+{"ask": 321, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9708}
+{"ask": 322, "depth": 2, "keys": "R4\\n", "reason": "replayed from minimaxflash-1.4", "turn": 9713}
+{"ask": 323, "depth": 2, "keys": "R12\\n", "reason": "replayed from minimaxflash-1.4", "turn": 9718}
+{"ask": 324, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9728}
+{"ask": 325, "depth": 2, "keys": "qd", "reason": "replayed from minimaxflash-1.4", "turn": 9732}
+{"ask": 326, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9733}
+{"ask": 327, "depth": 2, "keys": "re", "reason": "replayed from minimaxflash-1.4", "turn": 9738}
+{"ask": 328, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 9742}
+{"ask": 329, "depth": 2, "keys": "i", "reason": "replayed from minimaxflash-1.4", "turn": 9742}
+{"ask": 330, "depth": 2, "keys": "e", "reason": "replayed from minimaxflash-1.4", "turn": 9742}
+{"ask": 331, "depth": 2, "keys": "r", "reason": "replayed from minimaxflash-1.4", "turn": 9742}
+{"ask": 332, "depth": 2, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 9752}
+{"ask": 333, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9752}
+{"ask": 334, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9752}
+{"ask": 335, "depth": 2, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 9752}
+{"ask": 336, "depth": 2, "keys": ".6", "reason": "replayed from minimaxflash-1.4", "turn": 9782}
+{"ask": 337, "depth": 2, "keys": ".6", "reason": "replayed from minimaxflash-1.4", "turn": 9792}
+{"ask": 338, "depth": 2, "keys": "ier", "reason": "replayed from minimaxflash-1.4", "turn": 9802}
+{"ask": 339, "depth": 2, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 9812}
+{"ask": 340, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9812}
+{"ask": 341, "depth": 2, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 9812}
+{"ask": 342, "depth": 2, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 9902}
+{"ask": 343, "depth": 2, "keys": ".6", "reason": "replayed from minimaxflash-1.4", "turn": 9912}
+{"ask": 344, "depth": 2, "keys": "ier", "reason": "replayed from minimaxflash-1.4", "turn": 9922}
+{"ask": 345, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9929}
+{"ask": 346, "depth": 2, "keys": "va'", "reason": "replayed from minimaxflash-1.4", "turn": 9932}
+{"ask": 347, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9932}
+{"ask": 348, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9932}
+{"ask": 349, "depth": 2, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 9942}
+{"ask": 350, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9942}
+{"ask": 351, "depth": 2, "keys": "va'", "reason": "replayed from minimaxflash-1.4", "turn": 9942}
+{"ask": 352, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9942}
+{"ask": 353, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9942}
+{"ask": 354, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9942}
+{"ask": 355, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9942}
+{"ask": 356, "depth": 2, "keys": ".4", "reason": "replayed from minimaxflash-1.4", "turn": 9952}
+{"ask": 357, "depth": 2, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 9962}
+{"ask": 358, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9962}
+{"ask": 359, "depth": 2, "keys": "maa", "reason": "replayed from minimaxflash-1.4", "turn": 9962}
+{"ask": 360, "depth": 2, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 9972}
+{"ask": 361, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 9972}
+{"ask": 362, "depth": 2, "keys": "R20\\n", "reason": "replayed from minimaxflash-1.4", "turn": 9972}
+{"ask": 363, "depth": 2, "keys": "R50\\n", "reason": "replayed from minimaxflash-1.4", "turn": 10152}
+{"ask": 364, "depth": 2, "keys": "va'", "reason": "replayed from minimaxflash-1.4", "turn": 10162}
+{"ask": 365, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10162}
+{"ask": 366, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10162}
+{"ask": 367, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10162}
+{"ask": 368, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10162}
+{"ask": 369, "depth": 2, "keys": "Ga", "reason": "replayed from minimaxflash-1.4", "turn": 10172}
+{"ask": 370, "depth": 2, "keys": "b", "reason": "replayed from minimaxflash-1.4", "turn": 10172}
+{"ask": 371, "depth": 2, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 10182}
+{"ask": 372, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10182}
+{"ask": 373, "depth": 2, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 10182}
+{"ask": 374, "depth": 2, "keys": "ifr", "reason": "replayed from minimaxflash-1.4", "turn": 10242}
+{"ask": 375, "depth": 2, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 10242}
+{"ask": 376, "depth": 2, "keys": "i", "reason": "replayed from minimaxflash-1.4", "turn": 10242}
+{"ask": 377, "depth": 2, "keys": "er", "reason": "replayed from minimaxflash-1.4", "turn": 10242}
+{"ask": 378, "depth": 2, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10242}
+{"ask": 379, "depth": 2, "keys": "R5\\n", "reason": "replayed from minimaxflash-1.4", "turn": 10252}
+{"ask": 380, "depth": 2, "keys": "R20\\n", "reason": "replayed from minimaxflash-1.4", "turn": 10302}
+{"ask": 381, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10501}
+{"ask": 382, "depth": 0, "keys": "2222226666666666", "reason": "replayed from minimaxflash-1.4", "turn": 10501}
+{"ask": 383, "depth": 0, "keys": "2", "reason": "replayed from minimaxflash-1.4", "turn": 10661}
+{"ask": 384, "depth": 0, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 10661}
+{"ask": 385, "depth": 0, "keys": "666666666666662", "reason": "replayed from minimaxflash-1.4", "turn": 10671}
+{"ask": 386, "depth": 0, "keys": "866666666666662", "reason": "replayed from minimaxflash-1.4", "turn": 10671}
+{"ask": 387, "depth": 0, "keys": "666666662", "reason": "replayed from minimaxflash-1.4", "turn": 10750}
+{"ask": 388, "depth": 0, "keys": "3", "reason": "replayed from minimaxflash-1.4", "turn": 10817}
+{"ask": 389, "depth": 0, "keys": "62", "reason": "replayed from minimaxflash-1.4", "turn": 10817}
+{"ask": 390, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10823}
+{"ask": 391, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10823}
+{"ask": 392, "depth": 0, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 10827}
+{"ask": 393, "depth": 0, "keys": "6666", "reason": "replayed from minimaxflash-1.4", "turn": 10827}
+{"ask": 394, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10837}
+{"ask": 395, "depth": 0, "keys": "2", "reason": "replayed from minimaxflash-1.4", "turn": 10838}
+{"ask": 396, "depth": 0, "keys": "66", "reason": "replayed from minimaxflash-1.4", "turn": 10848}
+{"ask": 397, "depth": 0, "keys": "8666", "reason": "replayed from minimaxflash-1.4", "turn": 10848}
+{"ask": 398, "depth": 0, "keys": "2", "reason": "replayed from minimaxflash-1.4", "turn": 10888}
+{"ask": 399, "depth": 0, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 10888}
+{"ask": 400, "depth": 0, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 10898}
+{"ask": 401, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10898}
+{"ask": 402, "depth": 0, "keys": "q", "reason": "replayed from minimaxflash-1.4", "turn": 10898}
+{"ask": 403, "depth": 0, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 10898}
+{"ask": 404, "depth": 0, "keys": "6", "reason": "replayed from minimaxflash-1.4", "turn": 10898}
+{"ask": 405, "depth": 0, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 10908}
+{"ask": 406, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 10908}
+{"ask": 407, "depth": 0, "keys": "66666666", "reason": "replayed from minimaxflash-1.4", "turn": 10908}
+{"ask": 408, "depth": 0, "keys": "2222", "reason": "replayed from minimaxflash-1.4", "turn": 10968}
+{"ask": 409, "depth": 0, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 11008}
+{"ask": 410, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 11008}
+{"ask": 411, "depth": 0, "keys": "444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 11008}
+{"ask": 412, "depth": 0, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 11108}
+{"ask": 413, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 11108}
+{"ask": 414, "depth": 0, "keys": "8888888888", "reason": "replayed from minimaxflash-1.4", "turn": 11108}
+{"ask": 415, "depth": 0, "keys": "4444444444", "reason": "replayed from minimaxflash-1.4", "turn": 11198}
+{"ask": 416, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 11257}
+{"ask": 417, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 11257}
+{"ask": 418, "depth": 0, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 11257}
+{"ask": 419, "depth": 0, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 11257}
+{"ask": 420, "depth": 0, "keys": "4444444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 11257}
+{"ask": 421, "depth": 0, "keys": "22222222", "reason": "replayed from minimaxflash-1.4", "turn": 11307}
+{"ask": 422, "depth": 0, "keys": "444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 11387}
+{"ask": 423, "depth": 0, "keys": "2222", "reason": "replayed from minimaxflash-1.4", "turn": 11457}
+{"ask": 424, "depth": 0, "keys": "44444444444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 11467}
+{"ask": 425, "depth": 0, "keys": "888888", "reason": "replayed from minimaxflash-1.4", "turn": 11636}
+{"ask": 426, "depth": 0, "keys": "l>", "reason": "replayed from minimaxflash-1.4", "turn": 11696}
+{"ask": 427, "depth": 0, "keys": "g", "reason": "replayed from minimaxflash-1.4", "turn": 11696}
+{"ask": 428, "depth": 0, "keys": "g", "reason": "replayed from minimaxflash-1.4", "turn": 11706}
+{"ask": 429, "depth": 0, "keys": "8", "reason": "replayed from minimaxflash-1.4", "turn": 11706}
+{"ask": 430, "depth": 0, "keys": "88888", "reason": "replayed from minimaxflash-1.4", "turn": 11716}
+{"ask": 431, "depth": 0, "keys": "666666666", "reason": "replayed from minimaxflash-1.4", "turn": 11726}
+{"ask": 432, "depth": 0, "keys": "2222", "reason": "replayed from minimaxflash-1.4", "turn": 11726}
+{"ask": 433, "depth": 0, "keys": "666666", "reason": "replayed from minimaxflash-1.4", "turn": 11756}
+{"ask": 434, "depth": 0, "keys": "88888", "reason": "replayed from minimaxflash-1.4", "turn": 11816}
+{"ask": 435, "depth": 0, "keys": "66666666", "reason": "replayed from minimaxflash-1.4", "turn": 11866}
+{"ask": 436, "depth": 0, "keys": "> ", "reason": "replayed from minimaxflash-1.4", "turn": 11886}
+{"ask": 437, "depth": 1, "keys": "R*&\\n", "reason": "replayed from minimaxflash-1.4", "turn": 11886}
+{"ask": 438, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12466}
+{"ask": 439, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12476}
+{"ask": 440, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12486}
+{"ask": 441, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12496}
+{"ask": 442, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12506}
+{"ask": 443, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12516}
+{"ask": 444, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12526}
+{"ask": 445, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12536}
+{"ask": 446, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12546}
+{"ask": 447, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12566}
+{"ask": 448, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12576}
+{"ask": 449, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12586}
+{"ask": 450, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12596}
+{"ask": 451, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12606}
+{"ask": 452, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12616}
+{"ask": 453, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12626}
+{"ask": 454, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12636}
+{"ask": 455, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12646}
+{"ask": 456, "depth": 1, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 12656}
+{"ask": 457, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12656}
+{"ask": 458, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12666}
+{"ask": 459, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12686}
+{"ask": 460, "depth": 1, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 12696}
+{"ask": 461, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12696}
+{"ask": 462, "depth": 1, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 12706}
+{"ask": 463, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12706}
+{"ask": 464, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12716}
+{"ask": 465, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12726}
+{"ask": 466, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12736}
+{"ask": 467, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12746}
+{"ask": 468, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12756}
+{"ask": 469, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12766}
+{"ask": 470, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12776}
+{"ask": 471, "depth": 1, "keys": "lxg", "reason": "replayed from minimaxflash-1.4", "turn": 12786}
+{"ask": 472, "depth": 1, "keys": "l>", "reason": "replayed from minimaxflash-1.4", "turn": 12796}
+{"ask": 473, "depth": 1, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 12796}
+{"ask": 474, "depth": 1, "keys": "\\e", "reason": "replayed from minimaxflash-1.4", "turn": 12796}
+{"ask": 475, "depth": 1, "keys": "l>", "reason": "replayed from minimaxflash-1.4", "turn": 12796}
+{"ask": 476, "depth": 1, "keys": "g", "reason": "replayed from minimaxflash-1.4", "turn": 12796}
+{"ask": 477, "depth": 1, "keys": "l>", "reason": "replayed from minimaxflash-1.4", "turn": 12796}
+{"ask": 478, "depth": 1, "keys": "\u001b>", "reason": "replayed from minimaxflash-1.4", "turn": 12796}
+{"ask": 479, "depth": 1, "keys": "\u001b*>", "reason": "replayed from minimaxflash-1.4", "turn": 12796}
+{"ask": 480, "depth": 1, "keys": "*x", "reason": "replayed from minimaxflash-1.4", "turn": 12796}
+{"ask": 481, "depth": 1, "keys": "xg", "reason": "replayed from minimaxflash-1.4", "turn": 12796}
+{"ask": 482, "depth": 1, "keys": "*xg", "reason": "replayed from minimaxflash-1.4", "turn": 12816}
+{"ask": 483, "depth": 1, "keys": "*xg", "reason": "replayed from minimaxflash-1.4", "turn": 12846}
+{"ask": 484, "depth": 1, "keys": "*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 12856}
+{"ask": 485, "depth": 1, "keys": "*xg*xg*xg*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 12886}
+{"ask": 486, "depth": 1, "keys": "\u001b", "reason": "replayed from minimaxflash-1.4", "turn": 12926}
+{"ask": 487, "depth": 1, "keys": "*xg*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 12926}
+{"ask": 488, "depth": 1, "keys": "e", "reason": "replayed from minimaxflash-1.4", "turn": 12936}
+{"ask": 489, "depth": 1, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 12936}
+{"ask": 490, "depth": 1, "keys": "*xg*xg*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 12946}
+{"ask": 491, "depth": 1, "keys": "\u001bi", "reason": "replayed from minimaxflash-1.4", "turn": 12956}
+{"ask": 492, "depth": 1, "keys": "\u001b", "reason": "replayed from minimaxflash-1.4", "turn": 12956}
+{"ask": 493, "depth": 1, "keys": "*xg*xg*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 12956}
+{"ask": 494, "depth": 1, "keys": "e", "reason": "replayed from minimaxflash-1.4", "turn": 12966}
+{"ask": 495, "depth": 1, "keys": " *xg*xg*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 12966}
+{"ask": 496, "depth": 1, "keys": "\u001b*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 12986}
+{"ask": 497, "depth": 1, "keys": "\u001bi", "reason": "replayed from minimaxflash-1.4", "turn": 12996}
+{"ask": 498, "depth": 1, "keys": "de", "reason": "replayed from minimaxflash-1.4", "turn": 12996}
+{"ask": 499, "depth": 1, "keys": "\u001b", "reason": "replayed from minimaxflash-1.4", "turn": 12996}
+{"ask": 500, "depth": 1, "keys": "ed", "reason": "replayed from minimaxflash-1.4", "turn": 12996}
+{"ask": 501, "depth": 1, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 12996}
+{"ask": 502, "depth": 1, "keys": "e", "reason": "replayed from minimaxflash-1.4", "turn": 13001}
+{"ask": 503, "depth": 1, "keys": "\u001b*", "reason": "replayed from minimaxflash-1.4", "turn": 13001}
+{"ask": 504, "depth": 1, "keys": ",", "reason": "replayed from minimaxflash-1.4", "turn": 13001}
+{"ask": 505, "depth": 1, "keys": "\u001b,", "reason": "replayed from minimaxflash-1.4", "turn": 13001}
+{"ask": 506, "depth": 1, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 13011}
+{"ask": 507, "depth": 1, "keys": "*xg*xg*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 13011}
+{"ask": 508, "depth": 1, "keys": "\u001b*xg*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 13021}
+{"ask": 509, "depth": 1, "keys": "\u001b*xg*xg*xg*xg*xg*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 13031}
+{"ask": 510, "depth": 1, "keys": "\u001bp", "reason": "replayed from minimaxflash-1.4", "turn": 13041}
+{"ask": 511, "depth": 1, "keys": "*xg*xg*xg*xg*xg*xg*xg*xg*xg*xg", "reason": "replayed from minimaxflash-1.4", "turn": 13041}
+{"ask": 512, "depth": 1, "keys": "e", "reason": "replayed from minimaxflash-1.4", "turn": 13051}
+{"ask": 513, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 13061}
+{"ask": 514, "depth": 1, "keys": "C", "reason": "replayed from minimaxflash-1.4", "turn": 13061}
+{"ask": 515, "depth": 1, "keys": "C", "reason": "replayed from minimaxflash-1.4", "turn": 13061}
+{"ask": 516, "depth": 1, "keys": "\u001bm", "reason": "replayed from minimaxflash-1.4", "turn": 13061}
+{"ask": 517, "depth": 1, "keys": "a", "reason": "replayed from minimaxflash-1.4", "turn": 13061}
+{"ask": 518, "depth": 1, "keys": "\u001b*4444", "reason": "replayed from minimaxflash-1.4", "turn": 13061}
+{"ask": 519, "depth": 1, "keys": "444444444444xg", "reason": "replayed from minimaxflash-1.4", "turn": 13061}
+{"ask": 520, "depth": 1, "keys": "*8888888888888888888888xg", "reason": "replayed from minimaxflash-1.4", "turn": 13231}
+{"ask": 521, "depth": 1, "keys": "*6666666666666666666666666666666666666666xg", "reason": "replayed from minimaxflash-1.4", "turn": 13241}
+{"ask": 522, "depth": 1, "keys": "*666666666666666666666666666666666666666666666666666666666666666666666xg", "reason": "replayed from minimaxflash-1.4", "turn": 13531}
+{"ask": 523, "depth": 1, "keys": "*8888888888888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 13541}
+{"ask": 524, "depth": 1, "keys": "*6666666666666666666666666666666666666666xg", "reason": "replayed from minimaxflash-1.4", "turn": 13551}
+{"ask": 525, "depth": 1, "keys": "*4444444444444444444444xg", "reason": "replayed from minimaxflash-1.4", "turn": 13561}
+{"ask": 526, "depth": 1, "keys": "*4444444444444444444444xg", "reason": "replayed from minimaxflash-1.4", "turn": 13881}
+{"ask": 527, "depth": 1, "keys": "*4444444444444444444444444444444444xg", "reason": "replayed from minimaxflash-1.4", "turn": 13891}
+{"ask": 528, "depth": 1, "keys": "*8888888888888888888888888xg", "reason": "replayed from minimaxflash-1.4", "turn": 13901}
+{"ask": 529, "depth": 1, "keys": "*66666666666666666666666666666666666666666666666666666666666666666xg", "reason": "replayed from minimaxflash-1.4", "turn": 13911}
+{"ask": 530, "depth": 1, "keys": "*888888888888xg", "reason": "replayed from minimaxflash-1.4", "turn": 14241}
+{"ask": 531, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 14271}
+{"ask": 532, "depth": 1, "keys": " *8888888888888888888888888888888888888888888888888888888888888888888xg", "reason": "replayed from minimaxflash-1.4", "turn": 14271}
+{"ask": 533, "depth": 1, "keys": "*66666666666666666666666666666666666666666666666666666666666666666xg", "reason": "replayed from minimaxflash-1.4", "turn": 14581}
+{"ask": 534, "depth": 1, "keys": "*2222222222222222222222222222222222222222222222222222222222222222222xg", "reason": "replayed from minimaxflash-1.4", "turn": 14591}
+{"ask": 535, "depth": 1, "keys": "*6666666666666666666666666666666666688888888888xg", "reason": "replayed from minimaxflash-1.4", "turn": 14601}
+{"ask": 536, "depth": 1, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 14611}
+{"ask": 537, "depth": 1, "keys": " *6666666666666666666666666666666666668888888888xg", "reason": "replayed from minimaxflash-1.4", "turn": 14611}
+{"ask": 538, "depth": 1, "keys": "*88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888xg", "reason": "replayed from minimaxflash-1.4", "turn": 14621}
+{"ask": 539, "depth": 1, "keys": "*88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888x", "reason": "replayed from minimaxflash-1.4", "turn": 14631}
+{"ask": 540, "depth": 1, "keys": "88888", "reason": "replayed from minimaxflash-1.4", "turn": 14631}
+{"ask": 541, "depth": 1, "keys": "g", "reason": "replayed from minimaxflash-1.4", "turn": 14631}
+{"ask": 542, "depth": 1, "keys": "*8888888888888888888888888888888888888888xg", "reason": "replayed from minimaxflash-1.4", "turn": 14641}
+{"ask": 543, "depth": 1, "keys": "*6666666666666666666666666666666666666666666788888888888xg", "reason": "replayed from minimaxflash-1.4", "turn": 14651}
+{"ask": 544, "depth": 1, "keys": "*6666666666666666666666666666666666666666666666666666666666666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 14661}
+{"ask": 545, "depth": 1, "keys": "*6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 15101}
+{"ask": 546, "depth": 1, "keys": "*8888888888888888888888888888888888888888888888888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15101}
+{"ask": 547, "depth": 1, "keys": "*3333333333333333333333333333333333333333333333333333333333333333333g", "reason": "replayed from minimaxflash-1.4", "turn": 15101}
+{"ask": 548, "depth": 1, "keys": "*66666666666666666666666666666666666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 15101}
+{"ask": 549, "depth": 1, "keys": "*8666g", "reason": "replayed from minimaxflash-1.4", "turn": 15101}
+{"ask": 550, "depth": 1, "keys": "o8", "reason": "replayed from minimaxflash-1.4", "turn": 15101}
+{"ask": 551, "depth": 1, "keys": "o8", "reason": "replayed from minimaxflash-1.4", "turn": 15111}
+{"ask": 552, "depth": 1, "keys": "o8o8o8o8o8o8o8o8o8o8", "reason": "replayed from minimaxflash-1.4", "turn": 15121}
+{"ask": 553, "depth": 1, "keys": "*888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15151}
+{"ask": 554, "depth": 1, "keys": "*888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15171}
+{"ask": 555, "depth": 1, "keys": "*8888888888888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15181}
+{"ask": 556, "depth": 1, "keys": "*88888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15191}
+{"ask": 557, "depth": 1, "keys": "*888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15201}
+{"ask": 558, "depth": 1, "keys": "*7777777777777777777777g", "reason": "replayed from minimaxflash-1.4", "turn": 15211}
+{"ask": 559, "depth": 1, "keys": "*88888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15221}
+{"ask": 560, "depth": 1, "keys": "*8888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15251}
+{"ask": 561, "depth": 1, "keys": "*88888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15271}
+{"ask": 562, "depth": 1, "keys": "*66666666666666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 15341}
+{"ask": 563, "depth": 1, "keys": "*8888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15351}
+{"ask": 564, "depth": 1, "keys": "*4444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 15361}
+{"ask": 565, "depth": 1, "keys": "*1111111111111111111111g", "reason": "replayed from minimaxflash-1.4", "turn": 15371}
+{"ask": 566, "depth": 1, "keys": "*888888888886666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 15761}
+{"ask": 567, "depth": 1, "keys": " *88886666g", "reason": "replayed from minimaxflash-1.4", "turn": 15881}
+{"ask": 568, "depth": 1, "keys": "*888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 15931}
+{"ask": 569, "depth": 1, "keys": "o9o9o9o9o9o9o9o9o9o9o9", "reason": "replayed from minimaxflash-1.4", "turn": 15931}
+{"ask": 570, "depth": 1, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 15971}
+{"ask": 571, "depth": 1, "keys": "+8", "reason": "replayed from minimaxflash-1.4", "turn": 15971}
+{"ask": 572, "depth": 1, "keys": " va'", "reason": "replayed from minimaxflash-1.4", "turn": 15974}
+{"ask": 573, "depth": 1, "keys": "mad", "reason": "replayed from minimaxflash-1.4", "turn": 15981}
+{"ask": 574, "depth": 1, "keys": "\u001b", "reason": "replayed from minimaxflash-1.4", "turn": 15991}
+{"ask": 575, "depth": 1, "keys": "mad", "reason": "replayed from minimaxflash-1.4", "turn": 15991}
+{"ask": 576, "depth": 1, "keys": "\u001b", "reason": "replayed from minimaxflash-1.4", "turn": 15991}
+{"ask": 577, "depth": 1, "keys": "R6\\n", "reason": "replayed from minimaxflash-1.4", "turn": 15991}
+{"ask": 578, "depth": 1, "keys": "qd", "reason": "replayed from minimaxflash-1.4", "turn": 16001}
+{"ask": 579, "depth": 1, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 16001}
+{"ask": 580, "depth": 1, "keys": "+4", "reason": "replayed from minimaxflash-1.4", "turn": 16007}
+{"ask": 581, "depth": 1, "keys": "+4+4+4+4+4+4+4+4+4+4+4+4", "reason": "replayed from minimaxflash-1.4", "turn": 16018}
+{"ask": 582, "depth": 1, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 16141}
+{"ask": 583, "depth": 1, "keys": "mad", "reason": "replayed from minimaxflash-1.4", "turn": 16141}
+{"ask": 584, "depth": 1, "keys": "\u001b", "reason": "replayed from minimaxflash-1.4", "turn": 16141}
+{"ask": 585, "depth": 1, "keys": "mad", "reason": "replayed from minimaxflash-1.4", "turn": 16141}
+{"ask": 586, "depth": 1, "keys": "5", "reason": "replayed from minimaxflash-1.4", "turn": 16141}
+{"ask": 587, "depth": 1, "keys": "+4+4+4", "reason": "replayed from minimaxflash-1.4", "turn": 16151}
+{"ask": 588, "depth": 1, "keys": "*888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 16181}
+{"ask": 589, "depth": 1, "keys": "*8888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 16201}
+{"ask": 590, "depth": 1, "keys": "*7777777777777777g", "reason": "replayed from minimaxflash-1.4", "turn": 16221}
+{"ask": 591, "depth": 1, "keys": "*4444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 16241}
+{"ask": 592, "depth": 1, "keys": "*4444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 16271}
+{"ask": 593, "depth": 1, "keys": " va'", "reason": "replayed from minimaxflash-1.4", "turn": 16296}
+{"ask": 594, "depth": 1, "keys": " ", "reason": "replayed from minimaxflash-1.4", "turn": 16301}
+{"ask": 595, "depth": 1, "keys": " R8\n", "reason": "replayed from minimaxflash-1.4", "turn": 16307}
+{"ask": 596, "depth": 1, "keys": "&", "reason": "replayed from minimaxflash-1.4", "turn": 16311}
+{"ask": 597, "depth": 1, "keys": "\u001b+2+4+6+8+2+4+6+8+2+4+6+8+2+4+6+8", "reason": "replayed from minimaxflash-1.4", "turn": 16311}
+{"ask": 598, "depth": 1, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 16471}
+{"ask": 599, "depth": 1, "keys": " C", "reason": "replayed from minimaxflash-1.4", "turn": 16471}
+{"ask": 600, "depth": 1, "keys": "\u001bR*\n", "reason": "replayed from minimaxflash-1.4", "turn": 16471}
+{"ask": 601, "depth": 1, "keys": "&\n", "reason": "replayed from minimaxflash-1.4", "turn": 16471}
+{"ask": 602, "depth": 1, "keys": "\n", "reason": "replayed from minimaxflash-1.4", "turn": 16471}
+{"ask": 603, "depth": 1, "keys": "\u001bR50\n", "reason": "replayed from minimaxflash-1.4", "turn": 16471}
+{"ask": 604, "depth": 1, "keys": "\n", "reason": "replayed from minimaxflash-1.4", "turn": 16471}
+{"ask": 605, "depth": 1, "keys": "\r", "reason": "replayed from minimaxflash-1.4", "turn": 16471}
+{"ask": 606, "depth": 1, "keys": "*66666666666666666666666666666666666666666666666666666666666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 16971}
+{"ask": 607, "depth": 1, "keys": "R30\\r", "reason": "replayed from minimaxflash-1.4", "turn": 16981}
+{"ask": 608, "depth": 1, "keys": "\r", "reason": "replayed from minimaxflash-1.4", "turn": 16981}
+{"ask": 609, "depth": 1, "keys": "i  ", "reason": "replayed from minimaxflash-1.4", "turn": 17281}
+{"ask": 610, "depth": 1, "keys": "\\ee", "reason": "replayed from minimaxflash-1.4", "turn": 17281}
+{"ask": 611, "depth": 1, "keys": "*8888888888888888888888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 17281}
+{"ask": 612, "depth": 1, "keys": "\\ee*222222222222222222222222222222g", "reason": "replayed from minimaxflash-1.4", "turn": 17281}
+{"ask": 613, "depth": 1, "keys": "\\ee*6666666666666666666666666666666666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 17281}
+{"ask": 614, "depth": 1, "keys": "\\e\\e*6666666666666666666666666666666666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 17281}
+{"ask": 615, "depth": 1, "keys": "va'  ", "reason": "replayed from minimaxflash-1.4", "turn": 17301}
+{"ask": 616, "depth": 1, "keys": "666666666666  ", "reason": "replayed from minimaxflash-1.4", "turn": 17301}
+{"ask": 617, "depth": 1, "keys": "266666666666  ", "reason": "replayed from minimaxflash-1.4", "turn": 17311}
+{"ask": 618, "depth": 1, "keys": "8888888888  ", "reason": "replayed from minimaxflash-1.4", "turn": 17391}
+{"ask": 619, "depth": 1, "keys": "8", "reason": "replayed from minimaxflash-1.4", "turn": 17461}
+{"ask": 620, "depth": 1, "keys": "88888888", "reason": "replayed from minimaxflash-1.4", "turn": 17471}
+{"ask": 621, "depth": 1, "keys": "666666888888", "reason": "replayed from minimaxflash-1.4", "turn": 17501}
+{"ask": 622, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 17531}
+{"ask": 623, "depth": 1, "keys": " 6666666666", "reason": "replayed from minimaxflash-1.4", "turn": 17531}
+{"ask": 624, "depth": 1, "keys": "66666", "reason": "replayed from minimaxflash-1.4", "turn": 17581}
+{"ask": 625, "depth": 1, "keys": "*8888888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 17631}
+{"ask": 626, "depth": 1, "keys": "26666888888888", "reason": "replayed from minimaxflash-1.4", "turn": 17651}
+{"ask": 627, "depth": 1, "keys": "88888", "reason": "replayed from minimaxflash-1.4", "turn": 17791}
+{"ask": 628, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 17841}
+{"ask": 629, "depth": 1, "keys": "\\e222226", "reason": "replayed from minimaxflash-1.4", "turn": 17841}
+{"ask": 630, "depth": 1, "keys": "666666", "reason": "replayed from minimaxflash-1.4", "turn": 18191}
+{"ask": 631, "depth": 1, "keys": "22222222", "reason": "replayed from minimaxflash-1.4", "turn": 18251}
+{"ask": 632, "depth": 1, "keys": "66666666", "reason": "replayed from minimaxflash-1.4", "turn": 18281}
+{"ask": 633, "depth": 1, "keys": "[", "reason": "replayed from minimaxflash-1.4", "turn": 18331}
+{"ask": 634, "depth": 1, "keys": " 888666666666", "reason": "replayed from minimaxflash-1.4", "turn": 18331}
+{"ask": 635, "depth": 1, "keys": "6888888444422222", "reason": "replayed from minimaxflash-1.4", "turn": 18491}
+{"ask": 636, "depth": 1, "keys": "g22", "reason": "replayed from minimaxflash-1.4", "turn": 18651}
+{"ask": 637, "depth": 1, "keys": "8886g", "reason": "replayed from minimaxflash-1.4", "turn": 18662}
+{"ask": 638, "depth": 1, "keys": "6666662266", "reason": "replayed from minimaxflash-1.4", "turn": 18703}
+{"ask": 639, "depth": 1, "keys": "66666666", "reason": "replayed from minimaxflash-1.4", "turn": 18803}
+{"ask": 640, "depth": 1, "keys": "2222222222", "reason": "replayed from minimaxflash-1.4", "turn": 18843}
+{"ask": 641, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 18943}
+{"ask": 642, "depth": 1, "keys": "\\ei", "reason": "replayed from minimaxflash-1.4", "turn": 18943}
+{"ask": 643, "depth": 1, "keys": "er", "reason": "replayed from minimaxflash-1.4", "turn": 18943}
+{"ask": 644, "depth": 1, "keys": "va'  ", "reason": "replayed from minimaxflash-1.4", "turn": 18953}
+{"ask": 645, "depth": 1, "keys": "88888888", "reason": "replayed from minimaxflash-1.4", "turn": 18963}
+{"ask": 646, "depth": 1, "keys": "884444444444444444448886", "reason": "replayed from minimaxflash-1.4", "turn": 19043}
+{"ask": 647, "depth": 1, "keys": "44444444", "reason": "replayed from minimaxflash-1.4", "turn": 19321}
+{"ask": 648, "depth": 1, "keys": "6666666666", "reason": "replayed from minimaxflash-1.4", "turn": 19401}
+{"ask": 649, "depth": 1, "keys": "44444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 19481}
+{"ask": 650, "depth": 1, "keys": " va'  ", "reason": "replayed from minimaxflash-1.4", "turn": 19577}
+{"ask": 651, "depth": 1, "keys": "44444444", "reason": "replayed from minimaxflash-1.4", "turn": 19579}
+{"ask": 652, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 19639}
+{"ask": 653, "depth": 1, "keys": "\\e88888888", "reason": "replayed from minimaxflash-1.4", "turn": 19639}
+{"ask": 654, "depth": 1, "keys": "22224", "reason": "replayed from minimaxflash-1.4", "turn": 19719}
+{"ask": 655, "depth": 1, "keys": "4444444444", "reason": "replayed from minimaxflash-1.4", "turn": 19769}
+{"ask": 656, "depth": 1, "keys": "*4444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 19829}
+{"ask": 657, "depth": 1, "keys": "*8888888888888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 19839}
+{"ask": 658, "depth": 1, "keys": "*6666666666666666666666666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 19849}
+{"ask": 659, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 19919}
+{"ask": 660, "depth": 1, "keys": "\\elxg", "reason": "replayed from minimaxflash-1.4", "turn": 19919}
+{"ask": 661, "depth": 1, "keys": "*444444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 19929}
+{"ask": 662, "depth": 1, "keys": "*88888888888888888888888888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 20019}
+{"ask": 663, "depth": 1, "keys": "22226666666666", "reason": "replayed from minimaxflash-1.4", "turn": 20029}
+{"ask": 664, "depth": 1, "keys": "6666666666", "reason": "replayed from minimaxflash-1.4", "turn": 20169}
+{"ask": 665, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 20229}
+{"ask": 666, "depth": 1, "keys": "8888666", "reason": "replayed from minimaxflash-1.4", "turn": 20229}
+{"ask": 667, "depth": 1, "keys": "*8888888888888888888888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 20259}
+{"ask": 668, "depth": 1, "keys": "66", "reason": "replayed from minimaxflash-1.4", "turn": 20269}
+{"ask": 669, "depth": 1, "keys": "66666222", "reason": "replayed from minimaxflash-1.4", "turn": 20289}
+{"ask": 670, "depth": 1, "keys": "4422", "reason": "replayed from minimaxflash-1.4", "turn": 20349}
+{"ask": 671, "depth": 1, "keys": "*1111111111111111111111111111111111111111g", "reason": "replayed from minimaxflash-1.4", "turn": 20389}
+{"ask": 672, "depth": 1, "keys": "l8g", "reason": "replayed from minimaxflash-1.4", "turn": 20389}
+{"ask": 673, "depth": 1, "keys": "88888888", "reason": "replayed from minimaxflash-1.4", "turn": 20439}
+{"ask": 674, "depth": 1, "keys": "l4g", "reason": "replayed from minimaxflash-1.4", "turn": 20489}
+{"ask": 675, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 20709}
+{"ask": 676, "depth": 1, "keys": "*77777777777777777777777777777777777777777777g", "reason": "replayed from minimaxflash-1.4", "turn": 20709}
+{"ask": 677, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 20709}
+{"ask": 678, "depth": 1, "keys": "l4g", "reason": "replayed from minimaxflash-1.4", "turn": 20749}
+{"ask": 679, "depth": 1, "keys": "88888", "reason": "replayed from minimaxflash-1.4", "turn": 20749}
+{"ask": 680, "depth": 1, "keys": "2222222", "reason": "replayed from minimaxflash-1.4", "turn": 20779}
+{"ask": 681, "depth": 1, "keys": "24444", "reason": "replayed from minimaxflash-1.4", "turn": 20849}
+{"ask": 682, "depth": 1, "keys": "6666666666", "reason": "replayed from minimaxflash-1.4", "turn": 20899}
+{"ask": 683, "depth": 1, "keys": "l9g", "reason": "replayed from minimaxflash-1.4", "turn": 20999}
+{"ask": 684, "depth": 1, "keys": "l8g", "reason": "replayed from minimaxflash-1.4", "turn": 21079}
+{"ask": 685, "depth": 1, "keys": "888886666", "reason": "replayed from minimaxflash-1.4", "turn": 21109}
+{"ask": 686, "depth": 1, "keys": "888888888888", "reason": "replayed from minimaxflash-1.4", "turn": 21199}
+{"ask": 687, "depth": 1, "keys": "66666g", "reason": "replayed from minimaxflash-1.4", "turn": 21319}
+{"ask": 688, "depth": 1, "keys": "ier", "reason": "replayed from minimaxflash-1.4", "turn": 21370}
+{"ask": 689, "depth": 1, "keys": "4444444444", "reason": "replayed from minimaxflash-1.4", "turn": 21370}
+{"ask": 690, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 21470}
+{"ask": 691, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 21920}
+{"ask": 692, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 21940}
+{"ask": 693, "depth": 1, "keys": "*88888888888888888888888888888888888888888888g", "reason": "replayed from minimaxflash-1.4", "turn": 21950}
+{"ask": 694, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 21960}
+{"ask": 695, "depth": 1, "keys": "66", "reason": "replayed from minimaxflash-1.4", "turn": 21970}
+{"ask": 696, "depth": 1, "keys": "444", "reason": "replayed from minimaxflash-1.4", "turn": 21990}
+{"ask": 697, "depth": 1, "keys": "4444444444", "reason": "replayed from minimaxflash-1.4", "turn": 22020}
+{"ask": 698, "depth": 1, "keys": "88888", "reason": "replayed from minimaxflash-1.4", "turn": 22060}
+{"ask": 699, "depth": 1, "keys": "l9g", "reason": "replayed from minimaxflash-1.4", "turn": 22110}
+{"ask": 700, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 22160}
+{"ask": 701, "depth": 1, "keys": "8888888888", "reason": "replayed from minimaxflash-1.4", "turn": 22220}
+{"ask": 702, "depth": 1, "keys": "44444444", "reason": "replayed from minimaxflash-1.4", "turn": 22320}
+{"ask": 703, "depth": 1, "keys": "244444444444", "reason": "replayed from minimaxflash-1.4", "turn": 22370}
+{"ask": 704, "depth": 1, "keys": "444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 22490}
+{"ask": 705, "depth": 1, "keys": "444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 22589}
+{"ask": 706, "depth": 1, "keys": "44444444", "reason": "replayed from minimaxflash-1.4", "turn": 22709}
+{"ask": 707, "depth": 1, "keys": "2222222222", "reason": "replayed from minimaxflash-1.4", "turn": 22789}
+{"ask": 708, "depth": 1, "keys": "4444444444", "reason": "replayed from minimaxflash-1.4", "turn": 22789}
+{"ask": 709, "depth": 1, "keys": "444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 22889}
+{"ask": 710, "depth": 1, "keys": "888888", "reason": "replayed from minimaxflash-1.4", "turn": 22899}
+{"ask": 711, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 22909}
+{"ask": 712, "depth": 1, "keys": "444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 22909}
+{"ask": 713, "depth": 1, "keys": "*1111111111111111111111111111111111111111111g", "reason": "replayed from minimaxflash-1.4", "turn": 22909}
+{"ask": 714, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 22929}
+{"ask": 715, "depth": 1, "keys": "*2222222222222222222222222222222222222222222g", "reason": "replayed from minimaxflash-1.4", "turn": 22939}
+{"ask": 716, "depth": 1, "keys": "*1111111111111111111111111111111111111111111g", "reason": "replayed from minimaxflash-1.4", "turn": 22949}
+{"ask": 717, "depth": 1, "keys": "l4g", "reason": "replayed from minimaxflash-1.4", "turn": 22959}
+{"ask": 718, "depth": 1, "keys": "i", "reason": "replayed from minimaxflash-1.4", "turn": 22959}
+{"ask": 719, "depth": 1, "keys": "\\eM", "reason": "replayed from minimaxflash-1.4", "turn": 22959}
+{"ask": 720, "depth": 1, "keys": "*1111111111111111111111111111111111111111111g", "reason": "replayed from minimaxflash-1.4", "turn": 22959}
+{"ask": 721, "depth": 1, "keys": "*666666666666666666666666666666666666666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 22959}
+{"ask": 722, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 22959}
+{"ask": 723, "depth": 1, "keys": "*1111111111111111111111111111111111111111111g", "reason": "replayed from minimaxflash-1.4", "turn": 22969}
+{"ask": 724, "depth": 1, "keys": "*2222222222222222222222222222222222222222222g", "reason": "replayed from minimaxflash-1.4", "turn": 22979}
+{"ask": 725, "depth": 1, "keys": "*666666666666666666666666666666666666666666666g", "reason": "replayed from minimaxflash-1.4", "turn": 22999}
+{"ask": 726, "depth": 1, "keys": "*1111111111111111111111111111111111111111111g", "reason": "replayed from minimaxflash-1.4", "turn": 22999}
+{"ask": 727, "depth": 1, "keys": "*3333333333333333333333333333333333333333333g", "reason": "replayed from minimaxflash-1.4", "turn": 23009}
+{"ask": 728, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 23019}
+{"ask": 729, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 23019}
+{"ask": 730, "depth": 1, "keys": "o8", "reason": "replayed from minimaxflash-1.4", "turn": 23209}
+{"ask": 731, "depth": 1, "keys": "6666666666666666666666", "reason": "replayed from minimaxflash-1.4", "turn": 23209}
+{"ask": 732, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 23429}
+{"ask": 733, "depth": 1, "keys": "44444444", "reason": "replayed from minimaxflash-1.4", "turn": 23429}
+{"ask": 734, "depth": 1, "keys": "44444444444444", "reason": "replayed from minimaxflash-1.4", "turn": 23508}
+{"ask": 735, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 23648}
+{"ask": 736, "depth": 1, "keys": "*2222222222222222222222222222222222222222222g", "reason": "replayed from minimaxflash-1.4", "turn": 23648}
+{"ask": 737, "depth": 1, "keys": "22222222", "reason": "replayed from minimaxflash-1.4", "turn": 23648}
+{"ask": 738, "depth": 1, "keys": "*1111111111111111111111111111111111111111111g", "reason": "replayed from minimaxflash-1.4", "turn": 23707}
+{"ask": 739, "depth": 1, "keys": "48888", "reason": "replayed from minimaxflash-1.4", "turn": 23717}
+{"ask": 740, "depth": 1, "keys": "o8", "reason": "replayed from minimaxflash-1.4", "turn": 23767}
+{"ask": 741, "depth": 1, "keys": "666666666666", "reason": "replayed from minimaxflash-1.4", "turn": 23767}
+{"ask": 742, "depth": 1, "keys": "ier", "reason": "replayed from minimaxflash-1.4", "turn": 23867}
+{"ask": 743, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 23877}
+{"ask": 744, "depth": 1, "keys": "44444444", "reason": "replayed from minimaxflash-1.4", "turn": 23877}
+{"ask": 745, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 23925}
+{"ask": 746, "depth": 1, "keys": " *4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 23995}
+{"ask": 747, "depth": 1, "keys": "*1111111111111111111111111111111111111111111g", "reason": "replayed from minimaxflash-1.4", "turn": 24005}
+{"ask": 748, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 24065}
+{"ask": 749, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 24085}
+{"ask": 750, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 24085}
+{"ask": 751, "depth": 1, "keys": "*4444444444444444444444444444444444444444444g", "reason": "replayed from minimaxflash-1.4", "turn": 24085}
+{"ask": 752, "depth": 1, "keys": "*1111111111111111111111111111111111111111111g", "reason": "replayed from minimaxflash-1.4", "turn": 24095}
+{"ask": 753, "depth": 1, "keys": "M", "reason": "replayed from minimaxflash-1.4", "turn": 24105}
+{"ask": 754, "depth": 1, "keys": " ", "reason": "dismiss the M-map overlay left by the previous life", "turn": 24105}
+{"ask": 755, "depth": 1, "keys": "888888888888", "reason": "walk north up the one-wide corridor at level column 52, out of the dead-end pocket and into the dark", "turn": 24105}
+{"ask": 756, "depth": 1, "keys": "4444444444444444", "reason": "walk west along level row 3 into the unremembered western half", "turn": 24175}
+{"ask": 757, "depth": 1, "keys": "22222222", "reason": "walk south down the column-47 corridor into the newly opened western rooms", "turn": 24215}
+{"ask": 758, "depth": 1, "keys": "444442", "reason": "walk west five tiles to the door column and step south into the closed door", "turn": 24265}
+{"ask": 759, "depth": 1, "keys": "22222222", "reason": "step through the unlocked door and run south into the dark", "turn": 24325}
+{"ask": 760, "depth": 1, "keys": "66666666666666666666", "reason": "run east along the row-13 corridor into the unremembered south-east of the dark quadrant", "turn": 24375}
+{"ask": 761, "depth": 1, "keys": "666666222266662222", "reason": "east six, south two, east four, south four, probing into the unremembered deep south", "turn": 24575}
+{"ask": 762, "depth": 1, "keys": "6666666666666626", "reason": "east twelve down the room, south one, and into the closed door on the far side", "turn": 24695}
+{"ask": 763, "depth": 1, "keys": "66666666666666666666", "reason": "east through the open door and on into the unremembered east", "turn": 24835}
+{"ask": 764, "depth": 1, "keys": "M", "reason": "open the whole-level map to see the coverage and check for a down staircase", "turn": 24945}
+{"ask": 765, "depth": 1, "keys": "22222222222222222222", "reason": "south down the corridor into the unremembered southern half of the level", "turn": 24945}
+{"ask": 766, "depth": 1, "keys": "844422222222", "reason": "north one, west three into the unremembered block, then south eight into the southern dark", "turn": 24995}
+{"ask": 767, "depth": 1, "keys": "442222222222", "reason": "west two to column 30 then south ten into the unremembered southern half", "turn": 25035}
+{"ask": 768, "depth": 1, "keys": "*2222222222222222222222222222222222222222222222g", "reason": "aimed walk at the level's southern edge, to cross the dark in one ask", "turn": 25065}
+{"ask": 769, "depth": 1, "keys": "444444222222222222", "reason": "west six to the column that has no wall below it, then south fourteen into the southern dark", "turn": 25075}
+{"ask": 770, "depth": 1, "keys": "222222222222222222", "reason": "south eighteen down the magma-flanked corridor into the southern dark", "turn": 25255}
+{"ask": 771, "depth": 1, "keys": "66666666666666666666", "reason": "east twenty into the unremembered band between the vein corridor and the door at column 67", "turn": 25405}
+{"ask": 772, "depth": 1, "keys": "22222222222222222222", "reason": "south twenty off the end of the east corridor into the unremembered rows below", "turn": 25505}
+{"ask": 773, "depth": 1, "keys": "66666666666666666666", "reason": "east twenty along the row-17 corridor to the open door and beyond", "turn": 25545}
+{"ask": 774, "depth": 1, "keys": "M", "reason": "whole-level map again to measure coverage after twenty decisions of sweeping", "turn": 25645}
+{"ask": 775, "depth": 1, "keys": " 44444444444444444444", "reason": "dismiss the map and walk west twenty, into the big unremembered western two thirds", "turn": 25645}
+{"ask": 776, "depth": 1, "keys": "44444444444", "reason": "west eleven to the scroll on the floor of the new corridor", "turn": 25845}
+{"ask": 777, "depth": 1, "keys": ",r", "reason": "pick up the scroll and open the read prompt", "turn": 25955}
+{"ask": 778, "depth": 1, "keys": "a", "reason": "read the unknown scroll", "turn": 25965}
+{"ask": 779, "depth": 1, "keys": "44444444444444444444", "reason": "west twenty along the corridor toward the level\\'s unremembered west", "turn": 25975}
+{"ask": 780, "depth": 1, "keys": "222222222222222222", "reason": "south eighteen off the end of the corridor into the unremembered south-west block", "turn": 26005}
+{"ask": 781, "depth": 1, "keys": "M", "reason": "whole-level map to see the coverage after twenty-seven decisions", "turn": 26025}
+{"ask": 782, "depth": 1, "keys": " 66666666666666666666", "reason": "dismiss the map and walk east twenty into the unremembered ground east of the pocket", "turn": 26025}
+{"ask": 783, "depth": 1, "keys": "2222222222222222", "reason": "south sixteen off the pocket into the unremembered south-west block", "turn": 26055}
+{"ask": 784, "depth": 1, "keys": "84438886688844", "reason": "a chained walk: north, west three, north two, east three, north two, west two, into the unremembered north-west", "turn": 26065}
+{"ask": 785, "depth": 1, "keys": "444888866688888882222222", "reason": "a twenty-four step chain west, north, east and south into the dark", "turn": 26145}
+{"ask": 786, "depth": 1, "keys": "442222222248888888842222", "reason": "chain south then north-west into the dark", "turn": 26305}
+{"ask": 787, "depth": 1, "keys": "422222222224888888884222", "reason": "sweep chain into the dark", "turn": 26415}
+{"ask": 788, "depth": 1, "keys": "662222222488888422222488", "reason": "sweep chain into the dark", "turn": 26475}
+{"ask": 789, "depth": 1, "keys": "448888888888884222222222", "reason": "sweep chain into the dark", "turn": 26585}
+{"ask": 790, "depth": 1, "keys": "448888888888884222222222", "reason": "sweep chain into the dark", "turn": 26615}
+{"ask": 791, "depth": 1, "keys": "448888888888886222222222", "reason": "sweep chain into the dark", "turn": 26645}
+{"ask": 792, "depth": 1, "keys": "444888888888888422222224", "reason": "sweep chain into the dark", "turn": 26675}
+{"ask": 793, "depth": 1, "keys": "448884222222488888422222", "reason": "sweep chain into the dark", "turn": 26725}
+{"ask": 794, "depth": 1, "keys": "888424842222224888884888", "reason": "sweep chain into the dark", "turn": 26785}
+{"ask": 795, "depth": 1, "keys": "662666688888888422222488", "reason": "sweep chain into the dark", "turn": 26895}
+{"ask": 796, "depth": 1, "keys": "44444", "reason": "attack the rat beside me until it is dead", "turn": 27005}
+{"ask": 797, "depth": 1, "keys": "2", "reason": "sweep chain into the dark", "turn": 27054}
+{"ask": 798, "depth": 1, "keys": "8", "reason": "sweep chain into the dark", "turn": 27064}
+{"ask": 799, "depth": 1, "keys": "2", "reason": "sweep chain into the dark", "turn": 27074}
+{"ask": 800, "depth": 1, "keys": "8", "reason": "sweep chain into the dark", "turn": 27084}
+{"ask": 801, "depth": 1, "keys": "2", "reason": "sweep chain into the dark", "turn": 27094}
+{"ask": 802, "depth": 1, "keys": "8", "reason": "sweep chain into the dark", "turn": 27104}
+{"ask": 803, "depth": 1, "keys": "2", "reason": "sweep chain into the dark", "turn": 27114}
+{"ask": 804, "depth": 1, "keys": "8", "reason": "sweep chain into the dark", "turn": 27124}
+{"ask": 805, "depth": 1, "keys": "2", "reason": "sweep chain into the dark", "turn": 27134}
+{"ask": 806, "depth": 1, "keys": "8", "reason": "sweep chain into the dark", "turn": 27144}
+{"ask": 807, "depth": 1, "keys": "228282828282828282828282", "reason": "sweep chain into the dark", "turn": 27154}
+{"ask": 808, "depth": 1, "keys": "M", "reason": "whole-level map: the coverage and the position", "turn": 27394}
+{"ask": 809, "depth": 1, "keys": " 66666666666666666666", "reason": "dismiss the map and walk east out of the pocket", "turn": 27394}
+{"ask": 810, "depth": 1, "keys": "[", "reason": "monster list, to see what is hitting me", "turn": 27434}
+{"ask": 811, "depth": 1, "keys": "886666886222268888622226", "reason": "sweep chain into the dark", "turn": 27434}
+{"ask": 812, "depth": 1, "keys": "886666888888884222222488", "reason": "sweep chain into the dark", "turn": 27554}
+{"ask": 813, "depth": 1, "keys": "666688888888422222248888", "reason": "sweep chain into the dark", "turn": 27634}
+{"ask": 814, "depth": 1, "keys": "666688888888422222248888", "reason": "sweep chain into the dark", "turn": 27694}
+{"ask": 815, "depth": 1, "keys": "666688888888422222248888", "reason": "sweep chain into the dark", "turn": 27754}
+{"ask": 816, "depth": 1, "keys": "666688888888422222248888", "reason": "sweep chain into the dark", "turn": 27814}
+{"ask": 817, "depth": 1, "keys": "886668888888422222488888", "reason": "sweep chain into the dark", "turn": 27964}
+{"ask": 818, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28084}
+{"ask": 819, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28104}
+{"ask": 820, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28124}
+{"ask": 821, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28144}
+{"ask": 822, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28164}
+{"ask": 823, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28184}
+{"ask": 824, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28204}
+{"ask": 825, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28224}
+{"ask": 826, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28244}
+{"ask": 827, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28264}
+{"ask": 828, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28284}
+{"ask": 829, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28304}
+{"ask": 830, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28324}
+{"ask": 831, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28344}
+{"ask": 832, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28364}
+{"ask": 833, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28384}
+{"ask": 834, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28404}
+{"ask": 835, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28424}
+{"ask": 836, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28444}
+{"ask": 837, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28464}
+{"ask": 838, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28484}
+{"ask": 839, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28504}
+{"ask": 840, "depth": 1, "keys": "42262", "reason": "sweep chain into the dark", "turn": 28524}
+{"ask": 841, "depth": 1, "keys": "*p88888888888888888888g", "reason": "aimed walk north to the level's northern edge, in free-cursor mode", "turn": 28544}
+{"ask": 842, "depth": 1, "keys": "4>", "reason": "step west onto the down staircase and take it", "turn": 28624}
+{"ask": 843, "depth": 2, "keys": " ", "reason": "clear the -more- after the descent", "turn": 28634}
+{"ask": 844, "depth": 2, "keys": "2", "reason": "sweep chain into the dark", "turn": 28634}
+{"ask": 845, "depth": 2, "keys": "222448888842222222248888", "reason": "sweep chain into the dark", "turn": 28644}
+{"ask": 846, "depth": 2, "keys": "q", "reason": "open the quaff prompt - 7 hit points and a soldier adjacent", "turn": 28781}
+{"ask": 847, "depth": 2, "keys": "d", "reason": "quaff the Potion of Cure Light Wounds", "turn": 28781}
+{"ask": 848, "depth": 2, "keys": "m", "reason": "open the cast prompt to use Stinking Cloud on the soldier", "turn": 28790}
+{"ask": 849, "depth": 2, "keys": "ma", "reason": "cast prompt with the book letter", "turn": 28791}
+{"ask": 850, "depth": 2, "keys": "d2", "reason": "cast Stinking Cloud on the acolyte one tile south", "turn": 28791}
+{"ask": 851, "depth": 2, "keys": " ", "reason": "clear the -more- after the spell", "turn": 28791}
+{"ask": 852, "depth": 2, "keys": "mad2", "reason": "cast Stinking Cloud again on the pair of monsters below me", "turn": 28801}
+{"ask": 853, "depth": 2, "keys": "mad2", "reason": "one more Stinking Cloud on the cutpurse blocking the corridor", "turn": 28811}
+{"ask": 854, "depth": 2, "keys": "2226,", "reason": "through the door and pick up the acolyte's drop", "turn": 28821}
+{"ask": 855, "depth": 2, "keys": "R*\\n", "reason": "rest to heal and recover spell points", "turn": 28852}
+{"ask": 856, "depth": 2, "keys": "qd", "reason": "quaff the Cure Light Wounds (letter d)", "turn": 28862}
+{"ask": 857, "depth": 2, "keys": "4,", "reason": "step west onto the scroll and pick it up", "turn": 28866}
+{"ask": 858, "depth": 2, "keys": "4,", "reason": "step west onto the scroll and pick it up", "turn": 28882}
+{"ask": 859, "depth": 2, "keys": "66666666666666666666", "reason": "east sixteen into the unremembered east of depth 2", "turn": 28892}
+{"ask": 860, "depth": 2, "keys": "i", "reason": "inventory: is the Phase Door in the pack?", "turn": 28972}
+{"ask": 861, "depth": 2, "keys": "\\eqd", "reason": "leave the inventory and quaff the potion", "turn": 28972}
+{"ask": 862, "depth": 2, "keys": " v", "reason": "open the throw prompt to see the throwable list", "turn": 28975}
+{"ask": 863, "depth": 2, "keys": "va'", "reason": "throw oil at the closest monster", "turn": 28982}
+{"ask": 864, "depth": 2, "keys": " [", "reason": "clear the -more- and list the monsters", "turn": 28982}
+{"ask": 865, "depth": 2, "keys": "444444444444", "reason": "attack the white harpy blocking the corridor", "turn": 28992}
+{"ask": 866, "depth": 2, "keys": "g", "reason": "pick up the Scroll of Phase Door", "turn": 29081}
+{"ask": 867, "depth": 2, "keys": "R\b*\\n", "reason": "rest until hit points and spell points are full", "turn": 29082}
+{"ask": 868, "depth": 2, "keys": "666222mad4", "reason": "approach the acolyte and hit it with Stinking Cloud", "turn": 29732}
+{"ask": 869, "depth": 2, "keys": " ", "reason": "clear the -more-; check the armour class change", "turn": 29767}
+{"ask": 870, "depth": 2, "keys": "e", "reason": "equipment screen: what raised the armour class to 20", "turn": 29772}
+{"ask": 871, "depth": 2, "keys": "\\e", "reason": "leave the equipment screen", "turn": 29772}
+{"ask": 872, "depth": 2, "keys": "mad4", "reason": "Stinking Cloud centred on the two crows beside me", "turn": 29772}
+{"ask": 873, "depth": 2, "keys": "4444444444444444", "reason": "whip the crows until they are dead", "turn": 29777}
+{"ask": 874, "depth": 2, "keys": " qd", "reason": "quaff the last potion and let the fear wear off", "turn": 29782}
+{"ask": 875, "depth": 2, "keys": " ", "reason": "clear the -more- and read the status line", "turn": 29787}
+{"ask": 876, "depth": 2, "keys": "444444", "reason": "six whip swings at the crows beside me", "turn": 29792}
+{"ask": 877, "depth": 2, "keys": "2222", "reason": "south four, away from the crows, through the door", "turn": 29792}
+{"ask": 878, "depth": 2, "keys": "R\b*\\n", "reason": "full rest until healed, letting the fear wear off", "turn": 29792}
+{"ask": 879, "depth": 2, "keys": " 444444", "reason": "whip the two crows now that the fear has passed", "turn": 29802}
+{"ask": 880, "depth": 2, "keys": " re", "reason": "read the Scroll of Phase Door and teleport out of the trap", "turn": 29840}
+{"ask": 881, "depth": 2, "keys": "\\ere", "reason": "leave the equipment list, open the read prompt and read the Phase Door", "turn": 29840}
+{"ask": 882, "depth": 2, "keys": "d", "reason": "read the Scroll of Phase Door", "turn": 29840}
+{"ask": 883, "depth": 2, "keys": "R\b*\\n", "reason": "rest to full health on the new level", "turn": 29850}
+{"ask": 884, "depth": 2, "keys": " 8", "reason": "step north onto the item in the niche", "turn": 29875}
+{"ask": 885, "depth": 2, "keys": ",", "reason": "pick the item up", "turn": 29890}
+{"ask": 886, "depth": 2, "keys": "26", "reason": "move onto the gold pile", "turn": 29900}
+{"ask": 887, "depth": 2, "keys": ",", "reason": "pick up the gold", "turn": 29920}
+{"ask": 888, "depth": 2, "keys": "6", "reason": "east one onto the gold pile", "turn": 29930}
+{"ask": 889, "depth": 2, "keys": ",", "reason": "pick up the gold", "turn": 29940}
+{"ask": 890, "depth": 2, "keys": "R\b*\\n", "reason": "rest to full health with 115 gold in the pack", "turn": 29940}
+{"ask": 891, "depth": 2, "keys": "44222", "reason": "west two and north two, away from the monsters, through the secret door", "turn": 29950}
+{"ask": 892, "depth": 2, "keys": "42222", "reason": "west one then north four, away from the acolytes, through the secret door", "turn": 29960}
+{"ask": 893, "depth": 2, "keys": "\u0018", "reason": "the run was stopped", "turn": 29966}
