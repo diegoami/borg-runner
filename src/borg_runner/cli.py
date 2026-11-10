@@ -184,6 +184,36 @@ def cmd_playbook(args):
     return 0
 
 
+def cmd_export(args):
+    """The hand-over to the consumer: what the corpus establishes."""
+    from . import export as export_module
+
+    if args.inputs:
+        print(json.dumps(export_module.inputs(), indent=1, sort_keys=True))
+        return 0
+    if args.check:
+        problems = export_module.check()
+        for problem in problems:
+            print(problem, file=sys.stderr)
+        print(f'{export_module.ACCUMULATED.name}: {len(problems)} problems')
+        return 1 if problems else 0
+    counted = export_module.corpus()
+    print(f"corpus: {len(counted['runs'])} runs, {counted['asks']:,} asks, "
+          f"{counted['keypresses']:,} keypresses, deepest depth "
+          f"{counted['deepest']}, {counted['deaths']} deaths")
+    silent = sorted(set(counted['runs']) - set(counted['reports']))
+    if silent:
+        print(f"wrote no report, so nothing to export: {', '.join(silent)}")
+    waiting = export_module.missing()
+    if waiting:
+        print(f"not read by any edition yet: {', '.join(waiting)}")
+        print(f'write the next edition of {export_module.ACCUMULATED.name}; '
+              f'the process is docs/EXPORT.md')
+    else:
+        print(f'{export_module.ACCUMULATED.name} has read every report')
+    return 0
+
+
 def cmd_record(args):
     cost = None
     if args.tokens or args.played_by or args.model:
@@ -376,6 +406,14 @@ def parser():
     p.add_argument('--check', action='store_true',
                    help='check the layout of every playbook')
     p.set_defaults(func=cmd_playbook)
+
+    p = sub.add_parser('export',
+                       help='the hand-over to the consumer (borg-reborn-rs)')
+    p.add_argument('--check', action='store_true',
+                   help='what is wrong with the current edition')
+    p.add_argument('--inputs', action='store_true',
+                   help='exactly what to read to write the next edition')
+    p.set_defaults(func=cmd_export)
 
     p = sub.add_parser('carry-on', help="continue where another run stopped")
     p.add_argument('--run', required=True, type=Path, help='the run to continue')

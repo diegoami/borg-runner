@@ -150,6 +150,31 @@ family as `AGENT`, the run reads those pages first and writes back to them
 last, `record --playbook <family>` puts it in the record, and `archive` says
 whether the run wrote back or left the next session where it started.
 
+## What goes out: the export
+
+One document is written **outward**, for the consumer rather than for the next
+player: [ACCUMULATED_KNOWLEDGE.md](ACCUMULATED_KNOWLEDGE.md), a distillation
+of every run's **report** with the evidence attached and the confidence
+stated, for **borg-reborn-rs** — the Rust Borg being rebuilt — and for anyone
+who wants what the runs learned without reading ten reports.
+
+```sh
+.venv/bin/python -m borg_runner export            # the corpus, and what is new
+.venv/bin/python -m borg_runner export --inputs   # what to read for the next edition
+.venv/bin/python -m borg_runner export --check    # an edition line, real runs, real asks
+```
+
+It is rewritten **from time to time**, not per run: one run rarely changes
+what the corpus knows, and `export` says which reports no edition has read
+yet. Staleness is deliberately not a failure.
+
+**No player reads it.** A run is denied exactly one thing (D9) — another run's
+account of the seed it is playing — and the export is that thing in
+concentrated form, so neither prompt mentions it and a test holds that.
+[docs/EXPORT.md](docs/EXPORT.md) is the process, [D16](docs/DESIGN.md) the
+reasoning, and [docs/CONSOLIDATE.md](docs/CONSOLIDATE.md) its inward
+counterpart: notebooks into the page a player reads.
+
 ## Why the screen, and why keys
 
 Both were decided by the owner on 2026-11-09 after a model played a full game

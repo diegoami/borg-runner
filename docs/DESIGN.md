@@ -253,6 +253,32 @@ Consolidation happens **after**, over all the notebooks at once, which is
 better than serialising the runs: a disagreement between two runs that never
 saw each other is stronger evidence than one run revising itself.
 
+## D16. One document is written outward, and no player reads it
+
+The runs produce knowledge for somebody else: **borg-reborn-rs**, the Rust
+Borg being rebuilt, which plays this game without reading a manual and cannot
+ask a run what it meant. `ACCUMULATED_KNOWLEDGE.md` at the root is that
+hand-over — a distillation of the *reports*, with the evidence attached and
+the confidence stated, rewritten **from time to time** rather than per run,
+because one run rarely changes what the corpus knows.
+
+**It is not part of a player's reading, and that is structural.** A run is
+denied exactly one thing (D9): another run's account of the seed it is
+playing. The export aggregates every report, so it is that thing in
+concentrated form. Neither prompt mentions it, nothing in `manuals/` links it,
+and a test holds both.
+
+The process, the format and the check are [EXPORT.md](EXPORT.md). The check is
+deliberately narrow — an edition line, citations that name real runs and real
+asks, and the consumer named — and staleness is *not* a failure: `export`
+prints which reports no edition has read, and when to accumulate is the
+owner's call.
+
+*Ruled out:* exporting the claims themselves, or a schema a consumer could
+import. Those live in borg-agent, which has a claim lifecycle and the rule
+that a model never promotes its own; this repository hands over prose with
+provenance, which is what a corpus of ten runs can honestly support.
+
 ## What this repository is not
 
 - not a Borg, and not a tuning of one: it holds no thresholds and no policy;
