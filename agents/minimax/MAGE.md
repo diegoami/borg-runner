@@ -115,10 +115,11 @@ Three facts about it that cost me the run:
    message line after a cast is therefore *traps and doors only*, and a
    missing third message is the normal case.
 
-The spell at CL1 costs 1 SP and **pays 2 experience on its first cast**
-(`class.txt`'s `exp` field, 2 for Find Traps; the payment shrinks with
-character level). At CL1 that is a sixth of the 12 needed for CL2, for one
-cast.
+The spell at CL1 costs 1 SP and **earns 2 experience on its first cast**
+(`class.txt`'s `exp` field, 2 for Find Traps; the award is `exp` × spell
+level, fixed - corrected 2026-11-10, this block borrowed the shrinking
+formula, which is the unknown-*item* one). At CL1 that is a sixth of the 12
+needed for CL2, for one cast.
 
 **What I would learn first, in this order:** Find Traps, Doors & Stairs
 (CL1), Phase Door (CL2, 2 SP, ten squares of escape), Electric Arc (CL2, 2 SP,
@@ -278,7 +279,7 @@ spider and a centipede adjacent.
 **Oil is 12 % against AC 36** (my throw is to-hit 11; AC 36 needs to-hit
 24), so killing Fang with oil cost about nine flasks and nine turns of
 three monsters biting. **Magic Missile — which the character had just
-learned — is 1 SP for 6-15 damage that never resists**, and it had one
+learned — is 1 SP for 3d4 (3-12) damage that never resists**, and it had one
 spell point. It spent that point on a centipede instead.
 
 The three rules I would give the next mage:

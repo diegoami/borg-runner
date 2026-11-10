@@ -16,7 +16,7 @@ character of this family learned, and you should read it as well as this.*
 **Buy fifteen flasks of oil and three Cure Light Wounds, and nothing else.**
 At 2.77 blows a kit dagger kills a 6-hp ant in one turn, and oil kills a
 10-hp worm mass without ever letting it multiply or poison you. That is 105
-gold of the 23 I had left over, and it carried the character from CL1 to CL4.
+gold, leaving 23 over, and it carried the character from CL1 to CL4.
 
 **Do not buy armour.** A blow that lands loses `damage x min(AC, 240) / 400`
 to your armour class — **2.5% of it at AC 10** (`mon-attack.c
@@ -45,7 +45,7 @@ shared tool on every screen instead of keeping your own list.
 
 **I read the Word of Recall in a dungeon I had just entered and then stood
 still for forty turns waiting for it.** The Recall's timer ticks once every
-ten game turns, so the shortest wait is 150 turns and the longest 350; a cave
+ten game turns, so the shortest wait is 150 turns and the longest 340 (corrected 2026-11-10; this said 350); a cave
 spider does 1d4 a turn at speed 120, and I had 26 of 43 hit points. **That is
 what killed the run.** Read it and keep walking, or read it next to the up
 staircase, or do not read it. A Warrior with oil and a dagger should never

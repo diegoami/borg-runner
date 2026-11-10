@@ -15,9 +15,9 @@ from time to time, not after every run.
 **What it contains, and why it is short.** The consumer can read the game's
 own manual, the strategy manual and `lib/gamedata` itself, at leisure and in
 full — a program has time a player in a 150-decision budget does not. So
-nothing here is in those documents. What is here is the residue: **what ten
-runs measured, what they corrected, and what had to be read out of the source
-because no manual states it.**
+nothing here is in those documents. What is here is the residue: **what
+fourteen runs measured, what they corrected, and what had to be read out of
+the source because no manual states it.**
 
 **Not for the players.** A run here is denied exactly one thing: another run's
 account of the seed it is playing. This file aggregates every report, so
@@ -55,6 +55,9 @@ and Necromancer have never been played here.**
 | [minimaxflash-1-again](records/minimaxflash-1-again/REPORT.md) | minimax/MiniMax-M3 | High-Elf Druid | 2 | 4 | 401 | 10,898 | alive, budget |
 | [minimaxflash-1.3](records/minimaxflash-1.3/REPORT.md) | minimax/MiniMax-M3 | High-Elf Druid | 1 | 4 | 610 | 17,281 | alive, budget |
 | [minimaxflash-2](records/minimaxflash-2/REPORT.md) | minimax/MiniMax-M3.1-Flash | Gnome Mage (asked for) | 1 | 1 | 158 | 8,001 | alive, budget |
+| [minimaxflash-2.2](records/minimaxflash-2.2/REPORT.md) | minimax/MiniMax-M3 | Gnome Mage | 2 | 2 | 354 | 10,811 | **died**, metallic green centipede |
+| [minimaxflash-1.4](records/minimaxflash-1.4/REPORT.md) | minimax/MiniMax-M3.1-Flash | High-Elf Druid | 2 | 4 | 759 | 24,105 | alive, budget |
+| [minimaxflash-3](records/minimaxflash-3/REPORT.md) | minimax/MiniMax-M3.1-Flash | Human Warrior (asked for) | 3 | 4 | 152 | 8,394 | **died**, cave spider |
 | [diego-1](records/diego-1/REPORT.md) | a person | Kobold Priest | 1 | 2 | 418 | 4,741 | alive, saved |
 
 Every row links a report, and every report links a replay that steps through
@@ -64,9 +67,9 @@ screen by screen: <https://diegoami.github.io/borg-runner/>.
 
 ## 1. Descent is the whole problem, and nothing in the manuals says how
 
-Nine of ten runs ended at depth 0, 1 or 2. **Nothing killed them**: eight were
-alive when they stopped, at or near full hit points. They were still on the
-first level because they had not found the way off it.
+Eleven of fourteen runs ended at depth 0, 1 or 2, and the four deaths are
+all in that band too. The ten that stopped were alive. They were still on
+the first level because they had not found the way off it.
 
 - **Walking a depth-1 level costs on the order of 100 decisions and finds
   nothing.** 100 of `sonnet-1`'s 125 asks; 148 of `minimaxflash-1`'s; 174
@@ -87,8 +90,9 @@ first level because they had not found the way off it.
   used the game's and got further on fewer asks.
 
 **The caveat that matters as much as the finding: no run ever questioned the
-objective.** All eleven treated the down staircase as the only thing worth
-finding, and the two that died were at character level 1 while doing it. The
+objective.** All fourteen treated the down staircase as the only thing worth
+finding, and the four that died were at character level 4 or lower while
+doing it. The
 alternative was never tested: explore the level you are on, take the
 experience and the gold, go back up - you arrive on an *up* staircase, and the
 town's shops restock daily - and descend when the character can pay for the
@@ -101,9 +105,9 @@ the only way to spend them.
 **For the consumer:** the manuals describe descent as the objective and say
 nothing about its cost. Measure decisions-per-descent, but also
 decisions-per-character-level: a policy that spends 80% of its decisions on
-floor coverage has 20% left for everything the manuals are about, and a
-policy that descends on a character that cannot pay for the depth is how both
-deaths here happened.
+floor coverage has 20% left for everything the manuals are about. The four
+deaths are their own finding (section 6): none was a big hit, and none was
+at a depth the character had no business being at.
 
 ## 2. What the generator does, which decides whether searching can work
 
@@ -177,8 +181,8 @@ manuals.
   stairs are connected, both directions are exits, and `<` then `>` is a
   fresh level of the same depth for two or three decisions. Two runs reported
   "I could not tell where on the level I was" as the thing that beat them;
-  with one staircase placed uniformly per level, the answer to a level that
-  will not yield is another level, not a better map.
+  the answer to a level that will not yield is another level, not a better
+  map.
 - **The game's own long walk is worth 17–44 tiles a decision — aimed at
   something already seen.** `find_path` (`player-path.c:1069`) tries a
   known-only path and falls back to one through unknown grids, and the
