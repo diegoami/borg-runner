@@ -33,7 +33,7 @@ that changes how it plays.
   characters below zero on constitution, none of them to a big hit.
 - **The dashboard** is <https://diegoami.github.io/borg-runner/>, rebuilt by
   `overview` and published by pushing `main`.
-- **430 fast tests** (`pytest -q`). The slow ones build and play the game
+- **433 fast tests** (`pytest -q`). The slow ones build and play the game
   (`pytest -q -m slow`), and CI does not run them today - an offer the owner
   has not taken up.
 - One run is **still playing** as this is written: `minimaxflash-3`, a Human
@@ -68,7 +68,7 @@ Run all of these before you commit anything that touches the page, the
 prompts or the playbooks:
 
 ```sh
-.venv/bin/python -m pytest -q                         # 430, includes the page check
+.venv/bin/python -m pytest -q                         # 433, includes the page check
 .venv/bin/python -m borg_runner prompts               # nothing is said only in a prompt
 .venv/bin/python -m borg_runner playbook --check      # layout, and spell numbers vs class.txt
 .venv/bin/python -m borg_runner consolidate --check   # every claim on the page names a real run#ask
@@ -79,7 +79,7 @@ prompts or the playbooks:
 ```
 
 The page check (`borg_runner.instructions`, driven by
-`tests/test_instructions.py`) is the strongest tool here: **656 claims on
+`tests/test_instructions.py`) is the strongest tool here: **718 claims on
 volume one, each parsed out of the page's own sentences and looked up in
 `vendor/` at the pin**, with floors per kind so a check cannot quietly
 disappear, and doctored rows that prove it can fail. It caught three of this
@@ -101,21 +101,30 @@ does not exist.
    staircases and 1 or 2 up**, on squares with three orthogonal walls, 16
    apart. `minimaxflash-1.4` had swept two thirds of a level for one
    staircase it believed was unique, and found none.
-4. **"Constitution sets how fast you may dive"** replaced a draft written as a
+4. **Section 6b gained the unknown-item pools**: what an unknown scroll or
+   potion can be at depth 2, with the weights from `object.txt` and the odds
+   (a scroll is Phase Door 17% of the time, 7% something against you), that
+   **Magic Mapping cannot be one of them below DL5**, that depth 1 and 2 have
+   no unknown wands, staves, rods, rings or amulets at all, and the three ways
+   a kind becomes known - including that **giving an item to the store that
+   buys its type identifies the kind for 0 gold**, which is the only way to
+   learn something you dare not use. A run had made "what does Magic Mapping
+   show" its standing question on depth 2, where that scroll cannot exist.
+5. **"Constitution sets how fast you may dive"** replaced a draft written as a
    band of hit points, which "fitted nobody" (the owner's correction). CON is
    a rate - `player_hp[level-1] + adj_con_mhp x level / 100` - so the rule is
    a **pace**: gate each descent on the worst round of the depth you are
    entering (14 at depth 2 or shallower), descend one depth at a time, take
    more levels between descents when CON is low. Six class entries and both
    prompts point at it.
-5. **`borg_runner prompts`** and `prompts/mage-shuttle-to-level-5.txt`.
-6. **`playbook --check` now reads a family page's spell mana and dice against
+6. **`borg_runner prompts`** and `prompts/mage-shuttle-to-level-5.txt`.
+7. **`playbook --check` now reads a family page's spell mana and dice against
    `class.txt`**, which caught `agents/minimax/MAGE.md` giving Magic Missile a
    `+3` it does not have. Corrected where it stood, with a note.
-7. **`reading_note` reads a carried-on run's own notes**, not the notebook it
+8. **`reading_note` reads a carried-on run's own notes**, not the notebook it
    inherited: `minimaxflash-1.4`'s record claimed it had read nothing for its
    class while its own note named both playbook pages.
-8. **`borg_runner audit`** (added just before this session's work): what a
+9. **`borg_runner audit`** (added just before this session's work): what a
    finished run should have left, as 18-19 checks. Both prompts end with it.
 
 ## What is waiting, in order

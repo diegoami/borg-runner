@@ -184,6 +184,14 @@ what was worth writing:
   armour - the shops restock daily - and descending when you can pay for it is
   a plan, and so is deciding not to descend at all. Say in your report what
   you were buying with the asks you spent.
+- **An unknown scroll or potion is a pool of kinds, not the one you want.**
+  What it can be is fixed by the depth you found it at: on depth 1 or 2 the
+  only unknown kinds in the game are scrolls and potions, and Magic Mapping
+  is not among them. Section 6b of INSTRUCTIONS.md gives both pools with
+  their odds and says how a kind becomes known - use it, buy one, or **give
+  it to the store that buys that type**, which pays 0 gold with selling off
+  and still identifies the kind for the rest of the game. That is the only
+  way to learn something you dare not read, and it is worth a town trip.
 - **Constitution sets how fast you may dive.** Read `CON` off `C`: it adds or
   subtracts hit points on *every* level, so two characters of one class can
   differ by ten, and a Mage, Necromancer, Rogue or Ranger is usually below

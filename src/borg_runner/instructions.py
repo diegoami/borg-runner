@@ -380,6 +380,177 @@ def died_records():
     return found
 
 
+def item_pool(tval, depth):
+    """{kind: weight} for every object of `tval` whose `alloc:` band covers `depth`."""
+    pool = {}
+    for entry in gd.load('object.txt')[0]:
+        if (entry.first('type') or '').strip() != tval:
+            continue
+        for alloc in entry.all('alloc'):
+            match = re.match(r'(\d+):(\d+) to (\d+)', alloc)
+            if match and int(match[2]) <= depth <= int(match[3]):
+                pool[entry.value] = int(match[1])
+    return pool
+
+
+def shallowest_of(tval):
+    """The shallowest depth an object of `tval` can be generated at."""
+    depths = []
+    for entry in gd.load('object.txt')[0]:
+        if (entry.first('type') or '').strip() != tval:
+            continue
+        for alloc in entry.all('alloc'):
+            match = re.match(r'(\d+):(\d+) to (\d+)', alloc)
+            if match:
+                depths.append(int(match[2]))
+    return min(depths) if depths else None
+
+
+@extractor('unknown item pools', minimum=40)
+def unknown_items(c):
+    """What an unknown consumable can be at depth 2, and how a kind becomes
+    known. Section 6b's answer to a run that planned around one scroll."""
+    rows = {'scroll': None, 'potion': None}
+    found = c.search(r'\| \*\*scroll\*\*, (?P<scrolls>\d+) kinds \| (?P<sbody>[^|]*)\| '
+                     r'(?P<schance>[^|]*)\|\n\| \*\*potion\*\*, (?P<potions>\d+) kinds \| '
+                     r'(?P<pbody>[^|]*)\| (?P<pchance>[^|]*)\|', name='the unknown pools table')
+    if found:
+        for tval, count_key, body_key in (('scroll', 'scrolls', 'sbody'),
+                                          ('potion', 'potions', 'pbody')):
+            real = item_pool(tval, 2)
+            rows[tval] = real
+            c.emit('unknown', found.start(count_key), f'kinds an unknown {tval} can be '
+                   f'at depth 2', int(found[count_key]), len(real))
+            # `A, B, C 50 each; D 20; E 10` -> every name, with its weight
+            claimed = {}
+            for group in found[body_key].split(';'):
+                match = re.match(r'^\s*(.*?)\s+(\d+)(?: each)?\s*$', group)
+                if not match:
+                    c.problem(f'cannot read the pool entry {group!r}', found.start(body_key))
+                    continue
+                for name in match[1].split(','):
+                    claimed[name.strip()] = int(match[2])
+            c.emit('unknown', found.start(body_key), f'the {tval} pool at depth 2 is '
+                   f'exactly the kinds whose alloc band covers it',
+                   sorted(claimed), sorted(real))
+            for name, weight in sorted(claimed.items()):
+                c.emit('unknown', found.start(body_key), f'{name} weight at depth 2',
+                       weight, real.get(name, 'not in the pool'))
+    def share(pool, names):
+        total = sum(pool.values()) or 1
+        return round(100 * sum(pool.get(name, 0) for name in names) / total)
+
+    if rows['scroll']:
+        chances = c.search(r'Phase Door (\d+)%, Deep Descent (\d+)%, \*\*(\d+)% against you\*\*',
+                           name='the scroll chances')
+        if chances:
+            c.emit('unknown', chances.start(1), 'an unknown scroll is Phase Door',
+                   int(chances[1]), share(rows['scroll'], ['Phase Door']))
+            c.emit('unknown', chances.start(2), 'an unknown scroll is Deep Descent',
+                   int(chances[2]), share(rows['scroll'], ['Deep Descent']))
+            c.emit('unknown', chances.start(3), 'an unknown scroll is against you',
+                   int(chances[3]), share(rows['scroll'], ['Summon Monster', 'Darkness']))
+    if rows['potion']:
+        chances = c.search(r'(\d+)% harmless or good, \*\*(\d+)% against you\*\*',
+                           name='the potion chances')
+        bad = ['Slowness', 'Sleep', 'Poison', 'Confusion', 'Blindness']
+        if chances:
+            c.emit('unknown', chances.start(2), 'an unknown potion is against you',
+                   int(chances[2]), share(rows['potion'], bad))
+            c.emit('unknown', chances.start(1), 'an unknown potion is harmless or good',
+                   int(chances[1]), 100 - share(rows['potion'], bad))
+    found = c.search(r'Its band starts at \*\*DL(\d+)\*\*', name="Magic Mapping's band")
+    if found:
+        pool = {name: weight for name, weight in item_pool('scroll', int(found[1])).items()}
+        magic = find_object('Magic Mapping', types=('scroll',))
+        c.emit('unknown', found.start(1), 'the shallowest Magic Mapping scroll',
+               int(found[1]), alloc_min(magic) if magic else 'no such scroll')
+        c.emit('unknown', found.start(1), 'and it is in the pool at that depth',
+               True, 'Magic Mapping' in pool)
+        c.emit('unknown', found.start(1), 'but not at depth 2', False,
+               'Magic Mapping' in item_pool('scroll', 2))
+    found = c.search(r'the shallowest \*\*wand\*\* is DL(\d+), the shallowest \*\*staff\*\*, '
+                     r'\*\*rod\*\*,\s*\n\*\*mushroom\*\* and \*\*ring\*\* DL(\d+), the shallowest '
+                     r'\*\*amulet\*\* DL(\d+)', name='the shallowest of each type')
+    if found:
+        c.emit('unknown', found.start(1), 'shallowest wand', int(found[1]),
+               shallowest_of('wand'))
+        for tval in ('staff', 'rod', 'mushroom', 'ring'):
+            c.emit('unknown', found.start(2), f'shallowest {tval}', int(found[2]),
+                   shallowest_of(tval))
+        c.emit('unknown', found.start(3), 'shallowest amulet', int(found[3]),
+               shallowest_of('amulet'))
+    found = c.search(r'one object in (\w+) is generated as if from a\s+deeper level '
+                     r'\(`src/obj-make\.c`, `one_in_\(great_obj\)` with\s+'
+                     r'`obj-make:great-obj:(\d+)` in `constants\.txt`, which recomputes the '
+                     r'level as `1 \+\s+level x (\d+) / randint1\((\d+)\)`\)',
+                     name='the out-of-depth boost')
+    if found:
+        size = constants()
+        source = gd.read_source('src/obj-make.c') or ''
+        c.emit('unknown', found.start(1), 'how often an object is generated deeper',
+               WORD_NUMBERS.get(found[1].lower(), found[1]),
+               size.get('obj-make:great-obj'))
+        for group in (2,):
+            c.emit('unknown', found.start(group), 'the great-obj chance',
+                   int(found[group]), size.get('obj-make:great-obj'))
+        for group in (3, 4):
+            c.emit('unknown', found.start(group), 'the depth the boost works from',
+                   int(found[group]), size.get('obj-make:max-depth'))
+        c.emit('unknown', found.start(), 'the boost is one_in_(great_obj) on the level',
+               True, 'one_in_(z_info->great_obj)' in source
+               and 'level * z_info->max_obj_depth / randint1' in source)
+    found = c.search(r'\*\*Alchemist \(5\)\*\* scrolls and potions;\s*\n'
+                     r'\*\*Magic shop \(6\)\*\* wands, staves, rods, rings, amulets and books; '
+                     r'\*\*General\s*\n\(1\)\*\* mushrooms, flasks, food, lights, diggers, cloaks '
+                     r'and ammunition;\s*\n\*\*Armoury \(2\)\*\* armour; \*\*Weaponsmith \(3\)\*\* '
+                     r'weapons, bows and ammunition;\s*\n\*\*Bookseller \(4\)\*\* books\. The '
+                     r'\*\*Black market and your Home buy nothing\*\*',
+                     name='who buys what')
+    if found:
+        buys = {}
+        for entry in gd.load('store.txt')[0]:
+            buys[entry.value] = {b.strip() for b in entry.all('buy')}
+        wanted = {
+            'STORE_ALCHEMY': {'scroll', 'potion'},
+            'STORE_MAGIC': {'wand', 'staff', 'rod', 'ring', 'amulet'},
+            'STORE_GENERAL': {'mushroom', 'flask', 'food', 'light', 'digger', 'cloak'},
+            'STORE_BLACK': set(),
+            'HOME': set(),
+        }
+        for store, types in wanted.items():
+            real = buys.get(store, 'no such store')
+            c.emit('unknown', found.start(), f'{store} buys', types,
+                   real if types else real,
+                   ok=(real == set()) if not types else types <= real)
+        c.emit('unknown', found.start(), 'the armoury buys armour', True,
+               any('armor' in kind for kind in buys.get('STORE_ARMOR', ())))
+        c.emit('unknown', found.start(), 'the weaponsmith buys weapons and ammunition',
+               True, {'sword', 'bow', 'arrow'} <= buys.get('STORE_WEAPON', set()))
+        c.emit('unknown', found.start(), 'the bookseller buys books', True,
+               all('book' in kind for kind in buys.get('STORE_BOOK', ('x',))))
+    found = c.search(r'`src/store\.c do_cmd_sell\(\)`\s+calls `object_flavor_aware\(\)` '
+                     r"and learns the object's runes \*\*before\*\* the\s+item changes hands",
+                     name='what giving an item teaches')
+    if found:
+        source = gd.read_source('src/store.c') or ''
+        body = re.search(r'void do_cmd_sell\(struct command \*cmd\)(.*?)\n\}', source, re.S)
+        text = body[1] if body else ''
+        aware = text.find('object_flavor_aware(player, obj)')
+        hands = text.find('gear_object_for_use(player, obj')
+        c.emit('unknown', found.start(), 'selling makes the flavour known first',
+               True, aware >= 0 and hands > aware)
+        c.emit('unknown', found.start(), 'and it learns the runes too', True,
+               'object_learn_unknown_rune(player, obj)' in text)
+    found = c.search(r'The prompt reads `Give which\s+item\?` and the message afterwards is '
+                     r'`You had \.\.\.`', name='what the screen says when selling is off')
+    if found:
+        c.emit('unknown', found.start(), 'the prompt with selling off', True,
+               '"Give which item? "' in (gd.read_source('src/ui-store.c') or ''))
+        c.emit('unknown', found.start(), 'and the message afterwards', True,
+               'You had %s (%c).' in (gd.read_source('src/store.c') or ''))
+
+
 def con_table():
     """`adj_con_mhp` from src/player-calcs.c: hundredths of a hit point per level."""
     source = gd.read_source('src/player-calcs.c') or ''

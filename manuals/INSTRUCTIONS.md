@@ -356,9 +356,70 @@ one near you as this one was - at two asks instead of a hundred.
 ## 6b. What to keep and what to leave
 
 **Selling pays nothing** (`birth_no_selling` is on; `birth`, c15 ITEM-05). So an
-object is worth carrying only if you will **use** it or **wear** it. Gold is
-the only loot with a value. That removes most of item management: do not haul
-anything to town.
+object is worth carrying only if you will **use** it, **wear** it, or **learn
+what it is** - see the next block, which is the one exception to hauling. Gold
+is the only loot with a value, so do not carry gear to town: it pays 0.
+
+### An unknown item is a pool of kinds, not a hope
+
+Nothing you pick up is a particular thing until you learn it, and **what it
+can be is fixed by your depth, not by what you want**: an unknown consumable
+is one kind of its type whose `alloc:` band covers the depth you found it at,
+weighted by the first number of that band (FACT, `object`). At **depth 2**
+the whole pool is:
+
+| unknown | the kinds it can be, with their weights | chances |
+|---|---|---|
+| **scroll**, 8 kinds | Treasure Detection, Phase Door, Light, Detect Invisible, Blessing 50 each; Deep Descent 20; Summon Monster 10; Darkness 10 | Phase Door 17%, Deep Descent 7%, **7% against you** |
+| **potion**, 11 kinds | Cure Light Wounds 80; Neutralize Poison 60; Speed, Heroism, Boldness 40 each; Slowness, Sleep, Poison, Confusion, Blindness, Slime Mold Juice 10 each | 84% harmless or good, **16% against you** |
+
+**Magic Mapping is not in that pool.** Its band starts at **DL5** (`object`
+`alloc`), so an unknown scroll on depth 1 or 2 cannot be it, however much the
+run would like a staircase detector. Nor can anything of a type that does not
+exist yet: the shallowest **wand** is DL3, the shallowest **staff**, **rod**,
+**mushroom** and **ring** DL5, the shallowest **amulet** DL10. On depth 1 and
+2 the only unknown kinds in the game are scrolls and potions.
+
+One exception, and it is small: one object in twenty is generated as if from a
+deeper level (`src/obj-make.c`, `one_in_(great_obj)` with
+`obj-make:great-obj:20` in `constants.txt`, which recomputes the level as `1 +
+level x 100 / randint1(100)`). So a wand on depth 2 is possible and rare, and
+when you find one the pool to think about is the deeper one.
+
+**So do not plan around one kind.** A run on depth 2 wrote that its standing
+question was what Magic Mapping shows and walked to two unknown scrolls to
+find out; the pool says it had a 17% chance of a Phase Door and no chance at
+all of the thing it was hoping for. The useful question is never "is this the
+one I want", it is "what does this pool make likely, and can I afford the
+tail".
+
+**Three ways a kind becomes known**, all FACT:
+
+1. **Use it.** Reading or quaffing identifies the kind at once and the first
+   use pays experience (section 1). For a depth-2 potion that is an 84% good
+   bet; for a scroll, 8% of the pool is Summon Monster or Darkness.
+2. **Buy one.** Everything in a shop is identified, so every kind the
+   Alchemist stocks is a kind you can rule out by sight for the rest of the
+   game - and the stock changes daily.
+3. **Give it to the store that buys that type.** `src/store.c do_cmd_sell()`
+   calls `object_flavor_aware()` and learns the object's runes **before** the
+   item changes hands, so with selling off you get **0 gold, lose the item,
+   and know the kind for the rest of the game**. The prompt reads `Give which
+   item?` and the message afterwards is `You had ...` (`src/ui-store.c`).
+   **This is the only way to identify something you dare not use**, and it is
+   worth a town trip of its own.
+
+Who takes what (`store` `buy:`): **Alchemist (5)** scrolls and potions;
+**Magic shop (6)** wands, staves, rods, rings, amulets and books; **General
+(1)** mushrooms, flasks, food, lights, diggers, cloaks and ammunition;
+**Armoury (2)** armour; **Weaponsmith (3)** weapons, bows and ammunition;
+**Bookseller (4)** books. The **Black market and your Home buy nothing**.
+
+So the workflow: pick unknown consumables up, use the ones whose pool is
+mostly harmless **while you are safe and at full hit points**, keep the rest,
+and give them away on your next trip to town - one trip identifies every
+unknown you are carrying, and a trip to town costs two or three asks from
+depth 1 (see the shuttle above).
 
 **The rule that does the rest:** in `object.txt` every harmful consumable has
 `cost:0`, and every useful one has a price. FACT, checked against the file:
