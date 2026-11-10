@@ -12,6 +12,7 @@ runs of the same family months apart are not the same experiment.
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | [codex-1-tty](codex-1-tty/) | 103 | openai/gpt-5.6-luna | Dunadan Warrior | 1 | 1 | 600 (134 gold + 466 carried) | 66 | 255 | 1,860 | ended | 16,000 | — | False | — | [watch](codex-1-tty/report.html) |
 | [minimaxflash-1](minimaxflash-1/REPORT.md) | 23 | minimax-coding-plan/MiniMax-M3.1-Flash | High-Elf Druid | 1 | 1 | 611 (26 gold + 585 carried) | 148 | 1,081 | 7,433 | ended | — | — | False | — | [watch](minimaxflash-1/report.html) |
+| [minimaxflash-1-again](minimaxflash-1-again/REPORT.md) | 23 | minimax/MiniMax-M3 | High-Elf Druid | 2 | 4 | 317 (18 gold + 299 carried) | 401 | 1,616 | 10,898 | ended | — | notebook.md | False | — | [watch](minimaxflash-1-again/report.html) |
 | [qwen-flash-1](qwen-flash-1/) | 23 | alibaba-token-plan/qwen3.8-flash | High-Elf Druid | 0 | 1 | 475 (379 gold + 96 carried) | 73 | 204 | 570 | died: a scruffy little dog | 51,226 | — | — | — | [watch](qwen-flash-1/report.html) |
 | [sonnet-1](sonnet-1/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 1 | 3 | 723 (10 gold + 713 carried) | 125 | 644 | 4,659 | ended | 162,466 | — | — | — | [watch](sonnet-1/report.html) |
 | [sonnet-2](sonnet-2/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 6 | 6 | 1,189 (91 gold + 1,098 carried) | 153 | 637 | 6,056 | ended | 172,221 | sonnet-1.md | True | — | [watch](sonnet-2/report.html) |
