@@ -1,6 +1,6 @@
 # ACCUMULATED KNOWLEDGE — what the runs found that no manual says
 
-Edition 6, 2026-11-10. *(Edition 1, the same day, repeated things the manuals
+Edition 7, 2026-11-10. *(Edition 1, the same day, repeated things the manuals
 already say; see "What is deliberately not here". Edition 2 added the eleventh
 run and the caveat in section 1 that the runs never questioned their own
 objective. Edition 3 added three runs and corrected the single most
@@ -9,11 +9,12 @@ not one. Edition 4 added two runs - a Gnome Mage played to the page's plan
 and a fifth Druid life that found the staircase and died past it - the fifth
 death, the fear mechanic, and the map facts that make "no staircase on the M
 map" real evidence. Edition 5 added the first Priest and Dwarf, and the sixth
-death: a Half-Elf Warrior killed by a breeder pack it walked into with a
-60-key chain. **Edition 6 adds the mage carry-on's death - the seventh - and
-two corrections it paid for: a locked door stops the aimed walk and turns it
-into lock-picking, and not every monster is placed asleep (a race with
-`sleepiness:0` is placed awake).**)*
+death. Edition 6 added the mage carry-on's death - the seventh - and the
+locked-door and never-sleeping corrections. **Edition 7 adds the Priest's
+second life and the first Ranger (the first Hobbit), and three measurements
+from play: what actually cuts a key string (`disturb()` and its list), what
+each movement command is worth per ask, and that the status line's `Light N`
+is the square's light, not the torch's.**)*
 
 **Who this is for.** [borg-reborn-rs](https://github.com/diegoami/borg-rs),
 the Rust Borg being rebuilt, and anyone else outside this repository. The
@@ -24,7 +25,7 @@ from time to time, not after every run.
 own manual, the strategy manual and `lib/gamedata` itself, at leisure and in
 full — a program has time a player in a 150-decision budget does not. So
 nothing here is in those documents. What is here is the residue: **what
-nineteen runs measured, what they corrected, and what had to be read out of
+twenty-one runs measured, what they corrected, and what had to be read out of
 the source because no manual states it.**
 
 **Not for the players.** A run here is denied exactly one thing: another run's
@@ -43,13 +44,13 @@ The prompts do not mention it.
 
 ## The corpus
 
-Nineteen runs, 5,280 asks, 38,099 keypresses, deepest **depth 7**, seven
+Twenty-one runs, 5,637 asks, 42,684 keypresses, deepest **depth 7**, seven
 deaths. One session was played by a person (`diego-1`), which is the control.
 Three characters were asked for (two Gnome Mages and the Warrior that
 followed them); the rest were drawn. By class: six Warrior runs, six Druid
-runs (five of them lives of one character), five Mages, and two Priests (one
-the person, one a Dwarf) - **Blackguard, Paladin, Ranger, Rogue and
-Necromancer have never been played here.**
+runs (five of them lives of one character), five Mages, three Priests (one
+the person, two lives of one Dwarf) and one Ranger - **Blackguard, Paladin,
+Rogue and Necromancer have never been played here.**
 
 | run | model | character | depth | level | asks | turns | ended |
 |---|---|---|---|---|---|---|---|
@@ -68,6 +69,8 @@ Necromancer have never been played here.**
 | [minimaxflash-3](records/minimaxflash-3/REPORT.md) | minimax/MiniMax-M3.1-Flash | Human Warrior (asked for) | 3 | 4 | 152 | 8,394 | **died**, cave spider |
 | [mmf-mage.2](records/mmf-mage.2/REPORT.md) | minimax/MiniMax-M3.1-Flash | Gnome Mage (asked for) | 3 | 1 | 146 | 4,872 | alive, stopped |
 | [mmf-mage.3](records/mmf-mage.3/REPORT.md) | minimax-coding-plan/MiniMax-M3.1-Flash | Gnome Mage (asked for) | 3 | 1 | 199 | 8,019 | **died**, crow |
+| [mmx-pri-1.2](records/mmx-pri-1.2/REPORT.md) | minimax-coding-plan/MiniMax-M3.1-Flash | Dwarf Priest (asked for) | 1 | 3 | 206 | 13,883 | alive, stopped |
+| [mmx-ran-1](records/mmx-ran-1/REPORT.md) | minimax-coding-plan/MiniMax-M3.1-Flash | Hobbit Ranger (asked for) | 1 | 1 | 151 | 5,219 | alive, stopped |
 | [minimaxflash-1.5](records/minimaxflash-1.5/REPORT.md) | minimax/MiniMax-M3.1-Flash | High-Elf Druid (life 5) | 2 | 4 | 893 | 29,966 | **died**, an acolyte |
 | [diego-1](records/diego-1/REPORT.md) | a person | Kobold Priest | 1 | 2 | 418 | 4,741 | alive, saved |
 | [mmx-pri-1](records/mmx-pri-1/REPORT.md) | minimax-coding-plan/MiniMax-M3.1-Flash | Dwarf Priest (asked for) | 1 | 2 | 149 | 9,952 | alive, stopped |
@@ -80,8 +83,8 @@ screen by screen: <https://diegoami.github.io/borg-runner/>.
 
 ## 1. Descent is the whole problem, and nothing in the manuals says how
 
-Fifteen of nineteen runs ended at depth 0, 1 or 2, and the seven deaths are
-all in that band too. The twelve that stopped were alive. They were still
+Sixteen of twenty-one runs ended at depth 0, 1 or 2, and the seven deaths are
+all in that band too. The fourteen that stopped were alive. They were still
 on the first level because they had not found the way off it.
 
 - **Walking a depth-1 level costs on the order of 100 decisions and finds
@@ -103,7 +106,7 @@ on the first level because they had not found the way off it.
   used the game's and got further on fewer asks.
 
 **The caveat that matters as much as the finding: no run ever questioned the
-objective.** All nineteen treated the down staircase as the only thing worth
+objective.** All twenty-one treated the down staircase as the only thing worth
 finding, and the seven that died were at character level 4 or lower while
 doing it. The one run that planned to level instead (`mmf-mage.2`, asked to
 play a Gnome Mage by the page's own arithmetic) found the plan's real
@@ -215,6 +218,22 @@ manuals.
   `minimaxflash-2#90`). The two agree about the game and disagree about what
   was known when they aimed: **aim at a landmark you have seen**, and use the
   nearest-frontier command for the dark.
+- **A key string ends at `disturb()`, not at a wall.** `disturb()`
+  (`src/player-util.c:1674`) signals `EVENT_INPUT_FLUSH`, and the frontend
+  drops the rest of the buffer. What disturbs, measured over one run: a
+  **visible monster attacking, hit or miss** (the miss branch calls
+  `disturb()` too), picking up gold or an item, opening a door, a failed lock
+  pick or disarm. A 24-key chain gave one step while two giant white mice
+  were awake, six asks running, with an empty message line because the
+  `-more-` erases it (ONE RUN, `mmx-ran-1`). The page's "a digit string stops
+  at the first wall" is one way a string ends; this is the other, and it is
+  the one that costs asks.
+- **What each movement command is worth per ask, measured over 150 asks:**
+  `lxg` 1 action; `l` + direction + `g` 3-6 in a room; `.` + direction 1-2 in
+  a room but 20+ in a corridor; a digit chain 1-9 and cut by any disturbance;
+  the aimed walk `*` `p` digits `g` **9-23**, including through the dark. A
+  run stops in an open room (`run_test`), and a diagonal step is refused when
+  either orthogonal neighbour is a wall (ONE RUN, `mmx-ran-1`).
 - **A reroll of the level is two or three decisions** (`<` then `>`; stairs
   are connected: 3 RUNS). Against a uniform placement, a fresh level is
   exactly as likely to be hard — which makes the comparison *decisions spent
@@ -339,6 +358,13 @@ The corpus' direct corrections. Each cost a run something.
   `calc_digging_chances()` needing over 10 for magma and over 20 for quartz.
   So every vein is a permanent wall for that class, and a `*` - a vein **with
   treasure** - is money it cannot have (GAME SOURCE + `minimaxflash-3`).
+- **The status line's `Light N` is the light of the square, not the torch's.**
+  `ui-display.c prt_light()` prints `square_light(cave, player->grid)`: 1 is a
+  dim corridor, 2 a lit one, 3 an open room, 0 darkness, and the town reads 1.
+  It changes as you move and without the torch burning (ONE RUN,
+  `mmx-pri-1.2`). It also sets the view: Light 2 is radius 1 (3x3) and Light 3
+  radius 2 (5x5) (`cave-view.c calc_lighting()`), so a torch in a corridor
+  shows only the squares around you (ONE RUN, `mmx-ran-1`).
 - **A Priest gets exactly one blow a turn, whatever it holds.**
   `calc_blows()` divides `adj_str_blow[STR]` by `max(weapon weight, class
   min-weight)`, and the Priest's min-weight is 35 with strength-multiplier 3,
@@ -411,7 +437,7 @@ The corpus' direct corrections. Each cost a run something.
 
 Not one of them was a big hit, none was at a depth the character had no
 business being at, and **none is the kind of death a hit-point threshold
-prevents** — which is the part worth carrying into a death analyser. Three
+prevents** — which is the part worth carrying into a death analyser. Four
 were at character level 1, one at 2 and three at 4; the deepest was depth 2.
 
 - **`sonnet-3`, Human Mage, 10 hit points, depth 1, turn 1,348, small
@@ -532,19 +558,32 @@ were at character level 1, one at 2 and three at 4; the deepest was depth 2.
   survive; and the depth-2 **crow and wild cat act twice a turn** (speed
   120, two blows of 1d3) - read their table rows before you descend (section
   6 has the death).
-- **Priest** (2 runs, one the person and one a Dwarf): **no prayer before CL5
-  detects anything**, and prayers are given at random rather than chosen
-  (`class.txt`), so a Priest has no magical route to a staircase — which,
-  given section 1, is the class's real problem rather than its combat. The
-  Dwarf is the best-bodied and worst-armed Priest the game makes: 24 hit
+- **Priest** (3 runs: the person, and two lives of one Dwarf): **no prayer
+  before CL5 detects anything**, and prayers are given at random rather than
+  chosen (`class.txt`), so a Priest has no magical route to a staircase —
+  which, given section 1, is the class's real problem rather than its combat.
+  The Dwarf is the best-bodied and worst-armed Priest the game makes: 24 hit
   points at CL2, +1.75 a level from CON 19, **one blow a turn whatever it
   holds**, and thrown oil at `35 - distance` as the whole attack (section 4).
   Its AC is what it buys (Robes to Soft Leather is AC 3 to 9), and its one
   real income is **digging**: a Dwarf's skill turns a treasure vein into 90
-  gold in three decisions. It reached CL2 and depth 1 and stopped alive with
-  410 carried; its own report's lesson is the mouse tax - a 38-tile walk with
-  a breeding nest at its back cost 22 of its 24 hit points in one decision
-  (`mmx-pri-1#81`, `#82`).
+  gold in three decisions. Life 1 reached CL2 and depth 1 with 410; life 2
+  reached **CL3 and 625**, bought back the escape ladder life 1 had spent
+  (Phase Door and a Cure Light Wounds), and still found no staircase on two
+  different depth-1 levels (15% then 1% of the map). Its own report's lesson
+  is the mouse tax - a 38-tile walk with a breeding nest at its back cost 22
+  of its 24 hit points in one decision (`mmx-pri-1#81`, `#82`) - and its
+  measurement is the `Light N` row in section 4.
+- **Ranger** (1 run, the first Hobbit): 12 hit points, AC 2, melee 1d5 at
+  to-hit 18 with 1.3 blows, **shoot to-hit 32 with 1.0 shot a turn**, disarm
+  59%, devices 48%, search 22%, stealth Excellent. At CL1 the Short Bow is
+  **worse than the dagger in damage per turn** (1d4 x2 = 2-8 against 1d5 x1.3)
+  and the FAST_SHOT flag only adds shots at CL3, so **thrown oil is the
+  Ranger's real weapon** (9-36 a flask at range ten). It reached CL1 and
+  depth 1 and stopped alive with 724 carried, and its report is the corpus's
+  movement measurement (section 2): the aimed walk 9-23 tiles an ask, `lxg`
+  1, the run 20+ in a corridor but 1-2 in a room, and a digit chain cut by
+  any disturbance.
 - **Blackguard, Paladin, Ranger, Rogue and Necromancer have never been played.**
 
 ## 8. What this corpus cannot answer

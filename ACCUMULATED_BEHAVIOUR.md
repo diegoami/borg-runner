@@ -1,10 +1,10 @@
 # ACCUMULATED BEHAVIOUR — the characters worth imitating, and what they did
 
-Edition 3, 2026-11-10. *(Edition 1 was written the same day. Edition 2 added
-the first Priest and the sixth death. Edition 3 adds the mage lineage's
-second archived life and its death at a locked door: the clearest case here
-of a character that did the arithmetic right and lost the run on the one
-decision that mattered.)*
+Edition 4, 2026-11-10. *(Edition 1 was written the same day. Edition 2 added
+the first Priest and the sixth death. Edition 3 added the mage lineage's
+second archived life and its death at a locked door. Edition 4 adds the
+Priest's second life - CL3, the best Priest so far - and the first Ranger,
+whose report is the corpus's movement measurement.)*
 
 **Who this is for.** [borg-reborn-rs](https://github.com/diegoami/borg-rs),
 the Rust Borg being rebuilt, and anyone else outside this repository. It is
@@ -15,7 +15,7 @@ No player reads either (D16 - the export aggregates what a player is denied).
 **The criteria, stated because they are a decision, not a default:**
 **character level and net worth** (gold plus the game's own valuation of what
 the character carries). Maximum dungeon depth is recorded and is **not** a
-success criterion: nineteen runs chased the down staircase and the one thing
+success criterion: twenty-one runs chased the down staircase and the one thing
 they never questioned was the chasing. Depth appears below as context only.
 
 **The unit is the character, not the run.** A character can live several
@@ -26,7 +26,7 @@ and third life. Every entry below gives the whole lineage, because what a
 life did is only readable against what it inherited.
 
 **The caveats, stated because they are the difference between this and
-astrology:** the corpus is nineteen runs. Every shape below is one character,
+astrology:** the corpus is twenty-one runs. Every shape below is one character,
 on one seed, by one model - a lead, not a result. Nothing here is true of
 any seed but its own, and the seed-specific parts are left out. Where a run
 was lucky, the luck is named; what you imitate is what it did with it.
@@ -194,13 +194,22 @@ staircase under your feet is always an exit in one direction.
   learned the game and not yet learned to stop - and the death that made the
   harness let the game end a key string (D17). Read it as a warning, not a
   model: the run is worth copying up to ask 139 and not one key past it.
-- **`mmx-pri-1`** (CL2, 410, alive, depth 1) - no shape yet, but the most
-  useful *class* document in the corpus: the first Dwarf and the first model
-  Priest, one blow a turn whatever it holds, thrown oil at `35 - distance`,
-  and an income in digging (90 gold from a vein in three decisions). It
-  stopped alive because a mouse nest cost it 22 of its 24 hit points on one
-  walk; the report is the arithmetic behind section 7 of
-  ACCUMULATED_KNOWLEDGE.md, and the play is not yet worth copying.
+- **`mmx-pri-1`'s character** (two lives: `.1` CL2, 410; `.2` CL3, 625, alive)
+  - no shape yet, but the most useful *class* document in the corpus: the
+  first Dwarf and the first model Priest, one blow a turn whatever it holds,
+  thrown oil at `35 - distance`, and an income in digging (90 gold from a
+  vein in three decisions). The second life is the better one: it bought back
+  the escape ladder the first had spent, reached CL3, and still found no
+  staircase on two depth-1 levels. The play is not yet worth copying, but
+  the inheritance is: **a life that spends its escapes leaves the next one
+  poorer, and the next one must buy them back before anything else.**
+- **`mmx-ran-1`** (CL1, 724, alive, depth 1) - no shape yet: it reached
+  character level 1 and found no staircase. It is here for its *measurement*,
+  not its play: the aimed walk 9-23 tiles an ask, `lxg` 1, the run 20+ in a
+  corridor but 1-2 in a room, and a digit chain cut by any disturbance - a
+  visible monster's attack, a pickup, a door. Read it before you plan a
+  movement budget; do not read it for how to fight (at CL1 its bow is worse
+  than its dagger, and thrown oil is the Ranger's real weapon).
 - **The CL1 survivors** (`codex-1-tty`, `minimaxflash-2`) - alive, level 1:
   no shape worth copying yet.
 - **`diego-1`** (CL2, the person) - the control, not a candidate: it saved
