@@ -1,6 +1,8 @@
 # Agent entry
 
 This file is for any session that works on this repository. Read it, then
+[docs/HANDOVER.md](docs/HANDOVER.md), which says where the work stands, what
+is waiting and which checks to run, then
 [docs/DESIGN.md](docs/DESIGN.md), which holds every decision and what it rules
 out, then [PLAN.md](PLAN.md).
 

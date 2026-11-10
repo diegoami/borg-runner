@@ -253,4 +253,7 @@ the keyboard is the action, and every judgement belongs to the model.
 
 ## Status
 
-**Being set up (2026-11-09).** See [PLAN.md](PLAN.md) for what exists.
+**Being set up (2026-11-09).** See [PLAN.md](PLAN.md) for what exists, and
+**[docs/HANDOVER.md](docs/HANDOVER.md)** for where the work stands today: the
+thirteen runs, the four places knowledge lives, every check and how to run it,
+and what the next session should pick up.
