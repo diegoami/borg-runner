@@ -76,6 +76,23 @@ press a key here.
 
 ## What it must not contain
 
+- **Anything the manuals already say.** This is the rule that decides most of
+  the document's length, and the first draft of edition 1 broke it. The
+  consumer reads the game's own manual, the strategy manual and
+  `lib/gamedata` itself — at leisure and in full, which a player inside a
+  150-decision budget cannot. So the command set, the spell lists, prices,
+  kits, monster tables and the escape ladder are **not** knowledge this
+  repository produces. What is left is the residue: what the runs measured,
+  what they corrected in the manuals, and what had to be read out of the
+  source because no manual states it. A data file is quoted only where a
+  run's conclusion depends on it.
+- **What is only true of reading a text screen.** Where a keypress is lost to
+  a `-more-`, that menu letters are labels and not positions, that the glyph
+  under `@` is not drawn, that a blank health bar means *unseen*: all real,
+  all in `manuals/INSTRUCTIONS.md` for the players here, and none of it
+  knowledge about Angband. A consumer with the game's own state does not have
+  those problems. The exception is a death: when one of them killed a run, the
+  death is the finding and it stays.
 - **A claim with no provenance.** The check catches a citation that names no
   run; it cannot catch a claim with no citation at all, so that is on the
   writer.

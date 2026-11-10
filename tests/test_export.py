@@ -100,6 +100,15 @@ def test_nothing_a_player_reads_points_at_the_export(name):
     assert 'ACCUMULATED_KNOWLEDGE' not in (pins.ROOT / name).read_text()
 
 
+def test_the_export_says_why_it_leaves_the_manuals_out():
+    """The consumer can read the manuals itself; the export is the residue."""
+    text = export.ACCUMULATED.read_text()
+    assert 'What is deliberately not here' in text
+    assert 'strategy manual' in text
+    process = (pins.ROOT / 'docs' / 'EXPORT.md').read_text()
+    assert 'Anything the manuals already say' in process
+
+
 def test_the_export_says_itself_that_players_do_not_read_it():
     text = export.ACCUMULATED.read_text()
     assert 'not for' in text.lower() and 'solution key' in text
