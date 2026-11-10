@@ -104,6 +104,7 @@ def keys_from(text):
 def cmd_replay(args):
     verdict = replay_module.replay(args.run, args.into or (run_module.RUNS /
                                    f'{Path(args.run).name}-replay'),
+                                   frames=args.frames,
                                    stop_after=args.stop_after)
     print(json.dumps(verdict, indent=2, sort_keys=True))
     return 0 if verdict['identical'] else 1
@@ -505,6 +506,9 @@ def parser():
     p.add_argument('--run', required=True, type=Path)
     p.add_argument('--into', type=Path)
     p.add_argument('--stop-after', type=int, help='stop once this game turn is reached')
+    p.add_argument('--frames', action='store_true',
+                   help='also dump the screen at every input event '
+                        '(frame-<ask>-<n>.txt), not just at the asks')
     p.set_defaults(func=cmd_replay)
 
     p = sub.add_parser('takeover', help='replay to a turn, save, and hand over in X11')

@@ -165,6 +165,23 @@ Per ask, numbered by the ask so a question and its answer always pair up:
 | `screen-<n>.txt` | the screen, 24 lines, as the game drew it |
 | `question-<n>.txt` | the ask number, the turn, and where to put the answer |
 | `keys-<n>.txt` | **the answer**: every byte is a key to press |
+| `frame-<n>-<i>.txt` | optional: the screen at every input event, not just the asks (`-f`) |
+
+An ask is answered **once**. The game presses the first answer and moves on,
+so a second one cannot reach it — it can only overwrite the keys file and
+append a second decision, and the record then claims keys were played that
+never were. `minimaxflash-3` did exactly that to its asks 27 and 56, and its
+replay diverged at exactly that point (found 2026-11-10). `answer` refuses a
+second answer; the readers (`recorded_keys`, `keys_sent`) take the first
+answer per ask and name the duplicates, and the audit warns on a log that
+has them.
+
+The frame dump exists because the asks are not the whole game: while the
+buffer spends a long key string, the game asks and is answered without a
+screen being written, and that is where deaths happen. With `-f` the
+frontend writes the screen at those events too (`replay --frames` for an
+old run). Nothing else changes: same keys, same screens at the asks, and
+the slow test replays a run twice with the dump on and off and diffs them.
 
 The question also carries `cursor x y`. A person sees a menu's highlight as
 reverse video; the screen dump is characters only, so without the cursor the
