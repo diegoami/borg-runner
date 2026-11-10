@@ -139,6 +139,16 @@ levelling and shopping. Nothing here scores depth: the record keeps the depth,
 the character level and the game's own valuation of everything you carry, and
 a shallow level played well is worth more than a deep one survived by luck.
 
+**The first character levels are on depth 1, and that is the plan.** A
+depth-1 kill pays 1 to 5 experience; CL1 to CL3 is a handful of kills, and
+CL5 is about forty. None of that needs a down staircase. A run that covers
+depth 1, kills what it meets and shuttles to town to heal and shop has done
+the job **even if it never sees a `>`**; a run that spends its 150 decisions
+hunting one has spent them on the wrong thing. **The down staircase is for
+later, when the character can pay for the depth** - not the first objective,
+and not a failure if it is not found (OBSERVED, mmx-pri-1.2#205: CL3 on depth 1,
+625 carried, no staircase found on either of two depth-1 levels).
+
 So **exploring the level you are on and going back to town is a plan, not a
 failure.** It is cheap and it pays:
 
@@ -534,6 +544,9 @@ and when to risk it, is under "Keys as the game receives them" above.
   one anyway, find a staircase before you pick a fight.
 
 ## 8. Descend
+**Do not read this section as the first job.** The first character levels are
+on depth 1 (see "Depth is not the objective"); descend when the character can
+pay for the depth, not because a staircase exists.
 **When you can pay for it** - see "Depth is not the objective" above; the
 choice of whether to go down now is yours to make and to report, and this
 section is only how.

@@ -199,10 +199,12 @@ staircase under your feet is always an exit in one direction.
   first Dwarf and the first model Priest, one blow a turn whatever it holds,
   thrown oil at `35 - distance`, and an income in digging (90 gold from a
   vein in three decisions). The second life is the better one: it bought back
-  the escape ladder the first had spent, reached CL3, and still found no
-  staircase on two depth-1 levels. The play is not yet worth copying, but
-  the inheritance is: **a life that spends its escapes leaves the next one
-  poorer, and the next one must buy them back before anything else.**
+  the escape ladder the first had spent and reached **CL3 on depth 1 without
+  a staircase** - which is the plan, not a failure: the first levels are on
+  depth 1, and the staircase is for when the character can pay for the depth.
+  The play is not yet worth copying, but the inheritance is: **a life that
+  spends its escapes leaves the next one poorer, and the next one must buy
+  them back before anything else.**
 - **`mmx-ran-1`** (CL1, 724, alive, depth 1) - no shape yet: it reached
   character level 1 and found no staircase. It is here for its *measurement*,
   not its play: the aimed walk 9-23 tiles an ask, `lxg` 1, the run 20+ in a

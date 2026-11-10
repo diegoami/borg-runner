@@ -81,14 +81,21 @@ screen by screen: <https://diegoami.github.io/borg-runner/>.
 
 ---
 
-## 1. Descent is the whole problem, and nothing in the manuals says how
+## 1. The staircase was not the objective, and the corpus learned that late
 
 Sixteen of twenty-one runs ended at depth 0, 1 or 2, and the seven deaths are
-all in that band too. The fourteen that stopped were alive. They were still
-on the first level because they had not found the way off it.
+all in that band too. The fourteen that stopped were alive, and most of them
+had spent their asks looking for a way down. **That was the wrong job.** The
+first character levels are on depth 1: a depth-1 kill pays 1 to 5 experience,
+and CL1 to CL3 is a handful of kills. A run that covers the level, kills what
+it meets and shuttles to town has done the job without a `>`. The priest's
+second life is the proof: **CL3, 625 carried, no staircase found on either of
+two depth-1 levels** (ONE RUN, `mmx-pri-1.2#205`). Read this section as where the
+decisions went, not as proof that descent is the goal.
 
-- **Walking a depth-1 level costs on the order of 100 decisions and finds
-  nothing.** 100 of `sonnet-1`'s 125 asks; 148 of `minimaxflash-1`'s; 174
+- **Walking a depth-1 level costs on the order of 100 decisions and finds no
+  staircase - but it is where the first kills are.** 100 of `sonnet-1`'s 125
+  asks; 148 of `minimaxflash-1`'s; 174
   screens of depth 1 in `minimaxflash-1.3`; 4,290 of `diego-1`'s 4,741 game
   turns on one level (5 RUNS, one of them a person).
 - **The person and the first model run are the same session.** 971 keypresses
@@ -568,12 +575,13 @@ were at character level 1, one at 2 and three at 4; the deepest was depth 2.
   Its AC is what it buys (Robes to Soft Leather is AC 3 to 9), and its one
   real income is **digging**: a Dwarf's skill turns a treasure vein into 90
   gold in three decisions. Life 1 reached CL2 and depth 1 with 410; life 2
-  reached **CL3 and 625**, bought back the escape ladder life 1 had spent
-  (Phase Door and a Cure Light Wounds), and still found no staircase on two
-  different depth-1 levels (15% then 1% of the map). Its own report's lesson
-  is the mouse tax - a 38-tile walk with a breeding nest at its back cost 22
-  of its 24 hit points in one decision (`mmx-pri-1#81`, `#82`) - and its
-  measurement is the `Light N` row in section 4.
+  reached **CL3 and 625**, bought back the escape ladder life 1 had spent,
+  and found no staircase on two different depth-1 levels (15% then 1% of the
+  map). **That did not matter: CL3 on depth 1 is where the first levels
+  are** - the staircase is for later, not the objective. Its own report's
+  lesson is the mouse tax - a 38-tile walk with a breeding nest at its back
+  cost 22 of its 24 hit points in one decision (`mmx-pri-1#81`, `#82`) - and
+  its measurement is the `Light N` row in section 4.
 - **Ranger** (1 run, the first Hobbit): 12 hit points, AC 2, melee 1d5 at
   to-hit 18 with 1.3 blows, **shoot to-hit 32 with 1.0 shot a turn**, disarm
   59%, devices 48%, search 22%, stealth Excellent. At CL1 the Short Bow is

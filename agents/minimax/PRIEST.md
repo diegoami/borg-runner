@@ -221,3 +221,10 @@ At level 3 that is 2/3 of an experience unit a kill, and the level carries
 sixteen to twenty-four monsters over thirteen thousand squares. **Without a
 staircase this character cannot level, and the staircase is worth far more
 than any fight.**
+
+**Correction (maintainer, 2026-11-10): the first levels are on depth 1.**
+This life reached **CL3 there on four experience from three kills and no
+staircase**; the line above was written as if the staircase were the only
+source of experience, and it is not. **The staircase is for later, when
+depth-1 kills stop paying** - it is not the first objective, and a life that
+ends at CL3 on depth 1 with no `>` has done the job.
