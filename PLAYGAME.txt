@@ -1,6 +1,6 @@
 Play one game of Angband 4.2.6 from the screen, one keypress at a time.
 
-Before you start, substitute the two placeholders below. If you were given
+Before you start, substitute the placeholders below. If you were given
 only a run name, choose a seed that does not already appear in
 records/OVERVIEW.md and say in your first note which one you chose.
 
@@ -56,8 +56,10 @@ the OBSERVED line and say in your write-up which one held.
 Everything else in the repository is lookup. `knowledge/LEARNED.md` has the
 evidence behind each OBSERVED line, run and ask; `knowledge/MANUAL-GAPS.md`
 has the long cheat sheets; `manuals/INSTRUCTIONS_2.md` is depth 5 to 20 and no
-run has been there. Go to any of them for a number or a page, not before. Do not read other runs' decisions or write-ups for your own seed -
-general notes are knowledge, a transcript of your seed is a solution key.
+run has been there. Go to any of them for a number or a page, not before.
+
+Do not read other runs' decisions or write-ups for your own seed - general
+notes are knowledge, a transcript of your seed is a solution key.
 
 Your first note must say which files you actually opened, your own playbook
 among them. Nothing else records it, and the whole question here is what a
