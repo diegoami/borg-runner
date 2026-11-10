@@ -24,7 +24,8 @@
   "character_level": 4,
   "class": "Warrior",
   "cost": {
-    "model": "minimax-coding-plan/MiniMax-M3.1-Flash"
+    "model": "minimax-coding-plan/MiniMax-M3.1-Flash",
+    "played_by": "opencode"
   },
   "death_depth": 2,
   "died": true,
