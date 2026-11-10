@@ -181,6 +181,14 @@ READING = ('PLAYGAME.txt', 'CONTINUEGAME.txt', 'README.md', 'AGENTS.md',
            'manuals/INSTRUCTIONS_2.md')
 
 
+@pytest.mark.parametrize('name', PROMPTS)
+def test_both_prompts_say_the_town_staircase_is_under_you(name):
+    """Four runs walked the town looking for what they stood on."""
+    prose = ' '.join((pins.ROOT / name).read_text().split())
+    assert 'town_gen_layout' in prose
+    assert 'l>g' in prose
+
+
 @pytest.mark.parametrize('name', READING)
 def test_nothing_a_player_reads_points_at_a_file_that_is_gone(name):
     text = (pins.ROOT / name).read_text()

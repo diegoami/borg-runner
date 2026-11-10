@@ -162,6 +162,11 @@ what was worth writing:
 - There is no birth. Your character exists, with its level, its gear and its
   wounds. Press `i`, `e` and `C` early: nothing here remembers what it carries
   for you, and the run before you may have spent things.
+- **If you were left in the town, the staircase down is under you or one
+  `l>g` away.** The town has one, the game remembers it, and the tile under
+  `@` is never drawn - so read the status line rather than looking for a `>`
+  on the map (`src/gen-cave.c town_gen_layout()`; three runs raised this in
+  their own notes).
 - You inherit its position, which may be bad. Read the top line of the screen
   and the status line before you move. The run before you may have left you
   slowed, confused, out of escapes, or next to something it was losing to.

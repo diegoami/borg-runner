@@ -109,6 +109,26 @@ harness you are. If `wait` ever says the run has exited after you have only
 just started it, say so rather than starting over: that is a bug worth
 reporting, not something to work around.
 
+== WHEN BIRTH ENDS, YOU ARE STANDING ON THE WAY DOWN ==
+
+The town has one down staircase and **the game puts you on it**: `>` takes
+you to depth 1 before you have walked anywhere. FACT,
+`src/gen-cave.c town_gen_layout()` sets the staircase on the player's own
+square and then places the player there; the status line says `Down
+staircase` on your first screen, and `l` on your own square says it too.
+
+Runs keep missing it. The tile under `@` is never drawn - the map draws you,
+not the terrain you are standing on - so a player scanning for a `>` glyph
+sees none and goes looking. Three runs raised this in their own notes, and the
+one run that died at depth 0 never left the town at all.
+
+So: shop first if you mean to - the stores are the digits `1`-`8` on the map,
+and `M` draws the whole town with every door in it - then **`l>g`** walks you
+back to the staircase the game already remembers, and `> ` takes it. The same
+holds one level down: you arrive on an **up** staircase, which is your way out
+of a level that will not give you anything, and `< ` then `> ` is a fresh
+level of the same depth.
+
 == PLAY: ONE CALL PER DECISION ==
 
     .venv/bin/python -m borg_runner answer <n> '<keys>' --run runs/{RUNNAME} \
