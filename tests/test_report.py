@@ -26,6 +26,16 @@ def a_run(tmp_path):
     return run
 
 
+def a_run_with_leads(tmp_path):
+    """A run whose player wrote the leads the prompts ask for."""
+    run = a_run(tmp_path)
+    (run / 'REPORT.md').write_text(
+        '# r report\n\n## What happened\n\nit played.\n\n## 5. Leads\n\n'
+        '1. **The stairs are findable** (ask 2). Evidence: the map showed '
+        'one. Test: a run that buys a Magic Mapping scroll.\n')
+    return run
+
+
 # What would make the page fetch something. A bare "http" is not on the list
 # on purpose: Angband's own splash screen prints rephial.org and angband.live,
 # so those strings arrive as *game output* inside the replay's data and are no
@@ -178,3 +188,51 @@ def test_the_record_reaches_the_turn_of_the_last_question(tmp_path):
     record = run_module.write_record(run, outcome='stopped')
     assert record['final_turn'] == 1348, 'not the last answered ask'
     assert record['asks_made'] == 3 and record['asks'] == 2
+
+
+def test_the_page_shows_the_leads_the_player_wrote(tmp_path):
+    """The leads are the run's most valuable output, and the page shows them."""
+    page = report.render(report.read(a_run_with_leads(tmp_path)))
+    assert 'What it would do differently' in page
+    assert 'The stairs are findable' in page
+    assert 'a run that buys a Magic Mapping scroll' in page
+
+
+def test_each_lead_carries_the_turn_its_ask_happened_at(tmp_path):
+    """An ask is a number; the record says what turn it was at."""
+    page = report.render(report.read(a_run_with_leads(tmp_path)))
+    assert 'ask 2' in page
+    assert 'turn 2' in page
+
+
+def test_an_ask_is_a_link_into_the_replay(tmp_path):
+    """The turn is where it happened, and the page can be taken there."""
+    page = report.render(report.read(a_run_with_leads(tmp_path)))
+    assert 'href="#replay"' in page
+    assert 'data-ask="2"' in page
+
+
+def test_a_run_that_wrote_no_leads_says_so(tmp_path):
+    page = report.render(report.read(a_run(tmp_path)))
+    assert 'the write-up names no leads' in page
+
+
+def test_a_lead_cannot_break_out_of_the_page(tmp_path):
+    """A lead is a player's words, and the page renders them."""
+    run = a_run_with_leads(tmp_path)
+    (run / 'REPORT.md').write_text(
+        '## 5. Leads\n\n- **</script><b>no</b>** Test: <img src=x>\n')
+    page = report.render(report.read(run))
+    assert '</script><b>' not in page
+    assert '<img src=x>' not in page
+    assert page.count('</script>') == 1
+
+
+def test_a_code_span_inside_an_emphasised_claim_is_the_games_own_character():
+    """The reports write the game's keys in code, and one of them is a `*`."""
+    assert report.inline('**Does `*` then `>` jump?**') == (
+        '<strong>Does <code>*</code> then <code>&gt;</code> jump?</strong>')
+
+
+def test_an_asterisk_the_player_multiplied_with_is_not_an_emphasis():
+    assert report.inline('a cost of 2 * 3 = 6 * 4') == 'a cost of 2 * 3 = 6 * 4'
