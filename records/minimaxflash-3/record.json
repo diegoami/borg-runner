@@ -1,5 +1,5 @@
 {
-  "asks": 152,
+  "asks": 150,
   "asks_made": 150,
   "born_as_asked": true,
   "build": {
@@ -29,6 +29,10 @@
   },
   "death_depth": 2,
   "died": true,
+  "duplicate_answers": [
+    27,
+    56
+  ],
   "exit_code": null,
   "final_turn": 8394,
   "gold": 131,
@@ -36,8 +40,8 @@
     "max": 43,
     "now": -1
   },
-  "keypresses": 4574,
-  "keys_sha256": "8c7adbe6d4bca50a3eb5098198f1a8de49b90cc79fec5704c32b299c9b3f159e",
+  "keypresses": 4563,
+  "keys_sha256": "c1566b21f2f272c4d8b6b97112a1a78e59ff51ce4af18e50660c0d156c42a56b",
   "killed_by": "a cave spider",
   "max_character_level": 4,
   "max_depth": 3,
@@ -54,7 +58,7 @@
   "read_before_playing": "READING: I opened manuals/INSTRUCTIONS.md (all 367 lines), agents/minimax/COMMON.md (all 493 lines), agents/minimax/DRUID.md (my family's Druid page - read for the harness/screen-reading lessons, not the class), PLAYGAME.txt, docs/BRIEF.md, and strategy-manual c14 s1 (Warrior) + c14 s0 (class flags). No family has written a Warrior page, so agents/minimax/WARRIOR.md is mine to write. (ask 1)",
   "read_its_own_playbook": true,
   "run": "minimaxflash-3",
-  "savefile_sha256": "3e6991df9454c4abb1e8ceed18f38ae75c2f236658011020b92c501d46f9d3c5",
+  "savefile_sha256": "58ad2d16f714862e529da13a2c5c2207c6ee48555ab3a52faf5afcf0bf7458a2",
   "schema": "borg-runner/run-record@1",
   "screens": 150,
   "screens_sha256": "b313689f69ee58c2ab3e906078d4fa85f27ec5c391654e9e49754a0f5d7ca791",
