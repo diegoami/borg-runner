@@ -10,9 +10,9 @@ This run was handed notebook.md (106 lines) and those lines are **not** repeated
 - character: minimaxflash-1
 - game: angband/angband e473720ed88a
 - patch: 54a4cc8b04a2
-- reached: depth 2 in 758 asks, 6881 keypresses, turn 24105
-- outcome: stopped
-- keys: 4af83f10b25d
+- reached: depth 2 in 759 asks, 6882 keypresses, turn 24105
+- outcome: ended
+- keys: 66ca469a0233
 - notebook: 2dfaddd61c66
 
 ## The notes
