@@ -602,12 +602,22 @@ def reading_note(run):
     Nothing else records whether a player read anything, and a run's own
     final report is written afterwards and has been generous with itself: one
     report claimed three strategy chapters its contemporaneous note did not.
+
+    **Its own notes, not the ones it was handed.** A carried-on run starts
+    with its ancestor's notebook in place, so the first note in the file is
+    the note the *first* life wrote: minimaxflash-1.4 read both of its
+    playbook pages and said so at ask 609, and its record still said it had
+    read nothing for its class, because the ancestor's ask-1 note was found
+    first. `own_notes` takes the handed lines back out; where the inherited
+    file is no longer on disk it cannot, and this falls back to the whole
+    notebook as before.
     """
     # A note *about files*, not merely a note containing the word "read":
     # the first attempt matched "read the letter from the list" in a note
     # about shopping.
     names = ('.md', '.rst', 'docs/', 'knowledge/', 'manuals/', 'vendor/')
-    for line in notebook(run, lines=10 ** 6).splitlines():
+    mine = own_notes(run)
+    for line in (mine or notebook(run, lines=10 ** 6).splitlines()):
         said = line.lstrip('- ').strip()
         if said and any(name in said for name in names):
             return said

@@ -290,6 +290,41 @@ def test_the_reading_note_is_about_files_not_about_the_word_read(tmp_path):
     assert note.startswith('Opened before play')
 
 
+def test_a_carried_on_run_is_read_by_its_own_first_note_not_its_ancestors(tmp_path):
+    """minimaxflash-1.4 opened both of its playbook pages and said so at ask
+    609; its record still said it had read nothing for its class, because the
+    notebook it was handed opened with its first life's ask-1 note."""
+    import json
+
+    ancestor = tmp_path / 'ancestor.md'
+    ancestor.write_text('- Files opened: manuals/INSTRUCTIONS.md (whole), '
+                        'knowledge/NOTES.md, records/OVERVIEW.md (ask 1)\n')
+    run = a_run(tmp_path)
+    (run / 'notebook.md').write_text(ancestor.read_text())
+    (run / 'inherited.json').write_text(json.dumps(
+        {'inherited_from': str(ancestor), 'lines': 1, 'sha256': 'x'}))
+    run_module.remember(run, 'CARRIED ON at ask 609. Files I opened for THIS '
+                             'session: my own playbook agents/minimax/COMMON.md '
+                             'and agents/minimax/DRUID.md', ask=609)
+    note = run_module.reading_note(run)
+    assert note.startswith('CARRIED ON'), note
+    assert run_module.read_for_its_character(run, note, 'Druid') is True
+
+
+def test_without_the_inherited_file_the_whole_notebook_is_still_read(tmp_path):
+    """`own_notes` can only subtract what is still on disk; a run directory is
+    scratch, so the fallback must be the old behaviour, not nothing."""
+    import json
+
+    run = a_run(tmp_path)
+    run_module.remember(run, 'Opened: manuals/INSTRUCTIONS.md and the Druid '
+                             'block', ask=1)
+    (run / 'inherited.json').write_text(json.dumps(
+        {'inherited_from': str(tmp_path / 'gone.md'), 'lines': 3, 'sha256': 'x'}))
+    assert run_module.read_for_its_character(
+        run, run_module.reading_note(run), 'Druid') is True
+
+
 def test_a_run_says_whether_it_read_the_playbook_for_the_class_it_drew(tmp_path):
     run = a_run(tmp_path)
     run_module.remember(run, 'Opened: docs/BRIEF.md, command.rst, '

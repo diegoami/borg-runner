@@ -296,7 +296,8 @@ def race_experience(c):
                int(first[1]), int(match[1]) if match else 'player_exp not found')
 
 
-WORD_NUMBERS = {'two': 2, 'six': 6, 'twelve': 12, 'twenty': 20, 'forty': 40}
+WORD_NUMBERS = {'two': 2, 'three': 3, 'six': 6, 'twelve': 12, 'twenty': 20,
+                'forty': 40}
 
 
 def player_exp_table():
@@ -347,6 +348,67 @@ def missile_dice(spells, level):
             count = {'-': count - value, '+': count + value,
                      '*': count * value, '/': count // value}[op]
     return f'{count}d{match[2]}'
+
+
+@extractor('staircases per level', minimum=8)
+def staircases_per_level(c):
+    """How many staircases a level is built with, and where they can sit.
+    Section 8's answer to the sweep: there are three or four, in dead ends."""
+    found = c.search(r'both ask for \*\*(\d+) or (\d+) down staircases and (\d+) or '
+                     r'(\d+) up\*\*', name='the staircase counts')
+    cave = gd.read_source('src/gen-cave.c') or ''
+    if found and cave:
+        for name in ('classic_gen', 'modified_gen'):
+            body = re.search(rf'chunk \*{name}\(.*?\n\}}', cave, re.S)
+            call = re.search(r'handle_level_stairs\([^;]*?rand_range\((\d+), (\d+)\),\s*'
+                             r'rand_range\((\d+), (\d+)\)', body[0] if body else '', re.S)
+            real = tuple(int(call[n]) for n in (1, 2, 3, 4)) if call else 'no such call'
+            c.emit('staircases', found.start(1), f'{name} staircase counts (down, up)',
+                   tuple(int(found[n]) for n in (1, 2, 3, 4)), real)
+    profiles = {}
+    for entry in gd.load('dungeon_profile.txt')[0]:
+        profiles[entry.value.lower()] = {'alloc': int(entry.first('alloc') or 0),
+                                         'min': int(entry.first('min-level') or 0)}
+    found = c.search(r'`dungeon_profile\.txt`: modified (\d+), classic (\d+), cavern '
+                     r'and the rest deeper or special', name='the profile weights')
+    if found:
+        for group, name in ((1, 'modified'), (2, 'classic')):
+            c.emit('staircases', found.start(group), f'{name} profile alloc',
+                   int(found[group]), profiles.get(name, {}).get('alloc'))
+        deeper = {name for name, row in profiles.items()
+                  if row['alloc'] > 0 and row['min'] > 1}
+        c.emit('staircases', found.start(), 'every other profile with an alloc is '
+               'deeper than depth 1', True,
+               bool(deeper) and all(profiles[n]['min'] > 1 for n in deeper))
+    found = c.search(r'at least `min\(width, height\) / 4` = (\d+) squares apart',
+                     name='the minimum separation')
+    if found:
+        size = constants()
+        height = size.get('world:dungeon-hgt')
+        width = size.get('world:dungeon-wid')
+        real = min(height, width) // 4 if height and width else 'no world size'
+        c.emit('staircases', found.start(1), 'minimum separation of staircases',
+               int(found[1]), real)
+        c.emit('staircases', found.start(), 'the separation is a quarter of the '
+               'smaller dimension', True,
+               'MIN(c->width, c->height) / 4' in (cave or ''))
+    found = c.search(r'square with \*\*(\w+) adjacent walls\*\* - three of its four '
+                     r'orthogonal neighbours, diagonals not counted',
+                     name='the three-wall rule')
+    if found:
+        util = gd.read_source('src/gen-util.c') or ''
+        body = re.search(r'void alloc_stairs\(.*?\n\}', util, re.S)
+        text = body[0] if body else ''
+        c.emit('staircases', found.start(1), 'walls adjacent to a staircase',
+               WORD_NUMBERS.get(found[1].lower(), found[1]),
+               int(match[1]) if (match := re.search(r'\twalls = (\d+);', text)) else 'not found')
+        # The diagonal count belongs to the player-placement fallback, not
+        # here: the page said otherwise until this check said so.
+        c.emit('staircases', found.start(), 'the walls are counted orthogonally '
+               'only, and the count is relaxed when nothing is free', True,
+               'square_num_walls_adjacent' in text
+               and 'square_num_walls_diagonal' not in text
+               and '--walls;' in text)
 
 
 @extractor('experience ladder', minimum=24)

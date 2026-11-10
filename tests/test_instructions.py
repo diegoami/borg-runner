@@ -59,7 +59,7 @@ from borg_runner import gamedata, instructions
 
 # Floors, set just below what the page yields today. Raising the page's claims
 # raises these; lowering them means checks were lost, and should be a decision.
-TOTAL_FLOOR = 560
+TOTAL_FLOOR = 590
 KIND_FLOORS = {
     'object cost': 12, 'table cost': 15, 'table level': 15, 'table alloc': 15,
     'race hitdie': 10, 'class hitdie': 15, 'race exp': 3,
@@ -68,7 +68,7 @@ KIND_FLOORS = {
     'store always': 20, 'store normal': 8, 'shop digit': 16, 'cost 0': 30,
     'citation': 60, 'quotation': 4, 'manual says': 10, 'price semantics': 25,
     'experience': 18, 'spell experience': 6, 'spell damage': 4,
-    'monster experience': 2,
+    'monster experience': 2, 'staircases': 8,
 }
 
 
@@ -126,6 +126,10 @@ def test_every_extractor_found_something(report):
 DOCTORED = [
     ('Hobbit 7;', 'Hobbit 8;', ['Hobbit hit die', "8", "7"]),
     ('CL5 70, CL6 100', 'CL5 75, CL6 100', ['experience for CL5', '75', '70']),
+    ('both ask for **3 or 4 down staircases', 'both ask for **2 or 4 down staircases',
+     ['classic_gen staircase counts', '(2, 4, 1, 2)', '(3, 4, 1, 2)']),
+    ('/ 4` = 16 squares apart', '/ 4` = 12 squares apart',
+     ['minimum separation of staircases', '12', '16']),
     ('so **3d4, 3 to 12 damage**', 'so **3d4, 6 to 15 damage**',
      ['Magic Missile lowest damage at CL1', '6', '3']),
     ('spells pay 4, 4, 2, 4 and 4', 'spells pay 4, 4, 3, 4 and 4',
