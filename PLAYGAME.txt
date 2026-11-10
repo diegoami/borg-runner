@@ -122,9 +122,23 @@ from this page". No run has ever found a staircase by walking.
   say what would settle it.
 - Aim for about 150 decisions unless you are told otherwise, then stop.
 
-== WHEN YOU STOP: RECORD IT AND UPDATE THE DASHBOARD ==
+== WHEN YOU STOP: WRITE IT UP FIRST ==
 
-Run all six, in order. The first three are about your run; the last two
+**Write the report before you report to whoever started you.** Three of the
+first ten runs here reported to their caller and wrote no file, so what they
+found lived in a conversation and not in this repository - including the run
+that reached depth 7. `archive` now says when a run wrote nothing, and the
+table has a column for it, but the file is yours to write.
+
+Write runs/{RUNNAME}/REPORT.md: what happened (depth, character level,
+how it ended, decisions, turns; if you died, what killed you and the last
+three decisions before it), the decisions you would take back, where the
+reading was wrong or not enough, what you could not see or could not do, and
+your leads - each with the evidence and what would settle it.
+
+A broken run honestly reported is a result. A tidy story is not.
+
+Then run all six, in order. The first three are about your run; the last two
 publish it, and they are what makes your run visible to anyone else.
 
     .venv/bin/python -m borg_runner record --run runs/{RUNNAME} \
@@ -171,16 +185,3 @@ What each does:
 If the replay page itself ever needs rebuilding for every run - after someone
 changes it - that is `borg_runner report --all`, not something a run does.
 
-**Write the report before you report to whoever started you.** Three of the
-first ten runs here reported to their caller and wrote no file, so what they
-found lived in a conversation and not in this repository - including the run
-that reached depth 7. `archive` now says when a run wrote nothing, and the
-table has a column for it, but the file is yours to write.
-
-Then write runs/{RUNNAME}/REPORT.md: what happened (depth, character level,
-how it ended, decisions, turns; if you died, what killed you and the last
-three decisions before it), the decisions you would take back, where the
-reading was wrong or not enough, what you could not see or could not do, and
-your leads - each with the evidence and what would settle it.
-
-A broken run honestly reported is a result. A tidy story is not.
