@@ -90,6 +90,21 @@ def audit(name, where=None):
                        f"it answered something ({record.get('asks')} asks)"))
     rows.append(_check(record.get('character'),
                        f"the character is known ({record.get('character')})"))
+    # A second answer to an old ask never reached the game but stays in the
+    # log, and a replay fed the log in order diverges from the run at exactly
+    # that ask. `answer` refuses them now; this catches older logs and keys
+    # files written by hand.
+    dupes = record.get('duplicate_answers')
+    if dupes is None:
+        try:
+            _, duplicate_entries = run_module.played_decisions(kept)
+            dupes = sorted({entry['ask'] for entry in duplicate_entries})
+        except ValueError:
+            dupes = []              # an unparsable log is its own check above
+    rows.append(_check(not dupes,
+                       'each ask was answered once',
+                       f'asks {dupes} were answered twice; the first answer '
+                       'is what the game played', warn=True))
     if record.get('died'):
         rows.append(_check(record.get('killed_by'),
                            f"a death names its cause ({record.get('killed_by')})"))
@@ -122,6 +137,17 @@ def audit(name, where=None):
                            f'it added a section to agents/{family}/',
                            f'playbook --family {family} --append - --from {name}',
                            warn=True))
+    # A script written loose in the run directory - where the player's hands
+    # were, not where the prompts say - is kept by `archive`'s reconcile.
+    # This names one that was left behind anyway.
+    live_run = run_module.RUNS / name
+    if live_run.is_dir():
+        missing = [path.name for path in sorted(live_run.glob('*.py'))
+                   if not (kept / 'tools' / path.name).exists()]
+        rows.append(_check(not missing,
+                           'every script it wrote is in the record',
+                           'archive --run runs/<run> again (it reconciles '
+                           'loose scripts into tools/)', warn=True))
     overview = run_module.RECORDS / 'OVERVIEW.md'
     if overview.exists():
         rows.append(_check(f'[{name}]' in overview.read_text(),

@@ -307,6 +307,23 @@ def archive(run, into=None, log=print):
         shutil.rmtree(target / TOOLS, ignore_errors=True)
         shutil.copytree(tools, target / TOOLS)
         log(f'archive: {len(list(tools.rglob("*")))} files the player wrote')
+    # The reconcile: the prompts say to keep self-written tools in tools/,
+    # but a player mid-game writes a script where its hands are - the run
+    # root - and only tools/ is archived. A script left there would live in
+    # the git-ignored run directory and be lost on the next cleanup, so a
+    # loose one is archived beside the rest. The original stays where the
+    # player put it; this copies, it does not tidy somebody else's desk.
+    loose = sorted(path for path in run.glob('*.py')
+                   if not (tools / path.name).exists()) if tools.is_dir() \
+        else sorted(run.glob('*.py'))
+    if loose:
+        import shutil
+        (target / TOOLS).mkdir(exist_ok=True)
+        for path in loose:
+            shutil.copy2(path, target / TOOLS / path.name)
+        log(f'archive: {len(loose)} loose script(s) found beside the record '
+            f'and kept with the tools: '
+            + ', '.join(path.name for path in loose))
 
     kept = []
     for name in ARCHIVED:
@@ -396,10 +413,15 @@ def _playbook_note(run, log=print):
 
 
 def start(run, seed, out=None, character=None, resume=False, asked_for=None,
-          log=print):
+          frames=False, log=print):
     """Start the game in `run`, waiting for its first answer.
 
     It is given its own save directory so runs never share one.
+
+    `frames` turns on the frontend's frame dump: every input event's screen
+    is written (frame-<ask>-<n>.txt), not only the ones that empty the key
+    buffer, so what the game showed while spending a buffered string - the
+    turns a death happened in, say - is recorded too.
 
     `character` is the name passed as `-u`, and it is **part of the game**:
     the birth prompt arrives with it already filled in, so a replay under a
@@ -452,6 +474,11 @@ def start(run, seed, out=None, character=None, resume=False, asked_for=None,
     # keeps runs apart, and `savefile_of` is where to look.
     command = [str(game), '-magent', f'-u{character}',
                '--', f'-d{run / ASK}', f'-s{seed}']
+    if frames:
+        # Dump the screen at every input event, not just the asks, so the
+        # states the game showed while spending a buffered key string are
+        # recorded too (frame-<ask>-<n>.txt). The asks are untouched.
+        command.append(f'-f{run / ASK}')
     handle = (run / 'game.log').open('w')
     # Detached, in a session of its own. The game outlives the command that
     # starts it - it sits waiting for key files - and a harness that kills its
@@ -528,8 +555,21 @@ def answer(run, number, keys, reason='', memory=None):
     The frontend only ever reads the keys. The reason and the memory are
     recorded here, beside them, because what the agent *believed* at the time
     is the most useful column in the report (D4).
+
+    An ask may be answered once. A second answer cannot reach the game - it
+    pressed the first keys and moved on - so it can only overwrite the keys
+    file and append a second decision, and the record then claims keys were
+    played that never were (minimaxflash-3's asks 27 and 56; its replay
+    diverged at exactly that point).
     """
     run = Path(run)
+    for entry in decisions(run):
+        if entry['ask'] == number:
+            raise RuntimeError(
+                f'ask {number} is already answered ({entry["keys"]!r}); '
+                'the game pressed those keys and cannot be given another '
+                'answer. The notebook, not the decisions log, is where a '
+                'better plan goes.')
     target = run / ASK / f'keys-{number}.txt'
     part = run / ASK / f'.keys-{number}.part'
     part.write_text(keys)
@@ -671,6 +711,27 @@ def decisions(run):
     return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
 
 
+def played_decisions(run):
+    """The decisions the game actually consumed, one per ask, in ask order,
+    plus any later re-answers of the same ask.
+
+    A second `answer` to an old ask appends a new entry and overwrites the
+    keys file, but the game pressed the first one - it had long moved on.
+    minimaxflash-3's log re-answers asks 27 and 56 from much later, and a
+    replay that trusts the log's order feeds the wrong keys from there on.
+    The first entry is what the game saw (its screens match); the rest are a
+    player rewriting its own history, and they are returned separately so
+    nothing silently throws them away.
+    """
+    seen, duplicates = {}, []
+    for entry in decisions(run):
+        if entry['ask'] in seen:
+            duplicates.append(entry)
+        else:
+            seen[entry['ask']] = entry
+    return [seen[ask] for ask in sorted(seen)], duplicates
+
+
 def memory_now(run):
     """The newest memory the agent wrote, which goes back in the next prompt."""
     for entry in reversed(decisions(run)):
@@ -681,7 +742,8 @@ def memory_now(run):
 
 def keys_sent(run):
     """Every key, in order: the whole of the recording (D6)."""
-    return ''.join(entry['keys'] for entry in decisions(run))
+    played, _ = played_decisions(run)
+    return ''.join(entry['keys'] for entry in played)
 
 
 def alive(process):
@@ -854,7 +916,7 @@ def write_record(run, process=None, outcome=None, cost=None, playbook=None):
     keys = keys_sent(run)
     (run / KEYS).write_text(keys)
     screens = sorted((run / ASK).glob('screen-*.txt'))
-    taken = decisions(run)
+    taken, duplicates = played_decisions(run)
     asked_at = questions(run)
     death = death_of(run)
     if death:
@@ -871,6 +933,10 @@ def write_record(run, process=None, outcome=None, cost=None, playbook=None):
         'final_turn': (question(run, asked_at[-1])['turn'] if asked_at
                        else (taken[-1]['turn'] if taken else 0)),
         'asks_made': len(asked_at),
+        # Re-answers of the same ask, kept out of the key stream: the game
+        # pressed the first answer and moved on, so the second one never
+        # happened as far as the game is concerned.
+        'duplicate_answers': sorted({entry['ask'] for entry in duplicates}),
         'max_depth': max([(entry.get('depth') or 0) for entry in taken]
                          + [(question(run, number)['depth'] or 0)
                             for number in asked_at]) if asked_at or taken else 0,
