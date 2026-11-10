@@ -18,8 +18,26 @@ other. Two runs here end in `-again` and predate that; continuing one gives
                 back to before you stop. It is yours even when the character
                 you inherit was played by another family
 
-Work from /home/diego/projects/borg-runner and use .venv/bin/python. Your run
-will not disturb any other: each one owns its directory, game process,
+== YOUR OWN WORKTREE, YOUR OWN BRANCH ==
+
+You play in a worktree of the repository, not in the main checkout, so a run
+never shares a working tree with another run or with maintainer work, and
+what you write lands on a branch of its own. From
+/home/diego/projects/borg-runner:
+
+    git worktree add --detach ../{FROM}-next
+    cd ../{FROM}-next
+    bash scripts/setup.sh
+    uv venv .venv && uv pip install -e '.[test]' --python .venv/bin/python
+    .venv/bin/python -m borg_runner build
+
+(The worktree starts detached because `carry-on` names the run; you name the
+branch after it below.) The first build takes a few minutes; it is the price
+of isolation, paid once. Everything after this happens in the worktree:
+every path in this prompt is relative to it, and .venv/bin/python is its
+own. The run you are continuing is in `records/{FROM}/` in the worktree,
+exactly as it was archived. Your run cannot disturb another run or be
+disturbed: each one owns its worktree, branch, run directory, game process,
 character and notebook.
 
 == WHY THIS IS A NEW RUN AND NOT A RESTART ==
@@ -35,11 +53,14 @@ and yours, so it replays from its seed like any other.
 
 == START ==
 
-    .venv/bin/python -m borg_runner carry-on --run runs/{FROM}
+    .venv/bin/python -m borg_runner carry-on --run records/{FROM}
 
-It prints the name it chose - the next generation of the character - and that
-is your {RUNNAME} for every command below. Pass `--name` only if you were
-given one.
+(`runs/` is scratch and is not committed, so an archived run lives in
+`records/`; if you are continuing a run you just stopped in this same
+worktree, point at `runs/{FROM}` instead.) It prints the name it chose - the
+next generation of the character - and that is your {RUNNAME} for every
+command below. Pass `--name` only if you were given one. **Now name your
+branch after it:** `git switch -c run/{RUNNAME}`.
 
 It prints `waiting_at_ask` and the turn. That ask number is where you begin -
 **not 1**. It also prints `identical`: true means the replay reproduced the
@@ -246,10 +267,11 @@ when it has one or has earned one. Three rules:
   wrong. A claim any player should have belongs in your notebook instead,
   where `keep` promotes it into `knowledge/`.
 
-**If any other run is playing, append - do not rewrite.** Several runs of one
-family play here at once and they all write to these same pages, so the last
-whole-file rewrite erases the others. `playbook --family {AGENT}` says how
-many games are in progress. To add your part without touching anyone else's:
+**Append - do not rewrite.** Several runs of one family play at once, each
+in its own worktree on its own branch, and the branches are merged afterwards
+with merge=union: two appended sections both survive a merge, but two
+whole-file rewrites of the same page make a tangle no merge can tidy. To add
+your part without touching anyone else's:
 
     .venv/bin/python -m borg_runner playbook --family {AGENT} \
         --append - --from {RUNNAME} <<'MD'
@@ -269,8 +291,8 @@ If your family has no COMMON.md yet, start one:
 
 `archive` says afterwards whether you wrote back or not.
 
-Then run all six, in order. The first three are about your run; the last two
-publish it, and they are what makes your run visible to anyone else.
+Then run all five, in order. The first three are about your run; the last
+two publish it on your branch.
 
     .venv/bin/python -m borg_runner record --run runs/{RUNNAME} \
         --tokens <total> --tool-calls <total> \
@@ -281,10 +303,9 @@ publish it, and they are what makes your run visible to anyone else.
     .venv/bin/python -m borg_runner stop --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner keep --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner archive --run runs/{RUNNAME}
-    .venv/bin/python -m borg_runner overview
-    git add records knowledge agents index.html && \
+    git add records/{RUNNAME} knowledge/{RUNNAME}.md agents/{AGENT} && \
         git commit -m "{RUNNAME}: <depth, level, how it ended>" && \
-        git pull --rebase -q && git push -q
+        git push -u origin run/{RUNNAME}
 
 Then check your own work, and say what it printed when you report back:
 
@@ -316,13 +337,12 @@ What each does:
 - **archive** keeps the run in git: its keys, its decisions, its notes, its
   tools if you wrote any - and **generates its replay page**, which is how
   anyone watches your game back, screen by screen.
-- **overview** rebuilds the dashboard: `records/OVERVIEW.md`, `index.html` and
-  `records/overview.html`, all three from the records.
-- **the commit** publishes it. The dashboard is served at
-  <https://diegoami.github.io/borg-runner/>, so until you push, your run is
-  not there. Pull with a rebase first: other runs may have finished while you
-  played, and only `records/`, `knowledge/`, your own `agents/{AGENT}/` and
-  the dashboard files are yours to add.
+- **the commit** puts your run on its branch. You do not merge it and you do
+  not rebuild the dashboard: both happen on the main checkout after the runs
+  that are playing have finished, so two runs never race for the same files.
+  The dashboard is served at <https://diegoami.github.io/borg-runner/> once
+  your branch is merged and the overview is rebuilt there. Name your branch
+  when you report back.
 
 If the replay page itself ever needs rebuilding for every run - after someone
 changes it - that is `borg_runner report --all`, not something a run does.
