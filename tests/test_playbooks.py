@@ -149,8 +149,8 @@ def test_both_prompts_send_the_player_to_its_own_directory(name):
     assert 'agents/{AGENT}/COMMON.md' in text
     assert 'playbook --family {AGENT}' in text
     assert '--playbook {AGENT}' in text, 'the record must carry the family'
-    assert 'git add records knowledge agents' in text, \
-        'the commit must include the playbook the run just wrote'
+    assert 'git add records/{RUNNAME} knowledge/{RUNNAME}.md agents/{AGENT}' \
+        in text, 'the commit must include the playbook the run just wrote'
 
 
 @pytest.mark.parametrize('name', PROMPTS)

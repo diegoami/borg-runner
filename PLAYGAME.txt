@@ -312,8 +312,8 @@ class has one or has earned one. Three rules:
   any player should have belongs in your notebook, where `keep` promotes it
   into `knowledge/`.
 
-**Append - do not rewrite.** Several runs of one family play at once, each
-in its own worktree on its own branch, and the branches are merged afterwards
+Several runs of one family play at once, each in its own worktree on its own
+branch, so **append - do not rewrite**. The branches are merged afterwards
 with merge=union: two appended sections both survive a merge, but two
 whole-file rewrites of the same page make a tangle no merge can tidy. To add
 your part without touching anyone else's:
