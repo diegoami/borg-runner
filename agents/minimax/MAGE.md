@@ -42,6 +42,32 @@ spell, and the run's whole budget spent on the level's ground floor.
 never "can I afford this cast" but "can I afford to be in the right place
 when the bar is full".
 
+### The spell order I would use now — `minimaxflash-2.2`
+
+§3 said: Find Traps, Phase Door, Electric Arc, and that Magic Missile "is
+the best *damage* in the game for one spell point, but oil is better still".
+**Magic Missile first**, as of minimaxflash-2.2: it is 1 SP for 3d4 = 3–12
+damage and **never resists**, so it is **the only damage in the game that
+ignores armour** and the only thing that can hurt Fang's AC 36.
+
+**Studying a spell costs nothing** — `do_cmd_study_spell` calls
+`spell_learn()` and never touches `msp`; only casting does. So take both
+slots at the first level that offers them: minimaxflash-2.2 studied Magic
+Missile and Phase Door together and had 4 spell points at depth 2.
+
+**Oil is still the best attack for the things oil can hit** and costs no
+mana. **Magic Missile is the answer to the things oil cannot hit.**
+
+**Corrected 2026-11-10, against the pinned `class.txt`:** this page gave
+Magic Missile a damage bonus of three on top of its dice (6–15 damage), and
+Electric Arc one as well. Both are misreadings of the same line: the dice are
+`$Dd4` and `$Dd6` with the count
+`(CL-1)/5+3`, so the 3 **is** the dice count and there is no bonus - 3d4 (3 to
+12) at CL1 to CL5, 4d4 at CL6. The wrong number had already travelled into a
+brief written for the next mage, which is why
+`python -m borg_runner playbook --check` now reads a family page's spell
+numbers against the game's data.
+
 ## 3. Find Traps, Doors & Stairs is a staircase detector — and it is the
 only reason a mage is not hopeless at this level
 
@@ -82,94 +108,7 @@ cast.
 *damage* in the game for one spell point, but oil is better still (§4) and
 costs no mana.
 
-## 4. The mage's weapon is a flask of oil, and its armour is the shopping
-list
-
-**Melee is nearly useless.** The character sheet gives to-hit 9; the hit
-formula (`src/player-attack.c:196`) is
-`hit% = 12% + 83% × (to_hit − 2·AC/3) / to_hit`, so against a monster of
-AC 24 (a small kobold, a giant black ant) a to-hit of 9 can only ever hit
-on the 12% floor. **Never walk into a monster as a mage.**
-
-**Oil is the attack.** 9–36 damage, about 22, and it kills a 6 HP monster in
-one throw. In `minimaxflash-2` one flask killed a white icky thing (6 HP,
-AC 8) and a soldier ant (AC 4). But the throw is also a to-hit roll: my
-throw skill was 11, so against AC 24 the flask is 12% as well. **A mage can
-only kill what has low armour** — which is a bind, because the monsters that
-give experience are exactly the ones with armour.
-
-**Armour is the best money a mage can spend, and it is cheap.** For 200 gold
-out of 334:
-
-| Item | Gold | AC |
-|---|---|---|
-| Soft Leather Armour | 104 | 8 |
-| Leather Shield | 66 | 8 |
-| Metal Cap | 24 | 3 |
-| Cloak | 6 | 1 |
-
-That is **AC 21** (the sheet showed 21, one more than the sum). At AC 21 a
-monster needs **to-hit ≥ 14** to touch the mage at all, and most of depth 1
-does not. For 8 hit points this is the difference between one fight and
-five, and it is better value than a second potion. **Buy armour before
-potions; buy one potion and one escape, not two of each.**
-
-The rest of the shopping, from what the shops actually charged in
-`minimaxflash-2`: 15–20 flasks of oil (3 gold each), one Cure Light Wounds
-(20), one Scroll of Phase Door (15), one Scroll of Word of Recall (125 in the
-shop, and the mage's kit already has one). **Do not buy Magic Mapping (65):
-Find Traps is better for the staircase, and it costs one spell point
-instead of a quarter of the oil budget.**
-
-## 5. What killed the run, and what would not have
-
-The run stopped alive at depth 1, character level 1, with 4 gold. The
-staircase was never found, and the reason was not the spell and not the
-mana: **I did not know where on the level I was.** The map panel scrolls and
-the full map (`M`) draws only the *remembered* region, so after 158 asks I
-could not tell whether I stood at x = 20 or x = 120 — and every one of my
-eleven casts landed inside the same 40-tile band, over ground the first cast
-had already scanned. **A detector without a position is a random walk.**
-
-The other two lessons:
-
-* **The mage's melee is a trap**, and the map does not show which monsters
-  are armoured until you have hit one. In this run the two monsters I
-  could kill were lucky; a giant black ant (AC 24) would have been
-  unhittable, and with 8 HP and 4 experience to gain, **an unhittable
-  monster is a dead run.**
-* **The letter glyph on the floor is a monster, not an item.** 'i' is the
-  *icky thing* base (`monster_base.txt`), 'a' is an ant. Item glyphs are
-  '!', '?', '(', '=', '"', '_', '\', '|'. I spent an ask wondering what an
-  'i' was.
-
-## 6. Open questions for the next mage
-
-1. **Can the staircase hunt be done in fewer than six casts?** The staircase
-   must be a dead end with exactly three adjacent walls, and the spell
-   reveals 10–20 doors in its window, which is a map of the local
-   structure. **What would settle it:** a run that uses the revealed doors to
-   choose where to stand for the next cast, instead of a fixed grid.
-2. **Can a mage afford to level at all?** 12 experience for CL2, and only
-   low-armour monsters are killable with oil at to-hit 11. **What would
-   settle it:** a mage that buys Magic Missile knowledge first and fights
-   AC 24 monsters — but it needs CL2 to learn it, and CL2 needs experience,
-   and experience needs a killable monster. That circularity is worth
-   breaking deliberately.
-3. **How much is a Scroll of Deep Descent worth to a mage?** `object.txt`
-   gives it `alloc:20:1 to 100` — a 20% chance on any scroll, findable from
-   depth 1 — and it drops you five levels below your deepest. One would
-   have turned this run into a depth-6 run. **What would settle it:** a mage
-   run that treats finding one scroll as the primary objective, since it
-   beats the six-cast staircase hunt outright.
-4. **Is the Spell Points table per class or per level?** CL1 gave 2 SP for
-   the mage. **What would settle it:** read the table (it is not in
-   `class.txt`) and compute the spell-point income at each level, so the
-   hunt's cost can be stated in asks rather than in feelings.
-
-## From `minimaxflash-2.2`, 2026-11-10
-
-### CORRECTION to §3: the real cost of Find Traps, Doors & Stairs is not the mana, it is that it breaks the game's own pathfinding
+### CORRECTION to §3: the real cost of Find Traps, Doors & Stairs is not the mana, it is that it breaks the game's own pathfinding — `minimaxflash-2.2`
 
 §3 says the spell costs "the whole 150-ask budget" and tells the next mage to
 cover the level with six casts from a six-position grid. **That plan is worse
@@ -216,33 +155,83 @@ Three more facts about the spell, measured:
    window is ±22 rows, so the first re-cast missed it and the second, from
    closer, did not.
 
-### The spell order I would use now
+## 4. The mage's weapon is a flask of oil, and its armour is the shopping
+list
 
-§3 said: Find Traps, Phase Door, Electric Arc, and that Magic Missile "is
-the best *damage* in the game for one spell point, but oil is better still".
-**Magic Missile first**, as of minimaxflash-2.2: it is 1 SP for 3d4 = 3–12
-damage and **never resists**, so it is **the only damage in the game that
-ignores armour** and the only thing that can hurt Fang's AC 36.
+**Melee is nearly useless.** The character sheet gives to-hit 9; the hit
+formula (`src/player-attack.c:196`) is
+`hit% = 12% + 83% × (to_hit − 2·AC/3) / to_hit`, so against a monster of
+AC 24 (a small kobold, a giant black ant) a to-hit of 9 can only ever hit
+on the 12% floor. **Never walk into a monster as a mage.**
 
-**Studying a spell costs nothing** — `do_cmd_study_spell` calls
-`spell_learn()` and never touches `msp`; only casting does. So take both
-slots at the first level that offers them: minimaxflash-2.2 studied Magic
-Missile and Phase Door together and had 4 spell points at depth 2.
+**Oil is the attack.** 9–36 damage, about 22, and it kills a 6 HP monster in
+one throw. In `minimaxflash-2` one flask killed a white icky thing (6 HP,
+AC 8) and a soldier ant (AC 4). But the throw is also a to-hit roll: my
+throw skill was 11, so against AC 24 the flask is 12% as well. **A mage can
+only kill what has low armour** — which is a bind, because the monsters that
+give experience are exactly the ones with armour.
 
-**Oil is still the best attack for the things oil can hit** and costs no
-mana. **Magic Missile is the answer to the things oil cannot hit.**
+**Armour is the best money a mage can spend, and it is cheap.** For 200 gold
+out of 334:
 
-**Corrected 2026-11-10, against the pinned `class.txt`:** this page gave
-Magic Missile a damage bonus of three on top of its dice (6–15 damage), and
-Electric Arc one as well. Both are misreadings of the same line: the dice are
-`$Dd4` and `$Dd6` with the count
-`(CL-1)/5+3`, so the 3 **is** the dice count and there is no bonus - 3d4 (3 to
-12) at CL1 to CL5, 4d4 at CL6. The wrong number had already travelled into a
-brief written for the next mage, which is why
-`python -m borg_runner playbook --check` now reads a family page's spell
-numbers against the game's data.
+| Item | Gold | AC |
+|---|---|---|
+| Soft Leather Armour | 104 | 8 |
+| Leather Shield | 66 | 8 |
+| Metal Cap | 24 | 3 |
+| Cloak | 6 | 1 |
 
-### CORRECTION to §5: the staircase hunt failed because of the spell, not because I did not know where I was
+That is **AC 21** (the sheet showed 21, one more than the sum). At AC 21 a
+monster needs **to-hit ≥ 14** to touch the mage at all, and most of depth 1
+does not. For 8 hit points this is the difference between one fight and
+five, and it is better value than a second potion. **Buy armour before
+potions; buy one potion and one escape, not two of each.**
+
+The rest of the shopping, from what the shops actually charged in
+`minimaxflash-2`: 15–20 flasks of oil (3 gold each), one Cure Light Wounds
+(20), one Scroll of Phase Door (15), one Scroll of Word of Recall (125 in the
+shop, and the mage's kit already has one). **Do not buy Magic Mapping (65):
+Find Traps is better for the staircase, and it costs one spell point
+instead of a quarter of the oil budget.**
+
+### The armour-weight penalty counts worn armour only — `minimaxflash-2.2`, corrected
+
+`player-calcs.c:1505` sums the weight of *worn* armour — the weapon, bow,
+rings, amulet and light are all excluded — and then
+`msp -= (cur_wgt - class->magic.spell_weight) / 10`. The Mage's allowance is
+30 lb (`class.txt` `magic:1:300:5`). **My 36 lb of oil was in the pack and
+cost nothing at all**, which is the part worth keeping: a mage may carry as
+much oil as it can lift.
+
+**CORRECTION, 2026-11-10:** this block said the manual was "out by a factor
+of ten" for its "one spell point per pound over". It is not. `cur_wgt` is in
+tenths of a pound as well — a Flask of oil is `weight:20` and twenty-one of
+them show as 42.0 lb — so the division by ten turns tenths into pounds and
+the manual is exactly right. Check the units before you correct the page.
+
+## 5. What killed the run, and what would not have
+
+The run stopped alive at depth 1, character level 1, with 4 gold. The
+staircase was never found, and the reason was not the spell and not the
+mana: **I did not know where on the level I was.** The map panel scrolls and
+the full map (`M`) draws only the *remembered* region, so after 158 asks I
+could not tell whether I stood at x = 20 or x = 120 — and every one of my
+eleven casts landed inside the same 40-tile band, over ground the first cast
+had already scanned. **A detector without a position is a random walk.**
+
+The other two lessons:
+
+* **The mage's melee is a trap**, and the map does not show which monsters
+  are armoured until you have hit one. In this run the two monsters I
+  could kill were lucky; a giant black ant (AC 24) would have been
+  unhittable, and with 8 HP and 4 experience to gain, **an unhittable
+  monster is a dead run.**
+* **The letter glyph on the floor is a monster, not an item.** 'i' is the
+  *icky thing* base (`monster_base.txt`), 'a' is an ant. Item glyphs are
+  '!', '?', '(', '=', '"', '_', '\', '|'. I spent an ask wondering what an
+  'i' was.
+
+### CORRECTION to §5: the staircase hunt failed because of the spell, not because I did not know where I was — `minimaxflash-2.2`
 
 §5 says the reason the staircase was never found was that *"I did not know
 where on the level I was"*. **That was wrong, and I have been wrong in the
@@ -256,16 +245,7 @@ the SQUARE_DTRAP flag (above).
 detection spell once, on a level it has not already broken.** Both cost one
 ask. The first life spent 158.
 
-### The armour-weight penalty counts worn armour only, and it is one spell point per TEN pounds over
-
-`player-calcs.c:1505` sums the weight of *worn* armour — the weapon, bow,
-rings, amulet and light are all excluded — and then
-`msp -= (cur_wgt - class->magic.spell_weight) / 10`. The Mage's allowance is
-30 lb (`class.txt` `magic:1:300:5`). My 36 lb of oil was in the pack and
-cost nothing at all. `manuals/INSTRUCTIONS.md` §2 says "one spell point per
-pound over" — **the manual is out by a factor of ten.**
-
-### What killed the second life
+### What killed the second life — `minimaxflash-2.2`
 
 `minimaxflash-2.2` died on depth 2 at 2/16 hit points, killed by a metallic
 green centipede, with **a Scroll of Phase Door and a Scroll of Word of
@@ -295,7 +275,31 @@ The three rules I would give the next mage:
    **A wild cat on depth 2 is 9 HP, AC 14 and gives 8 experience — one flask
    of oil — and there are more of them than there are staircases.**
 
-### Answers to the open questions, and new ones
+## 6. Open questions for the next mage
+
+1. **Can the staircase hunt be done in fewer than six casts?** The staircase
+   must be a dead end with exactly three adjacent walls, and the spell
+   reveals 10–20 doors in its window, which is a map of the local
+   structure. **What would settle it:** a run that uses the revealed doors to
+   choose where to stand for the next cast, instead of a fixed grid.
+2. **Can a mage afford to level at all?** 12 experience for CL2, and only
+   low-armour monsters are killable with oil at to-hit 11. **What would
+   settle it:** a mage that buys Magic Missile knowledge first and fights
+   AC 24 monsters — but it needs CL2 to learn it, and CL2 needs experience,
+   and experience needs a killable monster. That circularity is worth
+   breaking deliberately.
+3. **How much is a Scroll of Deep Descent worth to a mage?** `object.txt`
+   gives it `alloc:20:1 to 100` — a 20% chance on any scroll, findable from
+   depth 1 — and it drops you five levels below your deepest. One would
+   have turned this run into a depth-6 run. **What would settle it:** a mage
+   run that treats finding one scroll as the primary objective, since it
+   beats the six-cast staircase hunt outright.
+4. **Is the Spell Points table per class or per level?** CL1 gave 2 SP for
+   the mage. **What would settle it:** read the table (it is not in
+   `class.txt`) and compute the spell-point income at each level, so the
+   hunt's cost can be stated in asks rather than in feelings.
+
+### Answers to the open questions, and new ones — `minimaxflash-2.2`
 
 1. **ANSWERED: the staircase hunt takes ONE cast and ONE walk, on a level
    the spell has not already broken.** See §3 above. The "six casts on a
@@ -327,3 +331,4 @@ The three rules I would give the next mage:
    one is a Deep Descent. **If it is, a mage that finds it on depth 2 arrives
    on depth 7 with 16 hit points, which no other run in this repository has
    done.**
+
