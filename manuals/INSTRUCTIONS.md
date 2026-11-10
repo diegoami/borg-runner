@@ -12,13 +12,13 @@ Original keyset: digits walk (`1-9`, `5` stays), letters are commands. Keys you 
 
 ## The one thing to take from this page
 
-**`lxg` explores and `l>g` descends. Use them instead of walking.**
+**The objective is experience, which raises your character level. Dungeon depth is a means to it, never a score.** The first levels are on depth 1, and `lxg` is how you get them; `l>g` descends when you can pay for the depth.
 
 - `lxg` — look, jump the cursor to the nearest square beside unexplored space, walk there. The game pathfinds; one ask covers what a dozen digit-presses would.
 - `l>g` — the same to the nearest **known** down staircase. Then `>` takes it.
 - `l<g` — the same to a known up staircase.
 - Send each **alone in its ask**: any key after `g` interrupts the walk after one step, so `lxglxglxg` gives one-square hops, not three walks.
-- With no staircase known yet, `>` in look mode does nothing (the game rings a bell) and the cursor stays put. Keep exploring with `lxg` until one is on the map.
+- With no staircase known yet, `>` in look mode does nothing (the game rings a bell) and the cursor stays put. Keep exploring with `lxg`; the staircase is not the point, the kills are.
 
 OBSERVED, sonnet-2.2#156 to sonnet-2.2#230: this is how the only deliberate descent in any run happened — depth 6 to depth 7, after four runs and some 350 asks had never found a staircase at all. One ask walked 11 steps and 110 game turns onto the stairs.
 
@@ -129,7 +129,7 @@ its decisions under `records/`.
   same depth. It was no quicker to finish than the level it replaced
   (sonnet-1#69).
 
-## Depth is not the objective
+## Experience is the objective, not depth
 
 Every run so far has treated the down staircase as the only thing worth
 finding, and two of them died at character level 1 doing it - one on depth 1,
@@ -512,7 +512,7 @@ the object's own level and is not where you find it):
 | Scroll of Phase Door | 15 | 1 | 1 | one monster is the problem; short hop |
 | Ration of Food | 3 | 0 | 0 | two or three; starvation has killed a run |
 | Wooden Torch / Lantern | 2 / 35 | 1 / 3 | 1 / 5 | you cannot read scrolls in the dark |
-| Scroll of Magic Mapping | 65 | 5 | 5 | maps within 22 rows and 40 columns of you - but one run paid 65 and saw no staircase |
+| Scroll of Magic Mapping | 65 | 5 | 5 | maps within 22 rows and 40 columns of you (about 16% of a level) - a convenience, not a plan: one run paid 65 and saw no staircase |
 | Potion of Cure Serious Wounds / Cure Critical Wounds | 70 / 200 | 3 / 5 | 5 / 12 | when Light stops being enough |
 | Scroll of Teleportation | 40 | 10 | 10 | the escape when Phase Door is not far enough |
 | Scroll of Deep Descent | 250 | 10 | 1 | not sold; five levels below your deepest |
@@ -545,9 +545,9 @@ and when to risk it, is under "Keys as the game receives them" above.
 
 ## 8. Descend
 **Do not read this section as the first job.** The first character levels are
-on depth 1 (see "Depth is not the objective"); descend when the character can
+on depth 1 (see "Experience is the objective, not depth"); descend when the character can
 pay for the depth, not because a staircase exists.
-**When you can pay for it** - see "Depth is not the objective" above; the
+**When you can pay for it** - see "Experience is the objective, not depth" above; the
 choice of whether to go down now is yours to make and to report, and this
 section is only how.
 - Every level has down staircases (`command`) but you must find one. Ways down, all FACT unless marked:
@@ -558,7 +558,7 @@ section is only how.
   0b. **`l>g` then `>`** — the one to use once a `>` is known; see the top of this page;
   1. a `>` you walk onto and press `>` on;
   2. Scroll of **Deep Descent** (`object`: found from DL1, **not sold**): after 3+1d4 turns you drop to **5 levels below your deepest level reached**, not below where you stand (`src/effect-handler-general.c`), landing on no staircase;
-  3. Scroll of Magic Mapping (65 g, Alchemist when stocked; found from DL5) maps everything within 22 rows and 40 columns of you, a radius each side (`object` `effect-yx`; `src/effect-handler-general.c` MAP_AREA);
+  3. Scroll of Magic Mapping (65 g, Alchemist when stocked; found from DL5) maps everything within 22 rows and 40 columns of you, a radius each side (`object` `effect-yx`; `src/effect-handler-general.c` MAP_AREA); **nice to have, not needed** - it is 16% of a level, and you can explore without it;
   5. Word of Recall (in your kit unless that option is on): read in the dungeon it takes you to town, read in town it returns you to your deepest depth after 15-34 turns - or to depth 1 if you have never left the town (c15 TOWN-05).
 - **Detection is the only thing that finds a staircase you have not seen**, and only a Mage or a Rogue has it: `Find Traps, Doors & Stairs` is `DETECT_STAIRS` with `effect-yx:22:40`, which is `+-22` rows and `+-40` columns - an **81x45 window, about 28% of a level** - and it reads the *real* grid and memorises what it finds (`src/effect-handler-general.c:1467`), so it reveals a staircase never seen. Three things measured with it (OBSERVED, minimaxflash-2#91, eleven casts): it **only reports ground it has not already scanned**, so two casts from the same place give "You sense no traps. You sense no doors." and nothing else; when there is no staircase in the window it says **nothing at all** about stairs, which is what a negative looks like; and covering a level takes **three positions across and two down, six casts**. Do
 not try to compute those positions - you cannot read your coordinates (see

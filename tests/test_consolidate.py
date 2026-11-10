@@ -112,7 +112,7 @@ def test_a_theme_several_runs_raise_must_be_on_the_page(repo):
     assert not raised['depth-is-the-only-plan']['answered']
     assert any(row['slug'] == 'depth-is-the-only-plan'
                for row in consolidate.unanswered(silent, repo / 'records'))
-    answers = a_page(repo, '# page\n\n## Depth is not the objective\n\nso.\n')
+    answers = a_page(repo, '# page\n\n## Experience is the objective, not depth\n\nso.\n')
     assert consolidate.unanswered(answers, repo / 'records') == []
 
 

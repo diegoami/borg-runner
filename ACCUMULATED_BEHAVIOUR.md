@@ -184,7 +184,8 @@ staircase under your feet is always an exit in one direction.
   that is where they teach.
 - **`mmx-war-1`** (CL4, 637, died to a silver mouse) - **right for 139
   decisions and wrong once.** It spent every coin on oil and a Magic Mapping
-  scroll, read the scroll to turn a hopeless hunt into a possible one, wrote
+  scroll, read the scroll to map **16% of the level** - a convenience, not the
+  answer: the staircase appeared seventy asks later, by walking - wrote
   its own beam-search planner, found and fixed a real padding bug in it, and
   pushed the M map's coverage from 16% to 26% until the staircase appeared
   (`mmx-war-1#22`, `#92`). Then it saw **eleven** silver mice and sent a

@@ -165,7 +165,7 @@ def check(path=INSTRUCTIONS):
 THEMES = (
     {'slug': 'the-game-walks-for-you',
      'raised': (r'\blxg\b', r'\bl>g\b', r'find_path', r'pathfind'),
-     'answered': (r'`lxg` explores',)},
+     'answered': (r'game pathfinds',)},
     {'slug': 'you-start-on-a-staircase',
      'raised': (r'town .{0,40}down stair', r'start(?:ing)? on (?:it|the stair)',
                 r'standing on it'),
@@ -195,7 +195,7 @@ THEMES = (
      'raised': (r'never (?:saw|found) a `?>`?', r'staircase hunt',
                 r"trying to find (?:the|depth \d+.s) down stair",
                 r'no down staircase'),
-     'answered': (r'Depth is not the objective',)},
+     'answered': (r'Experience is the objective, not depth',)},
     {'slug': 'armour-class-decides-the-fight',
      'raised': (r'hit_chance', r'AC 24', r'2 ?[x*/] ?AC', r'to-hit'),
      'answered': (r'hit_chance',)},

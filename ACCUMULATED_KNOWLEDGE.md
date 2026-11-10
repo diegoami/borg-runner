@@ -81,7 +81,7 @@ screen by screen: <https://diegoami.github.io/borg-runner/>.
 
 ---
 
-## 1. The staircase was not the objective, and the corpus learned that late
+## 1. Experience is the objective, not depth
 
 Sixteen of twenty-one runs ended at depth 0, 1 or 2, and the seven deaths are
 all in that band too. The fourteen that stopped were alive, and most of them
@@ -247,7 +247,9 @@ manuals.
   here* against *decisions spent anywhere*, and nobody has measured it.
 - **Magic Mapping is `effect-yx:22:40`**, a window and not a level, 65 gold,
   and the one reading of one on depth 1 showed no staircase (GAME SOURCE +
-  ONE RUN, `sonnet-2#47`).
+  ONE RUN, `sonnet-2#47`). **It is nice to have at best, not the instrument
+  the corpus treated it as**: 16% of a level, and every staircase found in
+  this corpus was found by walking.
 - **A level's monsters are few, asleep, and nowhere near you on purpose.**
   `classic_gen` places `z_info->level_monster_min` (14) + `randint1(8)` +
   `k`, with `k = MAX(MIN(depth/3, 10), 2)` = 2 at depths 1-6, each with
@@ -625,7 +627,9 @@ Read these as open. A consumer's own evidence would be the first.
    that explores.
 4. **Does Magic Mapping ever show a staircase?** Three readings, nothing in
    radius: `minimaxflash-1.4`, `sonnet-2#47` and `mmx-war-1#22`, whose window
-   was 44 rows x 80 columns - 16% of the level - with no `>` in it.
+   was 44 rows x 80 columns - 16% of the level - with no `>` in it. **It is a
+   convenience, not a plan**: the runs that found staircases found them by
+   covering the level.
 5. **Can a Mage's detection be aimed at all** without knowing its own
    coordinates? Six casts cover a level; eleven from one band cover one
    window.
