@@ -1,0 +1,56 @@
+{
+  "asks": 354,
+  "asks_made": 353,
+  "build": {
+    "binary_sha256": "610d5deed6e58c81e6af502f2b0ec720d90883a58ac5493379ca6fab24f44e24",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "54a4cc8b04a2381c2063b41bf687b65e11984b14e2c1547b7c96991fcfb3f8a6",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 503,
+  "character": "Gnome Mage",
+  "character_drawn": true,
+  "character_level": 2,
+  "class": "Mage",
+  "cost": {
+    "model": "minimax-coding-plan/MiniMax-M3",
+    "played_by": "opencode"
+  },
+  "death_depth": 2,
+  "died": true,
+  "exit_code": null,
+  "final_turn": 10811,
+  "gold": 4,
+  "hp": {
+    "max": 16,
+    "now": -1
+  },
+  "keypresses": 1641,
+  "keys_sha256": "4e09a324692808a3b5877178d6444cb9fdffdbf9af62c9ca67ffb8c8f5592207",
+  "killed_by": "a metallic green centipede",
+  "max_character_level": 2,
+  "max_depth": 2,
+  "notebook_lines": 210,
+  "notebook_sha256": "38e5396ccc101461394d3bc33c7b99a04e07db580e3ae06ba278dff86a099fc1",
+  "outcome": "died",
+  "own_tools": [],
+  "playbook": "minimax",
+  "race": "Gnome",
+  "read_before_playing": "Files I actually opened before my first keypress: manuals/INSTRUCTIONS.md (all 232 lines), agents/minimax/COMMON.md (all 380), agents/minimax/DRUID.md (all 315), docs/BRIEF.md, records/OVERVIEW.md (to pick an unused seed), vendor/angband/lib/gamedata/class.txt (Mage block) and p_race.txt (Gnome block). I did NOT read knowledge/*.md or any other run's decisions. Seed chosen: 41 (seeds already in use: 7, 11, 23, 103). (ask 1)",
+  "read_its_own_playbook": true,
+  "run": "minimaxflash-2.2",
+  "savefile_sha256": "21fda1484a138d84cba59ffa6b2f655eaf223b485f1c79e45bcbc30d888b8bf7",
+  "schema": "borg-runner/run-record@1",
+  "screens": 353,
+  "screens_sha256": "645c1d97763a75b28ad8cc3788265c572423e618334aa37a1578a5041c3cf716",
+  "seed": 41,
+  "wealth": 507
+}
