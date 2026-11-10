@@ -544,3 +544,45 @@ def test_archiving_twice_does_not_stack_the_links(tmp_path):
     text = (kept := tmp_path / 'kept' / 'REPORT.md').read_text()
     assert text.count(run_module.HEADER) == 1
     assert text.count('It went well.') == 1
+
+
+def test_a_characters_ancestry_is_the_whole_chain(tmp_path, monkeypatch):
+    """A character carried on twice has a history longer than its notebook.
+
+    Its write-ups carry what it did; the notebook carries only what it
+    learned, and nothing else records the rest.
+    """
+    monkeypatch.setattr(run_module, 'RUNS', tmp_path)
+    monkeypatch.setattr(run_module, 'RECORDS', tmp_path / 'records')
+    for name, parent in (('first', None), ('second', 'first'), ('third', 'second')):
+        run = tmp_path / name
+        (run / run_module.ASK).mkdir(parents=True)
+        (run / 'REPORT.md').write_text(f'# {name}\n')
+        (run / run_module.NOTEBOOK).write_text(f'- a note from {name}\n')
+        if parent:
+            (run / 'continues.json').write_text(json.dumps({'continues': parent}))
+    chain = run_module.ancestry(tmp_path / 'third')
+    assert [step['run'] for step in chain] == ['first', 'second', 'third']
+    assert all(step['report'] for step in chain)
+
+
+def test_a_run_from_birth_has_only_itself(tmp_path, monkeypatch):
+    monkeypatch.setattr(run_module, 'RUNS', tmp_path)
+    monkeypatch.setattr(run_module, 'RECORDS', tmp_path / 'records')
+    run = a_run(tmp_path)
+    assert [step['run'] for step in run_module.ancestry(run)] == ['r1']
+
+
+def test_an_archived_ancestor_is_found_too(tmp_path, monkeypatch):
+    """The live directory may be gone; the record is what git keeps."""
+    monkeypatch.setattr(run_module, 'RUNS', tmp_path / 'runs')
+    monkeypatch.setattr(run_module, 'RECORDS', tmp_path / 'records')
+    old = tmp_path / 'records' / 'gone'
+    old.mkdir(parents=True)
+    (old / 'REPORT.md').write_text('# gone\n')
+    new = tmp_path / 'runs' / 'live'
+    (new / run_module.ASK).mkdir(parents=True)
+    (new / 'continues.json').write_text(json.dumps({'continues': 'gone'}))
+    chain = run_module.ancestry(new)
+    assert [step['run'] for step in chain] == ['gone', 'live']
+    assert chain[0]['report'].endswith('records/gone/REPORT.md')

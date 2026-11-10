@@ -171,6 +171,19 @@ def cmd_carry_on(args):
     return 0 if verdict['identical'] else 1
 
 
+def cmd_history(args):
+    """The runs this character has been through, oldest first."""
+    past = run_module.ancestry(args.run)
+    for step in past:
+        print(f"{step['run']}")
+        for what in ('report', 'notebook'):
+            if step[what]:
+                print(f"    {what:<9} {step[what]}")
+    if len(past) == 1:
+        print('    (this character has not been carried on from anything)')
+    return 0
+
+
 def cmd_stop(args):
     """End a run's game cleanly, so it saves and does not linger."""
     process = run_module.started_process(args.run)
@@ -308,6 +321,10 @@ def parser():
     p.add_argument('--run', required=True, type=Path, help='the run to continue')
     p.add_argument('--name', help='the new run (default: <run>-again)')
     p.set_defaults(func=cmd_carry_on)
+
+    p = sub.add_parser('history', help="the runs this character has been through")
+    p.add_argument('--run', required=True, type=Path)
+    p.set_defaults(func=cmd_history)
 
     p = sub.add_parser('stop', help="end a run's game cleanly")
     p.add_argument('--run', required=True, type=Path)

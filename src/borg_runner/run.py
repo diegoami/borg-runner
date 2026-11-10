@@ -221,6 +221,46 @@ def link_report(text, name, into):
     return Path(into)
 
 
+def where_is(name):
+    """A run's directory, live or archived, whichever exists."""
+    for place in (RUNS / name, RECORDS / name):
+        if place.is_dir():
+            return place
+    return None
+
+
+def ancestry(run):
+    """The runs this character has been through, oldest first.
+
+    A continuation records its parent in `continues.json`, so the chain can be
+    walked back. A character that has been carried on twice has a history
+    longer than its own notebook, and the reports of its earlier lives are the
+    part that is not in the notebook at all.
+    """
+    chain, seen = [], set()
+    here = Path(run)
+    while here is not None:
+        name = here.name
+        if name in seen:                      # a cycle cannot happen, but
+            break                             # a hand-edited file could make one
+        seen.add(name)
+        chain.append({
+            'run': name,
+            'directory': str(here),
+            'report': str(here / 'REPORT.md') if (here / 'REPORT.md').exists() else None,
+            'notebook': str(here / NOTEBOOK) if (here / NOTEBOOK).exists() else None,
+        })
+        carried = here / 'continues.json'
+        if not carried.exists():
+            break
+        try:
+            parent = json.loads(carried.read_text()).get('continues')
+        except ValueError:
+            break
+        here = where_is(parent) if parent else None
+    return list(reversed(chain))
+
+
 def archive(run, into=None, log=print):
     """Keep a run in git: the seed, the keys, the reasons and the notes.
 

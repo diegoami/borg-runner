@@ -27,7 +27,11 @@ Follow the prompt in /home/diego/projects/borg-runner/CONTINUEGAME.txt — FROM=
 rules and what to run when it stops. Give it a `SEED` as well to play a
 dungeon another run has played, or leave it out and it picks an unused one and
 records which. [CONTINUEGAME.txt](CONTINUEGAME.txt) carries a stopped run on
-from where it left off, with that character's level, gear, wounds and notes.
+from where it left off, with that character's level, gear, wounds and notes —
+and with **its own history**: `borg_runner history --run X` lists every run
+the character has lived through, oldest first, and the continuation is told to
+read each of their write-ups. The notebook carries what a character learned;
+the write-ups carry what it *did*, and nothing else records that.
 
 **Runs do not interfere.** Each owns its directory, game process, seed,
 character and notebook; several play at once, and that is how a claim gets a

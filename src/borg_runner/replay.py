@@ -145,6 +145,14 @@ def carry_on(original, into, out=None, log=print):
         {'continues': original.name,
          'keys_sha256': json.loads((original / run_module.RECORD).read_text())
                         .get('keys_sha256')}, indent=2, sort_keys=True) + '\n')
+    # The character's earlier lives, written down where the player will find
+    # them: its notebook carries what it learned, and these carry what it did.
+    past = run_module.ancestry(into)
+    (into / 'history.json').write_text(
+        json.dumps(past, indent=2, sort_keys=True) + '\n')
+    for step in past[:-1]:
+        log(f'carry_on: history - {step["run"]}'
+            + (f', wrote {step["report"]}' if step['report'] else ', no write-up'))
 
     verdict = replay(original, into, out=out, keep_playing=True,
                      played_only=True, log=log)

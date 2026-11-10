@@ -43,16 +43,28 @@ you should say so rather than play on.
                               `C` will tell you.
     knowledge/NOTES.md        what earlier runs found. Where these two
                               disagree, NOTES wins.
-    runs/{FROM}/REPORT.md     the run you are continuing, if it wrote one.
-                              This one you *may* read: it is your own history,
-                              not somebody else's answer key.
+**Your own history, which no manual contains.** This character has lived
+before, perhaps more than once. Run
 
-Your notebook already contains the notes of the run you are continuing, and
-they are printed back to you with every screen. Do not restate them. Add only
+    .venv/bin/python -m borg_runner history --run runs/{RUNNAME}
+
+and **read every write-up it lists, oldest first**. The same chain is in
+`runs/{RUNNAME}/history.json`. Those are your own past lives: where the
+character has been, what it tried, what it would have done differently. Your
+notebook carries what it *learned*; the write-ups carry what it *did*, and
+nothing else records that.
+
+You may read these. A different run's transcript of your seed is still a
+solution key and is still out of bounds - the distinction is that this is
+your own history.
+
+Your notebook already contains the notes of every run in that chain, and they
+are printed back to you with every screen. Do not restate them. Add only
 what is new, or what contradicts them - and when something they claim turns
 out to be wrong, say so with the evidence.
 
-Your first note must say which files you actually opened.
+Your first note must say which files you actually opened, **including which
+of your own write-ups**.
 
 Do not read a *different* run's decisions or write-up for this seed. The run
 you continue is your own past; another run's transcript of the same dungeon is
