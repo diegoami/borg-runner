@@ -313,3 +313,62 @@ reach. **A carry-on inherits the consequence, not the plan.**
 **oil, time and reading the screen**, not with the spellbook; and the one
 thing that actually unlocked a staircase was **one ask of looking at a
 glyph that had been on the map the whole time.**
+
+## From `minimaxflash-1.4`, 2026-11-10
+
+### The druid cannot level on the level it is standing on
+
+The experience formula (`mon-util.c:1082`: `mexp * monster level / player
+level`) and the druid's numbers make one thing plain: at character level 4
+on depth 1 a kill is worth `mexp / 4`. A small kobold is 1.25 units, a grey
+mould 0.75, a mushroom patch 0.25, a giant white centipede 0.5. Level 5
+needs 28 units, so **a level-1 druid needs about 23 kills to level, and
+the level has no 23 kills in it.** On depth 2 the same formula gives
+`mexp * 2 / 4`: a giant black ant is 4 units, Grip 15, a giant green frog
+3. **For this class the staircase is not a trophy, it is the only way the
+character ever gets stronger** — and my three lives together earned two
+experience units because all three of them were on depth 1.
+
+### A druid's whip is a real weapon once it is blessed
+
+Without a Blessing the whip's to-hit of about 19 cannot reach an armour
+class of 36: `hit_chance` needs `to_hit >= 2 * AC / 3`, so 19 does not
+reach 36 and the oil has to do it alone. A Scroll of Blessing takes the
+to-hit to 29, and 29 reaches 36. Measured on this life: a giant white
+centipede (9 hp, armour class 12) died in **three swings** blessed and
+five unblessed, and the blessing is +5 armour class (12 to 17) on top.
+The druid's own melee problem, which my DRUID.md has called hopeless
+since the first life, is **a scroll away from being solved** — it lasts
+about thirty turns, so it is a fight-scoped tool, not a plan.
+
+### The druid's lock-picking skill, so a druid knows what a door costs
+
+`SKILL_DISARM_PHYS` for a druid is 30 at level 1 plus 10 a level plus the
+race's bonus (High-Elf 4), so 64 at level 4. The pick chance is
+`MAX(2, skill - 4 * lock_power)` with the lock level 1 to 7, so **36 to 60
+per cent, one attempt per ask** (a failure cancels the rest of the key
+string), and the door does not open under you afterwards. A druid that
+expects to cross a level's locked doors should budget two decisions a door
+and should not expect to do it in one.
+
+### What this life found for the druid's shopping list
+
+- **Four Potions of Cure Light Wounds on the floor of depth 1**, in a
+  stack, marked `!`. The druid of the third life had none, and had no way
+  to buy any. **A `!` may be a potion and the text screen cannot tell
+  you** — the oil kind and the potions share the glyph and only the colour
+  differs. Look before you walk over.
+- **A Scroll of Light is worth more to a sweeping druid than to a fighting
+  one**: it makes a permanent light globe, and a torch shows two tiles, so
+  every step of a sweep memorises about four squares instead of a few more.
+- **The class still has no escape of its own, and the third life spent
+  both Phase Door scrolls.** The scroll is the weapon; this life found
+  none.
+
+### What this life did not settle for the druid
+
+Whether a druid can reach character level 6 without a staircase: the
+formula says the answer is no on depth 1 and yes on depth 2, and the way
+to settle it is a druid run that reaches depth 2 and counts the
+experience of seven ordinary kills. At four units a kill on depth 2, level
+5 is nine kills away.

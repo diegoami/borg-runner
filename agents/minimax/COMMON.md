@@ -656,3 +656,116 @@ run".** Depth is recorded, not scored: a character that stops alive on depth
 depth 2 having spent its escape ladder. **A scroll that teleports ten
 squares is worth more than any number of flasks when the fight is not
 winnable.**
+
+## From `minimaxflash-1.4`, 2026-11-10
+
+### The M map is the whole level, scaled down — and it is the only position you can trust
+
+`display_map` (`vendor/angband/src/ui-map.c:761`) computes
+`row = (y * map_hgt) / cave->height` and `col = (x * map_wid) / cave->width`
+for **every square of the level**, so the M panel is a picture of the entire
+198 × 66 dungeon at 78 × 22, not a window into it. My COMMON.md said "M is a
+window onto the level"; that was wrong for three lives. What is right is
+that it draws only `cave->memory`, so unexplored squares are blank.
+
+The consequence is bigger than the correction: **the M map is the only
+honest position in the game.** The main map panel scrolls, and its rows are
+drawn *behind* the sidebar, so a row whose sidebar text is one character
+short has every glyph on it one column out. I read a scroll as a teleport
+(ask 683), and read the panel shift as a walk in the wrong direction twice
+(asks 679 and 695). The M map has its own grid and no sidebar over it.
+
+### The experience formula decides whether a character can level at all
+
+`player_kill_monster` (`vendor/angband/src/mon-util.c:1082`):
+`new_exp = (mon->race->mexp * mon->race->level) / p->lev`. On depth 1 at
+character level 4 that is `mexp / 4` — a small kobold is 1.25 units, a
+grey mould 0.75, a mushroom patch 0.25. Level 5 needs 28 units, so **a
+depth-1 character at level 4 needs about 23 kills to level, and a level-1
+player will never take that deal.** On depth 2 the same formula doubles
+(`mexp * 2 / 4`): a giant black ant is 4 units and Grip is 15.
+
+So the class of problem is not "which monster is worth fighting" but "which
+depth pays for its kills". **A character that wants to level must go
+deeper, and going deeper needs the one staircase the level is hiding.** My
+three lives together earned 2 experience units because all three were on
+depth 1.
+
+### Lock picking: the formula, the cancel, and the door that does not open
+
+`calc_unlocking_chance` (`vendor/angband/src/player-calcs.c:1676`) returns
+`MAX(2, skill - 4 * lock_power)`; the lock level is `randint1(7)`
+(`vendor/angband/src/gen-util.c:581`). For a CL4 High-Elf Druid
+(`SKILL_DISARM_PHYS` = 30 + 10×3 + 4 = 64) that is **36 to 60 per cent**,
+not the 26 per cent my notebook claimed.
+
+Two costs the manual does not mention:
+
+- **A failed pick cancels the rest of the key string.** The game prints
+  *"You failed to pick the lock. Cancelled."* — "Cancelled" is the run
+  cancel message — so a string of repeated presses is **one attempt per
+  ask** against a lock.
+- **A picked lock does not move you.** The press picks the lock and leaves
+  the character on the near side, so every locked door costs two
+  decisions: one to pick, one to step through.
+
+### The aimed walk finds new ground only when its destination is unknown
+
+`find_path` (`vendor/angband/src/player-path.c:1107`) sets
+`only_known = square_isknown(start) && square_isknown(dest)`. An aim that
+lands on a square you have already seen is pathed over remembered ground
+only — a stroll along corridors you have walked. An aim that lands on a
+square you have **not** seen is pathed through unknown ground, which the
+pathfinder treats as passable, and the walk crosses new territory as it
+goes. **Aim further than the edge of what you know.** This settles the
+disagreement between my own lives two and three about the same recipe.
+
+And the aimed walk is a slot machine: the cursor clamps to the level
+bounds, so a big aim is a request for the **edge** of the level, and the
+pathfinder answers with the cheapest route it can find, not the one you
+pointed at. Measured over 141 decisions on the same recipe: 0, 1, 1, 3, 9,
+23, 24, 26, 32, 33 tiles, wrong way about half the time — **about
+seventeen tiles an ask, in no direction you chose.**
+
+### The look-mode walk is the navigator, and it beats the aimed walk
+
+In look mode a direction key does not move the cursor one tile: it
+**snaps the cursor to the next interesting square** in that direction — a
+door, a monster, an item or a staircase — and the message line names it
+with its exact offset. So `l` + a direction + `g` walks you along the
+corridor to the next door **in one ask**, six to twelve tiles every time.
+`lxg` is the same idea with the frontier instead of the next door; on a
+level with a corridor every third segment it advanced one tile an ask,
+which is why my notes called it slow.
+
+### `!` cannot be read from a text screen
+
+`object.txt` gives the oil kind `graphics:!:y` **and** the potions
+`graphics:!:d`. Only the colour tells them apart and a plain-text player
+never sees colour. What I picked up expecting a flask of oil was **four
+Potions of Cure Light Wounds**. A `!` on the floor must be looked at.
+
+### Two harness rules that cost me decisions each
+
+- **To leave two menus, send `\e\e`, not `\ee`.** `\ee` is Escape followed
+  by the letter `e`. And a trailing key can undo the escape: my `g` re-
+  selected the armour in the equipment list and reopened the context menu,
+  so the screen came back identical and I wrongly concluded that Escape
+  did not work.
+- **The keypad is 7 8 9 / 4 5 6 / 1 2 3: 4 is left, 6 is right, 8 is up,
+  2 is down.** I got it wrong three times in 141 decisions and each slip
+  was invisible — the character moved, the turn counter moved and the map
+  looked plausible. The M map is what caught it. If a walk seems to have
+  gone nowhere, check the M map before sending another.
+
+### Chests, gold and buffs on depth 1
+
+- **Every chest on this level was empty** (`pval` 0 — "You see nothing
+  there to open"), four of them over two lives.
+- **A depth-1 gold drop averages about 17** (`make_gold`,
+  `vendor/angband/src/obj-make.c:1296`: `(16 * lev) / 10 + 16`), so gold
+  is earned by killing — and killing on depth 1 at level 4 pays a quarter
+  of an experience unit a kill. A character with 3 gold and no way to earn
+  more cannot shop, and that is worth knowing before it plans a trip.
+- **A Scroll of Blessing lasts about thirty turns** ("The prayer has
+  expired."). It is a minute of play, not a plan.
