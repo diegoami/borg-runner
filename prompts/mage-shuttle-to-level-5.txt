@@ -4,11 +4,11 @@ This is an objective to add to PLAYGAME.txt, not a replacement for it. Read
 PLAYGAME.txt and follow it, with these substitutions, and read this brief's
 objective in place of its "about 150 decisions" rule.
 
-    {RUNNAME}   the name of your run
-    {SEED}      an integer no record in records/OVERVIEW.md already uses
-    {AGENT}     your model family: minimax, sonnet, codex, qwen, glm
-    {CLASS}     Mage - read the letter off the class menu, do not count rows
-    {RACE}      drawn: press * at the race menu
+    run name    {RUNNAME}
+    seed        {SEED}, which no record in records/OVERVIEW.md may already use
+    family      {AGENT}, one of minimax, sonnet, codex, qwen, glm
+    class       Mage - read the letter off the class menu, do not count rows
+    race        drawn: press * at the race menu
 
     .venv/bin/python -m borg_runner play --seed {SEED} --name {RUNNAME} --class Mage
     .venv/bin/python -m borg_runner wait --run runs/{RUNNAME}
@@ -40,9 +40,10 @@ Three things the page says that decide how you spend your mana:
   moment the status line offers it;
 - the first cast of each spell pays experience - a mage's five CL1 and CL2
   spells pay 18 between them, for the price of the mana;
-- Magic Missile is 3d4, three to twelve damage, from CL1 to CL5. It does not
-  have a +3 bonus. If a page of your family's says 6 to 15, it is reading the
-  dice expression wrong, and you should correct it when you write back.
+- Magic Missile is 3d4, three to twelve damage, from CL1 to CL5, and has no
+  damage bonus. `agents/minimax/MAGE.md` said otherwise until 2026-11-10 and
+  now carries a note about it: if you meet another number like that, correct
+  the line where it stands and say in your report what it cost you.
 
 Budget: up to **300 decisions**. Stop as soon as the sidebar says level 5.
 Running out of asks short of it is a result, and so is dying; both answer the
