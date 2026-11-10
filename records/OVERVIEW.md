@@ -24,6 +24,7 @@ then the agent, then the character class.
 | [minimaxflash-2.2](minimaxflash-2.2/REPORT.md) | 41 | minimax-coding-plan/MiniMax-M3 | Gnome Mage | 2 | 2 | 507 (4 gold + 503 carried) | 353 | 1,637 | 10,811 | died: a metallic green centipede | — | notebook.md | False | — | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/minimaxflash-2.2/report.html) |
 | [minimaxflash-3](minimaxflash-3/REPORT.md) | 313 | minimax-coding-plan/MiniMax-M3.1-Flash | Human Warrior | 3 | 4 | 903 (131 gold + 772 carried) | 150 | 4,563 | 8,394 | died: a cave spider | — | — | True | 3 | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/minimaxflash-3/report.html) |
 | [mmf-mage.2](mmf-mage.2/REPORT.md) | 1 | minimax-coding-plan/MiniMax-M3.1-Flash | Gnome Mage | 3 | 1 | 576 (7 gold + 569 carried) | 146 | 661 | 4,872 | stopped | — | notebook.md | True | — | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/mmf-mage.2/report.html) |
+| [mmx-pri-1](mmx-pri-1/REPORT.md) | 17 | minimax-coding-plan/MiniMax-M3.1-Flash | Dwarf Priest | 1 | 2 | 410 (8 gold + 402 carried) | 149 | 984 | 9,952 | ended | — | — | True | — | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/mmx-pri-1/report.html) |
 | [mmx-war-1](mmx-war-1/REPORT.md) | 271 | minimax-coding-plan/MiniMax-M3.1-Flash | Half-Elf Warrior | 2 | 4 | 637 (7 gold + 630 carried) | 141 | 2,594 | 10,923 | died: a silver mouse | — | — | True | 5 | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/mmx-war-1/report.html) |
 | [qwen-flash-1](qwen-flash-1/REPORT.md) | 23 | alibaba-token-plan/qwen3.8-flash | High-Elf Druid | 0 | 1 | 475 (379 gold + 96 carried) | 73 | 204 | 570 | died: a scruffy little dog | 51,226 | — | — | — | yes | — | [watch](https://diegoami.github.io/borg-runner/records/qwen-flash-1/report.html) |
 | [sonnet-1](sonnet-1/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 1 | 3 | 723 (10 gold + 713 carried) | 125 | 644 | 4,659 | ended | 162,466 | — | — | — | yes | — | [watch](https://diegoami.github.io/borg-runner/records/sonnet-1/report.html) |
@@ -35,9 +36,9 @@ then the agent, then the character class.
 
 The table above is every run. These are the same rows cut three ways, in the order the questions are usually asked: **did the character live**, then **which agent played it**, then **what class it was**.
 
-- **Alive status**: [Alive](#alive) (11), [Died](#died) (6)
-- **Agent**: [Agent codex](#agent-codex) (1), [Agent human](#agent-human) (1), [Agent minimax](#agent-minimax) (10), [Agent qwen](#agent-qwen) (1), [Agent sonnet](#agent-sonnet) (4)
-- **Class**: [Class Druid](#class-druid) (6), [Class Mage](#class-mage) (4), [Class Priest](#class-priest) (1), [Class Warrior](#class-warrior) (6)
+- **Alive status**: [Alive](#alive) (12), [Died](#died) (6)
+- **Agent**: [Agent codex](#agent-codex) (1), [Agent human](#agent-human) (1), [Agent minimax](#agent-minimax) (11), [Agent qwen](#agent-qwen) (1), [Agent sonnet](#agent-sonnet) (4)
+- **Class**: [Class Druid](#class-druid) (6), [Class Mage](#class-mage) (4), [Class Priest](#class-priest) (2), [Class Warrior](#class-warrior) (6)
 
 ### Alive
 
@@ -51,6 +52,7 @@ The table above is every run. These are the same rows cut three ways, in the ord
 | [minimaxflash-1.4](minimaxflash-1.4/REPORT.md) | 23 | minimax-coding-plan/MiniMax-M3.1-Flash | High-Elf Druid | 2 | 4 | 347 (3 gold + 344 carried) | 759 | 6,882 | 24,105 | ended | — | notebook.md | True | — | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/minimaxflash-1.4/report.html) |
 | [minimaxflash-2](minimaxflash-2/REPORT.md) | 41 | minimax-coding-plan/MiniMax-M3.1-Flash | Gnome Mage | 1 | 1 | 574 (4 gold + 570 carried) | 158 | 1,163 | 8,001 | ended | — | — | True | 1 | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/minimaxflash-2/report.html) |
 | [mmf-mage.2](mmf-mage.2/REPORT.md) | 1 | minimax-coding-plan/MiniMax-M3.1-Flash | Gnome Mage | 3 | 1 | 576 (7 gold + 569 carried) | 146 | 661 | 4,872 | stopped | — | notebook.md | True | — | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/mmf-mage.2/report.html) |
+| [mmx-pri-1](mmx-pri-1/REPORT.md) | 17 | minimax-coding-plan/MiniMax-M3.1-Flash | Dwarf Priest | 1 | 2 | 410 (8 gold + 402 carried) | 149 | 984 | 9,952 | ended | — | — | True | — | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/mmx-pri-1/report.html) |
 | [sonnet-1](sonnet-1/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 1 | 3 | 723 (10 gold + 713 carried) | 125 | 644 | 4,659 | ended | 162,466 | — | — | — | yes | — | [watch](https://diegoami.github.io/borg-runner/records/sonnet-1/report.html) |
 | [sonnet-2](sonnet-2/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 6 | 6 | 1,189 (91 gold + 1,098 carried) | 153 | 637 | 6,056 | ended | 172,221 | sonnet-1.md | True | — | yes | — | [watch](https://diegoami.github.io/borg-runner/records/sonnet-2/report.html) |
 | [sonnet-2.2](sonnet-2.2/REPORT.md) | 7 | anthropic/claude-sonnet-5-5 | Half-Troll Warrior | 7 | 8 | 2,025 (161 gold + 1,864 carried) | 291 | 1,107 | 10,416 | stopped | 142,837 | notebook.md | True | — | yes | — | [watch](https://diegoami.github.io/borg-runner/records/sonnet-2.2/report.html) |
@@ -91,6 +93,7 @@ The table above is every run. These are the same rows cut three ways, in the ord
 | [minimaxflash-2.2](minimaxflash-2.2/REPORT.md) | 41 | minimax-coding-plan/MiniMax-M3 | Gnome Mage | 2 | 2 | 507 (4 gold + 503 carried) | 353 | 1,637 | 10,811 | died: a metallic green centipede | — | notebook.md | False | — | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/minimaxflash-2.2/report.html) |
 | [minimaxflash-3](minimaxflash-3/REPORT.md) | 313 | minimax-coding-plan/MiniMax-M3.1-Flash | Human Warrior | 3 | 4 | 903 (131 gold + 772 carried) | 150 | 4,563 | 8,394 | died: a cave spider | — | — | True | 3 | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/minimaxflash-3/report.html) |
 | [mmf-mage.2](mmf-mage.2/REPORT.md) | 1 | minimax-coding-plan/MiniMax-M3.1-Flash | Gnome Mage | 3 | 1 | 576 (7 gold + 569 carried) | 146 | 661 | 4,872 | stopped | — | notebook.md | True | — | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/mmf-mage.2/report.html) |
+| [mmx-pri-1](mmx-pri-1/REPORT.md) | 17 | minimax-coding-plan/MiniMax-M3.1-Flash | Dwarf Priest | 1 | 2 | 410 (8 gold + 402 carried) | 149 | 984 | 9,952 | ended | — | — | True | — | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/mmx-pri-1/report.html) |
 | [mmx-war-1](mmx-war-1/REPORT.md) | 271 | minimax-coding-plan/MiniMax-M3.1-Flash | Half-Elf Warrior | 2 | 4 | 637 (7 gold + 630 carried) | 141 | 2,594 | 10,923 | died: a silver mouse | — | — | True | 5 | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/mmx-war-1/report.html) |
 
 ### Agent qwen
@@ -133,6 +136,7 @@ The table above is every run. These are the same rows cut three ways, in the ord
 | run | seed | model | character | depth | level | wealth | asks | keys | turn | outcome | tokens | inherited | read its class | own tools | wrote up | playbook | replay |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | [diego-1](diego-1/REPORT.md) | — | none/human | Kobold Priest | 1 | 2 | — | 418 | 418 | 4,741 | stopped, saved | — | — | — | — | yes | — | [watch](https://diegoami.github.io/borg-runner/records/diego-1/report.html) |
+| [mmx-pri-1](mmx-pri-1/REPORT.md) | 17 | minimax-coding-plan/MiniMax-M3.1-Flash | Dwarf Priest | 1 | 2 | 410 (8 gold + 402 carried) | 149 | 984 | 9,952 | ended | — | — | True | — | yes | minimax | [watch](https://diegoami.github.io/borg-runner/records/mmx-pri-1/report.html) |
 
 ### Class Warrior
 
