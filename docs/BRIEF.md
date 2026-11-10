@@ -76,7 +76,7 @@ Every byte you send is a key. Four escapes exist for keys you cannot type:
 
 | You write | The game gets |
 |---|---|
-| `\n` | Enter (`KC_ENTER`; a prompt saying "Press Return" will **not** take a carriage return) |
+| `\n` | Enter (`KC_ENTER`; a literal carriage-return or newline byte mid-file is taken as Enter too - only a *trailing* real newline is dropped, as the one a text editor adds) |
 | `\e` | Escape |
 | `\t` | Tab |
 | `\\` | a literal backslash |
@@ -167,7 +167,7 @@ they are worth reading when your character matches theirs:
 
 | | |
 |---|---|
-| [agents/minimax/COMMON.md](../agents/minimax/COMMON.md) | what three lives of one character taught that player about reading the screen, pathfinding, fighting, the town, and the harness itself — including the corrections they made to their own notes |
+| [agents/minimax/COMMON.md](../agents/minimax/COMMON.md) | what seven runs of one model family taught their players about reading the screen, pathfinding, fighting, the town, and the harness itself — including the corrections they made to their own notes |
 | [agents/minimax/DRUID.md](../agents/minimax/DRUID.md) | the same player's class-specific notes: the druid's spell-point economy, its only real weapon, and the mushroom patches that make depth 1 hard |
 
 The game's own manual, at the pin:

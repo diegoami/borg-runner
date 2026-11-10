@@ -384,15 +384,19 @@ used this every few asks to measure progress: *"You recall a down staircase,
 gives**, and it survives the panel scrolling, which is why the panel's own
 coordinates are useless for measuring anything.
 
-### A locked door at depth 1 is a 36–40 % roll, not a wall — `minimaxflash-2.2`
+### A locked door at depth 1 is about a 24 % roll, not a wall — `minimaxflash-2.2`
 
 Nothing in the manual or in this page mentions locked doors. `cmd-cave.c:186`
 computes `MAX(2, skill - 4 * lock_power)` (`player-calcs.c:1676`), where
-`skill` is disarm-phys and `lock_power` is `m_bonus(7, player->depth)`
-(`cmd-cave.c:749`) — at depth 1 that is **0 or 1**, so the chance is 40 % or
-36 %. My Mage/Gnome disarm-phys is 40 (class base 30 + race 10). **I opened a
-locked depth-1 door in four attempts.** `no_light(player)` — the third
-argument — asks whether **my own square** is lit, not whether I have seen
+`skill` is disarm-phys and `lock_power` is stored at generation by
+`gen-util.c:581` `square_set_door_lock(c, grid, randint1(7))` — so **1 to 7**,
+and the chance at skill 40 is 36 % down to 12 %, about 24 % on average.
+(Corrected 2026-11-10: this block said `m_bonus(7, player->depth)` at
+`cmd-cave.c:749`, so 0 or 1 and "40 % or 36 %" — that call is the
+door-*jamming* path, not the lock being picked.) My Mage/Gnome disarm-phys is
+40 (class base 30 + race 10). **I opened a locked depth-1 door in four
+attempts.** `no_light(player)` — the third argument — asks whether **my own
+square** is lit, not whether I have seen
 the lock, so standing in torchlight does not divide the skill by ten.
 
 ### The M map is the whole level, scaled down — and it is the only position you can trust — `minimaxflash-1.4`
@@ -636,7 +640,7 @@ on the flat **12 %** floor. With 9–36 damage that is **2.7 expected damage
 per throw**, so Fang (25 HP, AC 36) needed about nine flasks, during which a
 cave spider and a centipede ate me down to 2/16 hit points. **A spell that
 ignores armour is worth far more than oil against an armoured monster** —
-Magic Missile is 1 SP for 6–15 damage and never resists. **Do not fight
+Magic Missile is 1 SP for 3d4 (3–12) damage and never resists (corrected 2026-11-10; this line said 6–15, reading the dice count 3 as a bonus). **Do not fight
 AC-30 monsters with oil at all.**
 
 ### The class armour-weight allowance counts worn armour only — `minimaxflash-2.2`, with its arithmetic corrected
@@ -757,10 +761,11 @@ mistakes in different clothes.
    character screens whose contents I already knew from the inherited
    notes. `i` and `e` are worth one ask each, not six.
 2. **Buy the Magic Mapping scroll the first day it is in stock.** It maps
-   22 rows × 40 columns around you. **But note the correction from
+   ±22 rows × ±40 columns around you (44×80; corrected 2026-11-10, this
+   block read the half-extents as the window). **But note the correction from
    `minimaxflash-1-again`: it maps an area, it does not reveal the whole
    198×66 level, and the earlier note "Magic Mapping (65 g) did not help"
-   is not evidence against it.** Whether a `>` appears in the 22×40 window is still
+   is not evidence against it.** Whether a `>` appears in the 44×80 window is still
    untested — and it is worth one run to settle, because 65 gold is 2.5
    days of a run's oil income.
 3. **Do not spend the escape ladder early.** `minimaxflash-1.3`
@@ -832,14 +837,16 @@ winnable.**
 
 **The Word of Recall is not an escape** (ask 150, and it killed me). Its
 timer ticks once every ten turns, so the shortest wait is 150 turns and
-the longest 350. I read it and stood still for forty turns, and a cave
+the longest 340 (corrected 2026-11-10; the timer is randint0(20) + 15 = 15-34 ticks of ten game turns). I read it and stood still for forty turns, and a cave
 spider killed the character (26/43 HP, 1d4 a turn). Read it and then
 walk, or not at all.
 
 ## 6. What I could not settle, and what would
 
-1. **Is the down staircase findable by walking?** One per level, uniform
-   over 13,068 squares. **What would settle it:** a run that spends its
+1. **Is the down staircase findable by walking?** Three or four per level
+   (corrected 2026-11-10; this block said one per level, uniform over 13,068
+   squares - that is the labyrinth generator, not what we play), at corridor
+   ends, 16 tiles apart. **What would settle it:** a run that spends its
    whole budget on the cursor-and-`g` walk above and scans every map for
    `>`, reporting where it appeared. Nobody has done that with the fast
    walk.

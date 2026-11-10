@@ -84,8 +84,10 @@ The experience formula (`mon-util.c:1082`: `mexp * monster level / player
 level`) and the druid's numbers make one thing plain: at character level 4
 on depth 1 a kill is worth `mexp / 4`. A small kobold is 1.25 units, a grey
 mould 0.75, a mushroom patch 0.25, a giant white centipede 0.5. Level 5
-needs 28 units, so **a level-1 druid needs about 23 kills to level, and
-the level has no 23 kills in it.** On depth 2 the same formula gives
+needs 36 more units (the ladder is 10/25/45/70 before the 145% race
+factor, so CL4 is 65 and CL5 is 101 - corrected 2026-11-10, this block
+said 28), so **a level-1 druid needs about thirty kills to level, and
+the level has no thirty kills in it.** On depth 2 the same formula gives
 `mexp * 2 / 4`: a giant black ant is 4 units, Grip 15, a giant green frog
 3. **For this class the staircase is not a trophy, it is the only way the
 character ever gets stronger** — and my three lives together earned two
@@ -207,12 +209,15 @@ centipedes asleep — all invisible to the eye.
 unfamiliar room *before entering it* should be reflex, not a response to
 trouble.
 
-The first cast also **pays experience** (2 units for Detect Life), and
-the `exp` field in `class.txt` is the **first-cast** cost, not the
-learning cost: studying a spell costs nothing at all, and the first cast
-of Stinking Cloud cost me **12 experience** at CL3
-(`minimaxflash-1-again`). That is why the first Detect Life cost 2 and a
-first Fox Form would cost 10.
+The first cast also **earns experience** (2 units for Detect Life), and
+the `exp` field in `class.txt` is the base of that first-cast award -
+the award is `exp` × spell level (corrected 2026-11-10; this block read
+the field as the whole cost, and said "cost" where it meant "earned" -
+the game pays you, not the other way round) - not the learning cost:
+studying a spell costs nothing at all, and the first cast
+of Stinking Cloud earned me **12 experience** at CL3
+(`minimaxflash-1-again`). That is why the first Detect Life earned 2 and a
+first Fox Form would earn 10.
 
 ---
 
@@ -381,7 +386,7 @@ HP and no time. **Against Grip, the Phase Door scrolls were what saved
 me, not Stinking Cloud.**
 
 **Buy the Magic Mapping scroll the first day the Alchemist has one**
-(3 scrolls at 65 gold, seen at ask 399 of `minimaxflash-1-again`). It maps 22×40 around you and
+(3 scrolls at 65 gold, seen at ask 399 of `minimaxflash-1-again`). It maps ±22 rows and ±40 columns around you (44×80 - the `effect-yx:22:40` are half-extents, corrected 2026-11-10) and
 would have ended a staircase hunt in a dozen asks — but note §8, the
 open question about whether it reveals stairs at all.
 
@@ -409,7 +414,7 @@ reach. **A carry-on inherits the consequence, not the plan.**
 ## 8. Open questions for the next druid
 
 1. **Does Magic Mapping reveal the down staircase?** `effect:MAP_AREA`,
-   `effect-yx:22:40` — 22 by 40, not the level. **What would settle it:**
+   `effect-yx:22:40` — ±22 rows, ±40 columns (44 by 80, not the level). **What would settle it:**
    buy one on depth 1, read it, and say whether a `>` appears in the
    window. The inherited note *"Magic Mapping (65 g) did not help"* is
    one run's negative result and does not answer it.

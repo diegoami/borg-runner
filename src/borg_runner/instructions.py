@@ -387,8 +387,8 @@ def measured_mechanics(c):
     found = c.search(r'One closed door in four gets a lock of strength '
                      r'`randint1\((\d+)\)` \(FACT, `src/gen-util\.c`\), and walking into it '
                      r'picks it: the chance is `MAX\((\d+), disarm-phys - (\d+) x lock '
-                     r'strength\)` per cent, with the skill divided by (\w+) if you cannot '
-                     r'see the lock or are blind', name='the lock arithmetic')
+                     r'strength\)` per cent, with the skill divided by (\w+) when your own '
+                     r'square is dark', name='the lock arithmetic')
     if found:
         util = gd.read_source('src/gen-util.c') or ''
         calcs = gd.read_source('src/player-calcs.c') or ''
@@ -3121,9 +3121,6 @@ def town_facts(c):
                (1, 1) if 'p->recall_depth = MAX(p->recall_depth, 1);' in util else None, covers=[m.span(1), m.span(2)])
         c.emit('source', m.start(), 'RECALL has no "nothing happens" for an unvisited depth', True,
                'if (OPT(player, birth_no_recall) && !player->total_winner)' in handler)
-        old = INSTRUCTIONS.read_text()
-        c.emit('docs', m.start(), 'volume 1 says recall does nothing from the town', True,
-               'it does nothing from the town' in old)
     m = c.search(r'(\d+) gold wasted', name='the recall scroll price')
     if m:
         c.emit('effect', m.start(), 'Word of Recall cost:', int(m[1]),

@@ -182,7 +182,7 @@ can check on the screen; nobody has tested it as a rule):
    14 damage** (FACT, `monster`). **5 of the 52 monsters at depth 2 or
    shallower can take 8 hit points in one round, and 3 of them can take 10.**
    Below the band's worst round, one bad corridor is a death; above it, a
-   mistake costs a potion. Volume two has the same number for every band
+   mistake costs a potion. Volume two has the worst monsters of each band
    below depth 5.
 2. **Descend one depth at a time**, and look at `HP` on the left and that
    number before each staircase. A character at -1 or worse on constitution
@@ -257,13 +257,15 @@ either manual.
 - **The level is 198x66 and you see 66x22 of it.** FACT,
   `constants.txt` (`world:dungeon-wid:198`, `world:dungeon-hgt:66`) against the map panel,
   which is the screen's 80 columns less the 13-column sidebar and one; there
-  is one down staircase per level, placed uniformly at random on a square with
-  three adjacent walls, at least 16 tiles from the up staircase
-  (`gen-cave.c:1583`, `gen-util.c` alloc_stairs, and the minimum separation
-  MIN(width, height) / 4 in gen-cave.c). **Three screens wide, three tall, one
-  staircase, no rule to exploit**: that is the arithmetic behind every "I
-  explored for ever" report here (OBSERVED, minimaxflash-1#104,
-  minimaxflash-2#7).
+  are **three or four down staircases and one or two up** per level (FACT,
+  `src/gen-cave.c classic_gen()` and `modified_gen()` both call
+  `handle_level_stairs()` for `rand_range(3, 4)` down and `rand_range(1, 2)`
+  up; section 8 has the profiles), each placed on a square with three
+  adjacent walls - a corridor end - and kept at least MIN(width, height) / 4
+  = 16 tiles apart (`src/gen-util.c alloc_stairs()`). **Three screens wide,
+  three tall, several staircases at corridor ends**: that is the arithmetic
+  behind every "I explored for ever" report here (OBSERVED,
+  minimaxflash-1#104, minimaxflash-2#7).
 
 **Aim the cursor at something you have seen.** In targeting mode the digit
 keys move the cursor one tile each and `g` walks the shortest path to it, and
@@ -298,9 +300,9 @@ x=120). It is not. **Nothing in this game asks you to go back to a place.**
   what is adjacent, and which direction still has dark in it.
 
 So the answer to "this level will not give me a staircase" is not a better
-map. It is: take the staircase you arrived on and get another level. One
-staircase per level, placed uniformly, means a fresh level is as likely to put
-one near you as this one was - at two asks instead of a hundred.
+map. It is: take the staircase you arrived on and get another level. With
+three or four staircases per level, a fresh one is as likely to put one near
+you as this one was - at two asks instead of a hundred.
 
 ## 1. Be born (`birth` ; the birth screens)
 - Race menu `*` (random item, Enter selects the highlight), class menu `*`. Stat screen: `a` (point-based), Enter to accept the allocation; Enter for the name, `y` for the history, any key to continue.
@@ -330,7 +332,7 @@ one near you as this one was - at two asks instead of a hundred.
 - Stairs are connected (`birth`): after `>` you stand on an up staircase; after `<` on a down one. Leaving a level destroys it; taking a staircase always gives a new level.
 - Light: your kit torch is wielded at birth and burns out; `F` refuels a lantern from flasks of oil. You cannot read scrolls in the dark, blind or confused (c15 CURE-02, `src/player-util.c`).
 - Hunger: `Fed %` on the status line; `E` eats.
-- **A closed door may be locked, and a lock is a roll, not a wall.** One closed door in four gets a lock of strength `randint1(7)` (FACT, `src/gen-util.c`), and walking into it picks it: the chance is `MAX(2, disarm-phys - 4 x lock strength)` per cent, with the skill divided by ten if you cannot see the lock or are blind (FACT, `src/player-calcs.c calc_unlocking_chance()`). A class with disarm-phys 40 opens a depth-1 door about two attempts in five. Two costs the manuals do not mention, both measured: **a failed pick prints `Cancelled` and eats the rest of the keys in that ask**, so a string of repeats is one attempt, not five (OBSERVED, minimaxflash-1.4#616); and **a picked lock does not move you** - the door opens and you are still outside it, so every locked door is two decisions (OBSERVED, minimaxflash-2.2#162).
+- **A closed door may be locked, and a lock is a roll, not a wall.** One closed door in four gets a lock of strength `randint1(7)` (FACT, `src/gen-util.c`), and walking into it picks it: the chance is `MAX(2, disarm-phys - 4 x lock strength)` per cent, with the skill divided by ten when your own square is dark (FACT, `src/player-calcs.c calc_unlocking_chance()`, and `src/cmd-cave.c do_cmd_open_aux()` passes no_light). A class with disarm-phys 40 opens a depth-1 door about one attempt in four. Two costs the manuals do not mention, both measured: **a failed pick prints `Cancelled` and eats the rest of the keys in that ask**, so a string of repeats is one attempt, not five (OBSERVED, minimaxflash-1.4#616); and **a picked lock does not move you** - the door opens and you are still outside it, so every locked door is two decisions (OBSERVED, minimaxflash-2.2#162).
 
 ## 4. See (`command`, `playing`)
 - `l` look. The list is sorted nearest first and includes your own square (`playing`; `src/target.c cmp_distance`), so it can open on it: Space or `+` for the next thing, `-` back, `r` toggles detail, Esc leaves (`playing`: "the list includes ... the player's location"). `[` lists visible monsters with asleep/awake and relative position. `]` lists items. `/` + symbol says what a glyph is. `M` whole-level map; `L` scroll the map by sectors (Esc leaves).
@@ -410,7 +412,7 @@ tail".
 
 1. **Use it.** Reading or quaffing identifies the kind at once and the first
    use pays experience (section 1). For a depth-2 potion that is an 84% good
-   bet; for a scroll, 8% of the pool is Summon Monster or Darkness.
+   bet; for a scroll, 7% of the pool is Summon Monster or Darkness.
 2. **Buy one.** Everything in a shop is identified, so every kind the
    Alchemist stocks is a kind you can rule out by sight for the rest of the
    game - and the stock changes daily.
@@ -460,7 +462,7 @@ the object's own level and is not where you find it):
 | Potion of Cure Serious Wounds / Cure Critical Wounds | 70 / 200 | 3 / 5 | 5 / 12 | when Light stops being enough |
 | Scroll of Teleportation | 40 | 10 | 10 | the escape when Phase Door is not far enough |
 | Scroll of Deep Descent | 250 | 10 | 1 | not sold; five levels below your deepest |
-| Scroll of Word of Recall | 125 | 5 | 5 | useless until you have been deep; it does nothing from the town |
+| Scroll of Word of Recall | 125 | 5 | 5 | read in the dungeon it takes you to town; read in town before you have left it, it drops you to depth 1 - 125 gold wasted |
 | Potion of Speed / Heroism / Berserk Strength | 75 / 25 / 80 | 1 / 1 / 3 | 1 / 1 / 3 | drink before a fight you have chosen |
 | Wand of Magic Missile / Stinking Cloud | 200 / 400 | 3 / 5 | 3 / 5 | ranged damage for a class with no spell |
 
@@ -473,7 +475,7 @@ first use pays experience and selling pays nothing - what the first use pays,
 and when to risk it, is under "Keys as the game receives them" above.
 
 ## 7. Recover
-- `R` then `&` then Enter rests until healed or disturbed; `R` `*` Enter until HP and SP are full; or give a number. Resting doubles regeneration; poison, stun, cuts stop it (c15 CURE-01, REST-01).
+- `R` then `&` then Enter rests until healed or disturbed; `R` backspace `*` Enter until HP and SP are full (the prompt is pre-filled with `& `, so `R` `*` rests only as needed - see section 1); or give a number. Resting doubles regeneration; poison, stun, cuts stop it (c15 CURE-01, REST-01).
 - **POLICY** c15 REST-01/02: rest only when no awake monster can reach you in about 5 turns; rest on a staircase when one is within about 10 steps.
 - Blackguards regenerate HP at half rate; Necromancers and spell-users rest for mana.
 
@@ -499,7 +501,7 @@ section is only how.
   1. a `>` you walk onto and press `>` on;
   2. Scroll of **Deep Descent** (`object`: found from DL1, **not sold**): after 3+1d4 turns you drop to **5 levels below your deepest level reached**, not below where you stand (`src/effect-handler-general.c`), landing on no staircase;
   3. Scroll of Magic Mapping (65 g, Alchemist when stocked; found from DL5) maps everything within 22 rows and 40 columns of you, a radius each side (`object` `effect-yx`; `src/effect-handler-general.c` MAP_AREA);
-  5. Word of Recall (in your kit unless that option is on): read in the dungeon it takes you to town, read in town it returns you to your deepest depth after 15-34 turns (c15 TOWN-05).
+  5. Word of Recall (in your kit unless that option is on): read in the dungeon it takes you to town, read in town it returns you to your deepest depth after 15-34 turns - or to depth 1 if you have never left the town (c15 TOWN-05).
 - **Detection is the only thing that finds a staircase you have not seen**, and only a Mage or a Rogue has it: `Find Traps, Doors & Stairs` is `DETECT_STAIRS` with `effect-yx:22:40`, which is `+-22` rows and `+-40` columns - an **81x45 window, about 28% of a level** - and it reads the *real* grid and memorises what it finds (`src/effect-handler-general.c:1467`), so it reveals a staircase never seen. Three things measured with it (OBSERVED, minimaxflash-2#91, eleven casts): it **only reports ground it has not already scanned**, so two casts from the same place give "You sense no traps. You sense no doors." and nothing else; when there is no staircase in the window it says **nothing at all** about stairs, which is what a negative looks like; and covering a level takes **three positions across and two down, six casts**. Do
 not try to compute those positions - you cannot read your coordinates (see
 "Where you are" above). Cast, walk a long way with one aimed `g`, cast again,
@@ -532,20 +534,22 @@ tiles an ask for about a hundred asks** (OBSERVED, minimaxflash-2.2#165,
 ## 9. Your class (`class`, `race`, c14; section numbers are c14's)
 Level-1 facts are from `class.txt`; "buy" is POLICY from c4/c14/c15 with real prices from section 2.
 
+**Every class is born with a Scroll of Word of Recall** (all nine `class.txt` entries have an equip line for it, gated on the `birth_no_recall` option, which is off here), so the kit lists below omit it: it is the way home in section 6, and the scroll a Warrior read and then stood still beside for forty turns (minimaxflash-3#149).
+
 **Warrior** (c14 s1): hit die 9, up to 6 blows, no spells, fear-proof only from CL30 (before that fear stops melee: Boldness 8 g, Berserk Strength). Kit: Dagger, Soft Leather Armour, Berserk Strength, food, torches. Buy: oil 15-20, Cure Light Wounds, Phase Door; a Sling or Short Bow if gold is left. Kills it: paralysis (floating eye), fear, open-room packs, running out of escapes. **It can never dig**: `skill-dig:0:0` in `class` and no points a level, while `src/player-calcs.c calc_digging_chances()` needs digging skill over 10 for magma and over 20 for quartz, so every vein on every level is a permanent wall to this class - and a `*` is a vein **with treasure** in it (`%` is a plain one), which means every `*` you see is money a Warrior cannot have. A Shovel does not change it (measured by minimaxflash-3; its report has the veins it walked past).
 
-**Mage** (s2): hit die 0 (HP = race die: **10** for a Human, 8 for a Gnome), INT, 30 lb armour. Learns **one** spell at CL1 (`G`, book, spell); studying costs one action and nothing else - no mana, no experience, no gold (`src/cmd-obj.c do_cmd_study_spell()`) - and the status line says `Study` while a slot is free, so take every slot the level gives you as soon as it appears. CL1 spells: Magic Missile 1 sp (dice `$Dd4` with the count `(CL-1)/5+3`, so **3d4, 3 to 12 damage**, all the way from CL1 to CL5 and 4d4 at CL6; never resisted. The 3 is the dice count, not a bonus: there is no `+3`, and a page that reads it as 6-15 is reading the expression wrong), Light Room 2 sp, Find Traps/Doors/Stairs 1 sp (detects within 22 rows and 40 columns). That last one is the staircase detector, and what its window costs in asks is in section 8. **Its melee is not a fallback**: to-hit 9 with the kit rapier is below `2 x AC / 3` for most of depth 1, so melee lands on the 12% floor only (OBSERVED, minimaxflash-2#91). Spell points at CL1 regenerate at about 0.014 a player action, one point per 71 actions. Phase Door spell at CL2, Detect Monsters CL3, Fire Ball CL6. Kit: Rapier, [First Spells], food, torch. Buy: oil (your real attack), Cure Light Wounds, Phase Door scrolls. Kills it: one round of melee, casting at 0 mana, anything adjacent at 10 HP. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
+**Mage** (s2): hit die 0 (HP = race die: **10** for a Human, 8 for a Gnome), INT, 30 lb armour. Learns **one** spell at CL1 (`G`, book, spell); studying costs one action and nothing else - no mana, no experience, no gold (`src/cmd-obj.c do_cmd_study_spell()`) - and the status line says `Study` while a slot is free, so take every slot the level gives you as soon as it appears. CL1 spells: Magic Missile 1 sp (dice `$Dd4` with the count `(CL-1)/5+3`, so **3d4, 3 to 12 damage**, all the way from CL1 to CL5 and 4d4 at CL6; never resisted. The 3 is the dice count, not a bonus: there is no `+3`, and a page that reads it as 6-15 is reading the expression wrong), Light Room 2 sp, Find Traps/Doors/Stairs 1 sp (detects within 22 rows and 40 columns). That last one is the staircase detector, and what its window costs in asks is in section 8. **Its melee is not a fallback**: to-hit 9 with the kit rapier is below `2 x AC / 3` for most of depth 1, so melee lands on the 12% floor only (OBSERVED, minimaxflash-2#91). Spell points at CL1 regenerate at about 0.014 a player action, one point per 71 actions. Phase Door spell at CL2, Detect Monsters CL3, Fire Ball CL6. Kit: Rapier, [First Spells], food, torch. Buy: oil (your real attack), Cure Light Wounds, Phase Door scrolls. Kills it: one round of melee, casting at 0 mana, anything adjacent at 10 HP. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and three of the four characters that died here were this fragile (the fourth was a Warrior).
 
-**Druid** (s3): hit die 2, WIS, no teleport spell ever. CL1: Detect Life 1 sp, Fox Form 2 sp (double move, but a shape cannot read, quaff or cast: change back first); Remove Hunger CL2 (no food needed), Stinking Cloud CL3 (2 sp, poison ball, your gun). Kit: Whip, [Lesser Charms]. Buy: oil (nothing else hits hard until CL3), Cure Light Wounds, Phase Door. Kills it: no escape when surrounded, poison-immune targets. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
+**Druid** (s3): hit die 2, WIS, no teleport spell ever. CL1: Detect Life 1 sp, Fox Form 2 sp (double move, but a shape cannot read, quaff or cast: change back first); Remove Hunger CL2 (no food needed), Stinking Cloud CL3 (2 sp, poison ball, your gun). Kit: Whip, [Lesser Charms]. Buy: oil (nothing else hits hard until CL3), Cure Light Wounds, Phase Door. Kills it: no escape when surrounded, poison-immune targets. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and three of the four characters that died here were this fragile (the fourth was a Warrior).
 
-**Priest** (s4): hit die 2, WIS, random spell learning. CL1 spells: Call Light, Detect Evil, Minor Healing (2 sp), Bless (2 sp, +5 AC, +10 to-hit). Kit: Mace (blessed +2/+2), **2 Cure Serious Wounds**, [Novice's Handbook]. Orb of Draining needs CL7 and [Cleansing Power] (kind cost 100, Bookseller). No escape spell until a DL30+ book. Buy: oil, Phase Door scrolls, Cure Light Wounds. Kills it: no escapes, non-evil animals, blindness or confusion stopping prayers. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
+**Priest** (s4): hit die 2, WIS, random spell learning. CL1 spells: Call Light, Detect Evil, Minor Healing (2 sp), Bless (2 sp, +5 AC, +10 to-hit). Kit: Mace (blessed +2/+2), **2 Cure Serious Wounds**, [Novice's Handbook]. Orb of Draining needs CL7 and [Cleansing Power] (kind cost 100, Bookseller). No escape spell until a DL30+ book. Buy: oil, Phase Door scrolls, Cure Light Wounds. Kills it: no escapes, non-evil animals, blindness or confusion stopping prayers. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and three of the four characters that died here were this fragile (the fourth was a Warrior).
 
-**Necromancer** (s5): hit die 2, INT, **sees without light and must not carry one**: a lit grid adds 25% spell failure; at CL1-5 you see only adjacent squares in the dark. Nether Bolt 1 sp (3d4; undead immune, evil half), Sense Invisible CL2, Create Darkness and Bat Form CL3. Kit: Main Gauche, [Into the Shadows], food; no torch. Buy: oil, Cure Light Wounds, Phase Door; **no torch**. Kills it: fighting in a lit room, undead, 10-HP fragility. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
+**Necromancer** (s5): hit die 2, INT, **sees without light and must not carry one**: a lit grid adds 25% spell failure; at CL1-5 you see only adjacent squares in the dark. Nether Bolt 1 sp (3d4; undead immune, evil half), Sense Invisible CL2, Create Darkness and Bat Form CL3. Kit: Main Gauche, [Into the Shadows], food; no torch. Buy: oil, Cure Light Wounds, Phase Door; **no torch**. Kills it: fighting in a lit room, undead, 10-HP fragility. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and three of the four characters that died here were this fragile (the fourth was a Warrior).
 
 **Paladin** (s6): hit die 6, 5 blows, random spell learning. CL1: Bless only (Detect Evil CL3, Call Light CL5, Minor Healing CL7, Heroism CL12, full effect CL15, for fear). Kit: Main Gauche, [Novice's Handbook], Protection from Evil scroll. Buy: oil, Cure Light Wounds, Phase Door. Kills it: as the Warrior, plus fear before CL12 and mana starvation.
 
-**Rogue** (s7): hit die 4, best throwing skill (72) and stealth, first spell at **CL5** (none now; Phase Door spell CL7, 55% base failure: carry scrolls). `s` + digit steals from an adjacent monster, best while it sleeps. Kit: Dagger, Soft Leather Armour, [First Spells]. Buy: oil, Phase Door, Cure Light Wounds, a Sling; throw Daggers and Spears. Kills it: waking a pack, early melee at low HP. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
+**Rogue** (s7): hit die 4, best throwing skill (72) and stealth, first spell at **CL5** (none now; Phase Door spell CL7, 55% base failure: carry scrolls). `s` + digit steals from an adjacent monster, best while it sleeps. Kit: Dagger, Soft Leather Armour, [First Spells]. Buy: oil, Phase Door, Cure Light Wounds, a Sling; throw Daggers and Spears. Kills it: waking a pack, early melee at low HP. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and three of the four characters that died here were this fragile (the fourth was a Warrior).
 
-**Ranger** (s8): hit die 5, best shooting skill (72), extra shots; first spell at **CL3** (Remove Hunger). Kit: Main Gauche, Short Bow, 15-20 Arrows, [Lesser Charms]. `h` fires at the nearest; arrows break. Buy: arrows (priced by power, believed about 1 g each: UNTESTED; 40+), oil, Cure Light Wounds, Phase Door. Kills it: out of arrows, fast melee in a corridor, archers. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
+**Ranger** (s8): hit die 5, best shooting skill (72), extra shots; first spell at **CL3** (Remove Hunger). Kit: Main Gauche, Short Bow, 15-20 Arrows, [Lesser Charms]. `h` fires at the nearest; arrows break. Buy: arrows (priced by power, believed about 1 g each: UNTESTED; 40+), oil, Cure Light Wounds, Phase Door. Kills it: out of arrows, fast melee in a corridor, archers. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and three of the four characters that died here were this fragile (the fourth was a Warrior).
 
 **Blackguard** (s9): hit die 8, 5 blows, heavy weapons, 60 lb armour. Spell points are **earned by fighting and being hurt**, decay when idle, and casting heals; HP regenerates at **half** rate. CL1: Seek Battle 1 sp (little use); Berserk Strength CL3, Whirlwind CL5. Kit: Tulwar (2d4), Leather Shield, Cure Light Wounds, [Into the Shadows]; **starting gold is nearly gone**. Buy: whatever Cure Light Wounds and oil it covers. Kills it: starting a fight already hurt, ranged attackers.
