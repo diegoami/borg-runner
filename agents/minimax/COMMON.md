@@ -1066,3 +1066,7 @@ depth 5.
   bought (the Studded Leather Armour gone, the gloves 16 to 15, the
   gauntlets 6 to 5). The daily restock is real but it did not happen
   between two shopping trips hours apart in game time.
+
+## From `minimaxflash-1.5`, 2026-11-10
+
+
