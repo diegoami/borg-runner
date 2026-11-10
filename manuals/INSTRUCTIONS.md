@@ -153,30 +153,56 @@ arithmetic says CL5 is about forty depth-1 kills for a Human. UNTESTED as a
 route to a character level - what would settle it is one run that shuttles,
 counts its asks per level, and says where the kills stopped paying.
 
-## If you are thin: eight to thirteen hit points, and what that forbids
+## Constitution sets how fast you may dive
 
-Read this block before you take a staircase if your class die is 0 or 2 - a
-**Mage**, **Priest**, **Druid** or **Necromancer**. Your hit points at
-character level 1 are the race die almost alone (section 1): **8** for a Gnome
-Mage, **10** for a Human Mage, **12** for a High-Elf Druid. Each level adds a
-roll of `randint1(hit die)`, 1 to 8 for that Gnome mage (FACT,
-`src/player-birth.c roll_hp()`), so **about 21 hit points at CL4 and 26 at
-CL5** on average, and as few as 12 at CL5 if the rolls are bad. A Rogue (die
-4) and a Ranger (die 5) are thin too for the first two levels.
+Hit points are a rate, not a class fact, and constitution is the rate.
+`src/player-calcs.c calc_hitpoints()` is `player_hp[level-1] + adj_con_mhp x
+level / 100`, with a floor of `level + 1`: the rolled part comes from the hit
+die and a level adds a roll of `randint1(hit die)` (FACT,
+`src/player-birth.c roll_hp()`), and **constitution adds or subtracts a fixed
+amount on top, every level** (FACT, `src/player-calcs.c adj_con_mhp[]`) - in hit points per level:
 
-What that is up against, all FACT from `monster`:
+| CON | 3 | 5 | 7 | 9 | 11 | 13 | 15 | 17 | 18/00 | 18/50 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| hit points per level | -2.5 | -1 | -0.5 | -0.1 | 0 | +0.1 | +0.5 | +1 | +1.5 | +2.75 |
 
-- the worst single round at depth 2 or shallower is a **soldier**, 2 x 1d7 =
-  **14 damage**, which is more than a Gnome Mage has at CL1 and more than a
-  Human Mage has; **5 of the 52 monsters at depth 2 or shallower can take 8
-  hit points in one round, and 3 of them can take 10**;
-- a **cave spider** comes in a group of **2d8** of them, each 1d4, at speed
-  120 - two actions to your one, nine of them on average;
-- a **floating eye** (depth 1) does no damage at all: its gaze paralyses, and
-  paralysis next to anything else is how a character at full health dies;
-- **the town is not a lobby.** A battle-scarred veteran hits for 2d6 = 12 and
-  a mean-looking mercenary for 1d10 = 10, both at depth 0, where there is no
-  staircase to run down and no experience to be had.
+Your own modifier is the race's plus the class's (`race` and `class` `stats`,
+which read STR:INT:WIS:DEX:CON): a **Gnome Mage is -1**, a Human Mage -2, a
+Rogue or a Ranger -1 whatever the race, a High-Elf Druid +1, a **Half-Troll
+Warrior +5**. Read `CON` off `C` and look it up. Two characters of the same
+class and level can differ by ten hit points, and the gap widens with every
+level, which is why a rule written in hit points fits nobody.
+
+**So the rule is a pace, not a prohibition.** Gate each descent on the worst
+round of the depth you are entering, and let a low constitution mean **more
+levels between descents**, not a ban (POLICY, c15 DEPTH-01 put in a form you
+can check on the screen; nobody has tested it as a rule):
+
+1. **The worst single round at depth 2 or shallower is a soldier, 2 x 1d7 =
+   14 damage** (FACT, `monster`). **5 of the 52 monsters at depth 2 or
+   shallower can take 8 hit points in one round, and 3 of them can take 10.**
+   Below the band's worst round, one bad corridor is a death; above it, a
+   mistake costs a potion. Volume two has the same number for every band
+   below depth 5.
+2. **Descend one depth at a time**, and look at `HP` on the left and that
+   number before each staircase. A character at -1 or worse on constitution
+   reaches any given hit-point total several levels later than one at +3, so
+   it spends those levels where they are cheap - depth 1, depth 2 and the
+   town - and the shuttle above is how.
+3. **Before depth 1 at all**: 10 to 20 flasks of oil, **one Cure Light
+   Wounds** (20 g) and **one Phase Door** (15 g). The pair is 35 gold out of
+   the 300-odd a caster is born with, and nothing else buys a second chance.
+4. **Read the escape at half your hit points**, not at two.
+5. **One monster unaccounted for means one key an ask.** Send a batch of
+   waits only when the screen is empty.
+
+Three more things the shallow depths do that no hit-point total answers, all
+FACT from `monster`: a **cave spider** comes in a group of **2d8** of them,
+each 1d4, at speed 120 - two actions to your one; a **floating eye** (depth 1)
+does no damage at all and its gaze paralyses, which is how a character at full
+health dies; and **the town is not a lobby** - a battle-scarred veteran hits
+for 2d6 = 12 and a mean-looking mercenary for 1d10 = 10, both at depth 0,
+where there is no staircase to flee down and no experience to be had.
 
 And what actually killed the three characters that died here - not one of
 them to a big hit, and each line names the run that saw it:
@@ -193,23 +219,9 @@ them to a big hit, and each line names the run that saw it:
   throwing oil, with a Scroll of Phase Door in its pack that it had carried
   the whole game and did not read until it was at 2 (minimaxflash-2.2#350).
 
-So the gate, which is a shopping list and a character level and not a feeling
-(POLICY, c15 DEPTH-01 made concrete; nobody has tested it as a rule):
-
-1. **Before depth 1**: 10 to 20 flasks of oil, **one Cure Light Wounds** (20
-   g) and **one Phase Door** (15 g). The pair costs 35 gold out of the 300-odd
-   a caster is born with. A caster with no heal and no escape is not ready at
-   any character level.
-2. **Read the escape at half your hit points**, not at two. All three deaths
-   above had the asks to leave and spent them on one more attack.
-3. **Before depth 2**: more max hit points than the band's worst round - **15
-   or more**, which for a mage is about CL4 - and a second escape bought
-   before the first is spent.
-4. **One monster unaccounted for means one key an ask.** Send a batch of waits
-   only when the screen is empty.
-
-None of this makes depth 1 safe. It makes a death a thing you chose rather
-than a thing that happened while you were reading the map.
+None of this makes depth 1 safe, and none of it says stay in the town. It
+makes a death a thing you chose rather than a thing that happened while you
+were reading the map.
 
 Descend when you can pay for the depth, and say in your report what you were
 buying with the asks you spent. "I cleared depth 1, reached level 5, bought
@@ -426,18 +438,18 @@ Level-1 facts are from `class.txt`; "buy" is POLICY from c4/c14/c15 with real pr
 
 **Warrior** (c14 s1): hit die 9, up to 6 blows, no spells, fear-proof only from CL30 (before that fear stops melee: Boldness 8 g, Berserk Strength). Kit: Dagger, Soft Leather Armour, Berserk Strength, food, torches. Buy: oil 15-20, Cure Light Wounds, Phase Door; a Sling or Short Bow if gold is left. Kills it: paralysis (floating eye), fear, open-room packs, running out of escapes.
 
-**Mage** (s2): hit die 0 (HP = race die: **10** for a Human, 8 for a Gnome), INT, 30 lb armour. Learns **one** spell at CL1 (`G`, book, spell); studying costs one action and nothing else - no mana, no experience, no gold (`src/cmd-obj.c do_cmd_study_spell()`) - and the status line says `Study` while a slot is free, so take every slot the level gives you as soon as it appears. CL1 spells: Magic Missile 1 sp (dice `$Dd4` with the count `(CL-1)/5+3`, so **3d4, 3 to 12 damage**, all the way from CL1 to CL5 and 4d4 at CL6; never resisted. The 3 is the dice count, not a bonus: there is no `+3`, and a page that reads it as 6-15 is reading the expression wrong), Light Room 2 sp, Find Traps/Doors/Stairs 1 sp (detects within 22 rows and 40 columns). That last one is the staircase detector, and what its window costs in asks is in section 8. **Its melee is not a fallback**: to-hit 9 with the kit rapier is below `2 x AC / 3` for most of depth 1, so melee lands on the 12% floor only (OBSERVED, minimaxflash-2#91). Spell points at CL1 regenerate at about 0.014 a player action, one point per 71 actions. Phase Door spell at CL2, Detect Monsters CL3, Fire Ball CL6. Kit: Rapier, [First Spells], food, torch. Buy: oil (your real attack), Cure Light Wounds, Phase Door scrolls. Kills it: one round of melee, casting at 0 mana, anything adjacent at 10 HP. **You are thin**: read the **If you are thin** block above before you take any staircase - the gate there is a shopping list and a character level, and all three characters that died here were this fragile.
+**Mage** (s2): hit die 0 (HP = race die: **10** for a Human, 8 for a Gnome), INT, 30 lb armour. Learns **one** spell at CL1 (`G`, book, spell); studying costs one action and nothing else - no mana, no experience, no gold (`src/cmd-obj.c do_cmd_study_spell()`) - and the status line says `Study` while a slot is free, so take every slot the level gives you as soon as it appears. CL1 spells: Magic Missile 1 sp (dice `$Dd4` with the count `(CL-1)/5+3`, so **3d4, 3 to 12 damage**, all the way from CL1 to CL5 and 4d4 at CL6; never resisted. The 3 is the dice count, not a bonus: there is no `+3`, and a page that reads it as 6-15 is reading the expression wrong), Light Room 2 sp, Find Traps/Doors/Stairs 1 sp (detects within 22 rows and 40 columns). That last one is the staircase detector, and what its window costs in asks is in section 8. **Its melee is not a fallback**: to-hit 9 with the kit rapier is below `2 x AC / 3` for most of depth 1, so melee lands on the 12% floor only (OBSERVED, minimaxflash-2#91). Spell points at CL1 regenerate at about 0.014 a player action, one point per 71 actions. Phase Door spell at CL2, Detect Monsters CL3, Fire Ball CL6. Kit: Rapier, [First Spells], food, torch. Buy: oil (your real attack), Cure Light Wounds, Phase Door scrolls. Kills it: one round of melee, casting at 0 mana, anything adjacent at 10 HP. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
 
-**Druid** (s3): hit die 2, WIS, no teleport spell ever. CL1: Detect Life 1 sp, Fox Form 2 sp (double move, but a shape cannot read, quaff or cast: change back first); Remove Hunger CL2 (no food needed), Stinking Cloud CL3 (2 sp, poison ball, your gun). Kit: Whip, [Lesser Charms]. Buy: oil (nothing else hits hard until CL3), Cure Light Wounds, Phase Door. Kills it: no escape when surrounded, poison-immune targets. **You are thin**: read the **If you are thin** block above before you take any staircase - the gate there is a shopping list and a character level, and all three characters that died here were this fragile.
+**Druid** (s3): hit die 2, WIS, no teleport spell ever. CL1: Detect Life 1 sp, Fox Form 2 sp (double move, but a shape cannot read, quaff or cast: change back first); Remove Hunger CL2 (no food needed), Stinking Cloud CL3 (2 sp, poison ball, your gun). Kit: Whip, [Lesser Charms]. Buy: oil (nothing else hits hard until CL3), Cure Light Wounds, Phase Door. Kills it: no escape when surrounded, poison-immune targets. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
 
-**Priest** (s4): hit die 2, WIS, random spell learning. CL1 spells: Call Light, Detect Evil, Minor Healing (2 sp), Bless (2 sp, +5 AC, +10 to-hit). Kit: Mace (blessed +2/+2), **2 Cure Serious Wounds**, [Novice's Handbook]. Orb of Draining needs CL7 and [Cleansing Power] (kind cost 100, Bookseller). No escape spell until a DL30+ book. Buy: oil, Phase Door scrolls, Cure Light Wounds. Kills it: no escapes, non-evil animals, blindness or confusion stopping prayers. **You are thin**: read the **If you are thin** block above before you take any staircase - the gate there is a shopping list and a character level, and all three characters that died here were this fragile.
+**Priest** (s4): hit die 2, WIS, random spell learning. CL1 spells: Call Light, Detect Evil, Minor Healing (2 sp), Bless (2 sp, +5 AC, +10 to-hit). Kit: Mace (blessed +2/+2), **2 Cure Serious Wounds**, [Novice's Handbook]. Orb of Draining needs CL7 and [Cleansing Power] (kind cost 100, Bookseller). No escape spell until a DL30+ book. Buy: oil, Phase Door scrolls, Cure Light Wounds. Kills it: no escapes, non-evil animals, blindness or confusion stopping prayers. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
 
-**Necromancer** (s5): hit die 2, INT, **sees without light and must not carry one**: a lit grid adds 25% spell failure; at CL1-5 you see only adjacent squares in the dark. Nether Bolt 1 sp (3d4; undead immune, evil half), Sense Invisible CL2, Create Darkness and Bat Form CL3. Kit: Main Gauche, [Into the Shadows], food; no torch. Buy: oil, Cure Light Wounds, Phase Door; **no torch**. Kills it: fighting in a lit room, undead, 10-HP fragility. **You are thin**: read the **If you are thin** block above before you take any staircase - the gate there is a shopping list and a character level, and all three characters that died here were this fragile.
+**Necromancer** (s5): hit die 2, INT, **sees without light and must not carry one**: a lit grid adds 25% spell failure; at CL1-5 you see only adjacent squares in the dark. Nether Bolt 1 sp (3d4; undead immune, evil half), Sense Invisible CL2, Create Darkness and Bat Form CL3. Kit: Main Gauche, [Into the Shadows], food; no torch. Buy: oil, Cure Light Wounds, Phase Door; **no torch**. Kills it: fighting in a lit room, undead, 10-HP fragility. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
 
 **Paladin** (s6): hit die 6, 5 blows, random spell learning. CL1: Bless only (Detect Evil CL3, Call Light CL5, Minor Healing CL7, Heroism CL12, full effect CL15, for fear). Kit: Main Gauche, [Novice's Handbook], Protection from Evil scroll. Buy: oil, Cure Light Wounds, Phase Door. Kills it: as the Warrior, plus fear before CL12 and mana starvation.
 
-**Rogue** (s7): hit die 4, best throwing skill (72) and stealth, first spell at **CL5** (none now; Phase Door spell CL7, 55% base failure: carry scrolls). `s` + digit steals from an adjacent monster, best while it sleeps. Kit: Dagger, Soft Leather Armour, [First Spells]. Buy: oil, Phase Door, Cure Light Wounds, a Sling; throw Daggers and Spears. Kills it: waking a pack, early melee at low HP. **You are thin**: read the **If you are thin** block above before you take any staircase - the gate there is a shopping list and a character level, and all three characters that died here were this fragile.
+**Rogue** (s7): hit die 4, best throwing skill (72) and stealth, first spell at **CL5** (none now; Phase Door spell CL7, 55% base failure: carry scrolls). `s` + digit steals from an adjacent monster, best while it sleeps. Kit: Dagger, Soft Leather Armour, [First Spells]. Buy: oil, Phase Door, Cure Light Wounds, a Sling; throw Daggers and Spears. Kills it: waking a pack, early melee at low HP. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
 
-**Ranger** (s8): hit die 5, best shooting skill (72), extra shots; first spell at **CL3** (Remove Hunger). Kit: Main Gauche, Short Bow, 15-20 Arrows, [Lesser Charms]. `h` fires at the nearest; arrows break. Buy: arrows (priced by power, believed about 1 g each: UNTESTED; 40+), oil, Cure Light Wounds, Phase Door. Kills it: out of arrows, fast melee in a corridor, archers.
+**Ranger** (s8): hit die 5, best shooting skill (72), extra shots; first spell at **CL3** (Remove Hunger). Kit: Main Gauche, Short Bow, 15-20 Arrows, [Lesser Charms]. `h` fires at the nearest; arrows break. Buy: arrows (priced by power, believed about 1 g each: UNTESTED; 40+), oil, Cure Light Wounds, Phase Door. Kills it: out of arrows, fast melee in a corridor, archers. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
 
 **Blackguard** (s9): hit die 8, 5 blows, heavy weapons, 60 lb armour. Spell points are **earned by fighting and being hurt**, decay when idle, and casting heals; HP regenerates at **half** rate. CL1: Seek Battle 1 sp (little use); Berserk Strength CL3, Whirlwind CL5. Kit: Tulwar (2d4), Leather Shield, Cure Light Wounds, [Into the Shadows]; **starting gold is nearly gone**. Buy: whatever Cure Light Wounds and oil it covers. Kills it: starting a fight already hurt, ranged attackers.

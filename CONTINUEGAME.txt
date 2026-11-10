@@ -184,13 +184,14 @@ what was worth writing:
   armour - the shops restock daily - and descending when you can pay for it is
   a plan, and so is deciding not to descend at all. Say in your report what
   you were buying with the asks you spent.
-- **If your class die is 0 or 2 - a Mage, Priest, Druid or Necromancer - you
-  have 8 to 13 hit points at character level 1, and the worst single round
-  at depth 2 or shallower is 14.** Read "If you are thin" in
-  manuals/INSTRUCTIONS.md before you take a staircase: it says what to buy,
-  when to read the escape and what character level makes depth 2 survivable.
-  All three characters that died here were this fragile, and none of them
-  died to a big hit.
+- **Constitution sets how fast you may dive.** Read `CON` off `C`: it adds or
+  subtracts hit points on *every* level, so two characters of one class can
+  differ by ten, and a Mage, Necromancer, Rogue or Ranger is usually below
+  zero on it. The rule is a pace, not a ban - gate each descent on the worst
+  round of the depth you are entering (14 at depth 2 or shallower) and take
+  more levels between descents when your constitution is low. "Constitution
+  sets how fast you may dive" in manuals/INSTRUCTIONS.md has the table, the
+  shopping list and the three deaths here, none of which was a big hit.
 - **Levelling has a price list, and section 1 of INSTRUCTIONS.md is it.** What
   each character level costs, what a kill pays once your own level divides it,
   and what pays nothing at all - stairs, walking, resting, shopping,

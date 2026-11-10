@@ -380,82 +380,121 @@ def died_records():
     return found
 
 
-@extractor('thin characters', minimum=20)
-def thin_characters(c):
-    """What a character with eight hit points is up against, and what killed
-    the three that died. The page's gate on descending."""
+def con_table():
+    """`adj_con_mhp` from src/player-calcs.c: hundredths of a hit point per level."""
+    source = gd.read_source('src/player-calcs.c') or ''
+    body = re.search(r'adj_con_mhp\[STAT_RANGE\]\s*=\s*\{(.*?)\n\};', source, re.S)
+    return [int(n) for n in re.findall(r'(-?\d+)\s*/\*', body[1])] if body else []
+
+
+def con_index(label):
+    """The `adj_con_mhp` row a stat label means: 3 is 0, 17 is 14, 18/50 is 20."""
+    match = re.fullmatch(r'18/(\d+)', label)
+    if match:
+        return 15 + int(match[1]) // 10
+    return int(label) - 3
+
+
+def stat_modifier(race, character_class, which=4):
+    """The race's plus the class's modifier to one stat (CON is the fifth)."""
     races = {e.value.lower(): e for e in gd.load('p_race.txt')[0]}
     classes = {e.value.lower(): e for e in gd.load('class.txt')[0]}
+    total = 0
+    for table, name in ((races, race), (classes, character_class)):
+        entry = table.get(name.lower())
+        total += int(entry.first('stats').split(':')[which]) if entry else 0
+    return total
 
-    def at_level_one(race, character_class):
-        return (int(races[race].first('hitdie')) +
-                int(classes[character_class].first('hitdie')))
 
-    found = c.search(r'\*\*(\d+)\*\* for a Gnome\s*\nMage, \*\*(\d+)\*\* for a Human Mage, '
-                     r'\*\*(\d+)\*\* for a High-Elf Druid', name='the thin hit points')
+@extractor('constitution and the pace of descent', minimum=28)
+def constitution_pace(c):
+    """Constitution as a rate, the worst round of the shallow band, and the
+    three deaths. The page's gate on descending, which is a pace and not a ban."""
+    table = con_table()
+    found = c.search(r'`src/player-calcs\.c calc_hitpoints\(\)` is `player_hp\[level-1\] \+ '
+                     r'adj_con_mhp x\s*\nlevel / 100`, with a floor of `level \+ 1`',
+                     name='the hit-point formula')
     if found:
-        for group, (race, kind) in enumerate([('gnome', 'mage'), ('human', 'mage'),
-                                              ('high-elf', 'druid')], start=1):
-            c.emit('thin', found.start(group), f'{race} {kind} hit points at CL1',
-                   int(found[group]), at_level_one(race, kind))
-    found = c.search(r'Each level adds a\s*\nroll of `randint1\(hit die\)`, 1 to (\d+) for that '
-                     r'Gnome mage \(FACT,\s*\n`src/player-birth\.c roll_hp\(\)`\), so \*\*about '
-                     r'(\d+) hit points at CL4 and (\d+) at\s*\nCL5\*\* on average, and as few as '
-                     r'(\d+) at CL5', name='the hit-point roll')
+        source = gd.read_source('src/player-calcs.c') or ''
+        c.emit('constitution', found.start(), 'the hit-point formula', True,
+               'p->player_hp[p->lev-1] + (bonus * p->lev / 100)' in source
+               and 'if (mhp < p->lev + 1)' in source)
+    found = c.search(r'a level adds a roll of `randint1\(hit die\)`', name='the hit-point roll')
     if found:
-        die = at_level_one('gnome', 'mage')
-        source = gd.read_source('src/player-birth.c') or ''
-        c.emit('thin', found.start(), 'a level adds randint1(hitdie)', True,
-               'randint1(player->hitdie)' in source)
-        c.emit('thin', found.start(1), 'the gnome mage hit die', int(found[1]), die)
-        for group, level in ((2, 4), (3, 5)):
-            average = die + (level - 1) * (die + 1) / 2
-            c.emit('thin', found.start(group), f'average hit points at CL{level}',
-                   int(found[group]), round(average),
-                   ok=abs(int(found[group]) - average) <= 1)
-        c.emit('thin', found.start(4), 'the worst roll at CL5',
-               int(found[4]), die + 4)
+        c.emit('constitution', found.start(), 'a level adds randint1(hitdie)', True,
+               'randint1(player->hitdie)' in (gd.read_source('src/player-birth.c') or ''))
+    head = c.search(r'\| CON \|(?P<cols>[^\n]*)\|\n\|[-| ]*\|\n\| hit points per level \|'
+                    r'(?P<rates>[^\n]*)\|', name='the constitution table')
+    if head and table:
+        labels = [cell.strip() for cell in head['cols'].split('|') if cell.strip()]
+        rates = [cell.strip() for cell in head['rates'].split('|') if cell.strip()]
+        c.emit('constitution', head.start('cols'), 'the table has a rate for every column',
+               len(labels), len(rates))
+        for label, rate in zip(labels, rates):
+            index = con_index(label)
+            real = table[index] / 100 if 0 <= index < len(table) else 'off the table'
+            c.emit('constitution', head.start('rates'),
+                   f'hit points per level at CON {label}', float(rate), real)
+    found = c.search(r'a \*\*Gnome Mage is (-?\d+)\*\*, a Human Mage (-?\d+), a\s*\nRogue or a '
+                     r'Ranger (-?\d+) whatever the race, a High-Elf Druid \+(\d+), a \*\*Half-Troll\s*\n'
+                     r'Warrior \+(\d+)\*\*', name='the constitution modifiers')
+    if found:
+        for group, (race, kind) in enumerate(
+                [('gnome', 'mage'), ('human', 'mage'), (None, 'rogue'),
+                 ('high-elf', 'druid'), ('half-troll', 'warrior')], start=1):
+            claimed = int(found[group]) if found[group].startswith('-') else int(found[group])
+            if race is None:                      # the class alone, whatever the race
+                real = stat_modifier('human', kind) - stat_modifier('human', 'warrior') + \
+                    stat_modifier('human', 'warrior')
+                real = stat_modifier('human', kind)
+            else:
+                real = stat_modifier(race, kind)
+            c.emit('constitution', found.start(group),
+                   f'{race or "any"} {kind} constitution modifier', claimed, real)
     rounds = monster_rounds()
-    found = c.search(r'is a \*\*soldier\*\*, 2 x 1d7 =\s*\n\s*\*\*(\d+) damage\*\*', name='the worst round')
+    found = c.search(r'worst single round at depth 2 or shallower is a soldier, 2 x 1d7 =\s*\n'
+                     r'\s*(\d+) damage', name='the worst round')
     if found:
-        c.emit('thin', found.start(1), 'the worst round at depth 2 or shallower',
+        c.emit('constitution', found.start(1), 'the worst round at depth 2 or shallower',
                int(found[1]), rounds[0][0])
-        c.emit('thin', found.start(1), 'and it is the soldier that does it',
+        c.emit('constitution', found.start(1), 'and it is the soldier that does it',
                'soldier', rounds[0][1])
-    found = c.search(r'\*\*(\d+) of the (\d+) monsters at depth 2 or shallower can take 8\s*\n'
-                     r'\s*hit points in one round, and (\d+) of them can take 10\*\*',
+    found = c.search(r'\*\*(\d+) of the (\d+) monsters at depth 2 or\s*\n\s*shallower can take 8 '
+                     r'hit points in one round, and (\d+) of them can take 10\.\*\*',
                      name='how many can kill eight hit points')
     if found:
-        c.emit('thin', found.start(2), 'monsters at depth 2 or shallower',
+        c.emit('constitution', found.start(2), 'monsters at depth 2 or shallower',
                int(found[2]), len(rounds))
-        c.emit('thin', found.start(1), 'how many can take 8 hit points in a round',
+        c.emit('constitution', found.start(1), 'how many can take 8 hit points in a round',
                int(found[1]), sum(1 for total, _ in rounds if total >= 8))
-        c.emit('thin', found.start(3), 'how many can take 10',
+        c.emit('constitution', found.start(3), 'how many can take 10',
                int(found[3]), sum(1 for total, _ in rounds if total >= 10))
-    found = c.search(r'a \*\*cave spider\*\* comes in a group of \*\*(\d+d\d+)\*\* of them, each '
-                     r'(\d+d\d+), at speed\s*\n\s*(\d+)', name='the cave spider group')
+    monsters = {e.value: e for e in gd.load('monster.txt')[0]}
+    found = c.search(r'a \*\*cave spider\*\* comes in a group of \*\*(\d+d\d+)\*\* of them,\s*\n'
+                     r'each (\d+d\d+), at speed (\d+)', name='the cave spider group')
     if found:
-        spider = next((e for e in gd.load('monster.txt')[0] if e.value == 'cave spider'), None)
+        spider = monsters.get('cave spider')
         friends = (spider.all('friends') + spider.all('friends-base')) if spider else []
-        c.emit('thin', found.start(1), 'cave spider group size',
+        c.emit('constitution', found.start(1), 'cave spider group size',
                found[1], friends[0].split(':')[1] if friends else 'no friends line')
-        c.emit('thin', found.start(2), 'cave spider blow',
+        c.emit('constitution', found.start(2), 'cave spider blow',
                found[2], spider.all('blow')[0].split(':')[2] if spider else None)
-        c.emit('thin', found.start(3), 'cave spider speed',
+        c.emit('constitution', found.start(3), 'cave spider speed',
                int(found[3]), int(spider.first('speed')) if spider else None)
-    found = c.search(r'A battle-scarred veteran hits for (\d+d\d+) = (\d+) and\s*\n'
-                     r'\s*a mean-looking mercenary for (\d+d\d+) = (\d+), both at depth (\d+)',
+    found = c.search(r'a battle-scarred veteran hits\s*\nfor (\d+d\d+) = (\d+) and a mean-looking '
+                     r'mercenary for (\d+d\d+) = (\d+), both at depth (\d+)',
                      name='what the town hits for')
     if found:
         for dice_group, total_group, name in ((1, 2, 'battle-scarred veteran'),
                                               (3, 4, 'mean-looking mercenary')):
-            entry = next((e for e in gd.load('monster.txt')[0] if e.value == name), None)
+            entry = monsters.get(name)
             blow = entry.all('blow')[0].split(':')[2] if entry else None
-            c.emit('thin', found.start(dice_group), f'{name} blow', found[dice_group], blow)
+            c.emit('constitution', found.start(dice_group), f'{name} blow',
+                   found[dice_group], blow)
             dice = re.fullmatch(r'(\d+)d(\d+)', found[dice_group])
-            c.emit('thin', found.start(total_group), f'{name} worst blow',
+            c.emit('constitution', found.start(total_group), f'{name} worst blow',
                    int(found[total_group]), int(dice[1]) * int(dice[2]) if dice else None)
-            c.emit('thin', found.start(5), f'{name} depth',
+            c.emit('constitution', found.start(5), f'{name} depth',
                    int(found[5]), int(entry.first('depth')) if entry else None)
     deaths = died_records()
     for pattern, run, fields in (
@@ -474,18 +513,15 @@ def thin_characters(c):
         for field, claimed in fields.items():
             c.emit('death', found.start(), f'{run} {field.replace("_", " ")}',
                    claimed, record.get(field, f'no record for {run}'))
-    found = c.search(r'CL1 Druid was clawed from (\d+) to 1', name="the druid's hit points")
-    if found:
-        c.emit('death', found.start(1), 'qwen-flash-1 max hit points',
-               int(found[1]), (deaths.get('qwen-flash-1', {}).get('hp') or {}).get('max'))
-    found = c.search(r'a (\d+)-hit-point Mage, blind', name="the mage's hit points")
-    if found:
-        c.emit('death', found.start(1), 'sonnet-3 max hit points',
-               int(found[1]), (deaths.get('sonnet-3', {}).get('hp') or {}).get('max'))
-    found = c.search(r'a CL2 Mage stood at 4 of (\d+) hit points', name='the gnome mage at four')
-    if found:
-        c.emit('death', found.start(1), 'minimaxflash-2.2 max hit points',
-               int(found[1]), (deaths.get('minimaxflash-2.2', {}).get('hp') or {}).get('max'))
+    for pattern, run, what in (
+            (r'CL1 Druid was clawed from (\d+) to 1', 'qwen-flash-1', 'max hit points'),
+            (r'a (\d+)-hit-point Mage, blind', 'sonnet-3', 'max hit points'),
+            (r'a CL2 Mage stood at 4 of (\d+) hit points', 'minimaxflash-2.2',
+             'max hit points')):
+        found = c.search(pattern, name=f'{run} hit points')
+        if found:
+            c.emit('death', found.start(1), f'{run} {what}', int(found[1]),
+                   (deaths.get(run, {}).get('hp') or {}).get('max'))
 
 
 @extractor('staircases per level', minimum=8)
