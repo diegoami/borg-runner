@@ -329,8 +329,36 @@ def archive(run, into=None, log=print):
         log(f'archive: {run.name} wrote no REPORT.md - what it found is not '
             f'in the repository. Both prompts ask for one.')
 
+    log(_playbook_note(run))
     log(f'archived: {target} ({", ".join(kept)})')
     return target
+
+
+def _playbook_note(run, log=print):
+    """Whether this run wrote anything back to its family's playbook.
+
+    The same failure as the missing write-up, one level up: a run that reads a
+    playbook and adds nothing to it leaves the next session of its own model
+    exactly where this one started. A file time cannot say whether what was
+    added was worth adding, only that the file was written during the run.
+    """
+    run = Path(run)
+    record = json.loads((run / RECORD).read_text()) if (run / RECORD).exists() else {}
+    family = record.get('playbook')
+    if not family:
+        return (f'archive: {run.name} names no playbook - if a model family '
+                f'played it, `record --playbook <family>` says which, and '
+                f'agents/<family>/ is where its next session looks')
+    from . import playbooks
+    started = run / 'started.json'
+    when = started.stat().st_mtime if started.exists() else 0
+    written = playbooks.touched_since(family, when)
+    if written:
+        return (f'archive: {run.name} wrote back to agents/{family}/: '
+                f'{", ".join(written)}')
+    return (f'archive: {run.name} read agents/{family}/ and wrote nothing back, '
+            f'so the next session of {family} starts where this one did. Both '
+            f'prompts ask for it before the finishing commands.')
 
 
 def start(run, seed, out=None, character=None, resume=False, asked_for=None,
@@ -763,7 +791,7 @@ def _standing(run, asked_at):
     }
 
 
-def write_record(run, process=None, outcome=None, cost=None):
+def write_record(run, process=None, outcome=None, cost=None, playbook=None):
     """What the run was, in one file, with the keys beside it.
 
     The savefile is copied in, because the build tree's `lib/save` is scratch
@@ -816,6 +844,10 @@ def write_record(run, process=None, outcome=None, cost=None):
                             if live.exists() else None),
         'outcome': outcome or ('playing' if alive(process) else 'ended'),
         'cost': cost or spend(run),
+        # The model family whose playbook this run read and wrote back to
+        # (`agents/<family>/`). A family, not a version: the playbook's point
+        # is that the next session of the same model picks it up.
+        'playbook': playbook,
         **_standing(run, asked_at),
         'died': bool(death),
         'killed_by': (death or {}).get('cause'),
@@ -831,7 +863,8 @@ def write_record(run, process=None, outcome=None, cost=None):
         before = json.loads((run / RECORD).read_text())
         for field in ('race', 'class', 'character', 'character_level',
                       'max_character_level', 'gold', 'carried_value',
-                      'wealth', 'hp', 'standing_from', 'replay_url', 'cost'):
+                      'wealth', 'hp', 'standing_from', 'replay_url', 'cost',
+                      'playbook'):
             if record.get(field) is None and before.get(field) is not None:
                 record[field] = before[field]
     # Last, because it is checked against the class the record ends up with,

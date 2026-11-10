@@ -146,6 +146,44 @@ def cmd_report(args):
     return 0
 
 
+def cmd_playbook(args):
+    """What this model family has written down for its own next session."""
+    from . import playbooks
+
+    if args.check:
+        complaints = playbooks.check()
+        for complaint in complaints:
+            print(complaint, file=sys.stderr)
+        print(f'{len(playbooks.families())} families, {len(complaints)} complaints')
+        return 1 if complaints else 0
+    if not args.family:
+        found = playbooks.families()
+        if not found:
+            print('no playbooks yet; the first run of a family writes one')
+            return 0
+        for row in found:
+            classes = ', '.join(row['classes']) or 'no class page yet'
+            print(f"agents/{row['family']:<12} {row['lines']:>5} lines   {classes}")
+        return 0
+    if args.start:
+        print(playbooks.start(args.family, run=args.start))
+        return 0
+    missing = 0
+    for row in playbooks.paths(args.family, args.klass):
+        where = row['path'].relative_to(run_module.pins.ROOT)
+        if row['exists']:
+            print(f"{str(where):<28} {row['lines']:>5} lines   {row['what']}")
+        else:
+            missing += 1
+            print(f"{str(where):<28}     - does not exist yet ({row['what']}): "
+                  f'nobody of this family has written it, so you do')
+    if missing:
+        print('write what is missing when you stop, with the run it came from: '
+              f'python -m borg_runner playbook --family {args.family} '
+              f'--start <your run name>')
+    return 0
+
+
 def cmd_record(args):
     cost = None
     if args.tokens or args.played_by or args.model:
@@ -156,7 +194,8 @@ def cmd_record(args):
         print('a model is written provider/model-version, for example '
               'anthropic/claude-sonnet-5-5', file=sys.stderr)
         return 1
-    print(json.dumps(run_module.write_record(args.run, cost=cost),
+    print(json.dumps(run_module.write_record(args.run, cost=cost,
+                                             playbook=args.playbook),
                      indent=2, sort_keys=True))
     return 0
 
@@ -321,7 +360,22 @@ def parser():
     p.add_argument('--tool-calls', type=int)
     p.add_argument('--played-by', help='session, subagent, opencode, openrouter')
     p.add_argument('--model')
+    p.add_argument('--playbook',
+                   help='the model family whose playbook you read and wrote '
+                        'back to, e.g. minimax for agents/minimax/')
     p.set_defaults(func=cmd_record)
+
+    p = sub.add_parser('playbook',
+                       help="a model family's own notes, for its next session")
+    p.add_argument('--family', help='the model family, e.g. minimax')
+    p.add_argument('--class', dest='klass',
+                   help='also the page for this class, e.g. Druid')
+    p.add_argument('--start', metavar='RUN',
+                   help="create the family's COMMON.md if it has none, "
+                        'naming the run that writes it')
+    p.add_argument('--check', action='store_true',
+                   help='check the layout of every playbook')
+    p.set_defaults(func=cmd_playbook)
 
     p = sub.add_parser('carry-on', help="continue where another run stopped")
     p.add_argument('--run', required=True, type=Path, help='the run to continue')

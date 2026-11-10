@@ -156,6 +156,16 @@ whole question here is what a reader does differently.
 Those two are about 23 KB together and they are the reading. Everything below
 is **lookup** — go to it when you need a number or a page, not before.
 
+A player who has played this game before in this repository, and written up
+what that taught them, keeps their own generalisations here. These are
+**not** evidence and not the manual — they are one player's judgement, and
+they are worth reading when your character matches theirs:
+
+| | |
+|---|---|
+| [agents/minimax/COMMON.md](../agents/minimax/COMMON.md) | what three lives of one character taught that player about reading the screen, pathfinding, fighting, the town, and the harness itself — including the corrections they made to their own notes |
+| [agents/minimax/DRUID.md](../agents/minimax/DRUID.md) | the same player's class-specific notes: the druid's spell-point economy, its only real weapon, and the mushroom patches that make depth 1 hard |
+
 The game's own manual, at the pin:
 
 ```sh
