@@ -62,6 +62,27 @@ Three rules for writing one:
   their character — but editing it would put words in another player's mouth,
   and each page says in its first lines whose experience it is.
 
+## Borrowing, when your family has nothing yet
+
+A family's first run of a class has no page of its own, and should not start
+from nothing: the same class may already have been played by somebody else.
+`playbook --family <yours> --class <class>` answers a missing page with every
+other family's page for it —
+
+```sh
+$ python -m borg_runner playbook --family codex --class Druid
+agents/codex/COMMON.md           - does not exist yet …
+agents/codex/DRUID.md            - does not exist yet …
+agents/minimax/COMMON.md     380 lines   borrow: everything that family has learned
+agents/minimax/DRUID.md      315 lines   borrow: their page for the Druid
+```
+
+— and says so when no family has written about that class at all, which means
+the run is the first and the page is its own to write. A borrowed page is read
+the way one player reads another: its numbers are its own. What a run takes
+from one, and whether it held, goes in **its own** pages when it stops,
+naming where it came from.
+
 ## What is here now
 
 `minimax/` — three lives of one High-Elf Druid on seed 23

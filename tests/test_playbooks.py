@@ -68,6 +68,38 @@ def test_an_empty_page_is_a_complaint(tmp_path):
     assert any('is empty' in c for c in playbooks.check(tmp_path, known_runs=['x']))
 
 
+def test_a_family_with_no_page_for_its_class_is_pointed_at_another(tmp_path):
+    """The first run of a class has nothing of its own, and need not."""
+    a_playbook(tmp_path, family='minimax', text='# COMMON\n\nfrom sonnet-1.\n')
+    (tmp_path / 'minimax' / playbooks.class_file('Druid')).write_text(
+        '# DRUID\n\nfrom sonnet-1.\n')
+    a_playbook(tmp_path, family='codex', text='# COMMON\n\nfrom sonnet-1.\n')
+    borrowed = playbooks.elsewhere('codex', 'Druid', where=tmp_path)
+    assert [(row['family'], row['path'].name) for row in borrowed] == [
+        ('minimax', 'DRUID.md')], 'only the page it lacks, and not its own'
+
+
+def test_a_family_with_nothing_at_all_borrows_both(tmp_path):
+    a_playbook(tmp_path, family='minimax', text='# COMMON\n\nfrom sonnet-1.\n')
+    (tmp_path / 'minimax' / playbooks.class_file('Druid')).write_text('d\n')
+    borrowed = playbooks.elsewhere('newcomer', 'Druid', where=tmp_path)
+    assert [row['path'].name for row in borrowed] == ['COMMON.md', 'DRUID.md']
+
+
+def test_a_family_that_has_its_own_pages_borrows_nothing(tmp_path):
+    a_playbook(tmp_path, family='minimax', text='# COMMON\n\nfrom sonnet-1.\n')
+    (tmp_path / 'minimax' / playbooks.class_file('Druid')).write_text('d\n')
+    a_playbook(tmp_path, family='codex', text='# COMMON\n\nfrom sonnet-1.\n')
+    (tmp_path / 'codex' / playbooks.class_file('Druid')).write_text('d\n')
+    assert playbooks.elsewhere('codex', 'Druid', where=tmp_path) == []
+
+
+def test_a_class_nobody_has_played_has_nothing_to_borrow(tmp_path):
+    a_playbook(tmp_path, family='minimax', text='# COMMON\n\nfrom sonnet-1.\n')
+    borrowed = playbooks.elsewhere('minimax', 'Blackguard', where=tmp_path)
+    assert borrowed == [], 'its own COMMON exists and no other family has one'
+
+
 def test_a_first_run_can_start_its_familys_page(tmp_path):
     page = playbooks.start('newmodel', run='newmodel-1', where=tmp_path)
     assert page.name == playbooks.COMMON and 'newmodel-1' in page.read_text()
@@ -119,6 +151,15 @@ def test_both_prompts_send_the_player_to_its_own_directory(name):
     assert '--playbook {AGENT}' in text, 'the record must carry the family'
     assert 'git add records knowledge agents' in text, \
         'the commit must include the playbook the run just wrote'
+
+
+@pytest.mark.parametrize('name', PROMPTS)
+def test_both_prompts_say_a_missing_page_can_be_borrowed(name):
+    """A family's first run of a class should not start from nothing."""
+    # As prose: both prompts wrap, so a sentence spans lines.
+    prose = ' '.join((pins.ROOT / name).read_text().split())
+    assert "another family's page for the same class" in prose
+    assert 'never edit theirs' in prose
 
 
 @pytest.mark.parametrize('name', PROMPTS)

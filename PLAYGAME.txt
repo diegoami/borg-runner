@@ -44,9 +44,13 @@ the draw, this prints exactly which pages exist and how long they are:
     agents/{AGENT}/<CLASS>.md   the part that is only true of your class,
                                 when your family has played one
 
-If neither exists you are the first of your family here, and those pages are
-yours to write when you stop. Another family's directory is open to you too -
-knowledge is not private here - but you write only your own.
+**If a page of yours is missing, that command points you at another family's
+page for the same class** - the same game, the same class, a different player.
+Read it: knowledge is not private here. Say in your first note that you
+borrowed it, and when you stop write your own page, naming what you took and
+whether it held. You never edit theirs, and their numbers are theirs. If no
+family has written about your class at all, you are the first and the page is
+yours.
 
 Weigh them by what is behind them: a FACT or an OBSERVED line is the game or
 many runs, your playbook is one family's experience, a POLICY line is advice

@@ -177,10 +177,23 @@ def cmd_playbook(args):
             missing += 1
             print(f"{str(where):<28}     - does not exist yet ({row['what']}): "
                   f'nobody of this family has written it, so you do')
-    if missing:
-        print('write what is missing when you stop, with the run it came from: '
-              f'python -m borg_runner playbook --family {args.family} '
-              f'--start <your run name>')
+    if not missing:
+        return 0
+    borrowed = playbooks.elsewhere(args.family, args.klass)
+    for row in borrowed:
+        where = row['path'].relative_to(run_module.pins.ROOT)
+        print(f"{str(where):<28} {row['lines']:>5} lines   borrow: "
+              f"{row['what']} - read it, do not edit it")
+    if borrowed:
+        print('another family has played this before you: read theirs, say in '
+              'your first note that you did, and write your own when you stop '
+              '- naming what you took and whether it held.')
+    elif args.klass:
+        print(f'no family has written about a {args.klass} yet; you are the '
+              f'first, so the page is yours to write.')
+    print('write what is missing when you stop, with the run it came from: '
+          f'python -m borg_runner playbook --family {args.family} '
+          f'--start <your run name>')
     return 0
 
 

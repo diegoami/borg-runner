@@ -92,6 +92,43 @@ def families(where=None):
     return found
 
 
+def elsewhere(family, character_class=None, where=None):
+    """Other families' pages a run may bootstrap from, for what it lacks.
+
+    A family's first run of a class has nothing of its own to read, and the
+    page that would help it may already exist under another family: the same
+    game, the same class, a different player. So a missing page is answered
+    by every other family's page for it - `COMMON.md` when the family has
+    none at all, `<CLASS>.md` when it has no page for the class it drew.
+
+    Reading another family's page was always allowed; this makes it findable,
+    which is the difference between a rule and a tool. Writing is still only
+    your own: what you take from a borrowed page, and whether it held, goes in
+    yours when you stop, naming where it came from. The borrowed page keeps
+    saying whose experience it is.
+    """
+    home = directory(family, where)
+    wanted = [COMMON] if not (home / COMMON).exists() else []
+    if character_class and not (home / class_file(character_class)).exists():
+        wanted.append(class_file(character_class))
+    if not wanted:
+        return []
+    root = Path(where) if where else AGENTS
+    found = []
+    for other in sorted(p for p in root.glob('*') if p.is_dir()):
+        if other.name == slug(family):
+            continue
+        for name in wanted:
+            page = other / name
+            if not page.exists():
+                continue
+            what = ('everything that family has learned' if name == COMMON
+                    else f'their page for the {character_class}')
+            found.append({'path': page, 'family': other.name, 'what': what,
+                          'lines': len(page.read_text().splitlines())})
+    return found
+
+
 def touched_since(family, when, where=None):
     """Whether this family's playbook was written to after a moment.
 

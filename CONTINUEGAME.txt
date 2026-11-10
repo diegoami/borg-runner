@@ -68,10 +68,14 @@ family and the class you have inherited:
 
     .venv/bin/python -m borg_runner playbook --family {AGENT} --class <CLASS>
 
-If neither exists, you are the first of your family here and they are yours to
-write when you stop. Another family's directory is open to you - knowledge is
-not private here - and is worth opening when you inherit their character; you
-write only your own. Weigh them by what is behind them: a FACT or an OBSERVED
+**If a page of yours is missing, that command points you at another family's
+page for the same class**, which is worth opening anyway when you inherit a
+character another family played: the same game, the same class, a different
+player. Read it, say in your first note that you borrowed it, and write your
+own when you stop - naming what you took and whether it held. You never edit
+theirs. If no family has written about your class at all, you are the first.
+
+Weigh them by what is behind them: a FACT or an OBSERVED
 line is the game or many runs, a playbook is one family's experience, a POLICY
 line is advice nobody has settled. An OBSERVED line names the runs that saw
 it as `run#ask`, and `knowledge/<run>.md` and `records/<run>/` are that run's
