@@ -80,6 +80,27 @@ def test_the_configure_flags_are_part_of_the_build_key():
     assert build.patch_sha256() == first
 
 
+KEY_WITH_X11 = build.key()
+
+
+def test_x11_can_be_left_out_for_a_machine_without_it(monkeypatch):
+    """Playing and replaying use our own frontend; X11 is only for takeover.
+
+    A build without it replays a recorded run byte for byte - checked on
+    sonnet-1, 125 asks, no differences, 2026-11-10 - so a cloud container with
+    no libx11-dev can still play and still reproduce what the owner's machine
+    recorded.
+    """
+    assert '-DSUPPORT_X11_FRONTEND=ON' in build.cmake_args()
+    monkeypatch.setenv(build.NO_X11, '1')
+    without = build.cmake_args()
+    assert '-DSUPPORT_X11_FRONTEND=OFF' in without
+    assert '-DSUPPORT_X11_FRONTEND=ON' not in without
+    # The flags are part of the build key, so the two builds do not share a
+    # directory and neither reuses the other's cache.
+    assert build.key() != KEY_WITH_X11
+
+
 def test_the_build_id_is_pinned_to_the_game_and_not_to_this_repository():
     """Left alone, cmake stamps our own git describe into the splash screen,
     so every commit here changed screen 1 of every recording."""

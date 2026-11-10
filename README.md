@@ -160,6 +160,7 @@ pressed, no decision made.
 
 ```sh
 .venv/bin/python -m borg_runner tools        # the library, and what runs wrote
+python3 tools/screen/explore.py m-screen.txt  # press M: the level, and where to aim
 python3 tools/screen/look.py runs/mine/ask/screen-42.txt --map   # what is drawn
 python3 tools/screen/aim.py  runs/mine/ask/screen-42.txt --to '>'  # keys to walk
 python3 tools/screen/diff.py screen-41.txt screen-42.txt  # did anything change?

@@ -36,6 +36,44 @@ anyone else's, or the run is worth nothing (D9).
 Read the manuals, press keys, keep your own memory of the world, and write the
 report at the end. You may not change a setting, a source file or an option.
 
+## Cloud sessions, and any machine that is not the owner's
+
+Nothing here needs a model key, a provider or a budget (D8): the session
+itself is the player. What it does need is the pinned clones and a compiler.
+
+```sh
+bash scripts/setup.sh                      # clones at the pins; checks the tools
+export BORG_RUNNER_NO_X11=1                # if there is no libx11-dev
+uv venv .venv && uv pip install -e '.[test]' --python .venv/bin/python
+.venv/bin/python -m pytest -q              # 346 fast tests, no build
+.venv/bin/python -m borg_runner build      # the game, once, a few minutes
+```
+
+- **Network**: github.com, for the two pinned repositories, and the Python
+  package index. No model API is called from this repository.
+- **Packages**: `git`, `cmake`, `make`, a C compiler, Python 3.10+. Nothing
+  else is imported at run time — `pyproject.toml` has no dependencies and the
+  tests only add pytest. `scripts/setup.sh --` names anything missing, and
+  `BORG_RUNNER_INSTALL=1 bash scripts/setup.sh` installs `libx11-dev` where
+  apt and sudo are available.
+- **No display is needed.** Playing and replaying use our own `-magent`
+  frontend, which is files in a directory. X11 is compiled in for `takeover`
+  alone — replaying to a turn and handing the savefile to a person in a real
+  terminal — so a container without the X11 headers sets
+  `BORG_RUNNER_NO_X11=1` and loses that one command and nothing else.
+  **Checked, 2026-11-10:** a build with the X11 frontend off replayed
+  `sonnet-1` byte for byte, 125 asks, no differences. The flags are part of
+  the build key, so the two builds keep separate directories.
+- **Writable**: `build/` and `runs/`, both git-ignored. A run is a directory
+  and a process; two runs never share either (D15).
+- **To publish a run** the session needs push rights: `archive`, `overview`
+  and a commit of `records/`, `knowledge/`, `agents/` and the three dashboard
+  files. The site is GitHub Pages from `main`.
+
+What does **not** work away from the owner's machine: `takeover` without X11,
+and nothing else. The slow tests build and play the game, so they need the
+compiler and a few minutes: `.venv/bin/python -m pytest -q -m slow`.
+
 ## Starting
 
 ```sh

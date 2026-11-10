@@ -9,6 +9,7 @@ Every tool reads a screen dump and prints. None of them presses a key, and
 none of them decides anything.
 
 ```sh
+python3 tools/screen/explore.py m-screen.txt          # press M first: one ask, the level
 python3 tools/screen/look.py  runs/mine/ask/screen-42.txt --map
 python3 tools/screen/aim.py   runs/mine/ask/screen-42.txt --to '>'
 python3 tools/screen/map.py   runs/mine/ask/screen-42.txt --shops
@@ -22,6 +23,7 @@ python3 tools/screen/diff.py  runs/mine/ask/screen-41.txt runs/mine/ask/screen-4
 | [aim.py](aim.py) | a place on the screen → the keys that make **the game** walk there (`*`, cursor digits, `g`) |
 | [map.py](map.py) | the panel with coordinate rulers, and a local route over tiles that are drawn walkable |
 | [diff.py](diff.py) | what changed between two screens — and whether anything did, which is how you catch a key that did nothing |
+| [explore.py](explore.py) | where the level is still dark, and the keys to send the game at it. Give it an `M` screen — one ask, the whole remembered level — or a run's recent screens |
 
 They take a raw dump (`runs/<run>/ask/screen-<n>.txt`) or the output of
 `answer`/`wait` pasted into a file; `screen.py` strips the `=== ASK` header

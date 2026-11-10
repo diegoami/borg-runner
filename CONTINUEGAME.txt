@@ -140,10 +140,12 @@ the escapes are \n Enter, \e Escape, \t Tab, \\ a backslash.
 
     .venv/bin/python -m borg_runner tools
 
-lists the shared screen tools in `tools/screen/` - `look.py` (what the screen
-has drawn, with offsets from `@`), `aim.py` (a place -> the keys that make the
-*game* walk there), `map.py` (the panel with rulers and a local route),
-`diff.py` (what changed, and whether anything did), `screen.py` (the reader).
+lists the shared screen tools in `tools/screen/` - `explore.py` (where the
+level is still dark; press `M` and give it that screen), `look.py` (what the
+screen has drawn, with offsets from `@`), `aim.py` (a place -> the keys that
+make the *game* walk there), `map.py` (the panel with rulers and a local
+route), `diff.py` (what changed, and whether anything did), `screen.py` (the
+reader).
 They take `runs/{RUNNAME}/ask/screen-<n>.txt` directly and press no keys.
 
 If you inherited tools from your own earlier life they are in

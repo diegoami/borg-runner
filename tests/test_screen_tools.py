@@ -119,6 +119,38 @@ def test_diff_finds_what_moved(tmp_path):
     assert 'tiles differ' in out
 
 
+LEVEL_MAP = Path(__file__).parent / 'screen-level-map.txt'
+
+
+def test_explore_reads_the_whole_level_view_and_finds_the_staircase():
+    """`M` is one ask and draws the remembered level; this is the town's."""
+    out = run('explore.py', str(LEVEL_MAP))
+    assert 'DOWN staircase in the box' in out
+    assert '`l>g` walks to it in one ask' in out, \
+        'with a staircase remembered, the game walks there; no tool should'
+    assert 'stores remembered: 1 at' in out
+    assert '3x3 level tiles per box tile' in out, 'the box is scaled'
+
+
+def test_explore_on_ordinary_screens_says_where_the_dark_is():
+    out = run('explore.py', str(SCREEN))
+    assert 'border the dark' in out
+    answer = [line for line in out.splitlines() if line.startswith('answer:')]
+    assert answer and answer[0].endswith('g'), 'the aim is the game walking'
+    assert 'press `M`' in out, 'the better route is the whole-level view'
+
+
+def test_explore_does_not_stitch_a_scrolled_view(tmp_path):
+    """It tried, and two stretches of corridor produced duplicate rooms."""
+    rows = SCREEN.read_text().split('\n')
+    shifted = tmp_path / 'scrolled.txt'
+    shifted.write_text('\n'.join(
+        row[:13] + row[13:][30:] + ' ' * 30 if len(row) > 43 else row
+        for row in rows))
+    out = run('explore.py', str(SCREEN), str(shifted))
+    assert 'the view moved 1 times' in out
+
+
 def test_adopting_a_runs_tool_records_where_it_came_from(tmp_path):
     written = tmp_path / 'mine.py'
     written.write_text('#!/usr/bin/env python3\n"""Mine."""\nprint(1)\n')

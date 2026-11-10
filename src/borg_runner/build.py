@@ -10,6 +10,7 @@ compile it. The game's own logic is untouched (D1, D2).
 """
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -29,6 +30,23 @@ FRONTEND = 'src/main-agent.c'
 CMAKE_ARGS = ['-DSUPPORT_BORG=OFF', '-DSUPPORT_TEST_FRONTEND=OFF',
               '-DSUPPORT_X11_FRONTEND=ON', '-DCMAKE_BUILD_TYPE=Release',
               f'-DANGBAND_BUILD_ID=borg-runner-{pins.commit("angband")[:7]}']
+
+# Playing and replaying use our own `-magent` frontend, which is files and no
+# display. X11 is compiled in for one thing only: `takeover`, which hands a
+# replayed savefile to a person in a real terminal (D7, D11). A machine with
+# no `libx11-dev` - a cloud container, usually - can build everything else,
+# so `BORG_RUNNER_NO_X11=1` drops that frontend. The flags are part of the
+# build key, so such a build lives in its own directory and does not disturb
+# the local one; the screens are the same either way, because the splash is
+# pinned by ANGBAND_BUILD_ID and no frontend but ours is ever started.
+NO_X11 = 'BORG_RUNNER_NO_X11'
+
+
+def cmake_args():
+    if not os.environ.get(NO_X11):
+        return list(CMAKE_ARGS)
+    return [argument if argument != '-DSUPPORT_X11_FRONTEND=ON'
+            else '-DSUPPORT_X11_FRONTEND=OFF' for argument in CMAKE_ARGS]
 
 # Each edit is (file, what must be there exactly once, what replaces it).
 EDITS = (
@@ -70,7 +88,7 @@ def patch_sha256(patch=PATCH):
     # The configure flags belong in the key too: changing one of them changes
     # the binary, and leaving them out meant a changed flag quietly reused the
     # cached build. Found when pinning the build id did not take effect.
-    for argument in CMAKE_ARGS:
+    for argument in cmake_args():
         digest.update(argument.encode())
     return digest.hexdigest()
 
@@ -123,7 +141,7 @@ def prepare(out=None, force=False, log=print):
 
     for name, command in (
             ('configure', ['cmake', '-S', str(source), '-B', str(out / 'build'),
-                           *CMAKE_ARGS]),
+                           *cmake_args()]),
             ('build', ['cmake', '--build', str(out / 'build'),
                        '--target', 'OurExecutable', '-j', '4'])):
         log(f'build: {name}')
@@ -149,7 +167,7 @@ def prepare(out=None, force=False, log=print):
         'game': pins.pin('angband')['repository'],
         'commit': pins.commit('angband'),
         'patch_sha256': patch_sha256(),
-        'cmake_args': list(CMAKE_ARGS),
+        'cmake_args': cmake_args(),
         'binary_sha256': hashlib.sha256(binary(out).read_bytes()).hexdigest(),
     }
     (out / 'build-identity.json').write_text(

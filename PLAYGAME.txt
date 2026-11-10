@@ -132,6 +132,10 @@ lists the shared screen tools in `tools/screen/`, which earlier runs wrote and
 which you may use as they are. They read a screen dump and print; none of them
 presses a key:
 
+    explore.py  where the level is still dark and the keys to send the game
+              at it. Press `M` first and give it that screen: `M` draws the
+              whole *remembered* level in one ask, and if a `>` is in it the
+              tool tells you to use `l>g` rather than any code
     look.py   everything the screen has drawn, nearest first, with the offset
               from `@` in the game's own form (`3 S, 2 E`)
     aim.py    a place on the screen -> the keys that make *the game* walk
