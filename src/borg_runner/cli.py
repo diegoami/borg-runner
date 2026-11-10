@@ -232,6 +232,31 @@ def cmd_playbook(args):
     return 0
 
 
+def cmd_audit(args):
+    """Did a finished run leave everything a finished run should leave?"""
+    from . import audit as audit_module
+
+    names = audit_module.archived() if args.all else [Path(args.run).name]
+    worst = 0
+    for name in names:
+        rows = audit_module.audit(name)
+        bad = [row for row in rows if not row['ok']]
+        if args.all and not bad:
+            print(f'{name}: all {len(rows)} checks pass')
+            continue
+        print(f'=== {name}: {len(rows) - len(bad)} of {len(rows)} checks pass')
+        for row in rows:
+            if row['ok'] and args.all:
+                continue
+            mark = 'ok  ' if row['ok'] else ('warn' if row['warn'] else 'MISS')
+            print(f"  {mark}  {row['what']}")
+            if not row['ok'] and row['fix']:
+                print(f"        -> {row['fix']}")
+        if any(not row['ok'] and not row['warn'] for row in rows):
+            worst = 1
+    return worst
+
+
 def cmd_consolidate(args):
     """What the reports say that the page does not."""
     from . import consolidate as consolidate_module
@@ -520,6 +545,12 @@ def parser():
     p.add_argument('--check', action='store_true',
                    help='check the layout of every playbook')
     p.set_defaults(func=cmd_playbook)
+
+    p = sub.add_parser('audit',
+                       help='did a finished run leave what it should leave?')
+    p.add_argument('--run', type=Path, help='the run, or its name')
+    p.add_argument('--all', action='store_true', help='every archived run')
+    p.set_defaults(func=cmd_audit)
 
     p = sub.add_parser('consolidate',
                        help='the recurring themes in the reports, and whether '

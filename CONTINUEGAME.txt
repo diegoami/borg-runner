@@ -264,6 +264,16 @@ publish it, and they are what makes your run visible to anyone else.
         git commit -m "{RUNNAME}: <depth, level, how it ended>" && \
         git pull --rebase -q && git push -q
 
+Then check your own work, and say what it printed when you report back:
+
+    .venv/bin/python -m borg_runner audit --run {RUNNAME}
+
+It reads the archive and says whether everything a finished run should leave
+is there: the files, the model and the family in the record, the promoted
+notebook, your section in the playbook, the dashboard row, and whether git
+has it. A `MISS` names the command that was skipped. Three of the first
+eleven runs here left something out and nobody noticed until days later.
+
 What each does:
 
 - **stop** asks the game to save and quit. Nothing else does: when you stop

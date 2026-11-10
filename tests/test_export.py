@@ -83,10 +83,18 @@ def test_staleness_is_information_and_not_an_error(tmp_path):
     assert export.check(path, tmp_path / 'records') == []
 
 
-def test_the_real_edition_is_sound_and_has_read_every_report():
+def test_the_real_edition_is_sound():
+    """Soundness is a rule; staleness is not.
+
+    docs/EXPORT.md says when to accumulate is the owner's call, so a report
+    that arrived this morning must not fail anybody's build. `missing()` is
+    where that shows, and `borg_runner export` prints it.
+    """
     assert export.check() == []
-    assert export.missing() == [], \
-        'reports have arrived since the last edition; see docs/EXPORT.md'
+    waiting = export.missing()
+    assert isinstance(waiting, list)
+    if waiting:
+        print('not yet in an edition: ' + ', '.join(waiting))
 
 
 NOT_FOR_PLAYERS = ('PLAYGAME.txt', 'CONTINUEGAME.txt', 'docs/BRIEF.md',

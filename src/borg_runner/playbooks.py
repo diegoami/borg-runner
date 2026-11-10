@@ -271,8 +271,11 @@ def check(where=None, known_runs=None):
                     f'agents/{family}/{page.name} names no run it came from: '
                     f'a playbook that cites no game cannot be checked against '
                     f'the record')
+        # The dotfiles are the locks `append` takes while it writes, which
+        # git ignores; anything else that is not a page is a complaint.
         for stray in sorted(p for p in directory_path.glob('*') if p.is_file()
-                            and p.suffix != '.md'):
+                            and p.suffix != '.md'
+                            and not p.name.startswith('.')):
             complaints.append(f'agents/{family}/{stray.name} is not a .md page; '
                               f'a playbook is prose, and tools belong with their run')
     return complaints
