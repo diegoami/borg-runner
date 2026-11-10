@@ -33,8 +33,9 @@ own** - see "The worktree model" below.
   aimed its walk at a locked door.
 - **The dashboard** is <https://diegoami.github.io/borg-runner/>, rebuilt by
   `overview` on the main checkout and published by pushing `main`. It leads
-  with **characters**, not runs: multi-life characters have a page under
-  `records/characters/`, single-life ones link their replay.
+  with **characters**, not runs: multi-life characters have a **Markdown**
+  page under `records/characters/` (readable on GitHub; the site links the
+  same file), single-life ones link their replay.
 - **450 fast tests** (`pytest -q`). The slow ones build and play the game
   (`pytest -q -m slow`); CI does not run them.
 - **Nothing is playing.** The last run, `mmf-mage.3` (the mage carry-on),

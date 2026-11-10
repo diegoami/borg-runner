@@ -254,30 +254,32 @@ def characters(found):
     return out
 
 
-def character_page(character, base='../'):
-    """One page for a multi-life character: the lives in order, each with
-    its numbers and its replay. It is written under records/characters/, so
-    the replays are one directory up."""
-    rows = []
+def character_markdown(character):
+    """One page for a multi-life character: the lives in order, each with its
+    numbers and its replay. Markdown, because this page is read on GitHub,
+    where an HTML file shows as source (the site's dashboard links here too).
+    """
+    lines = [
+        f"# {character['name']}",
+        '',
+        f"{len(character['lives'])} lives of one character, in order. Best: "
+        f"character level {character['best_level']}, worth "
+        f"{character['best_wealth']:,}.",
+        '',
+        'The whole set of characters is in [OVERVIEW.md](../OVERVIEW.md); who '
+        'is worth imitating and why is in '
+        '[ACCUMULATED_BEHAVIOUR.md](../../ACCUMULATED_BEHAVIOUR.md).',
+        '',
+    ]
     for row in character['lives']:
-        outcome = row['outcome'] or '?'
-        rows.append(
-            f"<li><strong>{html.escape(row['run'])}</strong> - CL {row['character_level']}, "
-            f"worth {row['wealth']}, depth {row['max_depth']}, {html.escape(outcome)} "
-            f"(<a href=\"{base}{row['run']}/report.html\">replay</a> · "
-            f"<a href=\"https://github.com/diegoami/borg-runner/blob/main/records/{row['run']}/REPORT.md\">report</a>)</li>")
-    return f"""<!doctype html>
-<html><head><meta charset="utf-8"><title>{html.escape(character['name'])}</title>
-<style>{PAGE_STYLE}</style></head><body><main>
-<h1>{html.escape(character['name'])}</h1>
-<p class="sub">{len(character['lives'])} lives of one character, in order.
-Best: character level {character['best_level']}, worth {character['best_wealth']}.
-The whole set of characters is on the <a href="../overview.html">overview</a>;
-who is worth imitating and why is in
-<a href="https://github.com/diegoami/borg-runner/blob/main/ACCUMULATED_BEHAVIOUR.md">ACCUMULATED_BEHAVIOUR.md</a>.</p>
-<ul>{''.join(rows)}</ul>
-</main></body></html>
-"""
+        lines.append(
+            f"- **{row['run']}** - CL {row['character_level']}, worth "
+            f"{row['wealth']:,}, depth {row['max_depth']}, "
+            f"{row['outcome'] or '?'} · "
+            f"[replay]({SITE}/records/{row['run']}/report.html) · "
+            f"[report](https://github.com/diegoami/borg-runner/blob/main/"
+            f"records/{row['run']}/REPORT.md)")
+    return '\n'.join(lines) + '\n'
 
 
 def write_all(found=None, log=print):
@@ -292,8 +294,10 @@ def write_all(found=None, log=print):
     for character in characters(found):
         if len(character['lives']) < 2:
             continue        # one recording: a page of its own is overkill
-        path = characters_dir / f"{character['name']}.html"
-        path.write_text(character_page(character))
+        path = characters_dir / f"{character['name']}.md"
+        path.write_text(character_markdown(character))
+        # A page written before this was Markdown is stale now.
+        (characters_dir / f"{character['name']}.html").unlink(missing_ok=True)
         written.append(path)
     for path in written:
         log(f'overview: {path}')
@@ -322,7 +326,7 @@ def characters_markdown(found):
     for character in multi:
         died = f", {character['deaths']} died" if character['deaths'] else ''
         lines.append(
-            f"- [{character['name']}](characters/{character['name']}.html) - "
+            f"- [{character['name']}](characters/{character['name']}.md) - "
             f"{len(character['lives'])} lives, best character level "
             f"{character['best_level']}, worth "
             f"{character['best_wealth']:,}{died}")
@@ -558,7 +562,8 @@ def page(found=None, standalone=True, base=''):
     def by_results(character):
         return (-character['best_level'], -character['best_wealth'])
     multi_html = ''.join(
-        f'<li><a href="{base}characters/{html.escape(c["name"])}.html">'
+        f'<li><a href="https://github.com/diegoami/borg-runner/blob/main/'
+        f'records/characters/{html.escape(c["name"])}.md">'
         f'<strong>{html.escape(c["name"])}</strong></a> - '
         f'{len(c["lives"])} lives, best CL {c["best_level"]}, '
         f'worth {c["best_wealth"]}'

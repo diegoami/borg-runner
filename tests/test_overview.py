@@ -78,7 +78,7 @@ def test_the_markdown_leads_with_characters_not_runs(tmp_path):
         overview.rows(tmp_path), into=tmp_path / 'OVERVIEW.md').read_text()
     assert text.startswith('# The characters, and every run')
     assert '## Characters' in text
-    assert '[one](characters/one.html) - 2 lives' in text
+    assert '[one](characters/one.md) - 2 lives' in text
     assert '## Single-life characters' in text
     assert '## Every run' in text
 
