@@ -34,6 +34,7 @@ COLUMNS = (
     ('inherited', 'inherited'),
     ('read_its_own_playbook', 'read its class'),
     ('own_tools', 'own tools'),
+    ('wrote_up', 'wrote up'),
     ('replay', 'replay'),
 )
 
@@ -82,6 +83,7 @@ def rows(where=None):
             'record': f'{record_path.parent.name}/',
             'report': (f'{record_path.parent.name}/REPORT.md'
                        if (record_path.parent / 'REPORT.md').exists() else None),
+            'wrote_up': 'yes' if (record_path.parent / 'REPORT.md').exists() else 'NO',
             'replay': (f'{record_path.parent.name}/report.html'
                        if (record_path.parent / 'report.html').exists() else None),
             'seconds_per_decision': cost.get('seconds_per_decision'),

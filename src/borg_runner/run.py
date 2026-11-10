@@ -321,6 +321,13 @@ def archive(run, into=None, log=print):
     written = run / 'REPORT.md'
     if written.exists():
         link_report(written.read_text(), run.name, into=target / 'REPORT.md')
+    else:
+        # Both prompts end by asking for one. Three of the first ten runs did
+        # not write it, and nobody noticed: a player that reports to whoever
+        # started it leaves nothing in the repository, so what it found lives
+        # in a conversation instead of in git.
+        log(f'archive: {run.name} wrote no REPORT.md - what it found is not '
+            f'in the repository. Both prompts ask for one.')
 
     log(f'archived: {target} ({", ".join(kept)})')
     return target

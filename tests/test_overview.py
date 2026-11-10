@@ -138,3 +138,14 @@ def test_the_page_keeps_its_links_relative(tmp_path):
     (run / 'report.html').write_text('<title>x</title>')
     page = overview.page(overview.rows(tmp_path))
     assert '"one/report.html"' in page
+
+
+def test_a_run_that_wrote_no_report_is_visible(tmp_path):
+    """Both prompts ask for one; three of the first ten runs skipped it and
+    nothing noticed, so what they found stayed out of the repository."""
+    silent = a_record(tmp_path, 'silent')
+    spoke = a_record(tmp_path, 'spoke')
+    (spoke / 'REPORT.md').write_text('# what happened\n')
+    found = {row['run']: row['wrote_up'] for row in overview.rows(tmp_path)}
+    assert found == {'silent': 'NO', 'spoke': 'yes'}
+    assert 'wrote up' in [label for _, label in overview.COLUMNS]
