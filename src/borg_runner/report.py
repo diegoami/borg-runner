@@ -13,9 +13,11 @@ Run it as `python -m borg_runner.report --run runs/<name>`.
 import argparse
 import html
 import json
+import re
 import sys
 from pathlib import Path
 
+from . import leads as leads_module
 from . import run as run_module
 
 STYLE = """
@@ -67,6 +69,14 @@ pre.book { background:var(--card); border:1px solid var(--line); border-radius:8
 .said { margin:10px 0 0; min-height:3em }
 .said .keys { font-size:1.05rem }
 .said .why { color:var(--dim) }
+ol.leads { margin:0 0 28px; padding-left:1.4em }
+ol.leads li { margin:0 0 16px }
+ol.leads p { margin:0 0 3px }
+.claim { font-weight:600 }
+.evidence { color:var(--dim) }
+.test { color:var(--flag) }
+.where { color:var(--dim); font-size:.92em; font-variant-numeric:tabular-nums }
+.where a { color:inherit }
 @media (max-width:620px) { .replay pre { font-size:10.5px } }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --ink:#e8e8e6; --dim:#9a9a97; --line:#2f3136;
@@ -117,6 +127,7 @@ def read(run):
     for number in asked:
         if number not in answered:
             unanswered[number] = run_module.question(run, number)
+    writeup = run / 'REPORT.md'
     return {
         'run': run,
         'asked': asked,
@@ -130,6 +141,7 @@ def read(run):
         'screens': screens,
         'notes': notes,
         'notebook': run_module.notebook(run, lines=10 ** 6),
+        'writeup': writeup.read_text() if writeup.exists() else '',
     }
 
 
@@ -251,8 +263,98 @@ def frames(data):
     return out
 
 
+def inline(text):
+    """The player's markdown, as HTML. Only the forms the reports use.
+
+    The words are the player's; the page renders them and does not rewrite
+    them. The code form matters because the game's own characters are
+    written in it - "the `>` staircase" - and a page that turned those into
+    markup would show something the game never showed.
+
+    It is a scan and not a pattern, because the reports put a code span
+    inside an emphasised claim: "**Does `*` then `>` really jump?**". One
+    pattern cannot tell that asterisk from the one that opens the
+    emphasis, so the code span is taken first and what is inside it is
+    left alone.
+    """
+    out, index, end = [], 0, len(text)
+    while index < end:
+        if text[index] == '`':
+            closing = text.find('`', index + 1)
+            if closing != -1:
+                out.append(f'<code>{html.escape(text[index + 1:closing])}</code>')
+                index = closing + 1
+                continue
+        if text.startswith('**', index):
+            closing = text.find('**', index + 2)
+            if closing != -1:
+                out.append(f'<strong>{inline(text[index + 2:closing])}</strong>')
+                index = closing + 2
+                continue
+        if text[index] == '*':
+            closing = text.find('*', index + 1)
+            # An italic that opens or closes on a space is an asterisk the
+            # player multiplied with, not an emphasis.
+            if (closing != -1 and closing > index + 1
+                    and not text[index + 1].isspace()
+                    and not text[closing - 1].isspace()):
+                out.append(f'<em>{inline(text[index + 1:closing])}</em>')
+                index = closing + 1
+                continue
+        out.append(html.escape(text[index]))
+        index += 1
+    return ''.join(out)
+
+
+def asks_text(ranges):
+    """`67-70` - the asks as the player wrote them."""
+    return ', '.join(f'{first}' if first == last else f'{first}-{last}'
+                     for first, last in ranges)
+
+
+def turns_text(turns):
+    """`2,145-2,175` - the span of the turns, in the game's own numbers."""
+    if not turns:
+        return ''
+    first, last = min(turns), max(turns)
+    return f'{first:,}' if first == last else f'{first:,}-{last:,}'
+
+
+def leads_section(data):
+    """The leads the player wrote, each with where it happened and its test.
+
+    The turn is the addition: an ask is a number, and the run's own decisions
+    say what turn it was at, so a lead that names "asks 67-70" is shown at
+    the turn it happened - and the ask is a link into the replay, so a reader
+    can watch the moment the lead is about.
+    """
+    found = leads_module.parse(data['writeup'])
+    if not found:
+        return '<p class="empty">the write-up names no leads</p>'
+    turns = {entry['ask']: entry.get('turn') for entry in data['decisions']}
+    out = []
+    for lead in found:
+        place = leads_module.where(lead, turns)
+        where = []
+        if place['asks']:
+            where.append(f'<a href="#replay" data-ask="{place["asks"][0]}">'
+                         f'ask {asks_text(place["ranges"])}</a>')
+        if place['turns']:
+            where.append(f'turn {turns_text(place["turns"])}')
+        out.append(
+            '<li>'
+            f'<p class="claim">{inline(lead["claim"])}</p>'
+            + (f'<p class="evidence">{inline(lead["evidence"])}</p>'
+               if lead['evidence'] else '')
+            + (f'<p class="test">{inline(lead["test"])}</p>'
+               if lead['test'] else '')
+            + (f'<p class="where">{" · ".join(where)}</p>' if where else '')
+            + '</li>')
+    return f'<ol class="leads">{"".join(out)}</ol>'
+
+
 REPLAY = r"""
-<section class="replay">
+<section class="replay" id="replay">
   <pre id="screen">(no screens were recorded)</pre>
   <div class="bar">
     <button id="back" title="left arrow">&#9664; step</button>
@@ -304,6 +406,14 @@ REPLAY = r"""
     else if (e.key === 'ArrowLeft') { stop(); show(at - 1); }
     else if (e.key === ' ' && e.target === document.body) { e.preventDefault(); start(); }
   });
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest ? e.target.closest('a[data-ask]') : null;
+    if (!link) { return; }
+    var want = parseInt(link.getAttribute('data-ask'), 10);
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].ask === want) { stop(); show(i); break; }
+    }
+  });
   show(0);
 })();
 </script>
@@ -352,6 +462,10 @@ time. {links(name)}</p>
 <p class="sub">Every screen the player faced, in order. Arrow keys step, space
 plays; the line underneath is the keys it sent and why.</p>
 {replay_section(data)}
+<h2>What it would do differently</h2>
+<p class="sub">The leads the player wrote, each with where it happened and what
+would settle it. An ask is a link into the replay above.</p>
+{leads_section(data)}
 <h2>What it kept</h2>
 {f'<pre class="book">{html.escape(book)}</pre>' if book
  else '<p class="empty">the notebook is empty</p>'}

@@ -47,7 +47,22 @@ not been opened from a takeover.
 | # | Task | Status |
 |---|---|---|
 | T08 | One page per run: the timeline, the screens, and **what the agent believed** beside what was true | **done** |
-| T09 | The leads section: what it would do differently, with the turn and a test | todo |
+| T09 | The leads section: what it would do differently, with the turn and a test | **done** |
+
+**T09, 2026-11-10.** The leads a player wrote are on its page now: what it
+would do differently, each with the turn it happened at and the test that
+would settle it. They are read out of the player's own `REPORT.md`, so the
+words are theirs; what is added is the **turn**, because an ask is a number
+and the run's own decisions say what turn it was at. The ask is a link into
+the replay, so a reader can watch the moment the lead is about.
+
+**Measured on the ten archived runs:** eight wrote leads, thirty-six between
+them, and twenty-six of those name a test under a name of their own - "Test:",
+"What would settle it:", "To settle it:". Seven name the ask they are about,
+which is what turns them into a place in the run. **Not checked:** a run that
+writes its leads as prose rather than as a list, and a lead that names an ask
+the run never made - the section shows the ask and no turn, which is the
+truth, but no run has needed it yet.
 
 **First real game, 2026-11-09.** A Sonnet agent played seed 7 from the screen:
 **125 asks, 644 keypresses, 4,659 game turns, depth 1, character level 3,
