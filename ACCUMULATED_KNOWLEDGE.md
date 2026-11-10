@@ -1,9 +1,11 @@
 # ACCUMULATED KNOWLEDGE — what the runs found that no manual says
 
-Edition 2, 2026-11-10. *(Edition 1, the same day, repeated things the manuals
-already say; see "What is deliberately not here". Edition 2 adds the eleventh
-run, a Mage, and the caveat in section 1 that the runs never questioned their
-own objective.)*
+Edition 3, 2026-11-10. *(Edition 1, the same day, repeated things the manuals
+already say; see "What is deliberately not here". Edition 2 added the eleventh
+run and the caveat in section 1 that the runs never questioned their own
+objective. **Edition 3 adds three runs - a Mage and a Warrior that died and a
+fourth Druid life - and corrects the single most load-bearing claim of edition
+2: a level has three or four down staircases, not one.**)*
 
 **Who this is for.** [borg-reborn-rs](https://github.com/diegoami/borg-rs),
 the Rust Borg being rebuilt, and anyone else outside this repository. The
@@ -33,10 +35,13 @@ The prompts do not mention it.
 
 ## The corpus
 
-Eleven runs, 2,490 asks, 11,566 keypresses, deepest **depth 7**, two deaths.
-One session was played by a person (`diego-1`), which is the control. Ten
-characters were drawn; one was asked for (a Gnome Mage, to test a class
-nobody had drawn).
+Fourteen runs, 3,755 asks, 24,663 keypresses, deepest **depth 7**, four
+deaths. One session was played by a person (`diego-1`), which is the control.
+Twelve characters were drawn; two were asked for (a Gnome Mage, to test a
+class nobody had drawn, and the Warrior that followed it). By class: five
+Warrior runs, four lives of one Druid plus a second Druid, two Mages, a
+Priest (the person) and nothing else - **Blackguard, Paladin, Ranger, Rogue
+and Necromancer have never been played here.**
 
 | run | model | character | depth | level | asks | turns | ended |
 |---|---|---|---|---|---|---|---|
@@ -105,11 +110,22 @@ deaths here happened.
 All GAME SOURCE, found because play could not answer it. None of it is in the
 manuals.
 
-- **Exactly one down staircase per level** (`gen-cave.c:1583`), placed on a
-  square with three adjacent walls (`gen-util.c:620`), drawn **uniformly at
-  random over the whole level** (`cave_find_get_grid`, `gen-util.c:202`).
-  There is no exploitable prior: not "near the up staircase", not "in the
-  largest room". Via `minimaxflash-1-again`.
+- **THREE OR FOUR down staircases per level, and one or two up** - corrected
+  in edition 3, and edition 2 had it wrong. `classic_gen` and `modified_gen`
+  are the only two profiles with an `alloc` at depth 1 (90 and 97 in
+  `dungeon_profile.txt`), and both call
+  `handle_level_stairs(..., rand_range(3, 4), rand_range(1, 2))`
+  (`gen-cave.c:1291`). The "exactly one" of edition 2 came from
+  `gen-cave.c:1583`, which is the **labyrinth** generator, chosen only by
+  hard-coded tests. Each staircase sits on an empty square with **exactly
+  three adjacent walls** - a corridor end - relaxed one wall at a time only if
+  no such square is free, and at least `MIN(width, height) / 4` = **16 tiles**
+  from the others (`gen-util.c alloc_stairs()`). There is still no "near the
+  up staircase" or "in the largest room" prior: what there is instead is a
+  **shape** (a dead end) and a **count** (three or four), both of which a
+  searcher can use. Via `minimaxflash-3`, which found three on three levels;
+  `minimaxflash-1.4` had already swept two thirds of a level for the one
+  staircase it believed in and found none of them.
 - **A level is 198×66 with up to 50 rooms** (`constants.txt`,
   `dungeon_profile.txt` "classic" `params:11:50:200:2`), against a 66×22 view.
   Via `minimaxflash-1`. With the uniform placement above, this is the whole
@@ -125,6 +141,18 @@ manuals.
   none, and `handle_level_stairs()` sets the minimum separation to
   `MIN(width, height) / 4` = 16 tiles. So it is not in the staircase room -
   the up staircase is (GAME SOURCE, via `minimaxflash-2`).
+- **Detection marks its whole window as trap-detected, and that stops the
+  game's own pathfinder.** `DETECT_TRAPS` sets `SQUARE_DTRAP` on **every**
+  square of its 81x45 window, trap or not
+  (`effect-handler-general.c:1376`), and `run_step` (`cmd-cave.c`) disturbs
+  the player - ending the run or the `g` walk - whenever a step leaves a
+  detected square for an undetected one, every step but the first. Two casts
+  from different places leave a seam, and every path across a seam dies on it:
+  `l>g` to a staircase 36 tiles away made **one or two tiles an ask for about
+  a hundred asks** (`minimaxflash-2.2#165`, `#256`). `do_cmd_walk` - plain
+  digit movement - has no such test and is immune. **Any program that casts
+  detection and then uses the game's travel command inherits this**, and the
+  fix is one more cast covering the path, or digits.
 - **Only a Mage or a Rogue can find a staircase it has not seen, and the
   arithmetic is brutal.** `DETECT_STAIRS` with `effect-yx:22:40` reads the
   *real* grid and memorises what it finds (`effect-handler-general.c:1467`),
@@ -183,6 +211,9 @@ The corpus' direct corrections. Each cost a run something.
 | Deep Descent is found from depth 1 (our own earlier distillate) | `object.txt` gives it `level:10` with `alloc:20:1 to 100`, and one *was* found and read on depth 1 (`sonnet-2#76`). Which field governs the depth is still unread (`obj-make.c`) |
 | a shop's stock is the seed's stock (inferred by a run) | `store_maint()` runs once per game **day** and the shopkeeper shuffles (`store.c:1425`): "the Alchemist had no Magic Mapping this seed" was true of one day only, and a later visit found three at 65 gold under a different shopkeeper (ONE RUN, `minimaxflash-1-again#399`) |
 | Word of Recall is not an escape (c15 ESC-04) | right, and the number behind it: the counter ticks in `process_world`, once per ten game turns, so 15+1d20 ticks is **150–340 game turns** — one run gave up after about forty (`qwen-flash-1`). Read in town before ever leaving it, it goes to depth 1, and arriving in town heals (GAME SOURCE + 2 RUNS) |
+| our own earlier distillate: "one spell point per TEN pounds of armour over the allowance" (a run's correction of the manual) | the manual was right and the run was wrong: `cur_wgt` is in tenths of a pound as well, so `(cur_wgt - spell_weight) / 10` is **pounds** over, one spell point each (GAME SOURCE; the claim is corrected in `agents/minimax/` where it stood) |
+| nothing in any manual mentions locked doors | one closed door in four is locked with strength `randint1(7)` (`gen-util.c`), walking into it picks it at `MAX(2, disarm-phys - 4 x strength)` per cent, and the skill is divided by ten if the lock is unseen or you are blind (`player-calcs.c calc_unlocking_chance()`). Two costs no manual states: **a failed pick prints `Cancelled` and eats the rest of that decision's keys** (`minimaxflash-1.4#616`), and **a picked lock leaves you outside the door** (`minimaxflash-2.2#162`) |
+| an unknown item is identified by use, or by a Scroll of Identify (the manuals' model) | **giving it to the store that buys its type identifies the kind for nothing**: `do_cmd_sell()` calls `object_flavor_aware()` and learns the runes *before* the item changes hands (`store.c`), so with `birth_no_selling` on you get 0 gold, lose the item and know every future copy. With selling off this is the only way to identify something you dare not use (GAME SOURCE) |
 | the manuals list the mushroom patches | they do not say that the **grey mould is mobile** — no `NEVER_MOVE`, and it chases (GAME SOURCE + `minimaxflash-1-again#174`, `codex-1-tty`, which lost 5 of 21 hit points to spores without ever meleeing it) |
 
 ## 4. Numbers the manuals do not give
@@ -226,6 +257,46 @@ The corpus' direct corrections. Each cost a run something.
   has a price** (GAME SOURCE), so once a kind is identified its shop price is
   its triage. Selling pays **0 gold** for everything (`birth_no_selling`: 2
   RUNS), which makes the starting Word of Recall scroll not money.
+- **The experience ladder, and why the middle levels are slow.** `player_exp[]`
+  (`src/player.c`) is cumulative and pre-race-factor: CL2 10, CL3 25, CL4 45,
+  CL5 70, CL6 100, CL7 140, CL8 200, CL9 280, applied as
+  `exp >= player_exp[lev-1] x expfact / 100`. A kill pays
+  `mexp x monster level / your level` with the remainder carried in
+  `exp_frac`, so nothing is lost to rounding but **the same monster is worth a
+  quarter as much at CL4 as at CL1** (`mon-util.c monster_death()`). A small
+  kobold (experience 5, depth 1) pays 5 at CL1 and 1.25 at CL4, so CL1 to CL5
+  on depth-1 trash is about 2, then 6, then 12, then 20 kills - **forty kills,
+  half of them for the last level**. Stairs, resting, shopping and detection
+  pay nothing; the **first cast of each spell** pays its `class` `spell:`
+  experience field (a mage's five CL1-CL2 spells pay 18 between them), and the
+  first use of an unknown object pays the formula above (GAME SOURCE).
+- **Constitution is a rate, not a bonus.** `calc_hitpoints()` is
+  `player_hp[level-1] + adj_con_mhp x level / 100`, floor `level + 1`, and a
+  level adds `randint1(hit die)` (`player-birth.c roll_hp()`). `adj_con_mhp`
+  runs from **-250 at CON 3** through 0 at 11 to **+1250 at 18/200**, i.e.
+  -2.5 to +12.5 hit points per level, so two characters of one class and level
+  differ by ten hit points and the gap widens with every level (GAME SOURCE).
+- **Armour buys misses, not padding.** A blow that lands loses
+  `damage x min(AC, 240) / 400` (`mon-attack.c adjust_dam_armor()`) - 2.5% at
+  AC 10 - while AC is the defence value in the hit roll, which is where its
+  value is. A Potion of Berserk Strength heals 30, gives +75 to-hit and fear
+  immunity and costs 10 AC, which at these depths is a bargain (GAME SOURCE +
+  `minimaxflash-3`).
+- **What an unknown item can be is fixed by the depth it was found at**, and
+  the pool is small: at depth 2 an unknown scroll is one of **eight** kinds
+  (Treasure Detection, Phase Door, Light, Detect Invisible, Blessing at weight
+  50; Deep Descent 20; Summon Monster and Darkness 10), so Phase Door 17%,
+  Deep Descent 7%, and 7% actively harmful; an unknown potion is one of
+  **eleven**, 84% harmless or good. **Magic Mapping cannot appear before DL5**,
+  the shallowest wand is DL3 and the shallowest staff, rod, mushroom and ring
+  DL5, so on depth 1 and 2 the only unknown kinds in the game are scrolls and
+  potions - except for the **one object in twenty** generated as if from a
+  deeper level (`obj-make.c`, `one_in_(great_obj)` with `great-obj:20`, which
+  recomputes the level as `1 + level x 100 / randint1(100)`) (GAME SOURCE).
+- **A Warrior can never dig**: `skill-dig:0:0` and no points a level, against
+  `calc_digging_chances()` needing over 10 for magma and over 20 for quartz.
+  So every vein is a permanent wall for that class, and a `*` - a vein **with
+  treasure** - is money it cannot have (GAME SOURCE + `minimaxflash-3`).
 
 ## 5. What the players did with all this, which is the behavioural finding
 
@@ -246,12 +317,27 @@ The corpus' direct corrections. Each cost a run something.
   pages and notes as the run that reached depth 7, and spent 29 of 73
   decisions on birth and shopping and the rest walking around the town until a
   dog killed it.
+- **Players fixate on the item they want rather than the pool they have.** A
+  run on depth 2 made "what does Magic Mapping show" its standing question and
+  walked to two unknown scrolls to answer it. Magic Mapping cannot be an
+  unknown scroll on depth 2 at all (section 4): the pool it was drawing from
+  was 17% Phase Door and 7% harmful. The same shape appears in the deaths:
+  **the plan was written around the best case of an unknown, not its
+  distribution.**
+- **A warning already written down is not a warning read.** The page these
+  runs read says, with the source behind it, that Word of Recall is not an
+  escape and that its wait is 150 to 340 game turns. The fourth death is a run
+  that read the Recall and stood still for forty turns. A line in a document
+  the player has open is not the same as a line the player applies - which is
+  the strongest argument in this corpus for *checked* knowledge over more
+  knowledge.
 
-## 6. How the two deaths happened
+## 6. How the four deaths happened
 
-Both at character level 1, both to a monster worth almost nothing, and
-**neither is the kind of death a threshold rule prevents** — which is the part
-worth carrying into a death analyser.
+Not one of them was a big hit, none was at a depth the character had no
+business being at, and **none is the kind of death a hit-point threshold
+prevents** — which is the part worth carrying into a death analyser. Two were
+at character level 1, one at 2 and one at 4; the deepest was depth 2.
 
 - **`sonnet-3`, Human Mage, 10 hit points, depth 1, turn 1,348, small
   kobold.** A wounded kobold was believed dead because its health bar went
@@ -262,25 +348,53 @@ worth carrying into a death analyser.
   but thrown oil.
   *The failure is state-tracking plus an uncancellable batch, not target
   selection.*
-- **`qwen-flash-1`, High-Elf Druid, 12 hit points, depth 0, turn 570, scruffy
-  little dog.** It never left the town.
+- **`qwen-flash-1`, High-Elf Druid, 13 hit points, depth 0, turn 570, scruffy
+  little dog** (2 hit points, biting for 1d1). It never left the town: it spent
+  sixty decisions hunting for shop doors while the town's animals clawed it
+  from 13 to 1.
   *The failure is that it never played.*
+- **`minimaxflash-2.2`, Gnome Mage, 16 hit points, depth 2, turn 10,811,
+  metallic green centipede** (1d1 and 1d1 at speed 120 - two damage a round).
+  It stood at 4 of 16 hit points with three monsters adjacent, throwing oil at
+  a unique with AC 36 - where its to-hit of 11 is on the game's flat 12% floor
+  - with a Scroll of Phase Door in the pack it had carried all game and did
+  not read until 2 hit points (`minimaxflash-2.2#350`).
+  *The failure is that the escape was never spent, against a fight the
+  arithmetic said it could not win.*
+- **`minimaxflash-3`, Human Warrior, 43 hit points, constitution +5,
+  character level 4, depth 2, turn 8,394, cave spider.** The fattest character
+  in the corpus, killed by a 7-hit-point spider doing 1d4: it read a Scroll of
+  Word of Recall on arriving at a fresh level and then **stood still for forty
+  turns** waiting for it, not knowing the timer ticks once per ten game turns
+  (`minimaxflash-3#149`).
+  *The failure is an action with a 150-turn cost taken as though it were
+  instant. Hit points buy mistakes; they do not buy standing still.*
 
 ## 7. The classes, where play said something data does not
 
-- **Warrior** (3 runs, the deepest): the only class past depth 2 here. Oil is
-  the whole ranged game and that was enough to depth 7.
+- **Warrior** (5 runs, the deepest): the only class past depth 2 here. Oil is
+  the whole ranged game and that was enough to depth 7. It **can never dig**
+  (section 4), so veins and the treasure in them are scenery for it, and
+  armour is a poor buy for a class that can fight (2.5% of a blow at AC 10)
+  while a Potion of Berserk Strength is a good one. The one that died had 43
+  hit points and died of standing still, not of being outmatched.
 - **Druid** (4 runs, all seed 23): 13 hit points and a 1d1+1 whip at CL1 —
   five blows to kill a 10-hit-point worm — and the mana economy above makes
   its CL3 spell unpayable. It still reached CL4 and killed a depth-2 unique,
   with oil.
-- **Mage** (1 run, died): one spell at CL1, and the choice of which decided
-  whether it had an attack at all.
+- **Mage** (2 runs, one died): one spell at CL1, and the choice of which
+  decided whether it had an attack at all. The second run settled the choice:
+  **Magic Missile first** - 1 spell point, `$Dd4` with the dice count
+  `(CL-1)/5+3`, so **3d4 (3 to 12) from CL1 to CL5**, never resisted, which is
+  the only damage in the game that ignores armour class. Studying costs one
+  action and nothing else, so take every slot the level offers. Its melee is
+  not a fallback: to-hit 9 with the kit rapier is on the 12% floor for most of
+  depth 1.
 - **Priest** (1 run, the person): **no prayer before CL5 detects anything**,
   and prayers are given at random rather than chosen (`class.txt`), so a
   Priest has no magical route to a staircase — which, given section 1, is the
   class's real problem rather than its combat.
-- **Blackguard and Necromancer have never been played.**
+- **Blackguard, Paladin, Ranger, Rogue and Necromancer have never been played.**
 
 ## 8. What this corpus cannot answer
 
@@ -293,8 +407,15 @@ Read these as open. A consumer's own evidence would be the first.
    run arrived at depth 7 at level 8. What would settle it: two runs on one
    seed, one diving, one levelling first, compared on where each stood at ask
    150.
-2. **Can depth 1's staircase be found by coverage?** No run has spent a full
-   budget on the long aimed walk while checking every view for a `>`.
+2. **Can a staircase be found by coverage?** One run has now tried: 140
+   decisions of sweeping on one depth-1 level, fifteen locked doors opened,
+   two thirds of the squares mapped *by its own estimate* - and **no down
+   staircase in any of it** (`minimaxflash-1.4#753`), on a level the generator
+   gave three or four. The honest reading is that the estimate was wrong: `M`
+   draws the squares you remember, and a band of columns you crossed is not
+   the squares inside it. What is still open is the measurement nobody has
+   made: the share of a level's squares actually remembered after N decisions,
+   which the replay of that run could be made to count.
 3. **Explore or reroll?** Two or three decisions against perhaps a hundred,
    with a uniform prior either way. Unmeasured, and it is the cheapest
    experiment left: the same seed, one run that rerolls on arrival and one
