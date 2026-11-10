@@ -251,3 +251,48 @@ def test_both_prompts_say_to_append_when_others_are_playing(name):
     prose = ' '.join((pins.ROOT / name).read_text().split())
     assert 'append - do not rewrite' in prose
     assert '--append - --from' in prose
+
+
+# -- a family page may be wrong about the game, and that is checkable ---------
+
+def test_a_wrong_spell_bonus_in_a_family_page_is_caught(tmp_path):
+    """MAGE.md read Magic Missile's `$Dd4` as `3d4+3`, and the wrong number
+    travelled into a brief written for the next mage before anyone noticed."""
+    page = tmp_path / 'minimax' / 'MAGE.md'
+    page.parent.mkdir(parents=True)
+    page.write_text('Magic Missile (CL1, 1 SP, 3d4+3, never resisted) is the best.\n')
+    rows = playbooks.disagreements(tmp_path)
+    assert len(rows) == 1, rows
+    assert 'Magic Missile has no damage bonus' in rows[0]
+    assert '$Dd4' in rows[0] and '3d4+3' in rows[0]
+
+
+def test_the_right_dice_and_mana_are_not_caught(tmp_path):
+    page = tmp_path / 'minimax' / 'MAGE.md'
+    page.parent.mkdir(parents=True)
+    page.write_text('Magic Missile (CL1, 1 SP, 3d4, never resisted) is the best.\n'
+                    'Phase Door (CL2, 2 SP, ten squares of escape).\n')
+    assert playbooks.disagreements(tmp_path) == []
+
+
+def test_a_wrong_mana_cost_is_caught(tmp_path):
+    page = tmp_path / 'minimax' / 'MAGE.md'
+    page.parent.mkdir(parents=True)
+    page.write_text('Magic Missile costs 3 SP, which is why it is never worth it.\n')
+    rows = playbooks.disagreements(tmp_path)
+    assert any('1 mana' in row and 'says 3' in row for row in rows), rows
+
+
+def test_a_table_row_and_a_mana_pool_are_not_read_as_a_spell_cost(tmp_path):
+    """`| Stinking Cloud | 3 | 2 | 27% |` is columns, and `had 4 spell points`
+    is a pool: neither is a claim about what a spell costs."""
+    page = tmp_path / 'minimax' / 'DRUID.md'
+    page.parent.mkdir(parents=True)
+    page.write_text('| Spell | CL | SP | Fail | Worth |\n'
+                    '| Stinking Cloud | 3 | 2 | 27% | Your gun |\n\n'
+                    'I studied Stinking Cloud and had 4 spell points at depth 2.\n')
+    assert playbooks.disagreements(tmp_path) == []
+
+
+def test_the_repositorys_own_family_pages_agree_with_the_game():
+    assert playbooks.disagreements() == []

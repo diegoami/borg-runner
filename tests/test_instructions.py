@@ -59,7 +59,7 @@ from borg_runner import gamedata, instructions
 
 # Floors, set just below what the page yields today. Raising the page's claims
 # raises these; lowering them means checks were lost, and should be a decision.
-TOTAL_FLOOR = 480
+TOTAL_FLOOR = 560
 KIND_FLOORS = {
     'object cost': 12, 'table cost': 15, 'table level': 15, 'table alloc': 15,
     'race hitdie': 10, 'class hitdie': 15, 'race exp': 3,
@@ -67,6 +67,8 @@ KIND_FLOORS = {
     'monster hp': 11, 'monster depth': 12, 'monster speed': 4, 'monster blow': 7,
     'store always': 20, 'store normal': 8, 'shop digit': 16, 'cost 0': 30,
     'citation': 60, 'quotation': 4, 'manual says': 10, 'price semantics': 25,
+    'experience': 18, 'spell experience': 6, 'spell damage': 4,
+    'monster experience': 2,
 }
 
 
@@ -123,6 +125,13 @@ def test_every_extractor_found_something(report):
 
 DOCTORED = [
     ('Hobbit 7;', 'Hobbit 8;', ['Hobbit hit die', "8", "7"]),
+    ('CL5 70, CL6 100', 'CL5 75, CL6 100', ['experience for CL5', '75', '70']),
+    ('so **3d4, 3 to 12 damage**', 'so **3d4, 6 to 15 damage**',
+     ['Magic Missile lowest damage at CL1', '6', '3']),
+    ('spells pay 4, 4, 2, 4 and 4', 'spells pay 4, 4, 3, 4 and 4',
+     ['Find Traps, Doors & Stairs first-cast experience', '3', '2']),
+    ('is about 2 kills, then 6', 'is about 3 kills, then 6',
+     ['small kobolds to go from CL1 to CL2', '3', '2']),
     ('Flask of oil 3, Ration 3', 'Flask of oil 4, Ration 3', ['Flask of oil cost:', '4', '3']),
     ('Cure Serious Wounds 70,', 'Cure Serious Wounds 75,', ['Cure Serious Wounds cost:', '75', '70']),
     ('Human 100, Half-Troll 120', 'Human 100, Half-Troll 125', ['Half-Troll exp', '125', '120']),

@@ -196,6 +196,24 @@ The minimum before you spend any gold: the commands you intend to use, and
 your class's section of chapter 14. The appendices are lookup tables — grep
 them when you meet something, do not read them through.
 
+## If you were given a brief as well as this
+
+A brief is an objective: "reach character level 5 without going below depth
+1", "spend the whole budget in the town and say what it bought". It replaces
+the 150-decision rule and nothing else - the procedure, the reading and the
+write-up are still the ones here.
+
+**A brief is not allowed to be the only place something is said.** If it tells
+you a number about the game, that number is on
+[manuals/INSTRUCTIONS.md](../manuals/INSTRUCTIONS.md) too, with its source;
+if it is not, the brief is wrong and the page is right, and saying so in your
+report is worth more than playing around it. `borg_runner prompts` is the
+check, it reads `PLAYGAME.txt`, `CONTINUEGAME.txt` and every brief in
+`prompts/`, and it refuses a labelled claim that cites nothing the page
+carries. The briefs that were worth keeping are in [prompts/](../prompts/),
+and you may be handed one that is not in there - in which case run the check
+on it before you start, and say what it printed.
+
 ## Rules
 
 - Change no setting, no source file and no option. You are playing the game as

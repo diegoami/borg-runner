@@ -184,6 +184,12 @@ what was worth writing:
   armour - the shops restock daily - and descending when you can pay for it is
   a plan, and so is deciding not to descend at all. Say in your report what
   you were buying with the asks you spent.
+- **Levelling has a price list, and section 1 of INSTRUCTIONS.md is it.** What
+  each character level costs, what a kill pays once your own level divides it,
+  and what pays nothing at all - stairs, walking, resting, shopping,
+  detection - are all there with the game's numbers. Read it before you decide
+  what this run is for: it is the difference between deciding to level up and
+  knowing what the fifth level actually costs in kills.
 - **You never need to know where you are on the level.** A level you leave is
   regenerated, so no map of it has a second use, and both staircases are
   exits: `< ` then `> ` gives a fresh level of the same depth in two or three

@@ -140,6 +140,19 @@ failure.** It is cheap and it pays:
 - a level whose feeling says it is empty is worth leaving, and leaving means
   **either** staircase.
 
+**The town-and-depth-1 shuttle**, which is the cheapest form of that plan and
+which no run has tried: in the town you stand on the down staircase, and on
+depth 1 you arrive on an up staircase, so `> ` and `< ` are one key each and a
+whole cycle is two or three asks (FACT, connected stairs; sonnet-1#67,
+sonnet-2#25). Every `>` builds a *new* depth 1, so the monsters beside the
+staircase are new as well, and the town between cycles is where resting is
+safe, where the shops restock and where nothing can reach you. What the
+shuttle does not do is pay for itself: **stairs give no experience**, so a
+cycle is worth exactly the kills you made before taking it, and section 1's
+arithmetic says CL5 is about forty depth-1 kills for a Human. UNTESTED as a
+route to a character level - what would settle it is one run that shuttles,
+counts its asks per level, and says where the kills stopped paying.
+
 Descend when you can pay for the depth, and say in your report what you were
 buying with the asks you spent. "I cleared depth 1, reached level 5, bought
 armour and went down at ask 120" is a result. So is "I spent 150 asks looking
@@ -215,6 +228,9 @@ one near you as this one was - at two asks instead of a hundred.
 - Race menu `*` (random item, Enter selects the highlight), class menu `*`. Stat screen: `a` (point-based), Enter to accept the allocation; Enter for the name, `y` for the history, any key to continue.
 - Level-1 hit points = race hit die + class hit die (+CON) (`src/player-birth.c`: `hitdie = r_mhp + c_mhp`). FACT, `race` hitdie: Hobbit 7; Gnome, Kobold 8; Elf 9; Human, Half-Elf, Half-Orc, Dunadan, High-Elf 10; Dwarf 11; Half-Troll 12. Class die: Warrior 9, Blackguard 8, Paladin 6, Ranger 5, Rogue 4, Priest/Druid/Necromancer 2, Mage 0 (`class` hitdie).
 - Level 2 needs `10 x XP-mod%` experience (`src/player.c`; mod = race exp, Human 100, Half-Troll 120, High-Elf 145). The sidebar `NXT` is experience still needed. A kill pays `monster exp x monster level / your level` (c15 15.3).
+- The whole early ladder, cumulative and before that modifier (FACT, player_exp in `src/player.c`, applied in `src/player.c adjust_level()` as experience >= `player_exp[lev-1] x expfact / 100`): CL2 10, CL3 25, CL4 45, CL5 70, CL6 100, CL7 140, CL8 200, CL9 280. CL5 is therefore 70 experience for a Human, 84 for a Gnome or a Half-Troll, 101 for a High-Elf.
+- **A kill pays less the higher your level, and that is what makes the middle levels slow.** The award is `mexp x monster level / your level` and the remainder is carried over, so nothing is lost to rounding (FACT, `src/mon-util.c monster_death()`). A small kobold (`monster` experience 5, depth 1) pays 5 at CL1 but 1.25 at CL4, so climbing CL1 to CL5 on depth-1 kobolds is about 2 kills, then 6, then 12, then 20: **forty kills, half of them for the last level alone**. The monster's own level multiplies, which is why a soldier (`monster` experience 6, depth 2) pays 12 at CL1, and why depth pays better than patience.
+- **Nothing else pays at all**: stairs, walking, resting, shopping, detection and reading the map are worth zero experience. What pays besides kills is the first use of an unknown potion, scroll or wand (section 6b) and the **first cast of each spell** - the last field of its `class` `spell:` line. A mage's five CL1 and CL2 spells pay 4, 4, 2, 4 and 4, so studying them and casting each once is 18 experience: CL2 and most of the way to CL3 for a Human, for the price of the mana.
 - Birth options in force (`birth` , `src/list-options.h`): start kit **on** (a few items, less gold), selling **off** (stores pay 0 gold), connected stairs **on**. Gold = 600 + unspent point-buy - kit value (`src/player-birth.c`), so it differs by class. Read `AU` on the left.
 - Your class's block is in section 9; read it **after** the draw.
 
@@ -350,7 +366,7 @@ Level-1 facts are from `class.txt`; "buy" is POLICY from c4/c14/c15 with real pr
 
 **Warrior** (c14 s1): hit die 9, up to 6 blows, no spells, fear-proof only from CL30 (before that fear stops melee: Boldness 8 g, Berserk Strength). Kit: Dagger, Soft Leather Armour, Berserk Strength, food, torches. Buy: oil 15-20, Cure Light Wounds, Phase Door; a Sling or Short Bow if gold is left. Kills it: paralysis (floating eye), fear, open-room packs, running out of escapes.
 
-**Mage** (s2): hit die 0 (HP = race die: **10** for a Human, 8 for a Gnome), INT, 30 lb armour. Learns **one** spell at CL1 (`G`, book, spell). CL1 spells: Magic Missile 1 sp (3d4, never resisted), Light Room 2 sp, Find Traps/Doors/Stairs 1 sp (detects within 22 rows and 40 columns). That last one is the staircase detector, and what its window costs in asks is in section 8. **Its melee is not a fallback**: to-hit 9 with the kit rapier is below `2 x AC / 3` for most of depth 1, so melee lands on the 12% floor only (OBSERVED, minimaxflash-2#91). Spell points at CL1 regenerate at about 0.014 a player action, one point per 71 actions. Phase Door spell at CL2, Detect Monsters CL3, Fire Ball CL6. Kit: Rapier, [First Spells], food, torch. Buy: oil (your real attack), Cure Light Wounds, Phase Door scrolls. Kills it: one round of melee, casting at 0 mana, anything adjacent at 10 HP.
+**Mage** (s2): hit die 0 (HP = race die: **10** for a Human, 8 for a Gnome), INT, 30 lb armour. Learns **one** spell at CL1 (`G`, book, spell); studying costs one action and nothing else - no mana, no experience, no gold (`src/cmd-obj.c do_cmd_study_spell()`) - and the status line says `Study` while a slot is free, so take every slot the level gives you as soon as it appears. CL1 spells: Magic Missile 1 sp (dice `$Dd4` with the count `(CL-1)/5+3`, so **3d4, 3 to 12 damage**, all the way from CL1 to CL5 and 4d4 at CL6; never resisted. The 3 is the dice count, not a bonus: there is no `+3`, and a page that reads it as 6-15 is reading the expression wrong), Light Room 2 sp, Find Traps/Doors/Stairs 1 sp (detects within 22 rows and 40 columns). That last one is the staircase detector, and what its window costs in asks is in section 8. **Its melee is not a fallback**: to-hit 9 with the kit rapier is below `2 x AC / 3` for most of depth 1, so melee lands on the 12% floor only (OBSERVED, minimaxflash-2#91). Spell points at CL1 regenerate at about 0.014 a player action, one point per 71 actions. Phase Door spell at CL2, Detect Monsters CL3, Fire Ball CL6. Kit: Rapier, [First Spells], food, torch. Buy: oil (your real attack), Cure Light Wounds, Phase Door scrolls. Kills it: one round of melee, casting at 0 mana, anything adjacent at 10 HP.
 
 **Druid** (s3): hit die 2, WIS, no teleport spell ever. CL1: Detect Life 1 sp, Fox Form 2 sp (double move, but a shape cannot read, quaff or cast: change back first); Remove Hunger CL2 (no food needed), Stinking Cloud CL3 (2 sp, poison ball, your gun). Kit: Whip, [Lesser Charms]. Buy: oil (nothing else hits hard until CL3), Cure Light Wounds, Phase Door. Kills it: no escape when surrounded, poison-immune targets.
 

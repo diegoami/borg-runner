@@ -168,8 +168,15 @@ def cmd_playbook(args):
         complaints = playbooks.check()
         for complaint in complaints:
             print(complaint, file=sys.stderr)
-        print(f'{len(playbooks.families())} families, {len(complaints)} complaints')
-        return 1 if complaints else 0
+        denied = playbooks.disagreements()
+        for row in denied:
+            print(f'the game says otherwise: {row}', file=sys.stderr)
+        print(f'{len(playbooks.families())} families, {len(complaints)} complaints, '
+              f'{len(denied)} numbers the game denies')
+        if denied:
+            print('a family page is one player\'s account, but a spell\'s mana and '
+                  'dice are facts: correct the line where it stands')
+        return 1 if complaints or denied else 0
     if not args.family:
         found = playbooks.families()
         if not found:
@@ -285,6 +292,24 @@ def cmd_consolidate(args):
     if unread:
         print(f"\nnot cited anywhere on the page yet: {', '.join(unread)}")
     return 0
+
+
+def cmd_prompts(args):
+    """A prompt may repeat the page; it may not be the only place a tip lives."""
+    from . import prompts as prompts_module
+
+    if args.inputs:
+        print(json.dumps(prompts_module.inputs(), indent=1, sort_keys=True))
+        return 0
+    paths = [Path(name) for name in args.paths] or None
+    problems = prompts_module.check(paths)
+    for problem in problems:
+        print(problem, file=sys.stderr)
+    checked = paths if paths is not None else prompts_module.files()
+    print(f'{len(checked)} prompts: {len(problems)} problems')
+    if not problems:
+        print('every labelled claim they make is anchored and on the page')
+    return 1 if problems else 0
 
 
 def cmd_tools(args):
@@ -560,6 +585,17 @@ def parser():
     p.add_argument('--inputs', action='store_true',
                    help='what a consolidating session is given, as JSON')
     p.set_defaults(func=cmd_consolidate)
+
+    p = sub.add_parser('prompts',
+                       help='check the prompts: nothing may be said only there')
+    p.add_argument('paths', nargs='*', metavar='FILE',
+                   help='prompts to check instead of the repository\'s own '
+                        '(use before handing a new brief to a player)')
+    p.add_argument('--check', action='store_true',
+                   help='the default, and the only thing this does')
+    p.add_argument('--inputs', action='store_true',
+                   help='what it reads, as JSON')
+    p.set_defaults(func=cmd_prompts)
 
     p = sub.add_parser('tools',
                        help='the shared screen tools runs may use and add to')

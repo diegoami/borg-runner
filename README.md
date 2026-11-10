@@ -149,6 +149,34 @@ I am carrying because I will not spend an ask on `i`"*. Both prompts name the
 family as `AGENT`, the run reads those pages first and writes back to them
 last, `record --playbook <family>` puts it in the record, and `archive` says
 whether the run wrote back or left the next session where it started.
+Most of a playbook is one player's account and cannot be checked, but a
+spell's mana and the shape of its dice are facts: `playbook --check` reads
+those against the pinned `class.txt`, because `agents/minimax/MAGE.md` gave
+Magic Missile a damage bonus it does not have and the wrong number travelled
+into a brief before anyone noticed.
+
+### Where a tip lives, and why it is never the prompt
+
+A prompt is handed to one player and then thrown away. The page is read by
+every player before its first keypress, for ever. So **nothing may be said
+only in a prompt**: a brief that carries a number nobody put on the page has
+left it in the one place no later run will look. [prompts/](prompts/) keeps
+the briefs worth running twice, and the rule is checked:
+
+```sh
+.venv/bin/python -m borg_runner prompts             # the templates and the briefs
+.venv/bin/python -m borg_runner prompts draft.txt   # before handing a new one over
+```
+
+A labelled claim in a prompt must carry an anchor - a source citation or a
+`run#ask` - and that anchor must be on the page as well; a quoted section of
+the page must still exist there; a brief must say which template it is added
+to. The first brief kept this way,
+[prompts/mage-shuttle-to-level-5.txt](prompts/mage-shuttle-to-level-5.txt),
+started life as a chat message holding the experience ladder, the kill
+arithmetic and a correction to a spell's damage - none of which a later mage
+would ever have seen. They are in section 1 and section 9 of the page now, and
+the check is what stops it happening again.
 
 ## Tools runs write, kept for the next run
 

@@ -233,6 +233,76 @@ def start(family, run='this run', where=None):
     return page
 
 
+def spell_numbers(class_name):
+    """{spell: (mana, dice, has_bonus)} for a class, from the pinned class.txt."""
+    from . import gamedata as gd
+    entry = next((e for e in gd.load('class.txt')[0]
+                  if e.value.lower() == (class_name or '').lower()), None)
+    found, current = {}, None
+    for key, value, *_ in (entry.fields if entry else []):
+        if key == 'spell':
+            parts = value.split(':')
+            current = parts[0]
+            found[current] = {'mana': int(parts[2]), 'dice': None}
+        elif current and key == 'dice' and found[current]['dice'] is None:
+            found[current]['dice'] = value
+    return found
+
+
+def disagreements(where=None):
+    """Numbers a family page states about a spell that the game's data denies.
+
+    A playbook is one player's account and most of it cannot be checked - but a
+    spell's mana cost and the shape of its damage dice are in `class.txt`, and
+    a wrong one there travels: `agents/minimax/MAGE.md` read Magic Missile's
+    `$Dd4` as `3d4+3` and a brief written from it told a mage to expect 6 to 15
+    damage instead of 3 to 12. Only two things are checked, both of which a
+    reader would take as fact: a mana cost, and a damage bonus the dice
+    expression does not have.
+
+    It reads the words and cannot tell a claim from a quotation, so a page
+    correcting an old number says what the number was in prose ("a bonus of
+    three on top of its dice") rather than writing the wrong dice again.
+    """
+    home = Path(where) if where else AGENTS
+    if not home.is_dir():
+        return []
+    rows = []
+    for page in sorted(home.glob('*/*.md')):
+        if page.name == COMMON:
+            continue
+        name = page.stem.replace('_', ' ').title()
+        try:
+            spells = spell_numbers(name)
+        except Exception:                 # no pinned clone: nothing to check against
+            return rows
+        if not spells:
+            continue
+        text = page.read_text()
+        lines = {}                    # offset -> the line it falls on
+        for match in re.finditer(r'[^\n]*', text):
+            lines[match.start()] = match.group(0)
+        for spell, real in spells.items():
+            for mention in re.finditer(re.escape(spell), text, re.I):
+                line = text.rfind('\n', 0, mention.start()) + 1
+                if lines.get(line, '').lstrip().startswith('|'):
+                    continue          # a table row: its columns are not prose
+                scope = re.split(r'[.;)|\n]', text[mention.end():mention.end() + 60])[0]
+                # `1 SP`, `2 mana`: a cost. `had 4 spell points` is a pool,
+                # not a cost, and is not read as one.
+                mana = re.search(r'(\d+)\s*(?:SP\b|sp\b|mana\b)', scope)
+                if mana and int(mana[1]) != real['mana']:
+                    rows.append(f'{page.parent.name}/{page.name}: {spell} is '
+                                f"{real['mana']} mana in `class` spell:, the page "
+                                f'says {mana[1]}')
+                dice = re.search(r'(\d+)d(\d+)\s*\+\s*(\d+)', scope)
+                if dice and '+' not in (real['dice'] or ''):
+                    rows.append(f'{page.parent.name}/{page.name}: {spell} has no '
+                                f"damage bonus - `class` dice: is {real['dice']}, "
+                                f'the page says {dice[0]}')
+    return sorted(set(rows))
+
+
 def check(where=None, known_runs=None):
     """What is wrong with the playbooks, as a list of complaints.
 

@@ -296,6 +296,158 @@ def race_experience(c):
                int(first[1]), int(match[1]) if match else 'player_exp not found')
 
 
+WORD_NUMBERS = {'two': 2, 'six': 6, 'twelve': 12, 'twenty': 20, 'forty': 40}
+
+
+def player_exp_table():
+    """`player_exp[]` from src/player.c: the cumulative experience for CL2, CL3, ..."""
+    text = gd.read_source('src/player.c') or ''
+    body = re.search(r'player_exp\[PY_MAX_LEVEL\]\s*=\s*\{(.*?)\}', text, re.S)
+    return [int(n) for n in re.findall(r'\d+', body[1])] if body else []
+
+
+def monster_entry(name):
+    """A monster.txt entry by its name, or None."""
+    for entry in gd.load('monster.txt')[0]:
+        if entry.value.lower() == name.lower():
+            return entry
+    return None
+
+
+def spell_entries(class_name):
+    """{spell: {'level':, 'mana':, 'fail':, 'exp':, 'dice':, 'expr':}} for a class."""
+    entry = next((e for e in gd.load('class.txt')[0]
+                  if e.value.lower() == class_name.lower()), None)
+    spells, current = {}, None
+    for key, value, *_ in (entry.fields if entry else []):
+        if key == 'spell':
+            parts = value.split(':')
+            current = parts[0]
+            spells[current] = {'level': int(parts[1]), 'mana': int(parts[2]),
+                               'fail': int(parts[3]), 'exp': int(parts[4]),
+                               'dice': None, 'expr': None}
+        elif current and key in ('dice', 'expr'):
+            spells[current][key] = spells[current][key] or value
+    return spells
+
+
+def missile_dice(spells, level):
+    """Magic Missile's dice at character `level`, from `dice:` and `expr:`."""
+    dice, expr = spells['Magic Missile']['dice'], spells['Magic Missile']['expr']
+    match = re.fullmatch(r'\$(\w)d(\d+)', dice or '')
+    operation = re.fullmatch(r'(\w):PLAYER_LEVEL:(.+)', expr or '')
+    if not (match and operation and match[1] == operation[1]):
+        return None
+    count = level
+    for token in operation[2].split():                 # `- 1 / 5 + 3`, left to right
+        if re.fullmatch(r'[-+*/]', token):
+            op = token
+        else:
+            value = int(token)
+            count = {'-': count - value, '+': count + value,
+                     '*': count * value, '/': count // value}[op]
+    return f'{count}d{match[2]}'
+
+
+@extractor('experience ladder', minimum=24)
+def experience_ladder(c):
+    """What a character level costs, what a kill pays, and what pays nothing.
+    Section 1's arithmetic, which "Depth is not the objective" leans on."""
+    table = player_exp_table()
+    found = c.search(r'cumulative and before that modifier[^:]*:\s*(?P<body>CL2 [^.]*)\.',
+                     name='the experience ladder')
+    if found and table:
+        for match in re.finditer(r'CL(\d+) (\d+)', found['body']):
+            level = int(match[1])
+            real = table[level - 2] if 2 <= level <= len(table) + 1 else 'off the table'
+            c.emit('experience', found.start('body') + match.start(2),
+                   f'experience for CL{level}', int(match[2]), real)
+    races = {e.value.lower(): int(e.first('exp')) for e in gd.load('p_race.txt')[0]}
+    found = c.search(r'CL5 is therefore (\d+) experience for a Human, (\d+) for a '
+                     r'Gnome or a Half-Troll, (\d+) for a High-Elf',
+                     name='what CL5 costs each race')
+    if found and table:
+        for group, race in ((1, 'human'), (2, 'gnome'), (2, 'half-troll'), (3, 'high-elf')):
+            c.emit('experience', found.start(group), f'CL5 experience for a {race}',
+                   int(found[group]), table[3] * races[race] // 100)
+    found = c.search(r'A small kobold \(`monster` experience (\d+), depth (\d+)\) pays '
+                     r'(\d+) at CL1 but ([\d.]+) at CL4, so climbing CL1 to CL5 on '
+                     r'depth-1 kobolds is about (\d+) kills, then (\d+), then (\d+), '
+                     r'then (\d+): \*\*(\w+) kills, half of them',
+                     name='the kill arithmetic')
+    if found and table:
+        kobold = monster_entry('small kobold')
+        mexp = int(kobold.first('experience')) if kobold else 0
+        depth = int(kobold.first('depth')) if kobold else 0
+        c.emit('monster experience', found.start(1), 'small kobold experience',
+               int(found[1]), mexp)
+        c.emit('monster depth', found.start(2), 'small kobold depth', int(found[2]), depth)
+        c.emit('experience', found.start(3), 'a small kobold at CL1 pays',
+               int(found[3]), mexp * depth)
+        c.emit('experience', found.start(4), 'a small kobold at CL4 pays',
+               float(found[4]), mexp * depth / 4)
+        counts = [int(found[n]) for n in (5, 6, 7, 8)]
+        for index, claimed in enumerate(counts):
+            level = index + 1
+            needed = table[level - 1] - (table[level - 2] if level > 1 else 0)
+            c.emit('experience', found.start(5 + index),
+                   f'small kobolds to go from CL{level} to CL{level + 1}',
+                   claimed, round(needed / (mexp * depth / level)))
+        c.emit('experience', found.start(9), 'kobolds for the whole of CL1 to CL5',
+               WORD_NUMBERS.get(found[9].lower(), found[9]), sum(counts))
+        c.emit('experience', found.start(9), 'half of them is the last level',
+               counts[-1] * 2, sum(counts))
+    found = c.search(r'a soldier \(`monster` experience (\d+), depth (\d+)\) pays (\d+) at CL1',
+                     name='what a soldier pays')
+    if found:
+        soldier = monster_entry('soldier')
+        mexp = int(soldier.first('experience')) if soldier else 0
+        depth = int(soldier.first('depth')) if soldier else 0
+        c.emit('monster experience', found.start(1), 'soldier experience', int(found[1]), mexp)
+        c.emit('monster depth', found.start(2), 'soldier depth', int(found[2]), depth)
+        c.emit('experience', found.start(3), 'a soldier at CL1 pays', int(found[3]), mexp * depth)
+    spells = spell_entries('Mage')
+    found = c.search(r"A mage's five CL1 and CL2 spells pay (\d+), (\d+), (\d+), (\d+) and "
+                     r"(\d+), so studying them and casting each once is (\d+) experience",
+                     name='what a first cast pays')
+    if found and spells:
+        early = [(name, s) for name, s in spells.items() if s['level'] <= 2]
+        for index, (name, spell) in enumerate(early[:5]):
+            c.emit('spell experience', found.start(index + 1),
+                   f'Mage {name} first-cast experience', int(found[index + 1]), spell['exp'])
+        c.emit('spell experience', found.start(6), 'the five first casts together',
+               int(found[6]), sum(s['exp'] for _, s in early[:5]))
+        c.emit('spell experience', found.start(6), 'the mage has five spells at CL1-CL2',
+               5, len(early))
+    found = c.search(r'Magic Missile 1 sp \(dice `(\$\w+d\d+)` with the count '
+                     r'`\(CL-1\)/5\+3`, so \*\*(\d+d\d+), (\d+) to (\d+) damage\*\*, '
+                     r'all the way from CL1 to CL5 and (\d+d\d+) at CL6',
+                     name="Magic Missile's dice")
+    if found and spells.get('Magic Missile'):
+        c.emit('spell damage', found.start(1), 'Magic Missile dice expression',
+               found[1], spells['Magic Missile']['dice'])
+        for group, level in ((2, 1), (5, 6)):
+            c.emit('spell damage', found.start(group), f'Magic Missile dice at CL{level}',
+                   found[group], missile_dice(spells, level))
+        at_one = missile_dice(spells, 1) or '0d0'
+        count, sides = (int(n) for n in at_one.split('d'))
+        c.emit('spell damage', found.start(3), 'Magic Missile lowest damage at CL1',
+               int(found[3]), count)
+        c.emit('spell damage', found.start(4), 'Magic Missile highest damage at CL1',
+               int(found[4]), count * sides)
+    found = c.search(r'studying costs one action and nothing else - no mana, no experience, '
+                     r'no gold \(`src/cmd-obj\.c do_cmd_study_spell\(\)`\)',
+                     name='what studying costs')
+    if found:
+        source = gd.read_source('src/cmd-obj.c') or ''
+        body = re.search(r'void do_cmd_study_spell\(struct command \*cmd\)\s*\{(.*?)\n\}',
+                         source, re.S)
+        text = body[1] if body else ''
+        c.emit('source', found.start(), 'studying spends one move and nothing else',
+               True, bool(body) and 'energy_use = z_info->move_energy' in text
+               and not re.search(r'csp|exp_gain|au\b', text))
+
+
 @extractor('shop prices', minimum=36)
 def shop_prices(c):
     found = c.search(r'Prices\. FACT \([^)]*\):\s*(?P<body>.*?)\.\s+\*\*Gear',

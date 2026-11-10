@@ -78,7 +78,7 @@ cast.
 
 **What I would learn first, in this order:** Find Traps, Doors & Stairs
 (CL1), Phase Door (CL2, 2 SP, ten squares of escape), Electric Arc (CL2, 2 SP,
-4d6+3). Magic Missile (CL1, 1 SP, 3d4+3, never resisted) is the best
+3d6). Magic Missile (CL1, 1 SP, 3d4, never resisted) is the best
 *damage* in the game for one spell point, but oil is better still (§4) and
 costs no mana.
 
@@ -220,7 +220,7 @@ Three more facts about the spell, measured:
 
 §3 said: Find Traps, Phase Door, Electric Arc, and that Magic Missile "is
 the best *damage* in the game for one spell point, but oil is better still".
-**Magic Missile first**, as of minimaxflash-2.2: it is 1 SP for 3d4+3 = 6–15
+**Magic Missile first**, as of minimaxflash-2.2: it is 1 SP for 3d4 = 3–12
 damage and **never resists**, so it is **the only damage in the game that
 ignores armour** and the only thing that can hurt Fang's AC 36.
 
@@ -231,6 +231,16 @@ Missile and Phase Door together and had 4 spell points at depth 2.
 
 **Oil is still the best attack for the things oil can hit** and costs no
 mana. **Magic Missile is the answer to the things oil cannot hit.**
+
+**Corrected 2026-11-10, against the pinned `class.txt`:** this page gave
+Magic Missile a damage bonus of three on top of its dice (6–15 damage), and
+Electric Arc one as well. Both are misreadings of the same line: the dice are
+`$Dd4` and `$Dd6` with the count
+`(CL-1)/5+3`, so the 3 **is** the dice count and there is no bonus - 3d4 (3 to
+12) at CL1 to CL5, 4d4 at CL6. The wrong number had already travelled into a
+brief written for the next mage, which is why
+`python -m borg_runner playbook --check` now reads a family page's spell
+numbers against the game's data.
 
 ### CORRECTION to §5: the staircase hunt failed because of the spell, not because I did not know where I was
 
@@ -306,8 +316,8 @@ The three rules I would give the next mage:
    full rest (R, backspace, `*`, Enter) is about 400 game turns and fills the
    bar.**
 4. **NEW: how many spell points does it take to kill a 25 HP AC-36 monster
-   with Magic Missile?** Six to fifteen damage a cast means two or three
-   casts. **What would settle it:** a mage that hunts Fang on depth 2 with
+   with Magic Missile?** Three to twelve damage a cast, 7.5 on average, means
+   three or four casts. **What would settle it:** a mage that hunts Fang on depth 2 with
    Magic Missile and reports how many casts it took and how many hit points
    the mage had left afterwards.
 5. **NEW: is a Scroll of Deep Descent findable on depth 2?** `object.txt`
