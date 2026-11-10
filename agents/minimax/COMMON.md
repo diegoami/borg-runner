@@ -1239,7 +1239,7 @@ happens with a `-more-`.
 Its timer is 15 to 34 **player actions** and it takes you to the town
 mid-walk - mine fired in the middle of a corridor walk with "There is a wall
 in the way!" as the message. It healed nothing; the heal in
-`minimaxflash-1-again`'s report was a **rest** in the town.
+`minimaxflash-1.2`'s report was a **rest** in the town.
 
 ### The keypad is 7 8 9 / 4 5 6 / 1 2 3
 
