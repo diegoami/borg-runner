@@ -1076,4 +1076,45 @@ depth 5.
 
 ## From `minimaxflash-1.5`, 2026-11-10
 
+## From `mmf-mage.3`, 2026-11-10
 
+## From `mmf-mage.3`, 2026-11-10 (a Gnome Mage that died on depth 2 at 11 experience)
+
+- **A `-more-` takes ONE KEY PER PAGE, and the message line goes back to the
+  first page.** Six of my asks were eaten by a three-part message I could
+  not measure from the screen: after a Find Traps cast the line showed
+  "You sense no traps. You sense the presence of doors! -more-", then the
+  next screen showed "You sense the presence of stairs!", and the next ask's
+  keys went somewhere else entirely. **Send several spaces when you cannot
+  see how long a message is, and read the message line again after the
+  spaces.** The whole-level map ends with "Hit any key to continue", so an
+  answer after `M` loses its first key unless it starts with a space.
+- **A long key string sent while a prompt is open opens menus.** Twelve `6`
+  keys, sent while the game was in a prompt, opened the character sheet,
+  then the equipment list, then the quit menu — and `n` in that menu is
+  **New Game**. `Escape` from the character sheet is the quit command, and
+  `Escape` at the quit prompt opens the prompt again. **One command per ask,
+  and never a digit string unless the game is idle.**
+- **The ask header's `cursor at x,y` is where the MENU's cursor is.** With a
+  spell list open it read `cursor at 15,4`, which is the fourth screen row —
+  the spell I already knew. That one line would have saved me six asks.
+- **The sidebar's spell points are not redrawn after a cast** (I read
+  "SP 2/2" on the screen right after a cast that had taken the bar to 1/2),
+  so **rest, then read the bar, before you cast**: casting with too little
+  mana asks "Attempt it anyway?" and then over-exerts the character (a
+  fainting chance and a constitution loss).
+- **A digit string is the cheapest way across known ground and the safest
+  one:** twenty-four `6` keys carried me twenty-three tiles along a straight
+  corridor in ONE ask (the run command stops at the edge of the known map,
+  and the aimed walk stops at the first wall). But a digit string steps onto
+  whatever is in the way, and so does the game's own aimed walk — the aimed
+  walk is the fastest and the most dangerous.
+- **The game's aimed walk steps into monsters.** `*`, `p`, digits, `g` gives a
+  path with unknown ground treated as passable, and the walk steps on the
+  first monster it meets. It killed this run. **Look (`l`) or list (`[`)
+  before you aim.**
+- **A rest is one decision for two spell points** (`R`, backspace, `*`,
+  Enter), and the spell points otherwise come back at about one per 71
+  actions of walking (`player_regen_mana()`: `msp × 197 + 524` in 65536ths
+  per action). A rest is interrupted by anything that reaches you, so it is
+  only worth asking on swept ground.

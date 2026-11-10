@@ -1,0 +1,59 @@
+{
+  "asks": 199,
+  "asks_made": 199,
+  "build": {
+    "binary_sha256": "615f4fc4013e4bbcde83bb22fccd2df6c8fdb4274a08054fd1448f1b8792d020",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "3023dc56898fd887167e28cd8184674888df74cbb6486599c40ff41d6106b5de",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 638,
+  "character": "Gnome Mage",
+  "character_drawn": true,
+  "character_level": 1,
+  "class": "Mage",
+  "cost": {
+    "model": "minimax-coding-plan/MiniMax-M3.1-Flash",
+    "played_by": "opencode"
+  },
+  "death_depth": 2,
+  "died": true,
+  "duplicate_answers": [],
+  "exit_code": null,
+  "final_turn": 8019,
+  "gold": 7,
+  "hp": {
+    "max": 8,
+    "now": -2
+  },
+  "keypresses": 1062,
+  "keys_sha256": "bc5dd32933b2bbb35864ee4c9043d113c0ace6358a636964109710d01e239cb2",
+  "killed_by": "a crow",
+  "max_character_level": 1,
+  "max_depth": 3,
+  "notebook_lines": 91,
+  "notebook_sha256": "489ed0b322e7f29c58a21b90d265e0a323c8e72ce28af50391cf703cdfce6452",
+  "outcome": "died",
+  "own_tools": [
+    "panel.py"
+  ],
+  "playbook": "minimax",
+  "race": "Gnome",
+  "read_before_playing": "FIRST NOTE, mmf-mage.3 (seed 1, Gnome Mage, carried on from mmf-mage.2): FILES I ACTUALLY OPENED -- CONTINUEGAME.txt, AGENTS.md, docs/BRIEF.md, manuals/INSTRUCTIONS.md (all 556 lines, incl. the Mage block in section 9), and my own family's pages agents/minimax/COMMON.md (all 1079 lines) and agents/minimax/MAGE.md (all 409 lines). MY OWN WRITE-UPS I READ: records/mmf-mage.2/REPORT.md and records/mmf-mage.2/notebook.md (49 lines, inherited) and records/mmf-mage.2/decisions.jsonl (my own past life's keys, asks 105-146). 'borg_runner history --run runs/mmf-mage.3' lists exactly two entries -- mmf-mage.2's report and notebook, and my own notebook -- so that is all of my own history there is; I read no other run's decisions or report for this seed. I also read the game's own data for this life: vendor/angband/src/player-path.c (find_path, path_nearest_known), src/effect-handler-general.c (DETECT_TRAPS/DOORS/STAIRS), src/target.c (target_accept), src/player-calcs.c (adj_mag_study), lib/gamedata/class.txt (the Mage spell list) and lib/gamedata/monster.txt (the depth 1-2 tables), and the shared tools tools/screen/map.py and look.py. (ask 145)",
+  "read_its_own_playbook": true,
+  "run": "mmf-mage.3",
+  "savefile_sha256": "da492c027996ab98c9f621bd1f7f258a8d33b4f04c8e65d2674e7848f78b15e6",
+  "schema": "borg-runner/run-record@1",
+  "screens": 199,
+  "screens_sha256": "a5af73d8e71ddddc5b65e8c098dafb6838d316adb97288c3f7c0bcd7065f4113",
+  "seed": 1,
+  "wealth": 645
+}
