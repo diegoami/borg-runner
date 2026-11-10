@@ -1,10 +1,9 @@
-# COMMON — what four lives taught me about playing Angband
+# COMMON — what three lives of one character taught me about playing Angband
 
-*Written by the player of `minimaxflash-1`, `minimaxflash-1-again`,
-`minimaxflash-1.3` and `minimaxflash-2.2`, from those four runs' reports and
-notebooks. Three lives of a High-Elf Druid on seed 23 (610 asks, 4,219
-keypresses, final turn 17,281) and one life of a Gnome Mage on seed 41
-(354 asks, 1,641 keypresses, turn 10,811, died on depth 2).*
+*Written by the player of `minimaxflash-1`, `minimaxflash-1-again` and
+`minimaxflash-1.3`, from those three runs' reports and notebooks. Three
+lives of a High-Elf Druid on seed 23: 610 asks, 4,219 keypresses, final
+turn 17,281.*
 
 *This file is for future sessions of mine. It is not a general manual —
 `manuals/INSTRUCTIONS.md` and `knowledge/NOTES.md` are that. This is the
@@ -12,8 +11,8 @@ part that is **mine**: the things I measured, the things I got wrong, and
 the judgement calls I would make differently. Where it contradicts the
 manual or the notes, it is because I measured it, and it says so.*
 
-*Class-specific material is in [DRUID.md](DRUID.md) and [MAGE.md](MAGE.md).
-Read the one for your character; read this one either way.*
+*Class-specific material is in [DRUID.md](DRUID.md). Read both if your
+character is a Druid; read this one alone otherwise.*
 
 ---
 
@@ -149,77 +148,6 @@ is adjacent to ground you have already seen.
 
 ---
 
-## 1a. The detection spell breaks the game's own pathfinder
-
-**This is the most expensive thing my family has learned, and it cost two
-lives.** Read it before you cast any detection spell.
-
-`Find Traps, Doors & Stairs` is the only spell in the game that can find a
-staircase you have not seen. It is also the spell that **makes the game stop
-walking you anywhere.**
-
-`src/effect-handler-general.c:1321` (`effect_handler_DETECT_TRAPS`) scans the
-`±22 × ±40` window around the player — 81×45 = 3,645 squares — and at line
-1376 does:
-
-```c
-/* Mark as trap-detected */
-sqinfo_on(square(cave, loc(x, y))->info, SQUARE_DTRAP);
-```
-
-**on every square in the window, whether or not a trap is there.** (The scan
-loop skips the level's outer border, so the window's own edge is never
-marked.)
-
-`src/cmd-cave.c:1146`, inside `run_step`, which is shared by `.` (run) and by
-the pathfinder:
-
-```c
-/* Disturb player if the player is about to leave the area */
-if (player->upkeep->running
-        && !player->upkeep->running_firststep
-        && old_dtrap && !new_dtrap) {
-    disturb(player);
-    player->upkeep->energy_use = 0;
-    return;
-}
-```
-
-`old_dtrap` is "the square I am standing on has SQUARE_DTRAP". **So every
-time a walk steps off a trap-detected square, the walk stops.** Only the
-*first* step of any walk is exempt (`running_firststep`).
-
-Measured in minimaxflash-2.2: with the level marked by earlier casts, `l>g`
-to a known staircase 36 tiles away moved **one or two tiles per ask, for a
-hundred asks**. The prior life's eleven casts had left a mesh of unmarked
-seams between the eleven 81×45 blocks, and every path across a seam stopped.
-
-**What this means for you, in order of value:**
-
-1. **Plain digit walking is immune.** `do_cmd_walk` (`cmd-cave.c:1277`) has no
-   dtrap test, no running test and no object test. `44` moved me two tiles
-   west in one ask, every time, with no interruption. **If a walk is being cut
-   short, use digits.**
-2. **A fresh level has no dtrap squares at all.** minimaxflash-2.2 cast Find
-   Stairs once on depth 2 and found the depth-2 staircase **in one ask**; the
-   path to it lay inside the block the spell had just made, and the walk went
-   all the way. **This is the spell working as intended, and nobody in this
-   family had ever tried it on a level the spell had not already broken.**
-3. **The fix on a broken level costs one spell point.** Cast again from a
-   position whose window covers the whole path: the second cast marks every
-   square in the window again, seams included. minimaxflash-2.2 cast from 8
-   tiles too far north (the staircase was 24 rows south, the window is ±22
-   rows) and the walk still stopped; it cast again from closer and the path
-   went through.
-4. **The spell only reports ground it has not already scanned**, so a second
-   cast says nothing — but it still marks the whole window. **A cast that
-   "fails" (says "You sense no traps") has usually done its real work.**
-
-`manuals/INSTRUCTIONS.md` §8 describes this spell and recommends casting,
-aiming a `g`, and casting again. **That is the strategy the spell breaks.**
-
----
-
 ## 2. Reading the screen: the map lies, and it lies in a specific way
 
 **The map's left edge is drawn behind the sidebar.** The map window's
@@ -242,26 +170,6 @@ region, and on depth 2 it was **smaller** than the main map could show (a
 7×3 blob at ask 181 of `minimaxflash-1-again`, when the main map had just
 drawn a 13-wide room). I spent 8 asks on `M` in that life and got nothing. **The manual's "whole-level
 map" reads as if it revealed the level; it does not.**
-
-**CORRECTION, minimaxflash-2.2: `M` is nevertheless the one ask that finds a
-remembered staircase, and nobody in this family had pressed it.** `M` draws
-the whole remembered level into a 78×22 box, and a `>` that was seen earlier
-is **drawn in that box** even though the scrolling main panel may have lost
-it. In minimaxflash-2.2 the very first `M` of the run showed depth 1's down
-staircase at box (49,17) — the staircase the prior life had spent 158 asks
-hunting. **Press `M` before you cast anything.** The box is scaled about
-**2.5 level tiles per box tile**, so you can see the staircase but you cannot
-plan a route from it; use `l>` for the route (§2a).
-
-**`l>` is the only exact distance measurement in the game.** In look mode, `>`
-calls `path_nearest_known(..., square_isdownstairs, ...)`
-(`ui-target.c:1507`) and parks the cursor on the nearest *known* down
-staircase, and the screen then prints the offset **from the player to that
-square** as `"N N, N W"` (`target.c:370`, `coords_desc`). minimaxflash-2.2
-used this every few asks to measure progress: *"You recall a down staircase,
-18 S, 30 W"*. **This is the answer to "where am I" that no other screen
-gives**, and it survives the panel scrolling, which is why the panel's
-coordinates are useless for measuring anything.
 
 **`[` is the best one-ask scan in the game.** It prints *"You can see N
 monsters:"* with the glyph, the count, the name and the **exact relative
@@ -323,22 +231,6 @@ that difference.
 the **quaff prompt uses the pack letters**, and `qdq` instead opens the
 item menu's *Drop* option.
 
-**MEASURED, minimaxflash-2.2: why the throw list has its own letters.** The
-throw list is built in `ui-object.c:855` from `all_letters_nohjkl` — the same
-alphabet as the pack — but it lists **only the throwable items**. So with one
-throwable kind in the pack the oil was `a` in the throw list and `c` in the
-pack; the letter is the item's *position among the throwables*, not among
-everything. The screen says so: *"Throw which item? (Throwing items: a-a,
-/ for Inven, ESC)"*. minimaxflash-2 recorded that the oil was `a` there and I
-did not believe it; **the note was right and my first attempt (`vc`) was
-wrong.** Read the letter off the prompt.
-
-**Pack letters shift when an item is used.** minimaxflash-2.2 drank a Potion
-of Cure Light Wounds (letter `d`), and the two Scrolls of Phase Door became
-`d` and the Scroll of Word of Recall became `e`. **At 2 hit points with three
-monsters adjacent, I nearly guessed a letter instead of reading the prompt.
-Read the prompt.**
-
 **Buying is one ask, and selling out renumbers the list.** OBSERVED,
 minimaxflash-2: `p`, the row letter, the quantity digits, Enter, and then
 **another key** — the Enter is eaten by the quantity string prompt, so the
@@ -374,28 +266,6 @@ is about 77% and two hits finished it.
 patch AC 1, mouse AC 4); **a high-AC monster is only worth oil at one
 tile.**
 
-**MEASURED, minimaxflash-2.2: against AC 36 oil is not an attack, it is a
-lottery ticket.** My thrown oil is to-hit 11; `hit_chance()`
-(`player-attack.c:196`) computes `numerator = MAX(0, to_hit - 2·AC/3)`, so
-against AC 36 that is `MAX(0, 11 - 24) = 0` and the roll lands on the flat
-**12 %** floor. With 9–36 damage that is **2.7 expected damage per throw**,
-so Fang (25 HP, AC 36) needed about nine flasks, during which a cave spider
-and a centipede ate me down to 2/16 hit points. **A spell that ignores armour
-is worth far more than oil against an armoured monster** — Magic Missile is
-1 SP for 6–15 damage and never resists. **Do not fight AC-30 monsters with
-oil at all.**
-
-**MEASURED, minimaxflash-2.2: the class armour-weight allowance counts worn
-armour only, and it is one spell point per TEN pounds over.**
-`player-calcs.c:1505` sums the weight of *worn* armour — the weapon, bow,
-rings, amulet and light are all excluded — and then
-`msp -= (cur_wgt - class->magic.spell_weight) / 10`. The Mage's
-`class.txt` line is `magic:1:300:5`, so `spell_weight` is 300 tenths of a
-pound = **30 lb**. My worn armour was 20.5 lb, so no penalty, and **the
-36 lb of oil in my pack cost nothing at all.** `manuals/INSTRUCTIONS.md` §2
-says "one spell point per pound over (Mage/Necromancer 30 lb)" — **the game
-divides by ten, so the manual is out by a factor of ten.**
-
 **Confusion is the most crippling condition in the game, whatever your
 class.** A grey mushroom patch on depth 1 (`monster.txt`: 2 hp, AC 1,
 `NEVER_MOVE`, `SPORE:CONFUSE:1d4` — the 1d4 is the confusion *duration*,
@@ -424,24 +294,6 @@ fights.
 `minimaxflash-1.3` had no Phase Door and no Recall, so every fight had to
 be winnable with oil and a whip. I lost HP to a 2-hp mushroom patch because
 the fight was not about HP.
-
-**And minimaxflash-2.2 died of exactly that, a life later.** It died on
-depth 2 at 2/16 hit points with a Scroll of Phase Door *and* a Scroll of Word
-of Recall in the pack, fighting Fang (AC 36) with oil while a spider and a
-centipede ate it. **The rule is not "the fight is hard"; it is "the fight
-costs you the run".** Depth is recorded, not scored: a character that stops
-alive on depth 2 with full hit points and a full pack has done better than
-one that dies on depth 2 having spent its escape ladder.
-
-**MEASURED, minimaxflash-2.2: a locked door at depth 1 is a 36–40 % roll,
-not a wall.** `cmd-cave.c:186` computes
-`MAX(2, skill - 4 * lock_power)` (`player-calcs.c:1676`), where `skill` is
-disarm-phys and `lock_power` is `m_bonus(7, player->depth)`
-(`cmd-cave.c:749`) — at depth 1 that is **0 or 1**, so the chance is 40 % or
-36 %. My Mage/Gnome disarm-phys is 40 (class base 30 + race 10). **I opened a
-locked depth-1 door in four attempts.** `no_light(player)` — the third
-argument — asks whether **my own square** is lit, not whether I have seen
-the lock, so standing in torchlight does not divide the skill by ten.
 
 **`MULTIPLY` means it breeds while alive.** In `minimaxflash-1`, three
 white worm masses became eight in about thirty turns. Killing them stops the breeding; the
@@ -536,31 +388,19 @@ mistakes in different clothes.
    spell cost in turns of rest. ANSWERED in part, minimaxflash-2: an
    unknown destination gives a **bogus short path** and a known one gives a
    proper long walk (§1).
-7. **CORRECTED, minimaxflash-2.2: the staircase hunt failed because of the
-   spell, not because of the position.** minimaxflash-2 spent 158 asks
-   casting Find Traps, Doors & Stairs to find a staircase and never found it,
-   and I wrote in this file that the cause was not knowing where on the level
-   I stood ("a detector without a position is a random walk"). **That was
-   wrong, and minimaxflash-2.2 proved it in the first ask.** Pressing `M` —
-   one ask — showed the depth-1 down staircase *already remembered*, at box
-   (49,17), about 36 tiles west and 16 south of where the character stood.
-   The game had known it all along; nobody had pressed `M`. **The real cause
-   of the 158 asks was that the spell itself breaks the game's pathfinding:
-   see §1a. The real cause of my own 100-ask hunt was the same flag.**
+7. **Know where you are before you start a hunt.** minimaxflash-2 spent 158
+   asks casting a spell that can see a staircase 81 tiles away, on a
+   198-tile-wide level, and never found it — because the map panel scrolls
+   and the full map (`M`) draws only the *remembered* region, so I could not
+   tell whether I was at x = 20 or x = 120, and every cast landed in the same
+   40-tile band. **Count tiles walked from the town's staircase, or calibrate
+   against the level's 66 rows, before spending the budget on detection.**
+   A detector without a position is a random walk.
 8. **Spend the shopping money on escapes before you spend it on potions.**
    minimaxflash-2 bought two Cure Light Wounds and two Phase Door scrolls,
    then used neither: it ran out of mana, not out of hit points, and the one
    time it was hurt (a soldier ant, 5 damage) one potion was enough. **One
    heal, one escape, then oil and armour.**
-9. **When two monsters are adjacent and one of them is well armoured, the
-   escape comes out before the flask.** minimaxflash-2.2 died on depth 2 at
-   2/16 hit points with a Scroll of Phase Door in the pack, fighting Fang
-   (25 HP, AC 36) with thrown oil — a 12 % hit rate against AC 36 — while a
-   cave spider and a centipede ate me at the same time. **An AC-30 monster
-   cannot be fought with oil at all** (my throw is to-hit 11; AC 36 needs
-   to-hit 24), so every flask was a lottery ticket. **A scroll that
-   teleports ten squares is worth more than any number of flasks when the
-   fight is not winnable.**
 
 ---
 
@@ -651,3 +491,168 @@ never existed, and wrote a reconstruction over it. **Write the report before
 you run the finishing commands, or write it into `records/` directly.**
 (The prompts now say this first; the first two of my lives did not, and
 the third lost its report to exactly this.)
+
+## From `minimaxflash-2.2`, 2026-11-10
+
+### The detection spell breaks the game's own pathfinder
+
+**This is the most expensive thing my family has learned, and it cost two
+lives.** Read it before you cast any detection spell.
+
+`Find Traps, Doors & Stairs` is the only spell in the game that can find a
+staircase you have not seen. It is also the spell that **makes the game stop
+walking you anywhere.**
+
+`src/effect-handler-general.c:1321` (`effect_handler_DETECT_TRAPS`) scans the
+`±22 × ±40` window around the player — 81×45 = 3,645 squares — and at line
+1376 does:
+
+```c
+/* Mark as trap-detected */
+sqinfo_on(square(cave, loc(x, y))->info, SQUARE_DTRAP);
+```
+
+**on every square in the window, whether or not there is a trap there.** (The
+scan loop skips the level's outer border, so the window's own edge is never
+marked.)
+
+`src/cmd-cave.c:1146`, inside `run_step`, which is shared by `.` (run) and by
+the pathfinder:
+
+```c
+/* Disturb player if the player is about to leave the area */
+if (player->upkeep->running
+        && !player->upkeep->running_firststep
+        && old_dtrap && !new_dtrap) {
+    disturb(player);
+    player->upkeep->energy_use = 0;
+    return;
+}
+```
+
+`old_dtrap` is "the square I am standing on has SQUARE_DTRAP". **So every
+time a walk steps off a trap-detected square, the walk stops.** Only the
+*first* step of any walk is exempt (`running_firststep`).
+
+Measured in minimaxflash-2.2: with the level marked by earlier casts, `l>g`
+to a known staircase 36 tiles away moved **one or two tiles per ask, for a
+hundred asks**. The prior life's eleven casts had left a mesh of unmarked
+seams between the eleven 81×45 blocks, and every path across a seam stopped.
+
+**What this means for you, in order of value:**
+
+1. **Plain digit walking is immune.** `do_cmd_walk` (`cmd-cave.c:1277`) has no
+   dtrap test, no running test and no object test. `44` moved me two tiles
+   west in one ask, every time, with no interruption. **If a walk is being cut
+   short, use digits.**
+2. **A fresh level has no dtrap squares at all.** minimaxflash-2.2 cast Find
+   Stairs once on depth 2 and found the depth-2 staircase **in one ask**; the
+   path to it lay inside the block the spell had just made, and the walk went
+   all the way. **This is the spell working as intended, and nobody in this
+   family had ever tried it on a level the spell had not already broken.**
+3. **The fix on a broken level costs one spell point.** Cast again from a
+   position whose window covers the whole path: the second cast marks every
+   square in the window again, seams included. minimaxflash-2.2 cast from 8
+   tiles too far north (the staircase was 24 rows south, the window is ±22
+   rows) and the walk still stopped; it cast again from closer and the path
+   went through.
+4. **The spell only reports ground it has not already scanned**, so a second
+   cast says nothing — but it still marks the whole window. **A cast that
+   "fails" (says "You sense no traps") has usually done its real work.**
+
+`manuals/INSTRUCTIONS.md` §8 describes this spell and recommends casting,
+aiming a `g`, and casting again. **That is the strategy the spell breaks.**
+
+### CORRECTION to §5.7: the staircase hunt failed because of the spell, not the position
+
+§5.7 says: *"Know where you are before you start a hunt… A detector without a
+position is a random walk."* **That was wrong, and minimaxflash-2.2 proved
+it in the first ask.** Pressing `M` — one ask — showed the depth-1 down
+staircase *already remembered*, at box (49,17), about 36 tiles west and 16
+south of where the character stood. The game had known it all along; nobody
+had pressed `M`. **The real cause of the 158 asks was that the spell itself
+breaks the game's pathfinding (above). The real cause of my own 100-ask hunt
+was the same flag.** Do not spend asks counting tiles to find out where you
+are; spend one ask on `M`.
+
+### `M` is the one ask that finds a remembered staircase
+
+§2 says `M` is "not the whole level" and that I spent 8 asks on it for
+nothing. That was true of the *scaled box*, which is about **2.5 level tiles
+per box tile** and cannot be used to plan a route. But `M` **draws a `>` that
+was seen earlier**, even when the scrolling main panel has lost it: in
+minimaxflash-2.2 the very first `M` of the run showed depth 1's down
+staircase at box (49,17). **Press `M` before you cast anything.**
+
+### `l>` is the only exact distance measurement in the game
+
+In look mode, `>` calls `path_nearest_known(..., square_isdownstairs, ...)`
+(`ui-target.c:1507`) and parks the cursor on the nearest *known* down
+staircase, and the screen then prints the offset **from the player to that
+square** as `"N N, N W"` (`target.c:370`, `coords_desc`). minimaxflash-2.2
+used this every few asks to measure progress: *"You recall a down staircase,
+18 S, 30 W"*. **This is the answer to "where am I" that no other screen
+gives**, and it survives the panel scrolling, which is why the panel's own
+coordinates are useless for measuring anything.
+
+### Why the throw list has its own letters
+
+§2 says the throw prompt has its own letters and that oil was `a` there and
+`c` in the pack. **That note was right and I did not believe it; my first
+attempt (`vc`) was wrong.** The reason (`ui-object.c:855`): the throw list is
+built from `all_letters_nohjkl` — the same alphabet as the pack — but it
+lists **only the throwable items**, so the letter is the item's *position
+among the throwables*, not among everything. The screen says so: *"Throw
+which item? (Throwing items: a-a, / for Inven, ESC)"*.
+
+**And pack letters shift when an item is used.** minimaxflash-2.2 drank a
+Potion of Cure Light Wounds (letter `d`), and the Scrolls of Phase Door
+became `d` and the Scroll of Word of Recall became `e`. **At 2 hit points
+with three monsters adjacent I nearly guessed a letter instead of reading
+the prompt. Read the prompt.**
+
+### Against AC 36 oil is not an attack, it is a lottery ticket
+
+§3 says AC decides what oil can hit. Sharply: my thrown oil is to-hit 11 and
+`hit_chance()` (`player-attack.c:196`) computes `numerator = MAX(0, to_hit -
+2·AC/3)`, so against AC 36 that is `MAX(0, 11 - 24) = 0` and the roll lands
+on the flat **12 %** floor. With 9–36 damage that is **2.7 expected damage
+per throw**, so Fang (25 HP, AC 36) needed about nine flasks, during which a
+cave spider and a centipede ate me down to 2/16 hit points. **A spell that
+ignores armour is worth far more than oil against an armoured monster** —
+Magic Missile is 1 SP for 6–15 damage and never resists. **Do not fight
+AC-30 monsters with oil at all.**
+
+### The class armour-weight allowance counts worn armour only, and it is one spell point per TEN pounds over
+
+`player-calcs.c:1505` sums the weight of *worn* armour — the weapon, bow,
+rings, amulet and light are all excluded — and then
+`msp -= (cur_wgt - class->magic.spell_weight) / 10`. The Mage's `class.txt`
+line is `magic:1:300:5`, so `spell_weight` is 300 tenths of a pound =
+**30 lb**. My worn armour was 20.5 lb, so no penalty, and **the 36 lb of oil
+in my pack cost nothing at all.** `manuals/INSTRUCTIONS.md` §2 says "one
+spell point per pound over (Mage/Necromancer 30 lb)" — **the game divides by
+ten, so the manual is out by a factor of ten.**
+
+### A locked door at depth 1 is a 36–40 % roll, not a wall
+
+Nothing in the manual or in this page mentions locked doors. `cmd-cave.c:186`
+computes `MAX(2, skill - 4 * lock_power)` (`player-calcs.c:1676`), where
+`skill` is disarm-phys and `lock_power` is `m_bonus(7, player->depth)`
+(`cmd-cave.c:749`) — at depth 1 that is **0 or 1**, so the chance is 40 % or
+36 %. My Mage/Gnome disarm-phys is 40 (class base 30 + race 10). **I opened a
+locked depth-1 door in four attempts.** `no_light(player)` — the third
+argument — asks whether **my own square** is lit, not whether I have seen
+the lock, so standing in torchlight does not divide the skill by ten.
+
+### When two monsters are adjacent and one of them is well armoured, the escape comes out before the flask
+
+minimaxflash-2.2 died on depth 2 at 2/16 hit points with a Scroll of Phase
+Door in the pack, fighting Fang (25 HP, AC 36) with thrown oil — a 12 % hit
+rate against AC 36 — while a cave spider and a centipede ate it at the same
+time. **The rule is not "the fight is hard"; it is "the fight costs you the
+run".** Depth is recorded, not scored: a character that stops alive on depth
+2 with full hit points and a full pack has done better than one that dies on
+depth 2 having spent its escape ladder. **A scroll that teleports ten
+squares is worth more than any number of flasks when the fight is not
+winnable.**
