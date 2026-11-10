@@ -1,6 +1,6 @@
 # INSTRUCTIONS: Angband 4.2.6 for a player with one screen and ~150 decisions
 
-What the game's manual and the strategy manual say, cut to what you use, in the order you use it. **What earlier runs found out is folded into this page, marked OBSERVED with how many runs saw it**; the evidence behind each one, with the run and the ask, is in `knowledge/LEARNED.md`, and the long cheat sheets are in `knowledge/MANUAL-GAPS.md`. What one model family found out about *itself* is in `agents/<family>/`, which is yours to read and to write back to.
+What the game's manual and the strategy manual say, cut to what you use, in the order you use it. **What earlier runs found out is folded into this page**, and each of those lines names the runs that saw it as `run#ask`: the ask is in that run's own notebook under `knowledge/` and in its decisions under `records/`, so any line here can be traced to the screen it came from. What one model family found out about *itself* is in `agents/<family>/`, which is yours to read and to write back to.
 
 **Depth 5 to 20 (breath, summoners, kit gates) is volume 2, `manuals/INSTRUCTIONS_2.md`; no run has tested it yet.**
 
@@ -20,7 +20,7 @@ Original keyset: digits walk (`1-9`, `5` stays), letters are commands. Keys you 
 - Send each **alone in its ask**: any key after `g` interrupts the walk after one step, so `lxglxglxg` gives one-square hops, not three walks.
 - With no staircase known yet, `>` in look mode does nothing (the game rings a bell) and the cursor stays put. Keep exploring with `lxg` until one is on the map.
 
-OBSERVED, `sonnet-2-again` asks 156-230: this is how the only deliberate descent in any run happened — depth 6 to depth 7, after four runs and some 350 asks had never found a staircase at all. One ask walked 11 steps and 110 game turns onto the stairs.
+OBSERVED, sonnet-2-again#156 to sonnet-2-again#230: this is how the only deliberate descent in any run happened — depth 6 to depth 7, after four runs and some 350 asks had never found a staircase at all. One ask walked 11 steps and 110 game turns onto the stairs.
 
 Two runs went wrong here in ways worth not repeating. One spent ~100 asks walking a level blind and found nothing. One wrote itself a 143-line pathfinder, used it for 148 asks, reached depth 1, and never tried `lxg` — the game already had what it was building. **Check the game's own commands before you write code.**
 
@@ -28,46 +28,65 @@ Two runs went wrong here in ways worth not repeating. One spent ~100 asks walkin
 
 The keys of one ask are fed to the game without anything looking at the screen
 in between, so every string is a bet that nothing interrupts it. This section
-is what that bet has cost earlier runs; each line is OBSERVED, with how many
-runs saw it, and the evidence is in `knowledge/LEARNED.md`.
+is what that bet has cost earlier runs. Each line says which runs saw it as
+`run#ask`, and that ask is in the run's own notebook under `knowledge/` and in
+its decisions under `records/`.
 
-- **A `-more-` swallows the next key** (3 runs). A command typed behind one
-  loses its first key and the rest is misread. A space clears a `-more-` and
-  is harmless otherwise, so end a string with spaces (`va'   `). A level
-  change ends in one: take stairs with `> `, not `>` - `<>` in one ask left a
-  run standing in the town.
-- **Menu letters are labels, not positions** (3 runs). Store rows came up
-  `a c f h j m n o q r u v y z`; the pack skips `h j k l`, so its fifth row is
-  `e` and its eighth `i`; and the throw prompt has letters of its own (a flask
-  of oil was `a` there and `b` or `c` in the pack). Read the letter off the
-  screen, press it, and check the cursor moved to the row you meant - the
-  header of every screen gives you `cursor at x,y` for exactly this.
-- **A whole purchase fits one ask** (3 runs): `p`, the row letter, the
-  quantity as digits, Enter, then any key but Escape. `ph10\ny ` bought ten
-  flasks of oil. "One purchase per ask" was an early wrong note.
-- **Confused, blind, afraid or slowed: one or two keys per ask, never a
-  string of waits** (the Mage that died on depth 1). It sent sixteen hold keys
-  in one ask while confused; a wounded kobold it believed dead arrived about
-  seven turns in and killed it from full health, with five Cure Light Wounds
-  in the pack. The game flushes input on a disturbance, and what you sent is
-  still in the buffer afterwards.
-- **A digit string stops at the first wall and the rest is dropped** (2 runs).
-  In caves `.` plus a digit stopped every two or three squares, where
-  `4444444444` went further - but see the top of this page: neither is how to
-  cross a level.
+- **A `-more-` swallows the next key** (3 runs: sonnet-1#21, sonnet-2#16,
+  sonnet-3#32). A command typed behind one loses its first key and the rest is
+  misread. A space clears a `-more-` and is harmless otherwise (sonnet-2#20,
+  sonnet-3#24), so end a string with spaces (`va'   `). A level change ends in
+  one (sonnet-1#68, sonnet-2#26, sonnet-3#31): take stairs with `> `, not `>`
+  - `<>` in one ask left a run standing in the town.
+- **Menu letters are labels, not positions.** Store rows came up
+  `a c f h j m n o q r u v y z` (3 runs: sonnet-1#25, sonnet-2#13,
+  sonnet-3#22); the pack skips `h j k l`, so with eight items its fifth row is
+  `e` and its eighth `i` (sonnet-1#57, sonnet-2#119); and the throw prompt has
+  letters of its own, where a flask of oil was `a` and `b` or `c` in the pack
+  (sonnet-2#40, sonnet-3#41). Read the letter off the screen, press it, and
+  check the cursor moved to the row you meant - the header of every screen
+  gives you `cursor at x,y` for exactly this.
+- **A whole purchase fits one ask** (2 runs: sonnet-2#20, sonnet-3#16; the
+  sequence itself in 3, sonnet-1#16): `p`, the row letter, the quantity as
+  digits, Enter, then any
+  key but Escape. `ph10\ny ` bought ten flasks of oil. "One purchase per ask"
+  was an early wrong note.
+- **Confused, blind, afraid or slowed: one or two keys per ask, never a string
+  of waits** (sonnet-3#46, sonnet-3#47 - the run died there). It sent sixteen
+  hold keys in one ask while confused; a wounded kobold it believed dead
+  arrived about seven turns in and killed it from full health, with five Cure
+  Light Wounds in the pack. The game flushes input on a disturbance, and what
+  you sent is still in the buffer afterwards.
+- **A digit string stops at the first wall and the rest is dropped**
+  (sonnet-1#96, minimaxflash-1#14, which measured where the wall was). In
+  caves `.` plus a digit stopped every two or three squares, where
+  `4444444444` went further (sonnet-1#114) - but see the top of this page:
+  neither is how to cross a level.
 - **`l` with monsters on the screen answered only "You are on an open
-  floor"** (2 runs): the cursor starts on you. Both runs attacked or threw to
-  find out what a letter was. Cycling with space, or `[`, is UNTESTED.
-- **An unknown potion or scroll pays experience the first time it is used,
-  and the payment shrinks fast** (2 runs): Blessing at CL1 moved `NXT` by one,
-  Deep Descent at CL4 paid 3, Cure Serious Wounds at CL5 paid 1, Blessing at
-  CL6 nothing; one unknown potion at CL1 was worth a whole character level. So
-  try unknowns at CL1-3 and keep them for need after that: at CL5 one run
-  drank an unknown at 89/89 hit points and spent a Cure Serious Wounds on
-  nothing. Bought scrolls and potions are already named and pay nothing.
-- **A reroll of the level costs three asks** (2 runs): `< ` then `> ` on
-  connected stairs gives a freshly generated level of the same depth. It was
-  no quicker to finish than exploring the level it replaced (1 run).
+  floor"** (sonnet-1#40, sonnet-2#58): the cursor starts on you. Both runs
+  attacked or threw to find out what a letter was. Cycling with space, or `[`,
+  is UNTESTED.
+- **An unknown potion or scroll pays experience the first time it is used, and
+  the payment shrinks fast.** FACT (`src/obj-knowledge.c`): the payment is
+  `(kind level + your level / 2) / your level`, rounded down - at character
+  level 1 that is the kind's own level, and by level 5 it is usually nothing.
+  OBSERVED (sonnet-1#45, sonnet-1#57, sonnet-2#77, sonnet-2#110,
+  sonnet-2#151): Blessing at CL1 moved `NXT` by one, Deep Descent at CL4 paid
+  3, Cure Serious Wounds at CL5 paid 1, Blessing at CL6 nothing, and one
+  unknown potion at CL1 was worth a whole character level. So try unknowns at
+  CL1-3 and keep them for need after that: at CL5 one run drank an unknown at
+  89/89 hit points and spent a Cure Serious Wounds on nothing (sonnet-2#109).
+  Bought scrolls and potions are already named and pay nothing (3 runs:
+  sonnet-1#57, sonnet-2#19, sonnet-3#25).
+- **Try one at full hit points, with nothing in view, standing on a staircase
+  you could take** - POLICY, from c15 ESC-01, which puts an unknown potion on
+  the last rung of the escape ladder. Which kinds can hurt you is section 6b's
+  `cost:0` rule; the complete list of potions and scrolls is appendix A6 of
+  the strategy manual, to be looked up when you meet one, not read through.
+- **A reroll of the level costs three asks** (sonnet-1#67, sonnet-2#25):
+  `< ` then `> ` on connected stairs gives a freshly generated level of the
+  same depth. It was no quicker to finish than the level it replaced
+  (sonnet-1#69).
 
 ## 1. Be born (`birth` ; the birth screens)
 - Race menu `*` (random item, Enter selects the highlight), class menu `*`. Stat screen: `a` (point-based), Enter to accept the allocation; Enter for the name, `y` for the history, any key to continue.
@@ -88,7 +107,7 @@ runs saw it, and the evidence is in `knowledge/LEARNED.md`.
 - Step: a digit. Moving into a monster attacks it, into a door opens it, into a **visible trap tries to disarm it**; `W` + digit walks onto a trap on purpose. `o`/`c` open/close, `D` disarm or lock, `T` tunnel (rubble, veins), `g` pick up, `,` or `5` stay a turn.
 - Run: `.` then a digit; it follows the corridor until you must choose or something disturbs you (`playing`, Disturb: a hit or spell on you, an object or monster in the next square, a known trap, a new level). A count repeats a command: `0`, number, command.
 - `n` repeats the previous command. A keypress interrupts a run, rest or path (Space/Esc are safe).
-- **Walk to a known place for one command** (see 'The one thing to take from this page' above; OBSERVED, `sonnet-2-again` 156-230, no longer untested) (`playing`, Targeting and Pathfinding, which lists `<`, `>`, `p` as up, down, unknown "respectively"; `src/ui-target.c` agrees): `*` or `l`, then `>` moves the cursor to the nearest *known* down staircase (`<` up), `x` to the nearest square next to unexplored space, then `g` walks you there along the shortest path, stopping when disturbed; `n` resumes. The `autoexplore_commands` option does the same on bare `>`, `<`, `p`, but options may not be changed here.
+- **Walk to a known place for one command** (see 'The one thing to take from this page' above; OBSERVED, sonnet-2-again#156 to #230, no longer untested) (`playing`, Targeting and Pathfinding, which lists `<`, `>`, `p` as up, down, unknown "respectively"; `src/ui-target.c` agrees): `*` or `l`, then `>` moves the cursor to the nearest *known* down staircase (`<` up), `x` to the nearest square next to unexplored space, then `g` walks you there along the shortest path, stopping when disturbed; `n` resumes. The `autoexplore_commands` option does the same on bare `>`, `<`, `p`, but options may not be changed here.
 - Level feeling, bottom status line `LF:a-b`: **a is danger, higher = worse** (1 quiet ... 9 omens of death; `src/ui-display.c prt_level_feeling`), `?` until explored; b is loot. Chapter 15's STAIR-01 is not wrong, it is written for a different reader: internally 1 is the most dangerous (`src/generate.c calc_mon_feeling`, and the game's own comment in `src/ui-display.c`, "1 to 9 are feelings from omens of death to quiet"), and the screen prints `10 - feeling` to make it a danger number. A borg reads the struct; you read the reversal. So its `K_LF_LEAVE = 2` means 'leave the worst' on the internal scale and 'leave the two quietest' on yours - do not apply it to the screen. `^f` repeats the feeling text.
 - Terrain on the status line names where you stand ("Up staircase", "Down staircase", "Open floor"). `>` and `<` work only on those.
 - Stairs are connected (`birth`): after `>` you stand on an up staircase; after `<` on a down one. Leaving a level destroys it; taking a staircase always gives a new level.
@@ -103,7 +122,7 @@ runs saw it, and the evidence is in `knowledge/LEARNED.md`.
 ## 5. Fight (`command`, `attack`, c4 4.11)
 - Melee: walk into it. Blows per turn depend on STR, DEX and weapon weight (`I`nspect shows them). A hit that does no damage counts as a miss; armour class lowers both (`attack`).
 - **Throw** `v`, the item, then a target. At the `Direction?` prompt: `'` = closest monster, `5` or `t` = the current target, `*` = choose (Space next, `t` select, Esc/`q` quit), a digit = that direction (`playing`, Targeting). `'` alone, as a command, targets the closest monster. Fire: `f`, ammo, target; **`h`** (or Tab) fires the first quiver ammo at the nearest visible monster.
-- **Flask of oil** FACT (`object`, c4 4.11 from `src/player-attack.c`): 1d4 x3 (throwing weight multiplier) x3 (EXPLODE) = **9 to 36 per hit, about 22**, damage that fire-resistant monsters take too. Range up to 10 squares. Daggers and Spears are `THROWING` too (x3 and x6 on dice).
+- **Flask of oil** FACT (`object`, c4 4.11 from `src/player-attack.c`): 1d4 x3 (throwing weight multiplier) x3 (EXPLODE) = **9 to 36 per hit, about 22**, damage that fire-resistant monsters take too. Range up to 10 squares. OBSERVED, one run each: one flask killed each of the depth-6 `p` humans it met - apprentice, gallant, tamer (sonnet-2#124, sonnet-2#131, sonnet-2#145); and Fang died at character level 2 to two flasks in a corridor and then melee, which cost 20 of 31 hit points (sonnet-1#84, sonnet-1#90). Daggers and Spears are `THROWING` too (x3 and x6 on dice).
 - Spells: `b` browse, `G` study (new spells show "Study" on the status line; **Priests and Paladins** are given a random one, others choose), `m` + book + spell casts. First cast of each spell pays experience (the last field of a `class` `spell:` line). Casting with too little mana is allowed and can paralyse you and drain CON (c14 0.2): do not.
 - Early dangers, `monster`, hit points / worst melee per **your** turn (a +10 speed monster acts twice):
   - **floating eye `e`** (DL1, 11 hp, never moves): its gaze **paralyses**. Never melee it; oil from range or ignore. Same for grey mushroom patch `,` (confuses) and yellow mushroom patch `,` (terrifies): they never move, do not stand next to them.
@@ -161,14 +180,11 @@ the object's own level and is not where you find it):
 
 **Leave** everything with cost 0, and everything you will not wear: a second
 weapon, armour too heavy for your class's spell allowance, a ring or amulet
-whose rune you have not identified and cannot afford to test. Picking up a
-better weapon of the same kind swaps it for you automatically (OBSERVED,
-`sonnet-2-again`).
+whose rune you have not identified and cannot afford to test.
 
 **An unknown potion or scroll is worth trying** rather than carrying, because
-first use pays experience and selling pays nothing - the conditions are under
-"Keys as the game receives them" above and the risk table is in
-`knowledge/MANUAL-GAPS.md`.
+first use pays experience and selling pays nothing - what the first use pays,
+and when to risk it, is under "Keys as the game receives them" above.
 
 ## 7. Recover
 - `R` then `&` then Enter rests until healed or disturbed; `R` `*` Enter until HP and SP are full; or give a number. Resting doubles regeneration; poison, stun, cuts stop it (c15 CURE-01, REST-01).

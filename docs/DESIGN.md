@@ -235,10 +235,10 @@ different seeds, each keeping its own notes, and were consolidated afterwards.
 
 Two consequences worth stating.
 
-**Parallel runs are what makes `confirmed` reachable.** An item in
-`LEARNED.md` may only be promoted when two *different* runs show it, so
-running two or four at once is how a consolidation gets something to agree
-with. Same inherited notes, different seeds, is the useful shape; same seed
+**Parallel runs are what makes a second witness reachable.** A line on the
+page may claim two runs only when two *different* runs show it, and it names
+them, so running two or four at once is how a consolidation gets something to
+agree with. Same inherited notes, different seeds, is the useful shape; same seed
 twice measures how much of a run is the model rather than the dungeon.
 
 **The savefile is the one thing that collides.** It is named after the

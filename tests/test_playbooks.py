@@ -131,18 +131,26 @@ def test_the_writing_comes_before_the_finishing_commands(name):
     assert report < playbook < commands
 
 
-@pytest.mark.parametrize('name', PROMPTS)
-def test_the_prompts_do_not_send_a_player_to_a_file_that_is_gone(name):
-    """NOTES.md was removed; nothing a player is told to read may point at it."""
-    assert 'NOTES.md' not in (pins.ROOT / name).read_text()
+# The three documents the knowledge layer shed on 2026-11-10, once the page
+# carried their content. `records/` and `knowledge/` keep their own words,
+# and consolidate.py and docs/CONSOLIDATE.md say what was removed and why.
+GONE = ('NOTES.md', 'LEARNED.md', 'MANUAL-GAPS.md')
+READING = ('PLAYGAME.txt', 'CONTINUEGAME.txt', 'README.md', 'AGENTS.md',
+           'docs/BRIEF.md', 'agents/README.md', 'manuals/INSTRUCTIONS.md',
+           'manuals/INSTRUCTIONS_2.md')
 
 
-def test_no_live_document_points_at_the_removed_notes_file():
-    """`records/` and `knowledge/` are history and keep their own words."""
-    live = [pins.ROOT / name for name in
-            ('README.md', 'AGENTS.md', 'docs/BRIEF.md', 'agents/README.md',
-             'manuals/INSTRUCTIONS.md', 'manuals/INSTRUCTIONS_2.md')]
-    live += sorted((pins.ROOT / 'src' / 'borg_runner').glob('*.py'))
-    stale = [path.name for path in live
-             if path.exists() and 'NOTES.md' in path.read_text()]
-    assert not stale, f'{stale} still send a reader to knowledge/NOTES.md'
+@pytest.mark.parametrize('name', READING)
+def test_nothing_a_player_reads_points_at_a_file_that_is_gone(name):
+    text = (pins.ROOT / name).read_text()
+    stale = [gone for gone in GONE if gone in text]
+    assert not stale, f'{name} still sends a reader to {stale}'
+
+
+def test_the_knowledge_directory_is_now_evidence_only():
+    """One file per run and nothing else: no distillate to keep in step."""
+    from borg_runner import consolidate
+    runs = consolidate.recorded_runs()
+    kept = sorted(path.name for path in run_module.KNOWLEDGE.glob('*.md')
+                  if path.stem not in runs)
+    assert not kept, f'{kept} are in knowledge/ and are not a run notebook'

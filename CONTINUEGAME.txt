@@ -73,8 +73,10 @@ write when you stop. Another family's directory is open to you - knowledge is
 not private here - and is worth opening when you inherit their character; you
 write only your own. Weigh them by what is behind them: a FACT or an OBSERVED
 line is the game or many runs, a playbook is one family's experience, a POLICY
-line is advice nobody has settled. The evidence behind each OBSERVED line is
-in `knowledge/LEARNED.md`, with the run and the ask.
+line is advice nobody has settled. An OBSERVED line names the runs that saw
+it as `run#ask`, and `knowledge/<run>.md` and `records/<run>/` are that run's
+notebook and decisions - including, where the run is one of your own past
+lives, yours.
 
 The manuals themselves are **not** in git: `scripts/setup.sh` clones them at
 the commits `pins.json` names, so the text is the same text for every run.

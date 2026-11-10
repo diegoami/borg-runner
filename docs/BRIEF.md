@@ -7,11 +7,11 @@ What follows is the same thing at length, with the reasons.
 
 You are the player. Read this, read the manuals, and play.
 
-**Read everything in `knowledge/`** — every earlier run's notebook, the filed
-knowledge in `LEARNED.md`, and the cheat sheets in `MANUAL-GAPS.md`. That is
-what this repository is for: a run that starts from what the last one worked
-out is the whole point, and nothing is gained by making you discover the throw
-keys again.
+**What earlier runs worked out is on the page**, as OBSERVED lines naming the
+runs that saw each one — and `knowledge/<run>.md` holds those runs' own
+notebooks if you want the words behind a line. That is what this repository is
+for: a run that starts from what the last one worked out is the whole point,
+and nothing is gained by making you discover the throw keys again.
 
 One thing is kept from you, and only this: **another run's decisions or report
 for the seed you are playing** (`runs/<name>/decisions.jsonl`, `REPORT.md`).
@@ -153,11 +153,12 @@ whole question here is what a reader does differently.
 | [manuals/INSTRUCTIONS.md](../manuals/INSTRUCTIONS.md) | the game's manual and the strategy manual distilled into what a player needs, in the order a player needs it, with **a block for every class** — find the one you drew, and with what earlier runs found folded in. Every line is labelled and says where it came from: **FACT** from the game's data or source, **OBSERVED** from runs with how many saw it, **POLICY** from the strategy manual to be tested, **UNTESTED** by anybody |
 | `agents/<family>/COMMON.md` and `<CLASS>.md` | your own model family's notes, written by its earlier sessions for this one — see below, and `borg_runner playbook --family <family>` |
 
-That page is about 23 KB and it is the reading, with your own family's pages
+That page is about 27 KB and it is the reading, with your own family's pages
 beside it. Everything below is **lookup** — go to it when you need a number or
-a page, not before. `knowledge/LEARNED.md` holds the evidence behind each
-OBSERVED line with the run and the ask, and `knowledge/MANUAL-GAPS.md` the
-long cheat sheets.
+a page, not before. Each OBSERVED line on the page names the runs that saw it
+as `run#ask`; `knowledge/<run>.md` is that run's own notebook and
+`records/<run>/` its decisions and replay, so any claim can be traced to the
+screen behind it.
 
 A player who has played this game before in this repository, and written up
 what that taught them, keeps their own generalisations here. These are

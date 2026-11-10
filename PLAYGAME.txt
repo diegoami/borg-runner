@@ -53,10 +53,11 @@ many runs, your playbook is one family's experience, a POLICY line is advice
 nobody has settled. Where your playbook contradicts an OBSERVED line, follow
 the OBSERVED line and say in your write-up which one held.
 
-Everything else in the repository is lookup. `knowledge/LEARNED.md` has the
-evidence behind each OBSERVED line, run and ask; `knowledge/MANUAL-GAPS.md`
-has the long cheat sheets; `manuals/INSTRUCTIONS_2.md` is depth 5 to 20 and no
-run has been there. Go to any of them for a number or a page, not before.
+Everything else in the repository is lookup. An OBSERVED line on the page
+names the runs that saw it as `run#ask`: `knowledge/<run>.md` is that run's own
+notebook and `records/<run>/` its decisions and its replay, so you can see the
+screen a claim came from. `manuals/INSTRUCTIONS_2.md` is depth 5 to 20, where
+no run has been. Go to any of them for a number or a page, not before.
 
 The manuals themselves are **not** in git: `scripts/setup.sh` clones them at
 the commits `pins.json` names, so the text is the same text for every run.
