@@ -3,6 +3,21 @@
 Three runs: seed 7 Half-Troll Warrior twice (alive, depth 1 at ask 125; alive, depth 6 at ask 153) and seed 11 Human Mage (died on depth 1 at character level 1, ask 48). Read after `manuals/INSTRUCTIONS.md`; where they disagree this file is what the game did. **(3 runs) / (2 runs)** = seen on separate runs; **(1 run)** = one run's word, a lead. Evidence for any line is in `knowledge/LEARNED.md` under the `[id]`; `MANUAL-GAPS.md` has the long cheat sheets. Gold, shop stock and depth-1 monsters are those two characters'.
 
 
+## One inherited note now explained by the source
+
+A run read Word of Recall in the town, watched the `Recall` marker sit for
+about forty turns with no teleport, and wrote that it might be a dud. It is
+not. `src/player-util.c` has "Players who haven't left town before go to level
+1", so recall from town takes you to **depth 1** - and `src/game-world.c`
+decrements the counter in `process_world`, which runs once every **ten game
+turns**, so 15+1d20 ticks is **150-340 game turns**. The run gave up at about
+a quarter of the minimum. Reading it in town is 125 gold spent on a slow trip
+to depth 1, not a no-op.
+
+This is what the note discipline is for: the run wrote what it saw and
+hedged - "either it resolves at the next transition or..." - instead of
+asserting, so the source could settle it later.
+
 ## Explore and descend with the game's own pathfinder
 
 **`lxg` to explore, `l>g` to reach a known down staircase, `l<g` to go back up**

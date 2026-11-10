@@ -15,8 +15,20 @@ Two parts, by design:
   value already looked up, so a claim is a (line, what, claimed, real) row.
 
 What it does not read is in `tests/test_instructions.py`'s docstring.
+
+Volume two (`manuals/INSTRUCTIONS_2.md`, depth 5 to 20) is read the same way with
+`check(volume=2)`. It borrows volume one's shorthand header, reuses the generic
+extractors (citations, chapter references, quotations) and `claim_monster` and
+`claim_spells`, and adds grammars for what only it says: counts over the whole
+monster list (every breather, summoner and unique in range must be in its table),
+arithmetic from the game's own formulas (breath damage and falloff, teleport
+distance, energy, hit points at a level, gold per pile) and what the strategy
+manual says against what the data says. Each claim can name the page's numbers it
+settles (`covers`), so `number_coverage` can say how many of the page's numbers
+nothing checks.
 """
 import bisect
+import functools
 import re
 import unicodedata
 from dataclasses import dataclass, field
@@ -92,6 +104,7 @@ class Report:
 
 # -- reading the page --------------------------------------------------------
 
+@functools.lru_cache(maxsize=512)
 def plain(text):
     """Lower case, no accents, no markdown, one space: for comparing names."""
     text = unicodedata.normalize('NFKD', text)
@@ -793,6 +806,11 @@ def find_monster(token, table):
     return None
 
 
+def worst_round(entry):
+    """Every blow at its maximum: the most one monster turn of melee can do."""
+    return sum(gd.dice_max(d) if d else 0 for d in blow_dice(entry))
+
+
 def blow_dice(entry):
     out = []
     for blow in entry.all('blow'):
@@ -906,7 +924,7 @@ def claim_monster(c, entry, label, scope, pos, base=None):
                same[0][1] if same else 'no friends: line', covers=at(pack, 1))
     upto = re.search(r'up to (\d+)( per its turn)?', scope)
     if upto and real_blows:
-        top = sum(gd.dice_max(d) or 0 for d in real_blows)
+        top = worst_round(entry)
         factor = 1 if upto[2] else 1 + (int(entry.first('speed')) - 110) // 10
         c.emit('monster damage', pos, f'{label} worst melee per ' +
                ('monster' if upto[2] else 'player') + ' turn', int(upto[1]), top * factor,
@@ -916,7 +934,7 @@ def claim_monster(c, entry, label, scope, pos, base=None):
         real = {int(entry.first(k)) for k in ('spell-freq', 'innate-freq') if entry.first(k)}
         c.emit('monster freq', pos, f'{label} casts 1 in N turns (spell-freq or innate-freq)',
                int(freq[1]), int(freq[1]) if int(freq[1]) in real else sorted(real) or 'no freq line',
-               covers=at(freq, 1))
+               covers=at(freq))
     flags = monster_flags(entry)
     for word, (where, needle) in KEYWORDS.items():
         if word in scope.lower():
@@ -1186,7 +1204,7 @@ def line_text(c, number):
     return c.text[c.starts[number - 1]:end]
 
 
-@extractor('citation shortcuts', minimum={1: 14, 2: 8}, volumes=(1, 2))
+@extractor('citation shortcuts', minimum={1: 14, 2: 11}, volumes=(1, 2))
 def citation_shortcuts(c):
     """The header's `object`/`store`/... = file conventions: every file named exists."""
     found = c.search(r'^Sources, so any line can be checked\..*$', re.M, 'the sources header')
@@ -1239,7 +1257,7 @@ def line_files(c, pos):
     return []
 
 
-@extractor('source and field citations', minimum={1: 32, 2: 40}, volumes=(1, 2))
+@extractor('source and field citations', minimum={1: 32, 2: 65}, volumes=(1, 2))
 def source_citations(c):
     """Every backticked token that names something in the pinned tree must exist."""
     keys = {path.name: gd.load(path.name)[1] for path in gd.GAMEDATA.glob('*.txt')}
@@ -1284,7 +1302,7 @@ def source_citations(c):
                        True, bool(valid))
 
 
-@extractor('chapter references', minimum={1: 23, 2: 15}, volumes=(1, 2))
+@extractor('chapter references', minimum={1: 23, 2: 22}, volumes=(1, 2))
 def chapter_references(c):
     """`c4 4.11`, `ESC-04`, `c15 ESC`: the section or rule must exist at the pin."""
     chapters = {n: gd.read_chapter(n) or '' for n in gd.strategy_chapter_files()}
@@ -1304,7 +1322,7 @@ def chapter_references(c):
                bool(re.search(rf'\b{m[1]}-\d\d\b', fifteen)), end=m.end())
 
 
-@extractor('quotations and document sections', minimum={1: 9, 2: 3}, volumes=(1, 2))
+@extractor('quotations and document sections', minimum={1: 9, 2: 4}, volumes=(1, 2))
 def quotations(c):
     """A phrase in double quotes is quoted from a source cited on its line."""
     sources = {}
@@ -1342,7 +1360,7 @@ def quotations(c):
             else:
                 found_in.append(name)
         c.emit('quotation', m.start(), f'"{m[1]}" appears in a source cited on the line '
-               f'({", ".join(names)})', True, bool(found_in), end=m.end())
+               f'({", ".join(names)})', True, bool(found_in), end=m.end(), covers=[m.span(1)])
     for m in c.finditer(r'`(playing|attack|command|birth)`,\s+([A-Z][A-Za-z ]+?)'
                         r'(?=[,:)]|\s+which)'):
         titles = rst_titles(source_text(m[1]) or '')
@@ -1384,6 +1402,7 @@ def spell_table():
     return {e.value: e for e in gd.load('monster_spell.txt')[0]}
 
 
+@functools.lru_cache(maxsize=1)
 def projection_entries():
     """`projection.txt` with each `code:` given to the `name:` that FOLLOWS it
     (the file writes `code:` first, so the generic parser files it under the
@@ -1431,6 +1450,9 @@ def monster_table_two():
     for key in list(table):
         if ',' in key:
             table.setdefault(key.split(',')[0], table[key])
+    for short, full in MONSTER_SHORT.items():
+        if full in table:
+            table.setdefault(short, table[full])
     return table
 
 
@@ -1480,7 +1502,7 @@ def find_row_monster(c, cell, table):
     return entry
 
 
-@extractor('depth bands', minimum=15, volumes=(2,))
+@extractor('depth bands', minimum=17, volumes=(2,))
 def depth_bands(c):
     header, rows = table_cells(c, 'kinds per depth band')
     bands = []
@@ -1502,7 +1524,7 @@ def depth_bands(c):
     breaths = [n for n in spells if n.startswith('BR_')]
     found = c.search(r'`hit:100`', name='the breath always hits claim')
     c.emit('breath', found.start() if found else 0, 'every BR_ spell has hit:100 (no armour roll)', True,
-           all(spells[n].first('hit') == '100' for n in breaths))
+           all(spells[n].first('hit') == '100' for n in breaths), covers=[found.span()] if found else ())
     found = c.search(r'no `message-save` line on any `BR_` spell', name='breath has no saving throw')
     c.emit('breath', found.start() if found else 0, 'no BR_ spell has a message-save line (no saving throw)',
            True, not any(spells[n].has('message-save') for n in breaths))
@@ -1524,9 +1546,9 @@ def chapter15_depth_gates():
     return gates
 
 
-@extractor('kit gates', minimum=14, volumes=(2,))
+@extractor('kit gates', minimum=21, volumes=(2,))
 def kit_gates(c):
-    header, rows = table_cells(c, "The rows in this volume's range")
+    _, rows = table_cells(c, "Rows in this volume's range")
     gates, table = chapter15_depth_gates(), monster_table_two()
     for row in rows:
         depth_cell, need_cell, anchor_cell = row[:3]
@@ -1543,19 +1565,38 @@ def kit_gates(c):
             entry = find_monster(name, table)
             c.emit('gate', anchor_cell[1], f'c15 DEPTH-02 anchor {name}: depth', said_depth,
                    depth_of(entry) if entry else 'no such monster')
+    carry = c.search(r'carry (\d+)\+ and leave rather than trade', name='the cure potions to carry')
+    if carry:
+        c.emit('gate', carry.start(), 'cure potions to carry is the c15 DEPTH-02 DL5 figure', int(carry[1]),
+               int(re.search(r'(\d+)\+ cure potions', gates[5][0])[1]), covers=[carry.span(1)])
     found = c.search(r'Cure Light Wounds heals (\d+) \(`object`\), under his (\d+)',
                      name='the Cure Light Wounds against Bullroarer line')
     if found:
         potion = find_object('Cure Light Wounds', types=['potion'])
         c.emit('gate', found.start(), 'Cure Light Wounds heals', int(found[1]),
                int(potion.first('dice')) if potion.first('dice') else None, covers=[found.span(1)])
-        bull = table[plain('Bullroarer')]
-        top = sum(gd.dice_max(d) or 0 for d in blow_dice(bull)) * (1 + (int(bull.first('speed')) - 110) // 10)
+        bull = find_monster('Bullroarer', table)
+        top = worst_round(bull) * (1 + (int(bull.first('speed')) - 110) // 10)
         c.emit('gate', found.start(), 'Bullroarer worst melee per player turn', int(found[2]), top,
                covers=[found.span(2)])
 
 
-@extractor('monster mentions', minimum=40, volumes=(2,))
+    m = c.search(r'the chapter\'s "\+(\d+)" for him is \+(\d+) in `monster`', name='the Bullroarer speed disagreement')
+    if m:
+        bull = find_monster('Bullroarer', table)
+        fifteen = gd.read_chapter(15) or ''
+        c.emit('manual says', m.start(), 'c15 DEPTH-02 gives Bullroarer this speed', int(m[1]),
+               int(re.search(r'Bullroarer \(D5, \+(\d+)\)', fifteen)[1]), covers=[m.span(1)])
+        c.emit('gate', m.start(), 'Bullroarer speed in monster.txt', int(m[2]),
+               int(bull.first('speed')) - 110, covers=[m.span(2)])
+    m = c.search(r'The next gate, DL(\d+), wants (?P<need>.*?) \(c15 DEPTH-02\)', name='the DL25 gate')
+    if m:
+        said = squash(m['need']).replace(' and ', '; ')
+        c.emit('gate', m.start(), 'depth 25 gate requirement is c15 DEPTH-02\'s', said,
+               gates.get(int(m[1]), ('no such gate',))[0], covers=[m.span(1), m.span('need')])
+
+
+@extractor('monster mentions', minimum=42, volumes=(2,))
 def monster_mentions(c):
     """`**name** (DL5, +10, 60 hp, ...)`: every figure in the parentheses is looked up."""
     table = monster_table_two()
@@ -1568,7 +1609,7 @@ def monster_mentions(c):
             claim_monster(c, entry, name, m[2], m.start(), base=m.start(2))
 
 
-@extractor('monster depths in lists', minimum=14, volumes=(2,))
+@extractor('monster depths in lists', minimum=24, volumes=(2,))
 def monster_depth_lists(c):
     """`Orfax and tengu (DL10), quasit (DL16)`: each name's depth."""
     table = monster_table_two()
@@ -1583,21 +1624,37 @@ def monster_depth_lists(c):
                    depth_of(entry), covers=[m.span(2)])
 
 
-@extractor('monster lists under a spell or blow', minimum=8, volumes=(2,))
+def monster_vocabulary():
+    """Every spell, blow effect and flag a monster entry can carry."""
+    words = set()
+    for entry in gd.load('monster.txt')[0] + gd.load('monster_base.txt')[0]:
+        for key, value, _ in entry.fields:
+            if key in ('spells', 'blow', 'flags'):
+                words.update(re.findall(r'[A-Z][A-Z_0-9]+', value))
+    return words
+
+
+@extractor('monster lists under a spell or blow', minimum=13, volumes=(2,))
 def monster_token_lists(c):
     """`TELE_TO casters pull you back: Orfax and tengu`: every name after the colon
     has that spell, blow or flag."""
     table = monster_table_two()
     inner = name_regex(table)
-    for m in c.finditer(r'\b([A-Z][A-Z]+(?:_[A-Z0-9]+)+)\b[^:.\n]{0,70}: ([^.\n]+)'):
-        token = m[1]
-        for name in inner.finditer(plain_keep(m[2])):
+    vocabulary = monster_vocabulary()
+    for word in c.finditer(r'\b([A-Z][A-Z_0-9]{2,})\b'):
+        token = word[1]
+        if token not in vocabulary:
+            continue
+        m = re.match(r'[^:.\n]{0,70}: ([^.\n]+)', c.text[word.end():])
+        if not m:
+            continue
+        for name in inner.finditer(plain_keep(m[1])):
             entry = find_monster(name[1], table)
             have = set()
             for key, value, _ in entry.fields:
                 if key in ('spells', 'blow', 'flags'):
                     have.update(re.findall(r'[A-Z][A-Z_0-9]+', value))
-            c.emit('monster trait', m.start(), f'{name[1]} has {token}', True,
+            c.emit('monster trait', word.start(), f'{name[1]} has {token}', True,
                    token in have or token in monster_flags(entry))
 
 
@@ -1667,14 +1724,19 @@ def monster_spell_damage(c):
         c.emit('spell damage', formula.start(), 'BO_FIRE dice', f'$B+{formula[1]}', dice,
                covers=[formula.span(1), formula.span(2)])
         c.emit('spell damage', formula.start(), 'BO_FIRE B = power / N', f'B:SPELL_POWER:/ {formula[2]}', expr)
-    reserve = c.search(r'(\d+) \+ the (\d+)-point reserve \(c15 `K_HP_RESERVE`, max\(20, 10%\)\) = (\d+)',
-                       name='the druid bolt plus reserve sum')
+    reserve = c.search(r'(\d+) \+ the (\d+)-point reserve \(c15 `K_HP_RESERVE`, max\(20, 10%\)\) = (\d+), so (\d+) is the '
+                       r'round number above', name='the druid bolt plus reserve sum')
     if reserve:
         druid = table[plain('druid')]
         bolt = spell_max_damage(spells['BO_FIRE'], int(druid.first('depth')))
         c.emit('spell damage', reserve.start(), 'druid BO_FIRE plus reserve is the sum', int(reserve[3]),
                bolt + int(reserve[2]), covers=[reserve.span(1), reserve.span(2), reserve.span(3)])
         c.emit('spell damage', reserve.start(), 'the druid bolt in the sum', int(reserve[1]), bolt)
+        gate = chapter15_depth_gates()[15][0]
+        c.emit('gate', reserve.start(), 'the round number is the c15 DEPTH-02 hit points for DL15',
+               int(reserve[4]), int(re.match(r'(\d+) max hp', gate)[1]), covers=[reserve.span(4)])
+        c.emit('gate', reserve.start(), 'the round number is above the bolt plus the reserve', True,
+               int(reserve[4]) > int(reserve[3]))
 
 
 STORE_NAMES = {'Alchemist': 'STORE_ALCHEMY', 'Magic shop': 'STORE_MAGIC', 'General Store': 'STORE_GENERAL',
@@ -1756,12 +1818,12 @@ def extract_energy_table():
     return [int(n) for n in re.findall(r'\b(\d+),', re.sub(r'/\*.*?\*/', '', body[1]))]
 
 
-@extractor('escape table', minimum=24, volumes=(2,))
+@extractor('escape table', minimum=18, volumes=(2,))
 def escape_table(c):
     object_table_two(c, 'FACT (`src/effect-handler-general.c TELEPORT`', 'escape')
 
 
-@extractor('teleport arithmetic', minimum=24, volumes=(2,))
+@extractor('teleport arithmetic', minimum=27, volumes=(2,))
 def teleport_arithmetic(c):
     constants_, handler = constants(), gd.read_source('src/effect-handler-general.c') or ''
     phase = find_object('Phase Door', types=['scroll'])
@@ -1819,11 +1881,13 @@ def teleport_arithmetic(c):
         staff = find_object('Teleportation', types=['staff'])
         c.emit('teleport', m.start(), 'Staff of Teleportation charges:', f'{m[1]}+d{m[2]}',
                staff.first('charges'), covers=[m.span(1), m.span(2)])
-    m = c.search(r'from DL(\d+) is DL(\d+)', name='Deep Descent from DL15')
+    m = c.search(r'drops you to (\d+) levels below your deepest: deepest DL(\d+), you land on DL(\d+)', name='Deep Descent from DL15')
     if m:
         skip = constants_.get('world:stair-skip')
-        c.emit('teleport', m.start(), 'Deep Descent lands this far below your deepest', int(m[2]),
-               int(m[1]) + 4 // skip + 1, covers=[m.span(1), m.span(2)])
+        c.emit('teleport', m.start(), 'Deep Descent lands this far below your deepest', int(m[1]),
+               4 // skip + 1, covers=[m.span(1)])
+        c.emit('teleport', m.start(), 'Deep Descent from DL15 lands on DL20', int(m[3]),
+               int(m[2]) + 4 // skip + 1, covers=[m.span(2), m.span(3)])
     m = c.search(r'goes up or down at random, even odds; it cannot go up from the town', name='Teleport Level')
     if m:
         c.emit('source', m.start(), 'TELEPORT_LEVEL is a coin flip when both ways are legal', True,
@@ -1846,6 +1910,13 @@ def teleport_arithmetic(c):
                bool(curse and 'NO_TELEPORT' in curse.flags()))
         c.emit('source', m.start(), 'both teleports say "Teleportation forbidden!" under the curse', True,
                handler.count('Teleportation forbidden!') >= 3 and 'OF_NO_TELEPORT' in handler)
+    m = c.search(r'the game learns the curse only when it takes effect \(`id-type:on effect`, `object_property`\)',
+                 name='when the curse is learned')
+    if m:
+        ban = next((e for e in gd.load('object_property.txt')[0]
+                    if e.first('code') == 'NO_TELEPORT'), None)
+        c.emit('curse', m.start(), 'NO_TELEPORT is identified on effect (object_property.txt)', 'on effect',
+               ban.first('id-type') if ban else None)
     m = c.search(r'only a teleport of (\d+) or less works', name='the no-teleport square rule')
     if m:
         c.emit('source', m.start(), 'a no-teleport square blocks a teleport longer than 10', True,
@@ -1870,30 +1941,32 @@ SIDE_EFFECTS = {'destroys pack items': 'inven_damage', 'poisons': 'TMD_POISONED'
                 'blinds': 'TMD_BLIND', 'stuns': 'TMD_STUN', 'cuts': 'TMD_CUT'}
 
 
-@extractor('breath elements', minimum=40, volumes=(2,))
+@extractor('breath elements', minimum=48, volumes=(2,))
 def breath_elements(c):
-    header, rows = table_cells(c, 'FACT: damage = the breather')
+    _, rows = table_cells(c, 'FACT: damage = the breather')
     by_name = projection_by_name()
+    adjust = gd.read_source('src/project-player.c') or ''
+    seen = set()
     for row in rows:
-        element = by_name.get(row[0][0].lower())
-        if element is None:
-            c.emit('breath', row[0][1], f'{row[0][0]} is a projection in projection.txt', True, False)
-            continue
-        for index, field_name in ((1, 'divisor'), (2, 'damage-cap')):
-            cell = row[index]
-            c.emit('breath element', cell[1], f'{element.value} {field_name}', int(cell[0]),
-                   int(element.first(field_name)), covers=numbers_in(cell))
-        note = row[3]
-        body = handler_body(element.first('code'))
-        for word, token in SIDE_EFFECTS.items():
-            if word in note[0]:
-                c.emit('breath element', note[1], f'{element.value} breath: {word} ({token} in its handler)',
-                       True, token in body)
-        if 'halved' in note[0]:
-            adjust = gd.read_source('src/project-player.c') or ''
-            c.emit('breath element', note[1], 'acid is halved when it eats a piece of armour (minus_ac)',
-                   True, 'type == PROJ_ACID && p && minus_ac(p)' in adjust)
-    seen = {r[0][0].lower() for r in rows}
+        for name in row[0][0].split(', '):
+            element = by_name.get(name.lower())
+            if element is None:
+                c.emit('breath', row[0][1], f'{name} is a projection in projection.txt', True, False)
+                continue
+            seen.add(name.lower())
+            for index, field_name in ((1, 'divisor'), (2, 'damage-cap')):
+                cell = row[index]
+                c.emit('breath element', cell[1], f'{element.value} {field_name}', int(cell[0]),
+                       int(element.first(field_name)), covers=numbers_in(cell))
+            note = row[3]
+            body = handler_body(element.first('code'))
+            for word, token in SIDE_EFFECTS.items():
+                if word in note[0]:
+                    c.emit('breath element', note[1], f'{element.value} breath: {word} ({token} in its handler)',
+                           True, token in body)
+            if 'halved' in note[0] and name.lower() == 'acid':
+                c.emit('breath element', note[1], 'acid is halved when it eats a piece of armour (minus_ac)',
+                       True, 'type == PROJ_ACID && p && minus_ac(p)' in adjust)
     used = {by_name[projection_name(code)].value for m in real_monsters() if in_range(m, 5, 24)
             for code in breath_codes(m)}
     c.emit('breath element', 0, 'every element a monster of DL5-24 breathes is in the table', [],
@@ -1904,7 +1977,7 @@ def breath_elements(c):
         c.emit('source', found.start(), 'breath_dam: hp / divisor, capped by damage_cap', True,
                'dam = hp / element->divisor;' in source and 'if (dam > element->damage_cap)' in source)
     m = c.search(r'acid, lightning, fire, cold and poison are (\d+)/(\d+) per resist level; light, dark, '
-                 r'sound and shards (\d+)/\((8\+1d4)\) per level', name='the resist factors')
+                 r'sound and shards (\d+)/\((\d+\+\d+d\d+)\) per level', name='the resist factors')
     if m:
         for name in ('acid', 'lightning', 'fire', 'cold', 'poison'):
             p = by_name[name]
@@ -1919,32 +1992,34 @@ def breath_elements(c):
     m = c.search(r'adds one level and no more than (\d+) count', name='the temporary resist cap')
     if m:
         calcs = gd.read_source('src/player-calcs.c') or ''
-        cap = re.search(r'temp_resist\]\.res_level\s*<\s*(\d+)\)\s*\{\s*state->el_info\[[^\]]*\]\.res_level\+\+',
-                        calcs)
+        cap = re.search(r'temp_resist\]\.res_level\s*<\s*(\d+)\)\s*\{\s*state->el_info\[.*?\]\.res_level\+\+',
+                        calcs, re.S)
         c.emit('source', m.start(), 'a timed resist adds one level only below the cap (player-calcs.c)',
                int(m[1]), int(cap[1]) if cap else None, covers=[m.span(1)])
     m = c.search(r'potion alone is (\d+)/(\d+) and a permanent resist plus the potion is (\d+)/(\d+)',
                  name='one and two resist levels')
     if m:
-        c.emit('resist', m.start(), 'one level of 1/3 is 1/3, two are 1/9', (1, 3, 1, 9),
-               (int(m[1]), int(m[2]), int(m[3]), int(m[4])), ok=(int(m[1]), int(m[2]), int(m[3]), int(m[4]))
-               == (1, 3, 1, 3 ** 2), covers=[m.span(i) for i in (1, 2, 3, 4)])
-    m = c.search(r'is a (\d+)-degree cone \(`BREATH:\.\.\.:0:(\d+)`\), full strength out to (\d+) squares '
-                 r'and then (\d+)/\(distance \+ 1\) of it: (\d+)% at (\d+) squares, (\d+)% at (\d+)',
+        acid = by_name['acid']
+        one = (int(acid.first('numerator')), int(acid.first('denominator')))
+        c.emit('resist', m.start(), 'one level of 1/3 is 1/3, two are 1/9',
+               (int(m[1]), int(m[2]), int(m[3]), int(m[4])), (one[0], one[1], one[0] ** 2, one[1] ** 2),
+               covers=[m.span(i) for i in (1, 2, 3, 4)])
+    m = c.search(r'is a (\d+)-degree cone \(`BREATH:\.\.\.:(\d+):(\d+)`\), full strength out to (\d+) squares '
+                 r'and then (\d+)/\(distance \+ (\d+)\) of it: (\d+)% at (\d+) squares, (\d+)% at (\d+)',
                  name='the breath falloff')
     if m:
         spells = spell_table()
-        degrees = {int(next(v for k, v, _ in spells[n].fields if k == 'effect').split(':')[3])
-                   for n in spells if n.startswith('BR_')}
-        c.emit('breath', m.start(), 'every BR_ spell is this many degrees', {int(m[1])}, degrees,
-               covers=[m.span(1), m.span(2)])
-        c.emit('breath', m.start(), '(BREATH:...:0:N) is the degrees', int(m[2]), int(m[1]))
+        params = {tuple(next(v for k, v, _ in spells[n].fields if k == 'effect').split(':')[2:4])
+                  for n in spells if n.startswith('BR_')}
+        c.emit('breath', m.start(), 'every BR_ spell is BREATH:X:radius:degrees', {(m[2], m[3])}, params,
+               covers=[m.span(2), m.span(3)])
+        c.emit('breath', m.start(), 'the cone is this many degrees', int(m[1]), int(m[3]), covers=[m.span(1)])
         diameter = 4 * 60 // int(m[1])
-        c.emit('breath', m.start(), 'full strength out to diameter - 1 squares', int(m[3]), diameter - 1,
-               covers=[m.span(3)])
-        c.emit('breath', m.start(), 'then diameter / (distance + 1) of the strength', int(m[4]), diameter,
+        c.emit('breath', m.start(), 'full strength out to diameter - 1 squares', int(m[4]), diameter - 1,
                covers=[m.span(4)])
-        for share_at, dist_at in ((5, 6), (7, 8)):
+        c.emit('breath', m.start(), 'then diameter / (distance + 1) of the strength', (int(m[5]), int(m[6])),
+               (diameter, 1), covers=[m.span(5), m.span(6)])
+        for share_at, dist_at in ((7, 8), (9, 10)):
             c.emit('breath', m.start(), f'strength at {m[dist_at]} squares (%)', int(m[share_at]),
                    round(100 * diameter / (int(m[dist_at]) + 1)), covers=[m.span(share_at), m.span(dist_at)])
         project = (gd.read_source('src/project.c') or '') + (gd.read_source('src/effect-handler-attack.c') or '')
@@ -1966,10 +2041,10 @@ def projection_name(code):
     return projection_by_code()[code].value.lower()
 
 
-@extractor('breather table', minimum=120, volumes=(2,))
+@extractor('breather table', minimum=115, volumes=(2,))
 def breather_table(c):
-    header, rows = table_cells(c, 'Every breather of DL5-20')
-    table, by_name = monster_table_two(), projection_by_name()
+    _, rows = table_cells(c, 'Every breather of DL5-20')
+    table = monster_table_two()
     listed = set()
     for row in rows:
         name, depth, hp, element, breath, freq = row[:6]
@@ -2018,9 +2093,9 @@ def breather_table(c):
                rows_by['baby multi-hued dragon'], covers=[found.span(3)])
 
 
-@extractor('summoner table', minimum=60, volumes=(2,))
+@extractor('summoner table', minimum=56, volumes=(2,))
 def summoner_table(c):
-    header, rows = table_cells(c, 'FACT, every summoner of DL5-20')
+    _, rows = table_cells(c, 'FACT, every summoner of DL5-20')
     table, spells = monster_table_two(), spell_table()
     listed = set()
     for row in rows:
@@ -2050,12 +2125,34 @@ def summoner_table(c):
             at = m.start('body') + k.start(2)
             c.emit('summoner', at, f'{k[1]} dice: (attempts)', int(k[2]), int(dice) if dice else None,
                    covers=[(at, at + len(k[2]))])
+    m = c.search(r'summoners have (\d+) to (\d+) hp and an oil flask averages about (\d+)', name='summoner hit points and oil')
+    if m:
+        hps = [int(x.first('hit-points')) for x in real_monsters() if x.value in listed]
+        c.emit('summoner', m.start(), 'least hit points of a summoner in range', int(m[1]), min(hps), covers=[m.span(1)])
+        c.emit('summoner', m.start(), 'most hit points of a summoner in range', int(m[2]), max(hps), covers=[m.span(2)])
+        flask = find_object('Flask of oil', types=['flask'])
+        n, sides = (int(x) for x in flask.first('attack').split(':')[0].split('d'))
+        mult = (2 + int(flask.first('weight')) // 12) * (3 if 'EXPLODE' in flask.flags() else 1)
+        c.emit('summoner', m.start(), 'a flask of oil averages (volume 1)', int(m[3]),
+               round(n * (sides + 1) / 2 * mult), covers=[m.span(3)])
     m = c.search(r'stops when the sum reaches your depth x the summoner\'s own level, or the attempts run out',
                  name='the summon loop')
     if m:
         c.emit('source', m.start(), 'SUMMON adds temp * temp and stops at depth * rlev or summon_max', True,
                'val += temp * temp;' in handler and 'val < player->depth * rlev' in handler
                and 'attempts < summon_max' in handler)
+    m = c.search(r'drawn up to level \(depth \+ summoner level\)/(\d+) \+ (\d+) and appears within (\d+) squares of '
+                 r'the summoner', name='how strong a summoned monster is')
+    if m:
+        summon = gd.read_source('src/mon-summon.c') or ''
+        c.emit('source', m.start(), 'summon_specific draws up to (depth + lev) / 2 + 5',
+               (int(m[1]), int(m[2])), (int(m[1]), int(m[2]))
+               if f'(player->depth + lev) / {m[1]} + {m[2]}' in summon else None,
+               covers=[m.span(1), m.span(2)])
+        c.emit('source', m.start(), 'summon_specific places within 4 squares of the summoner', int(m[3]),
+               int(m[3]) if f'for (d = 1; d < {int(m[3]) + 1}; ++d)' in summon else None, covers=[m.span(3)])
+        c.emit('source', m.start(), 'a monster summon is placed at the summoner (mon->grid)', True,
+               'summon_specific(mon->grid, rlev + level_boost, summon_type' in handler)
     m = c.search(r'`S_KIN` calls monsters of the summoner\'s own base', name='kin')
     if m:
         c.emit('source', m.start(), 'S_KIN keeps only monsters of the summoner\'s base', True,
@@ -2065,18 +2162,19 @@ def summoner_table(c):
         animal = next((e for e in gd.load('summon.txt')[0] if e.value == 'ANIMAL'), None)
         c.emit('docs', m.start(), 'summon.txt: ANIMAL is race-flag ANIMAL', 'ANIMAL',
                animal.first('race-flag') if animal else None)
-    m = c.search(r'(six) of the (eight) \(all but the priest and the druid\) have BLINK', name='blink summoners')
+    m = c.search(r'(\w+) of the (\w+) \(all but the priest and the druid\) have BLINK', name='blink summoners')
     if m:
         every = [x for x in real_monsters() if in_range(x) and any(s.startswith('S_') for s in spell_names(x))]
         with_blink = [x for x in every if 'BLINK' in spell_names(x)]
         without = sorted(plain(x.value) for x in every if 'BLINK' not in spell_names(x))
         c.emit('summoner', m.start(), 'summoners without BLINK', ['druid', 'priest'], without)
-        c.emit('summoner', m.start(), 'summoners with BLINK (six)', 6, len(with_blink), covers=[m.span(1)])
-        c.emit('summoner', m.start(), 'summoners (eight)', 8, len(every), covers=[m.span(2)])
+        words = {'four': 4, 'five': 5, 'six': 6, 'seven': 7, 'eight': 8, 'nine': 9}
+        c.emit('summoner', m.start(), 'summoners with BLINK', words.get(m[1]), len(with_blink), covers=[m.span(1)])
+        c.emit('summoner', m.start(), 'summoners in range', words.get(m[2]), len(every), covers=[m.span(2)])
     for m in c.finditer(r'(Orfax|Boldor) comes with (?P<list>[^.;]*)'):
         entry = table[plain(m[1])]
         friends = {v.split(':')[2].lower(): v.split(':')[1] for v in entry.all('friends')}
-        for k in re.finditer(r'(\d+d\d+) ([a-z ]+?)s?(?= and |,|$|\.)', m['list']):
+        for k in re.finditer(r'(\d+d\d+) ([a-z ]+?)s?(?= and |,| \(|$|\.)', m['list']):
             c.emit('summoner', m.start('list') + k.start(),
                    f'{m[1]} comes with {k[2]}: dice', k[1], friends.get(k[2].lower()),
                    covers=[(m.start('list') + k.start(1), m.start('list') + k.end(1))])
@@ -2091,9 +2189,9 @@ NOTE_WORDS = {
 }
 
 
-@extractor('unique table', minimum=70, volumes=(2,))
+@extractor('unique table', minimum=88, volumes=(2,))
 def unique_table(c):
-    header, rows = table_cells(c, 'FACT, every unique in range')
+    _, rows = table_cells(c, 'FACT, every unique in range')
     table = monster_table_two()
     listed = set()
     for row in rows:
@@ -2107,7 +2205,7 @@ def unique_table(c):
                int(entry.first('speed')) - 110, covers=numbers_in(speed))
         c.emit('unique', hp[1], f'{name[0]} hit-points', int(hp[0]), int(entry.first('hit-points')),
                covers=numbers_in(hp))
-        top = sum(gd.dice_max(d) or 0 for d in blow_dice(entry))
+        top = worst_round(entry)
         c.emit('unique', per_turn[1], f'{name[0]} worst melee per player turn', int(per_turn[0]),
                top * (1 + (int(entry.first('speed')) - 110) // 10), covers=numbers_in(per_turn))
         c.emit('unique', name[1], f'{name[0]} is a UNIQUE', True, 'UNIQUE' in entry.flags())
@@ -2181,21 +2279,21 @@ def class_books(c):
                    before[-1][1] if before else None, real[0])
     c.emit('class', 0, 'the class paragraphs are the casters with town books', sorted(seen),
            sorted(e.value for e in classes.values() if e.has('magic')))
-    m = c.search(r'Town books hold (?P<town>[^;]*); dungeon-only books hold (?P<dungeon>[^.]*)\.', name='teleport books')
+    m = c.search(r'[Tt]own books hold (?P<town>[^;]*); dungeon-only books hold (?P<dungeon>[^.]*)\.', name='teleport books')
     if m:
         for which, kind in (('town', 'town'), ('dungeon', 'dungeon')):
             for k in re.finditer(r'(Mage|Necromancer|Rogue|Priest) (Teleport Self|Shadow Shift|Portal)', m[which]):
                 spell = [s for s in class_spells(classes[k[1]]) if s[1] == k[2]]
                 c.emit('spell book', m.start(which) + k.start(), f'{k[1]} {k[2]} is in a {kind} book',
                        kind, books[spell[0][0]][0] if spell else 'no such spell')
-    m = c.search(r'(?P<who>Druid, Ranger, Paladin and Blackguard) have none', name='classes with no teleport')
+    m = c.search(r'(?P<who>[A-Z]\w+(?:, [A-Z]\w+)* and [A-Z]\w+) have none', name='classes with no teleport')
     if m:
         for who in re.split(r', | and ', m['who']):
             teleports = [v for k, v, _ in classes[who].fields if k == 'effect' and v.startswith('TELEPORT')]
             c.emit('class flags', m.start(), f'{who} has no teleport spell', [], teleports)
 
 
-@extractor('spell numbers', minimum=44, volumes=(2,))
+@extractor('spell numbers', minimum=28, volumes=(2,))
 def spell_numbers(c):
     classes = {e.value: e for e in gd.load('class.txt')[0]}
     source = gd.read_source('src/player-spell.c') or ''
@@ -2208,10 +2306,10 @@ def spell_numbers(c):
                5 if 'minfail < 5' in source else None, covers=[m.span(2)])
         c.emit('source', m.start(), 'spell_chance: cap of 50 percent', int(m[3]),
                50 if 'if (chance > 50) chance = 50;' in source else None, covers=[m.span(3)])
-    m = c.search(r'adds (\d+) per missing point', name='the mana shortfall')
+    m = c.search(r'Mage Resistance CL(\d+)', name='Mage Resistance in section 4')
     if m:
-        c.emit('source', m.start(), 'spell_chance: 5 per missing mana point', int(m[1]),
-               5 if '5 * (spell->smana - player->csp)' in source else None, covers=[m.span(1)])
+        c.emit('spell', m.start(), 'Mage Resistance level', int(m[1]),
+               next(x for x in class_spells(classes['Mage']) if x[1] == 'Resistance')[2], covers=[m.span(1)])
     m = c.search(r'Teleport Self \((\d+)%\) is down to the (\d+)% floor at CL(\d+)', name='the Mage floor')
     if m:
         spell = next(s for s in class_spells(classes['Mage']) if s[1] == 'Teleport Self')
@@ -2231,7 +2329,7 @@ def spell_numbers(c):
         for k in re.finditer(r'CL(\d+) is (\d+)%, about (\d+)', c.text):
             cl = int(k[1])
             pct = cl * int(m[1]) // int(m[2])
-            c.emit('spell', k.start(), f'Teleport Self at CL{cl}: percent', int(k[2]), pct, covers=[k.span(2)])
+            c.emit('spell', k.start(), f'Teleport Self at CL{cl}: percent', int(k[2]), pct, covers=[k.span(1), k.span(2)])
             c.emit('spell', k.start(), f'Teleport Self at CL{cl}: squares from the middle', int(k[3]),
                    (wid // 2) * pct // 100, covers=[k.span(3)])
     m = c.search(r'First cast pays experience x spell level', name='the first-cast experience')
@@ -2245,26 +2343,28 @@ def spell_numbers(c):
             exp_of = None
             for key, value, _ in classes[k[1]].fields:
                 if key == 'spell' and value.split(':')[0] == k[2]:
-                    exp_of = int(value.split(':')[5])
+                    exp_of = int(value.split(':')[4])
             c.emit('spell', at, f'{k[1]} {k[2]} experience (last field)', int(k[3]), exp_of,
                    covers=[(m.start() + k.start(3), m.start() + k.end(3))])
             c.emit('spell', at, f'{k[1]} {k[2]} level', int(k[4]), spell[0][2] if spell else None,
                    covers=[(m.start() + k.start(4), m.start() + k.end(4))])
             c.emit('spell', at, f'{k[1]} {k[2]} first cast pays', int(k[5]), int(k[3]) * int(k[4]),
                    covers=[(m.start() + k.start(5), m.start() + k.end(5))])
-    m = c.search(r'CL(\d+) needs (\d+) x race exp / 100, CL(\d+) (\d+) and CL(\d+) (\d+)', name='level thresholds')
+    m = c.search(r'CL(\d+) needs (\d+) x race exp / (\d+), CL(\d+) (\d+) and CL(\d+) (\d+)', name='level thresholds')
     if m:
         text = gd.read_source('src/player.c') or ''
+        c.emit('source', m.start(), 'adjust_level divides by 100 after the race experience factor', int(m[3]),
+               100 if 'p->expfact / 100L' in text else None, covers=[m.span(3)])
         table = [int(n) for n in re.findall(r'\b(\d+)L?,', text[text.index('player_exp[PY_MAX_LEVEL]'):][:900])]
-        for level_at, exp_at in ((1, 2), (3, 4), (5, 6)):
+        for level_at, exp_at in ((1, 2), (4, 5), (6, 7)):
             level = int(m[level_at])
             c.emit('source', m.start(), f'player_exp: experience for CL{level}', int(m[exp_at]), table[level - 2],
                    covers=[m.span(level_at), m.span(exp_at)])
 
 
-@extractor('buy table', minimum=48, volumes=(2,))
+@extractor('buy table', minimum=23, volumes=(2,))
 def buy_table(c):
-    object_table_two(c, 'the shop adds its own markup; read the price). "found from" is', 'buy')
+    object_table_two(c, 'Found from is the', 'buy')
 
 
 @extractor('first appearances', minimum=3, volumes=(2,))
@@ -2280,15 +2380,16 @@ def first_appearances(c):
                    int(found[1]), min(depth_of(m) for m in monsters if test(m)), covers=[found.span(1)])
 
 
-@extractor('hit points and free action', minimum=20, volumes=(2,))
+@extractor('hit points and free action', minimum=14, volumes=(2,))
 def hit_points_and_free_action(c):
     birth = gd.read_source('src/player-birth.c') or ''
     races = {e.value: e for e in gd.load('p_race.txt')[0]}
     classes = {e.value: e for e in gd.load('class.txt')[0]}
-    m = c.search(r'hit die \+ \(n-1\) x \(hit die \+ 1\)/2', name='the hit point average')
+    m = c.search(r'hit die \+ \(n-1\) x \(hit die \+ 1\)/2 plus CON \(`src/player-birth.c roll_hp`: each level rolls 1 to '
+                 r'the hit die\)', name='the hit point average')
     if m:
         c.emit('source', m.start(), 'roll_hp rolls randint1(hitdie) per level', True,
-               'randint1(player->hitdie)' in birth)
+               'randint1(player->hitdie)' in birth and 'player->player_hp[i-1] + j' in birth, covers=[m.span()])
 
     def average(hit_die, level):
         return hit_die + (level - 1) * (hit_die + 1) / 2
@@ -2308,11 +2409,11 @@ def hit_points_and_free_action(c):
     if m:
         dice = next(v for k, v, _ in spells['HOLD'].fields if k == 'dice')
         c.emit('spell', m.start(), 'HOLD paralyses for (dice)', m[1], dice, covers=[m.span(1)])
-    m = c.search(r'Free Action blocks it', name='Free Action blocks HOLD')
+    m = c.search(r'Free Action blocks it \(`fail:(\d+):FREE_ACT`', name='Free Action blocks HOLD')
     if m:
         timed = {e.value: e for e in gd.load('player_timed.txt')[0]}
-        c.emit('spell', m.start(), 'PARALYZED fails with FREE_ACT', 'FREE_ACT',
-               (timed['PARALYZED'].first('fail') or '').split(':')[-1])
+        c.emit('spell', m.start(), 'PARALYZED fails with FREE_ACT (fail:N:FREE_ACT)', f'{m[1]}:FREE_ACT',
+               timed['PARALYZED'].first('fail'), covers=[m.span(1)])
     m = c.search(r'The gate sits (\w+) levels after its own first anchor', name='the Free Action gap')
     if m:
         gates = chapter15_depth_gates()
@@ -2324,7 +2425,7 @@ def hit_points_and_free_action(c):
     if m:
         c.emit('gate', m.start(), 'DEPTH-01 looks to d+5: the first depth that sees DL13', int(m[2]),
                int(m[1]) - 5, covers=[m.span(1), m.span(2)])
-    m = c.search(r'ring \(found from DL(\d+), (\d+), `object`\) or as an ego on gloves \(found from DL(\d+) to '
+    m = c.search(r'ring \(found from DL(\d+), (\d+), `object`\) or an ego on gloves \(found from DL(\d+) to '
                  r'(\d+)\) or boots \((\d+) to (\d+)\) \(`ego_item`\)', name='where Free Action comes from')
     if m:
         ring = find_object('Free Action', types=['ring'])
@@ -2340,7 +2441,7 @@ def hit_points_and_free_action(c):
             (s['key'], t, n) for s in stores() for t, n in s['always'] + s['normal'] if 'Free Action' in n])
 
 
-@extractor('town facts', minimum=33, volumes=(2,))
+@extractor('town facts', minimum=25, volumes=(2,))
 def town_facts(c):
     handler = gd.read_source('src/effect-handler-general.c') or ''
     util = gd.read_source('src/player-util.c') or ''
@@ -2350,27 +2451,33 @@ def town_facts(c):
         c.emit('source', m.start(), 'Word of Recall delay (src/effect-handler-general.c)',
                (int(m[1]), int(m[2])), (int(k[2]), int(k[2]) + int(k[1]) - 1) if k else None,
                covers=[m.span(1), m.span(2)])
-    m = c.search(r'it takes you to DL(\d+)\*\*', name='recall from the town with no depth')
+    m = c.search(r'it takes you to DL(\d+)\*\* \(`src/player-util.c player_set_recall_depth` makes it at least (\d+)\)',
+                 name='recall from the town with no depth')
     if m:
-        c.emit('source', m.start(), 'player_set_recall_depth: at least depth 1', int(m[1]),
-               1 if 'p->recall_depth = MAX(p->recall_depth, 1);' in util else None, covers=[m.span(1)])
+        c.emit('source', m.start(), 'player_set_recall_depth: at least depth 1', (int(m[1]), int(m[2])),
+               (1, 1) if 'p->recall_depth = MAX(p->recall_depth, 1);' in util else None, covers=[m.span(1), m.span(2)])
         c.emit('source', m.start(), 'RECALL has no "nothing happens" for an unvisited depth', True,
                'if (OPT(player, birth_no_recall) && !player->total_winner)' in handler)
         old = INSTRUCTIONS.read_text()
         c.emit('docs', m.start(), 'volume 1 says recall does nothing from the town', True,
                'it does nothing from the town' in old)
+    m = c.search(r'(\d+) gold wasted', name='the recall scroll price')
+    if m:
+        c.emit('effect', m.start(), 'Word of Recall cost:', int(m[1]),
+               int(find_object('Word of Recall', types=['scroll']).first('cost')), covers=[m.span(1)])
     m = c.search(r'\*\*y also sets your deepest depth to this one\*\*', name='recall y sets max depth')
     if m:
         c.emit('source', m.start(), 'recall y sets recall_depth and max_depth to the current depth', True,
                'player->recall_depth = player->max_depth = player->depth;' in handler)
-    m = c.search(r'\(16 x depth / 10 \+ 16\) x (\d+) with selling off: (?P<piles>[^.]*)\.', name='the gold formula')
+    m = c.search(r'\((\d+) x depth / (\d+) \+ (\d+)\) x (\d+) with selling off: (?P<piles>[^.]*)\.', name='the gold formula')
     if m:
         source = gd.read_source('src/obj-make.c') or ''
-        c.emit('source', m.start(), 'make_gold average is (16 * lev) / 10 + 16', True,
-               'int avg = (16 * lev)/10 + 16;' in source)
-        c.emit('source', m.start(), 'make_gold multiplies by 5 under no_selling', int(m[1]),
+        c.emit('source', m.start(), 'make_gold average is (16 * lev) / 10 + 16', (16, 10, 16),
+               (int(m[1]), int(m[2]), int(m[3])) if f'int avg = ({m[1]} * lev)/{m[2]} + {m[3]};' in source else None,
+               covers=[m.span(1), m.span(2), m.span(3)])
+        c.emit('source', m.start(), 'make_gold multiplies by 5 under no_selling', int(m[4]),
                5 if 'if (OPT(player, birth_no_selling) && player->depth)' in source and 'value *= 5;' in source
-               else None, covers=[m.span(1)])
+               else None, covers=[m.span(4)])
         for k in re.finditer(r'(\d+) at DL(\d+)', m['piles']):
             lev = int(k[2])
             at = m.start('piles') + k.start()
@@ -2409,7 +2516,7 @@ def town_facts(c):
         body = player[player.index('static void adjust_level'):][:2200]
         c.emit('source', m.start(), 'adjust_level restores every stat at a level up', True,
                all(f'EF_RESTORE_STAT, source_none(), "0", STAT_{s}' in body for s in ('STR', 'INT', 'WIS', 'DEX', 'CON')))
-    m = c.search(r'Summon Undead \(found from DL(\d+)\), Aggravate Monster \(found from DL(\d+)\), and the cost-0 '
+    m = c.search(r'Summon Undead \(found from DL(\d+)\), Aggravate Monster \(found from DL(\d+)\) and the cost-(\d+) '
                  r'potions of Sleep and Salt Water, which paralyse', name='unknown scrolls and potions')
     if m:
         c.emit('effect', m.start(), 'Summon Undead found from', int(m[1]),
@@ -2418,17 +2525,11 @@ def town_facts(c):
                alloc_min(find_object('Aggravate Monster', types=['scroll'])), covers=[m.span(2)])
         for name in ('Sleep', 'Salt Water'):
             potion = find_object(name, types=['potion'])
-            c.emit('effect', m.start(), f'potion of {name} cost:', 0, int(potion.first('cost')))
+            c.emit('effect', m.start(), f'potion of {name} cost:', int(m[3]), int(potion.first('cost')),
+                   covers=[m.span(3)])
             c.emit('effect', m.start(), f'potion of {name} paralyses', True,
                    any('PARALYZED' in v for k, v, _ in potion.fields if k == 'effect'))
-    m = c.search(r'Summon Undead \(`cost:0`, found from DL(\d+)\)', name='Summon Undead in section 5')
-    if m:
-        scroll = find_object('Summon Undead', types=['scroll'])
-        c.emit('effect', m.start(), 'Summon Undead cost:', 0, int(scroll.first('cost')))
-        c.emit('effect', m.start(), 'Summon Undead found from', int(m[1]), alloc_min(scroll), covers=[m.span(1)])
-        for what, kind in (('Summon Monster', 'scroll'), ('Summoning', 'staff')):
-            c.emit('effect', m.start(), f'{kind} of {what} cost:', 0,
-                   int(find_object(what, types=[kind]).first('cost')))
+
 
 
 def manual_says_two(c):
@@ -2443,8 +2544,7 @@ def manual_says_two(c):
         (r"FIGHT-04's `halves at 7`", 15, r'halves at 7'),
         (r'the chapter\'s "\+20" for him', 15, r'Bullroarer \(D5, \+20\)'),
         (r'down to under 3 Phase Door', 12, r'fewer than 3 Phase'),
-        (r'c15 TOWN-02', 15, r'Notably absent from town stock lists'),
-        (r'c15 DEPTH-02 lists a minimum kit per depth', 15, r'DEPTH-02 — Mandatory kit gates'),
+                (r'c15 DEPTH-02 gives a minimum kit per depth', 15, r'DEPTH-02 — Mandatory kit gates'),
     ]
     chapters = {n: gd.read_chapter(n) or '' for n in gd.strategy_chapter_files()}
     for anchor, chapter, needle in rules:
@@ -2456,12 +2556,12 @@ def manual_says_two(c):
                bool(re.search(needle, chapters[chapter])), end=found.end(), covers=[found.span()])
 
 
-extractor('strategy manual quotations', minimum=10, volumes=(2,))(manual_says_two)
+extractor('strategy manual quotations', minimum=11, volumes=(2,))(manual_says_two)
 
 
 # -- how much of the page's numbers a check settles ---------------------------
 
-NUMBER_TOKEN = re.compile(r'(?<![A-Za-z_$#])(?:\d+d\d+|\d+(?:\.\d+)?)')
+NUMBER_TOKEN = re.compile(r'(?:(?<=CL)|(?<=DL)|(?<![A-Za-z_$#\d.]))(?:\d+d\d+|\d+(?:\.\d+)?)')
 
 
 def structural_spans(text):
@@ -2470,11 +2570,15 @@ def structural_spans(text):
     spans = []
     for m in re.finditer(r'^(#.*|Sources, so any line can be checked\..*)$', text, re.M):
         spans.append(m.span())
+    opening = re.search(r'^\*\*No run has reached.*$', text, re.M)        # the caveat: scope and narrative
+    if opening:
+        spans.append(opening.span())
     for m in re.finditer(r'^\|.*\|\s*\n\|[-| :]+\|', text, re.M):          # a table's header and rule
         spans.append(m.span())
     for pattern in (r'\bc\d+(?: \d+\.\d+(?:[-,] ?\d+\.\d+)*)?', r'\b[A-Z]{2,6}-\d\d[a-z]?(?:/\d\d)*\b',
-                    r'\b[Ss]ections? \d+(?:-\d+)?\b', r'\b[Vv]olume \d\b'):
-        spans += [m.span() for m in re.finditer(pattern, text)]
+                    r'\b[Ss]ections? \d+[a-z]?(?:-\d+)?\b', r'\b[Vv]olume \d\b', r'\(\d\)', r'\b1 in N\b',
+                    r'\bDL\d+-\d+\b', r'^- \*\*[^*]+\*\*(?=[ .:(])'):
+        spans += [m.span() for m in re.finditer(pattern, text, re.M)]
     return spans
 
 

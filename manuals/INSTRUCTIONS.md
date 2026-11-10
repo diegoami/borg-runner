@@ -2,6 +2,8 @@
 
 What the game's manual and the strategy manual say, cut to what you use, in the order you use it. **What earlier runs found out, including where they contradicted this page, is in `knowledge/NOTES.md`: read it too, and where the two disagree NOTES wins.**
 
+**Depth 5 to 20 (breath, summoners, kit gates) is volume 2, `manuals/INSTRUCTIONS_2.md`; no run has tested it yet.**
+
 Sources, so any line can be checked. `command`/`playing`/`attack`/`birth` = `vendor/angband/docs/<name>.rst`. `object`/`store`/`class`/`monster`/`trap` = `vendor/angband/lib/gamedata/<name>.txt`, and `race` = `vendor/angband/lib/gamedata/p_race.txt`. `src/x.c` = `vendor/angband/src/`. `c4`/`c14`/`c15` = strategy manual chapters at its pin (`git cat-file -p HEAD:docs/c-manual/<file>`). Words in double quotes are quoted from the source named beside them. Labels: **FACT** is in game data or source; **POLICY** is chapter 15's own "starting policy to be measured, not as truths", so following it and being hurt is a result worth reporting; **UNTESTED** means no run has tried it.
 
 One caution about that chapter: it is *notes for the borg*, written for a program that reads the game's own variables. You read a screen, and the screen sometimes shows the reverse of what the program sees - the level feeling is the known case. A rule of its that mentions a number you cannot see, or can only see transformed, is not a rule you can follow; check against `src/` before you trust it.
@@ -72,7 +74,7 @@ Two runs went wrong here in ways worth not repeating. One spent ~100 asks walkin
 ## 6. Escape (c13, c15 ESC)
 - Standing on a staircase: take it (one action). Phase Door (15 g): teleports about 10 squares; Cure Light Wounds: heals 20, cures blindness, cuts 20 and confusion 20 turns (`object`). Potions work blind or confused; scrolls do not.
 - **POLICY** c15 ESC-01 ladder, in order: a staircase under you; Phase Door if one monster is the problem; Teleportation; heal; an unknown potion only as the last rung. HEAL-01: heal on predicted danger, the smallest heal that makes you safe; HEAL-04: if the monster out-damages your best heal per turn, leave instead.
-- Do not treat Word of Recall (15-34 turns delay) or Deep Descent (3+1d4 turns) as an escape (c15 ESC-04).
+- Do not treat Word of Recall (15-34 turns delay) or Deep Descent (3+1d4 turns) as an escape (c15 ESC-04). Those are *player* turns: FACT, `src/game-world.c` decrements the recall counter once every ten game turns, so the wait is 150-340 game turns, and a run that gave up on it after about forty had waited a quarter of the minimum. Read in town before you have ever left it, Recall takes you to DL1 rather than nowhere - see volume 2.
 - Running from faster monsters does not work: +10 speed is double your moves (`attack`, "A note on speed").
 
 ## 6b. What to keep and what to leave

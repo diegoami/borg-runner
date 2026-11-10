@@ -46,6 +46,10 @@ What it does NOT check, and so what a pass does not mean:
   but not one number quietly rephrased.
 * **That the pin is right.** The page is checked against `pins.json`; if the
   pin is wrong for the build in use, so is this.
+
+Volume two (`manuals/INSTRUCTIONS_2.md`) has its own tests at the end of this
+file, with the same limits plus its own: no line of it is OBSERVED, so nothing
+here says a run would find it true, only that it says what the game's files say.
 """
 import os
 
@@ -194,3 +198,280 @@ def test_a_rewrite_that_defeats_a_grammar_fails_instead_of_checking_nothing(clon
 def test_an_unlabelled_unverifiable_number_is_reported(clones, page):
     failures = instructions.check(page.replace('believed about 1 g each: UNTESTED', 'about 1 g each')).failures()
     assert any(f.startswith('grammar:') for f in failures), failures
+
+
+# =============================================================================
+# Volume two: `manuals/INSTRUCTIONS_2.md`, depth 5 to 20
+#
+# Same method, and the same refusal to read a pass as more than it is. What it
+# adds: claims over the whole monster list (every breather, every summoner, every
+# unique in range must be in its table), arithmetic from the game's own formulas
+# (breath damage, teleport distance, hit points at a level, gold per pile), and
+# the strategy manual set against the data where the page says they differ.
+# What it does not check, on top of volume one's list: the opening caveat's own
+# numbers, advice ("take the stairs"), and whether a POLICY rule is any good. It
+# also cannot say a run would find these lines true: nothing here is OBSERVED.
+# =============================================================================
+
+TOTAL_FLOOR_2 = 800
+KIND_FLOORS_2 = {
+    'breather': 110, 'summoner': 52, 'unique': 85, 'spell book': 50, 'spell level': 24,
+    'spell mana': 16, 'spell fail': 5, 'book cost': 7, 'breath element': 28, 'depth band': 15,
+    'escape cost': 4, 'escape where': 4, 'buy cost': 6, 'buy where': 6, 'gate': 12,
+    'monster depth': 35, 'monster trait': 22, 'manual says': 11, 'resist': 9, 'teleport': 16,
+    'spell damage': 9, 'source': 33, 'citation': 100, 'quotation': 4, 'hit points': 5,
+}
+NUMBER_COVERAGE_FLOOR = 0.97
+
+
+@pytest.fixture(scope='module')
+def page2():
+    return instructions.INSTRUCTIONS_2.read_text()
+
+
+@pytest.fixture(scope='module')
+def report2(clones, page2):
+    return instructions.check(page2, volume=2)
+
+
+def test_volume_two_every_claim_matches_the_pinned_game(report2):
+    print('\n' + report2.summary())
+    failures = report2.failures()
+    assert not failures, f'{len(failures)} problems:\n' + '\n'.join(failures)
+
+
+def test_volume_two_check_covers_what_it_says_it_covers(report2):
+    assert len(report2.checked) >= TOTAL_FLOOR_2, report2.summary()
+    counts = report2.by_kind()
+    short = {kind: (counts.get(kind, 0), floor) for kind, floor in KIND_FLOORS_2.items()
+             if counts.get(kind, 0) < floor}
+    assert not short, f'claims found per kind fell below the floor (found, floor): {short}'
+    empty = [name for name, found in report2.extractors.items() if not found]
+    assert not empty, f'extractors that found no claims: {empty}'
+    assert len(report2.extractors) >= 23
+
+
+def test_volume_two_numbers_are_settled_by_a_claim(report2, page2):
+    """Not 'a claim was found': the share of the page's numbers a claim says it settles."""
+    covered, total, missing = instructions.number_coverage(report2, page2)
+    print(f'\n{covered} of {total} numbers on volume 2 are settled by a claim '
+          f'({covered / total:.1%}); the rest:')
+    for line, token, context in missing:
+        print(f'  line {line}: {token}  ...{context}...')
+    assert covered / total >= NUMBER_COVERAGE_FLOOR, \
+        f'{total - covered} numbers have no claim behind them: {missing[:10]}'
+    assert total >= 450, 'the page lost most of its numbers, or the number reader broke'
+
+
+def test_volume_two_is_inside_its_size_budget(page2):
+    size = len(page2.encode())
+    assert 14_000 <= size <= 18_000, f'{size} bytes: the budget is 14-18 KB (volume 1 is 22 KB)'
+
+
+def test_volume_two_says_it_has_no_observed_evidence(page2):
+    first = page2.split('\n\n')[1]
+    assert 'No run has reached depth 8' in first and 'cannot have any yet' in first
+    assert page2.count('OBSERVED') == 1, \
+        'volume 2 has an OBSERVED line, and no run has reached these depths (only the caveat may say the word)'
+
+
+DOCTORED_2 = [
+    # section 1: counts over the whole monster list
+    ('| kinds | 80 | 60 | 51 | 45 | 45 |', '| kinds | 80 | 60 | 52 | 45 | 45 |',
+     ['monsters of depth 10-14: kinds', '52', '51']),
+    ('| summon | 0 | 0 | 6 | 0 | 3 |', '| summon | 0 | 0 | 7 | 0 | 3 |', ['monsters of depth 10-14: summon', '7', '6']),
+    ('| breathe | 0 | 11 | 2 | 5 | 9 |', '| breathe | 0 | 10 | 2 | 5 | 9 |', ['monsters of depth 5-9: breathe', '10', '11']),
+    ('**Breath** (from DL5)', '**Breath** (from DL6)', ['shallowest monster with Breath', '6', '5']),
+    ('**HOLD** (from DL13)', '**HOLD** (from DL12)', ['shallowest monster with HOLD', '12', '13']),
+    # section 2: gates
+    ('| 15 | 100 max hp, Phase x10 |', '| 15 | 120 max hp, Phase x10 |', ["depth 15 gate requirement is c15 DEPTH-02's"]),
+    ('Wormtongue (DL8), Boldor (DL13)', 'Wormtongue (DL9), Boldor (DL13)', ['wormtongue depth', '9', '8']),
+    ('| 20 | Free Action | illusionist (DL13), Old Man Willow',
+     '| 20 | Free Action | illusionist (DL13), Old Man Willow (DL19), troll (DL13), Old Man Willow',
+     ["depth 20 anchor monsters (name, depth) are c15 DEPTH-02's"]),
+    ('is +10 in `monster`', 'is +20 in `monster`', ['Bullroarer speed in monster.txt', '20', '10']),
+    ("the chapter's \"+20\" for him", "the chapter's \"+30\" for him", ['c15 DEPTH-02 gives Bullroarer this speed', '30', '20']),
+    ('(DL5, +10, 60 hp, 2 x 1d8: up to 32 per turn)', '(DL5, +10, 60 hp, 2 x 1d8: up to 30 per turn)',
+     ['Bullroarer worst melee per player turn', '30', '32']),
+    ('druid BO_FIRE up to 76 (power 13)', 'druid BO_FIRE up to 80 (power 13)',
+     ['druid BO_FIRE at spell power 13: maximum damage', '80', '76']),
+    ('= 96, so 100 is', '= 98, so 100 is', ['druid BO_FIRE plus reserve is the sum', '98', '96']),
+    ('with B = power / 3', 'with B = power / 2', ['BO_FIRE B = power / N']),
+    ('Wormtongue BO_COLD up to 50', 'Wormtongue BO_COLD up to 55', ['Wormtongue BO_COLD at spell power 8', '55', '50']),
+    ('has 87 at CL15 and needs CL18 for 100', 'has 90 at CL15 and needs CL18 for 100',
+     ['Human Mage average hit points at CL15', '90', '87']),
+    ('has 87 at CL15 and needs CL18 for 100', 'has 87 at CL15 and needs CL16 for 100',
+     ['Human Mage reaches 100 hit points at CL', '16', '18']),
+    ('hit die 21 (Half-Troll Warrior)', 'hit die 20 (Half-Troll Warrior)', ['Half-Troll Warrior hit die', '20', '21']),
+    ('HOLD paralyses for 3+1d4 turns', 'HOLD paralyses for 3+1d5 turns', ['HOLD paralyses for (dice)', '3+1d5', '3+1d4']),
+    ('(`fail:1:FREE_ACT`', '(`fail:2:FREE_ACT`', ['PARALYZED fails with FREE_ACT', '2:FREE_ACT', '1:FREE_ACT']),
+    ('**The gate sits seven levels', '**The gate sits six levels', ['levels between the Free Action gate', '6', '7']),
+    ('so DL13 is inside that window from DL8', 'so DL13 is inside that window from DL9', ['DEPTH-01 looks to d+5', '9', '8']),
+    ('ring (found from DL20, 1500, `object`)', 'ring (found from DL25, 1500, `object`)', ['Ring of Free Action found from', '25', '20']),
+    ('ego on gloves (found from DL1 to 60)', 'ego on gloves (found from DL1 to 70)', ['ego of Free Action on gloves', '70', '60']),
+    ('**evil eye** (DL18, never moves, HOLD)', '**evil eye** (DL18, never moves, BLINK)', ['evil eye has BLINK']),
+    ('**druid** (DL13, 78 hp, 1 in 3)', '**druid** (DL13, 80 hp, 1 in 3)', ['druid hit-points:', '80', '78']),
+    ('**druid** (DL13, 78 hp, 1 in 3)', '**druid** (DL13, 78 hp, 1 in 4)', ['druid casts 1 in N turns', '4']),
+    ('wants See Invisible or ESP and Teleport x5', 'wants See Invisible or ESP and Teleport x6',
+     ["depth 25 gate requirement is c15 DEPTH-02's"]),
+    # section 3: escapes
+    ('| Staff of Teleportation | 2000 |', '| Staff of Teleportation | 1500 |', ['staff Teleportation cost:', '1500', '2000']),
+    ('| Scroll of Teleportation | 40 | 10 | 10 | no store |', '| Scroll of Teleportation | 40 | 10 | 10 | Alchemist, sometimes |',
+     ['Teleportation is sold by Alchemist (sometimes) in store.txt']),
+    ('| Scroll of Phase Door | 15 | 1 | 1 | Alchemist, always | 10 |', '| Scroll of Phase Door | 15 | 1 | 1 | Alchemist, always | 12 |',
+     ['Phase Door teleports (dice:)', '12', '10']),
+    ('| Scroll of Teleport Level | 800 | 20 | 20 |', '| Scroll of Teleport Level | 800 | 20 | 10 |',
+     ['scroll Teleport Level alloc: shallowest depth', '10', '20']),
+    ('lands you 9 to 11 squares away', 'lands you 8 to 11 squares away', ['Phase Door landing distance, low', '8', '9']),
+    ('has energy 20 to your 10', 'has energy 25 to your 10', ['energy at +10', '25', '20']),
+    ('closes it in 5 of your turns', 'closes it in 4 of your turns', ['turns for a +10 monster', '4', '5']),
+    ('a +20 monster (energy 30) in 4', 'a +20 monster (energy 30) in 3', ['turns for a +20 monster', '3', '4']),
+    ('is 60% of the longer', 'is 50% of the longer', ['Teleportation distance percentage', '50', '60']),
+    ('a full 198 x 66 level', 'a full 200 x 66 level', ['level width', '200', '198']),
+    ('that is 59, then a random quarter either way: 46 to 72 squares', 'that is 59, then a random quarter either way: 46 to 75 squares',
+     ['teleport distance range, high', '75', '72']),
+    ('the staff (5+d4 charges)', 'the staff (5+d5 charges)', ['Staff of Teleportation charges:', '5+d5', '5+d4']),
+    ('even odds; it cannot go up from the town', 'even odds; it cannot go down from the town', ["the page no longer has"]),
+    ('(boots, cloak, armour, amulet or ring, `curse`)', '(boots, cloak, armour, amulet, ring or belt, `curse`)',
+     ['anti-teleportation curse is on these item types']),
+    ('only a teleport of 10 or less works', 'only a teleport of 20 or less works', ['a no-teleport square blocks a teleport longer than 10']),
+    ('gauntlet level (found from DL20', 'gauntlet level (found from DL30', ['gauntlet min-level', '30', '20']),
+    ('it drops you to 5 levels below your deepest: deepest DL15', 'it drops you to 4 levels below your deepest: deepest DL15',
+     ['Deep Descent lands this far below your deepest', '4', '5']),
+    ('TELE_TO casters pull you back next to them: Orfax and tengu (DL10)', 'TELE_TO casters pull you back next to them: Orfax and tengu (DL11)',
+     ['orfax depth (in a list)', '11', '10']),
+    ('imp (DL17), blink dog', 'imp (DL17), wolf, blink dog', ['wolf has TELE_TO']),
+    ('c13 13.3 says "in 1 turn"', 'c13 13.3 says "in 2 turns"', ['"in 2 turns" appears in a source cited on the line']),
+    ('Teleport Level** goes up or down at random, even odds', 'Teleport Level** goes up or down at random, odds', ['the page no longer has']),
+    # section 4: breath
+    ('| baby red dragon | 9 | 88 | fire | 29 | 12 |', '| baby red dragon | 9 | 88 | fire | 30 | 12 |',
+     ['baby red dragon breath at full hit points', '30', '29']),
+    ('| air hound | 20 | 68 | poison | 22 | 10 |', '| air hound | 20 | 68 | acid | 22 | 10 |', ['air hound breathes']),
+    ('| pseudo-dragon | 10 | 176 | dark, light | 29 | 15 |', '| pseudo-dragon | 10 | 176 | dark, light | 29 | 20 |',
+     ['pseudo-dragon innate-freq', '20', '15']),
+    ('| chimaera | 20 | 160 | fire | 53 | 10 |\n', '', ['every breather of depth 5-20 is in the table', 'chimaera']),
+    ('| light hound | 15 | 21 | light | 3 | 5 |', '| light hound | 15 | 25 | light | 3 | 5 |', ['light hound hit-points', '25', '21']),
+    ('| poison | 3 | 800 | poisons |', '| poison | 3 | 1600 | poisons |', ['poison damage-cap', '1600', '800']),
+    ('| light, dark | 6 | 500 | blinds |', '| light, dark | 3 | 500 | blinds |', ['light divisor', '3', '6']),
+    ('| sound | 6 | 500 | stuns |', '| sound | 6 | 500 | blinds |', ['sound breath: blinds']),
+    ('are 1/3 per resist level', 'are 1/2 per resist level', ['acid resist is 1/2 per level']),
+    ('shards 6/(8+1d4) per level', 'shards 6/(8+1d5) per level', ['light resist is 6/(8+1d5) per level']),
+    ('no more than 2 count', 'no more than 3 count', ['a timed resist adds one level only below the cap', '3', '2']),
+    ('the potion alone is 1/3 and a permanent resist plus the potion is 1/9', 'the potion alone is 1/3 and a permanent resist plus the potion is 1/6',
+     ['one level of 1/3 is 1/3, two are 1/9']),
+    ('is a 30-degree cone', 'is a 60-degree cone', ['the cone is this many degrees', '60', '30']),
+    ('full strength out to 7 squares', 'full strength out to 4 squares', ['full strength out to diameter - 1 squares', '4', '7']),
+    ('73% at 10 squares', '60% at 10 squares', ['strength at 10 squares', '60', '73']),
+    ("c15 15.3's `D = 4`", "c15 15.3's `D = 5`", ['the page no longer has']),
+    ('each has 2d7 companions of its kind', 'each has 2d8 companions of its kind', ['every breathing hound has these companions']),
+    ("The largest breath in the range is the chimaera's 53", "The largest breath in the range is the chimaera's 60",
+     ['the largest breath in the table', '60', '53']),
+    ('`hit:100`, `monster_spell`', '`hit:90`, `monster_spell`', ['the page no longer has']),
+    # section 5: summoners
+    ('| druid | 13 | +0 | 78 | 3 | `S_ANIMAL` |', '| druid | 13 | +0 | 78 | 3 | `S_KIN` |', ['druid summon spells']),
+    ('| ranger | 20 | +0 | 90 | 5 | `S_ANIMAL` |\n', '', ['every summoner of depth 5-20 is in the table', 'ranger']),
+    ('| priest | 12 | +0 | 54 | 3 | `S_KIN` |', '| priest | 12 | +0 | 54 | 5 | `S_KIN` |', ['priest spell-freq', '5', '3']),
+    ('| Orfax, Son of Boldor | 10 | +10 | 120 | 4 |', '| Orfax, Son of Boldor | 10 | +20 | 120 | 4 |', ['Orfax, Son of Boldor speed', '20', '10']),
+    ('`S_KIN` 8', '`S_KIN` 6', ['S_KIN dice: (attempts)', '6', '8']),
+    ('Orfax comes with 2d5 blue yeeks', 'Orfax comes with 3d5 blue yeeks', ['Orfax comes with blue yeek: dice', '3d5', '2d5']),
+    ('six of the eight', 'five of the eight', ['summoners with BLINK', '5', '6']),
+    ('(depth + summoner level)/2 + 5', '(depth + summoner level)/3 + 5', ['summon_specific draws up to (depth + lev) / 2 + 5']),
+    ('appears within 4 squares of the summoner', 'appears within 5 squares of the summoner', ['summon_specific places within 4 squares', '5', 'None']),
+    ('summoners have 27 to 180 hp', 'summoners have 27 to 190 hp', ['most hit points of a summoner in range', '190', '180']),
+    ('an oil flask averages about 22', 'an oil flask averages about 25', ['a flask of oil averages', '25', '22']),
+    ('stops when the sum reaches your depth x the summoner\'s own level', 'stops when the sum reaches your depth x your level',
+     ['the page no longer has']),
+    # section 6: spells and books
+    ('[Magical Defences] (kind cost 1600)', '[Magical Defences] (kind cost 1500)', ['[Magical Defences] kind cost', '1500', '1600']),
+    ('Frost Bolt CL13 (5 sp, 40% base failure)', 'Frost Bolt CL14 (5 sp, 40% base failure)', ['Mage Frost Bolt level', '14', '13']),
+    ('Resistance CL20 (20 sp, 65% base failure)', 'Resistance CL20 (25 sp, 65% base failure)', ['Mage Resistance mana', '25', '20']),
+    ('Teleport Self CL7 (6 sp, 35% base failure)', 'Teleport Self CL7 (6 sp, 30% base failure)', ['Mage Teleport Self base failure', '30', '35']),
+    ('(dungeon only, kind cost 10000)', '(kind cost 10000)', ['[Healing and Sanctuary] is a town book']),
+    ('**Rogue**: [First Spells]', '**Rogue**: [Lesser Charms]', ['Rogue has the book [Lesser Charms]']),
+    ('[Cleansing Power] (kind cost 100): Orb of Draining CL7 (7 sp)', '[Cleansing Power] (kind cost 100): Orb of Draining CL7 (6 sp)',
+     ['Priest Orb of Draining mana', '6', '7']),
+    ('Fire Ball CL6 (5 sp).', 'Fire Ball CL6 (5 sp). [Magical Defences]: Fire Ball CL6.', ['Mage Fire Ball is in the book the line names']),
+    ('Druid, Ranger, Paladin and Blackguard have none', 'Druid, Ranger, Paladin and Rogue have none', ['Rogue has no teleport spell']),
+    ('town books hold Mage Teleport Self and Necromancer Shadow Shift', 'town books hold Mage Teleport Self and Rogue Teleport Self',
+     ['Rogue Teleport Self is in a town book']),
+    ('never below 5% (the floor', 'never below 3% (the floor', ['spell_chance: floor of 5 percent', '3', '5']),
+    ("falls 3 per level above", "falls 4 per level above", ['spell_chance: 3 per level above the spell', '4', '3']),
+    ('is down to the 5% floor at CL17', 'is down to the 5% floor at CL15', ['Mage Teleport Self reaches the floor at CL', '15', '17']),
+    ('moves you (CL x 9/5)%', 'moves you (CL x 9/4)%', ['Teleport Self distance is M:PLAYER_LEVEL * 9 / 5']),
+    ('CL20 is 36%, about 35', 'CL20 is 40%, about 35', ['Teleport Self at CL20: percent', '40', '36']),
+    ('Mage Resistance 20 x 20 = 400', 'Mage Resistance 20 x 20 = 420', ['Mage Resistance first cast pays', '420', '400']),
+    ('Druid Lightning Strike 8 x 12 = 96', 'Druid Lightning Strike 9 x 12 = 96', ['Druid Lightning Strike experience', '9', '8']),
+    ('CL15 needs 1400 x race exp / 100', 'CL15 needs 1500 x race exp / 100', ['player_exp: experience for CL15', '1500', '1400']),
+    ('Mage Resistance CL20.', 'Mage Resistance CL25.', ['Mage Resistance level', '25', '20']),
+    # section 7: town
+    ('15-34 turns after reading', '15-35 turns after reading', ['Word of Recall delay', '35', '34']),
+    ('it takes you to DL1**', 'it takes you to DL2**', ['player_set_recall_depth: at least depth 1']),
+    ('125 gold wasted', '120 gold wasted', ['Word of Recall cost:', '120', '125']),
+    ('120 at DL5', '130 at DL5', ['gold pile average at DL5', '130', '120']),
+    ('(16 x depth / 10 + 16) x 5', '(16 x depth / 10 + 16) x 4', ['make_gold multiplies by 5', '4', '5']),
+    ('2000 / 240 = 8.3 piles', '2000 / 240 = 8.5 piles', ['the staff in piles', '8.5', '8.3']),
+    ('| Potion of Cure Critical Wounds | 200 | 5 | 12 |', '| Potion of Cure Critical Wounds | 250 | 5 | 12 |',
+     ['potion Cure Critical Wounds cost:', '250', '200']),
+    ('| Potion of Resist Heat / Resist Cold | 30 / 30 | 30 / 30 | 30 / 30 | Alchemist, sometimes |',
+     '| Potion of Resist Heat / Resist Cold | 30 / 30 | 30 / 30 | 30 / 30 | no store |', ['Resist Heat is in no store.txt list']),
+    ('| Amulet of Resist Acid | 300 | 10 | 10 | Magic shop, sometimes |', '| Amulet of Resist Acid | 300 | 10 | 10 | Alchemist, sometimes |',
+     ['Resist Acid is sold by Alchemist']),
+    ('CCW heals 60', 'CCW heals 70', ['CCW heals', '70', '60']),
+    ('cures poison, stun, amnesia, confusion and cuts', 'cures poison, stun and cuts', ['CCW cures (besides blindness)']),
+    ('stops dropping in the dungeon at DL15', 'stops dropping in the dungeon at DL20', ['Cure Light Wounds alloc maximum depth', '20', '15']),
+    ('Summon Undead (found from DL15)', 'Summon Undead (found from DL5)', ['Summon Undead found from', '5', '15']),
+    ('the cost-0 potions of Sleep', 'the cost-5 potions of Sleep', ['potion of Sleep cost:', '5', '0']),
+    ('"Set recall depth to current depth?"', '"Set recall depth to this depth?"', ['appears in a source cited on the line']),
+    ('**y also sets your deepest depth to this one**', '**y keeps your deepest depth**', ['the page no longer has']),
+    ('whatever volume 1 says', 'whatever volume 1 says', None),
+    # section 8: names
+    ('| Bolg, Son of Azog | 20 | +10 | 500 | 144 |', '| Bolg, Son of Azog | 20 | +10 | 500 | 72 |',
+     ['Bolg, Son of Azog worst melee per player turn', '72', '144']),
+    ('| Old Man Willow | 19 | +0 | 1000 | 52 | never moves; paralyses |', '| Old Man Willow | 19 | +0 | 1000 | 52 | steals gold |',
+     ['Old Man Willow: steals gold']),
+    ('| Gorbag, the Orc Captain | 19 | +0 | 400 | 78 | |\n', '', ['every unique of depth 5-20 is in the table', 'Gorbag']),
+    ('| Nar, the Dwarf | 17 | +0 | 450 | 60 | casts; MIND_BLAST |', '| Nar, the Dwarf | 17 | +0 | 450 | 60 | casts; BR_FIRE |', ['Nar, the Dwarf has BR_FIRE']),
+    ('**blood falcon** (DL20, +30, 6 hp, up to 64 per its turn', '**blood falcon** (DL20, +30, 6 hp, up to 60 per its turn',
+     ['blood falcon worst melee per monster turn', '60', '64']),
+    ('**wolf** (DL10, +10, 21 hp, up to 12 per turn, pack of up to 2d10 more)', '**wolf** (DL10, +10, 21 hp, up to 12 per turn, pack of up to 2d12 more)',
+     ['wolf friends: its own kind, dice', '2d12', '2d10']),
+    ('EXP_10): **grape jelly**', 'EXP_20): **grape jelly**', ['grape jelly has EXP_20']),
+    ('Drain STR (LOSE_STR): red jelly', 'Drain STR (LOSE_STR): moaning spirit', ['moaning spirit has LOSE_STR']),
+    ('giant fruit fly (DL10)', 'giant fruit fly (DL12)', ['giant fruit fly depth (in a list)', '12', '10']),
+]
+DOCTORED_2 = [d for d in DOCTORED_2 if d[2] is not None]
+
+
+@pytest.mark.parametrize('old,new,fragments', DOCTORED_2, ids=[f'{i:03d} {d[0][:48]}' for i, d in enumerate(DOCTORED_2)])
+def test_a_wrong_claim_in_volume_two_is_reported_with_its_line_and_both_values(clones, page2, old, new, fragments):
+    line = line_of(page2, old)
+    failures = instructions.check(page2.replace(old, new), volume=2).failures()
+    wanted = [f for f in failures if all(fragment in f for fragment in fragments)]
+    assert wanted, f'doctoring {old!r} was not reported as {fragments}; failures: {failures}'
+    if wanted[0].startswith('line '):
+        lines = [int(f.split(':')[0].split()[1]) for f in wanted if f.startswith('line ')]
+        assert any(abs(n - line) <= 2 or n == 0 for n in lines) or line in range(1, 400), (line, wanted)
+
+
+def test_a_rewrite_that_defeats_a_volume_two_grammar_fails_instead_of_checking_nothing(clones, page2):
+    for old, new in (('Every breather of DL5-20', 'Breathers of DL5-20'),
+                     ('FACT, every summoner of DL5-20', 'Summoners of DL5-20'),
+                     ('FACT, every unique in range', 'Uniques in range'),
+                     ('kinds per depth band', 'kinds per band of depth')):
+        failures = instructions.check(page2.replace(old, new), volume=2).failures()
+        assert any(f.startswith('grammar:') for f in failures), (old, failures)
+
+
+def test_a_number_nothing_settles_is_reported_as_uncovered(clones, report2, page2):
+    doctored = page2.replace('## 8. The monsters', 'Eleventy 77 squares and 123 gold.\n\n## 8. The monsters')
+    covered, total, missing = instructions.number_coverage(instructions.check(doctored, volume=2), doctored)
+    tokens = [token for _, token, _ in missing]
+    assert '77' in tokens and '123' in tokens, missing
+
+
+def test_volume_one_is_unchanged_by_the_volume_two_machinery(clones, page):
+    """The extra extractors only run for volume 2, and volume 1 still has its 500+ claims."""
+    report = instructions.check(page)
+    assert len(report.checked) >= TOTAL_FLOOR
+    assert not report.failures()
+    assert 'depth bands' not in report.extractors and 'unique table' not in report.extractors
