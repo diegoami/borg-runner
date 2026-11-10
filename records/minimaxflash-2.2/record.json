@@ -1,5 +1,5 @@
 {
-  "asks": 354,
+  "asks": 353,
   "asks_made": 353,
   "build": {
     "binary_sha256": "610d5deed6e58c81e6af502f2b0ec720d90883a58ac5493379ca6fab24f44e24",
@@ -26,6 +26,9 @@
   },
   "death_depth": 2,
   "died": true,
+  "duplicate_answers": [
+    329
+  ],
   "exit_code": null,
   "final_turn": 10811,
   "gold": 4,
@@ -33,8 +36,8 @@
     "max": 16,
     "now": -1
   },
-  "keypresses": 1641,
-  "keys_sha256": "4e09a324692808a3b5877178d6444cb9fdffdbf9af62c9ca67ffb8c8f5592207",
+  "keypresses": 1637,
+  "keys_sha256": "db7a9705d335c826733a48f7dbde4a1c3cc2ac0234096ece6f06997ac7688009",
   "killed_by": "a metallic green centipede",
   "max_character_level": 2,
   "max_depth": 2,
@@ -44,8 +47,8 @@
   "own_tools": [],
   "playbook": "minimax",
   "race": "Gnome",
-  "read_before_playing": "Files I actually opened before my first keypress: manuals/INSTRUCTIONS.md (all 232 lines), agents/minimax/COMMON.md (all 380), agents/minimax/DRUID.md (all 315), docs/BRIEF.md, records/OVERVIEW.md (to pick an unused seed), vendor/angband/lib/gamedata/class.txt (Mage block) and p_race.txt (Gnome block). I did NOT read knowledge/*.md or any other run's decisions. Seed chosen: 41 (seeds already in use: 7, 11, 23, 103). (ask 1)",
-  "read_its_own_playbook": true,
+  "read_before_playing": "carry-on of minimaxflash-2: I start at depth 1, CL1, AC21, 8/8 HP, 1/2 SP, 4 gold, and the down staircase is NOT on my map. Plan per manuals/INSTRUCTIONS.md section 8: cast Find Stairs, walk long with one aimed g, cast again, and if two casts find nothing, reroll the level (< then >). First ask: M, the whole remembered level, to learn where the dark is. (ask 157)",
+  "read_its_own_playbook": false,
   "run": "minimaxflash-2.2",
   "savefile_sha256": "21fda1484a138d84cba59ffa6b2f655eaf223b485f1c79e45bcbc30d888b8bf7",
   "schema": "borg-runner/run-record@1",
