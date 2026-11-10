@@ -1,0 +1,33 @@
+{
+  "asked_for": {
+    "class": "Priest"
+  },
+  "build": {
+    "binary_sha256": "361a8769438014802d58f48b3f33eed4e8b2fcf87d173faf97797be1d8614408",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "3023dc56898fd887167e28cd8184674888df74cbb6486599c40ff41d6106b5de",
+    "schema": "borg-runner/build@1"
+  },
+  "character": "mmx-pri-1",
+  "command": [
+    "/home/diego/projects/mmx-pri-1/build/e473720ed88a-3023dc56898f/build/game/angband",
+    "-magent",
+    "-ummx-pri-1",
+    "--",
+    "-d/home/diego/projects/mmx-pri-1/runs/mmx-pri-1/ask",
+    "-s17",
+    "-f/home/diego/projects/mmx-pri-1/runs/mmx-pri-1/ask"
+  ],
+  "pid": 110071,
+  "savefile": "/home/diego/projects/mmx-pri-1/build/e473720ed88a-3023dc56898f/build/game/lib/save/mmx-pri-1",
+  "schema": "borg-runner/started@1",
+  "seed": 17
+}

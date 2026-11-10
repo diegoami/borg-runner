@@ -1,0 +1,60 @@
+{
+  "asks": 149,
+  "asks_made": 149,
+  "born_as_asked": true,
+  "build": {
+    "binary_sha256": "361a8769438014802d58f48b3f33eed4e8b2fcf87d173faf97797be1d8614408",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "3023dc56898fd887167e28cd8184674888df74cbb6486599c40ff41d6106b5de",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 402,
+  "character": "Dwarf Priest",
+  "character_asked_for": {
+    "class": "Priest"
+  },
+  "character_level": 2,
+  "class": "Priest",
+  "cost": {
+    "model": "minimax-coding-plan/MiniMax-M3.1-Flash",
+    "played_by": "opencode"
+  },
+  "death_depth": null,
+  "died": false,
+  "duplicate_answers": [],
+  "exit_code": null,
+  "final_turn": 9952,
+  "gold": 8,
+  "hp": {
+    "max": 24,
+    "now": 24
+  },
+  "keypresses": 984,
+  "keys_sha256": "599b30b6085d0d01a8bb185baa7372710f69242d55e856eb806c7aec92e54aa1",
+  "killed_by": null,
+  "max_character_level": 2,
+  "max_depth": 1,
+  "notebook_lines": 95,
+  "notebook_sha256": "90c1dfae3d2a805d6e22ed6ffeeca9cc7c2a3c21e196d8ec7ba35e35666163d4",
+  "outcome": "ended",
+  "own_tools": [],
+  "playbook": "minimax",
+  "race": "Dwarf",
+  "read_before_playing": "FIRST NOTE. Seed 17 chosen because it is not in records/OVERVIEW.md (seeds there: 1, 7, 11, 23, 41, 103, 313). Files I actually opened: manuals/INSTRUCTIONS.md (all 556 lines), my own playbook agents/minimax/COMMON.md (all 1079 lines), agents/minimax/DRUID.md|MAGE.md|WARRIOR.md (listed, NOT opened - I am a Priest), vendor/angband/lib/gamedata/class.txt (Priest block), object.txt (potion lines), monster.txt (depth and EVIL flags), and src/player-spell.c, player-calcs.c, player-util.c, cmd-obj.c, effect-handler-general.c. NOT opened: manuals/INSTRUCTIONS_2.md, the strategy manual, other runs' reports or decisions, agents/ of other families (there is no PRIEST.md anywhere: agents/minimax/PRIEST.md does not exist, so I am the first Priest in this repository and the page is mine to write). tools/screen/*.py are listed but unread so far. (ask 1)",
+  "read_its_own_playbook": true,
+  "run": "mmx-pri-1",
+  "savefile_sha256": "d931c72dfdfa8640ed517d203be96e647b2575d71ca99f0987b1e290a8f4be12",
+  "schema": "borg-runner/run-record@1",
+  "screens": 149,
+  "screens_sha256": "7edbd3501c7256a78173b05aab638c9110162e3c69553b5e254c19c2c134b3f9",
+  "seed": 17,
+  "wealth": 410
+}

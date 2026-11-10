@@ -1,0 +1,149 @@
+{"ask": 1, "depth": 0, "keys": " ", "reason": "dismiss the splash screen", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "*", "reason": "race was not given to me, so draw it with *", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "d", "reason": "class was given to me as Priest; its letter on this menu is d", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "\\n", "reason": "select Priest: cursor was on row 12 = d) Priest", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "a\\n", "reason": "point-based stats, then accept the game's own allocation", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "\\n", "reason": "accept the pre-filled name", "turn": 1}
+{"ask": 7, "depth": 0, "keys": "n", "reason": "skip the history: it is flavour and costs an ask", "turn": 1}
+{"ask": 8, "depth": 0, "keys": "\\n", "reason": "'n' opened the history text editor, not a decline; accept it with Enter", "turn": 1}
+{"ask": 9, "depth": 0, "keys": "y", "reason": "accept the history this time", "turn": 1}
+{"ask": 10, "depth": 0, "keys": " ", "reason": "final confirm: any other key continues", "turn": 1}
+{"ask": 11, "depth": 0, "keys": "i", "reason": "read the pack: what I carry and what letter the book has", "turn": 1}
+{"ask": 12, "depth": 0, "keys": "\\eGa", "reason": "close the pack menu, then study the Novice's Handbook (pack letter a) to learn my one prayer", "turn": 1}
+{"ask": 13, "depth": 0, "keys": "*33332g", "reason": "aim the cursor at the General Store (1) at map 46,9 and walk there", "turn": 11}
+{"ask": 14, "depth": 0, "keys": "*996666g", "reason": "re-aim at the General Store from my new position", "turn": 81}
+{"ask": 15, "depth": 0, "keys": "*p996666g", "reason": "aim in FREE mode (p) at the General Store and walk there", "turn": 81}
+{"ask": 16, "depth": 0, "keys": "666668", "reason": "walk east along row 10 to the General Store's door tile at 46,9", "turn": 91}
+{"ask": 17, "depth": 0, "keys": "ph18\\ny ", "reason": "buy 18 flasks of oil at 3 gold each (54 of my 91)", "turn": 141}
+{"ask": 18, "depth": 0, "keys": "\\e2444444442228", "reason": "leave the store, then walk south-east round to the Alchemist's door at 38,14 and step onto it", "turn": 141}
+{"ask": 19, "depth": 0, "keys": "422", "reason": "west one, south two onto the Alchemist's tile at 38,14", "turn": 281}
+{"ask": 20, "depth": 0, "keys": "pm1\\ny ", "reason": "buy one Scroll of Phase Door for 15 gold", "turn": 301}
+{"ask": 21, "depth": 0, "keys": "\\e", "reason": "leave the Alchemy Shop", "turn": 301}
+{"ask": 22, "depth": 0, "keys": "8844444444444444444444444444444442", "reason": "north two to row 12, west 31 along the open row, south one onto the Armoury tile at 7,13", "turn": 311}
+{"ask": 23, "depth": 0, "keys": "pc1\\ny ", "reason": "buy one Robes [2,+0] for 14 gold", "turn": 641}
+{"ask": 24, "depth": 0, "keys": "\\e", "reason": "cancel the Soft Leather Armour prompt (it costs 84, I have 22)", "turn": 641}
+{"ask": 25, "depth": 0, "keys": "\\e", "reason": "close the item description and get back to the store list", "turn": 641}
+{"ask": 26, "depth": 0, "keys": "pa1\\ny ", "reason": "buy one Robes for 14 gold", "turn": 641}
+{"ask": 27, "depth": 0, "keys": "\\e\\e", "reason": "close the item context menu and leave the Armoury", "turn": 641}
+{"ask": 28, "depth": 0, "keys": "pn1\\ny ", "reason": "buy one set of Leather Gloves for 6 gold (+1 AC)", "turn": 641}
+{"ask": 29, "depth": 0, "keys": "\\e", "reason": "leave the Armoury", "turn": 641}
+{"ask": 30, "depth": 0, "keys": "l>g", "reason": "walk to the known down staircase with the game's own pathfinder", "turn": 651}
+{"ask": 31, "depth": 0, "keys": "26666666666666666666666666666668888888844", "reason": "south to row 12, east 30 to column 44, north 8 to row 4, west 2 onto the down staircase at 42,4", "turn": 721}
+{"ask": 32, "depth": 0, "keys": "8w", "reason": "step north onto the down staircase, then open the wield/wear list", "turn": 1121}
+{"ask": 33, "depth": 0, "keys": "iwg", "reason": "wear the Leather Gloves (i) then the Robe (g) for +3 AC", "turn": 1131}
+{"ask": 34, "depth": 0, "keys": "> ", "reason": "take the down staircase to depth 1", "turn": 1151}
+{"ask": 35, "depth": 1, "keys": "lxg", "reason": "explore: look mode, jump the cursor to the nearest unexplored edge, walk there", "turn": 1151}
+{"ask": 36, "depth": 1, "keys": "*p6666666666666666666666666666666666666666g", "reason": "aim 40 tiles east in free mode and let the game's pathfinder walk me through new ground", "turn": 1161}
+{"ask": 37, "depth": 1, "keys": "M", "reason": "draw the whole remembered level and look for a down staircase", "turn": 1221}
+{"ask": 38, "depth": 1, "keys": "lxg", "reason": "explore toward the frontier again, now that I am out of the alcove", "turn": 1221}
+{"ask": 39, "depth": 1, "keys": "l6g", "reason": "look mode: snap the cursor to the next interesting square east and walk there", "turn": 1221}
+{"ask": 40, "depth": 1, "keys": "va'", "reason": "throw a flask of oil at the white worm mass beside me", "turn": 1251}
+{"ask": 41, "depth": 1, "keys": " ", "reason": "clear the -more- to see what the throw did", "turn": 1251}
+{"ask": 42, "depth": 1, "keys": " ", "reason": "clear the second -more- to see the damage", "turn": 1251}
+{"ask": 43, "depth": 1, "keys": " *p9666666g", "reason": "clear the -more-, then aim at the known floor tile (49,15) at the north gap of the room and walk there", "turn": 1251}
+{"ask": 44, "depth": 1, "keys": "88888888", "reason": "walk north along the corridor at column 49, eight tiles or until the wall", "turn": 1331}
+{"ask": 45, "depth": 1, "keys": "*p3366666666g", "reason": "aim at the item at (59,9), ten east and two south, and walk there", "turn": 1411}
+{"ask": 46, "depth": 1, "keys": " ", "reason": "clear the -more- and see where the aim walk left me", "turn": 1511}
+{"ask": 47, "depth": 1, "keys": "g", "reason": "pick up the brown potion", "turn": 1511}
+{"ask": 48, "depth": 1, "keys": "*p96666666666g", "reason": "aim east through the gap in the room's east wall and walk as far as the corridor goes", "turn": 1512}
+{"ask": 49, "depth": 1, "keys": "*p11144g", "reason": "aim at the floor tile just north of the treasure vein, five west and three south of me", "turn": 1532}
+{"ask": 50, "depth": 1, "keys": "*p114444g", "reason": "aim at the floor tile north of the treasure vein, six west and two south", "turn": 1532}
+{"ask": 51, "depth": 1, "keys": "2", "reason": "step south into the treasure vein and start digging it", "turn": 1592}
+{"ask": 52, "depth": 1, "keys": "T2", "reason": "tunnel south into the treasure vein; the command repeats until the wall is gone", "turn": 1592}
+{"ask": 53, "depth": 1, "keys": "T2", "reason": "tunnel south into the treasure vein again", "turn": 2592}
+{"ask": 54, "depth": 1, "keys": "44", "reason": "move two tiles west to stand north of the treasure vein at (20,12)", "turn": 2722}
+{"ask": 55, "depth": 1, "keys": "T2", "reason": "tunnel south into the treasure vein", "turn": 2742}
+{"ask": 56, "depth": 1, "keys": "2", "reason": "step south onto the dug vein to pick up the gold", "turn": 2772}
+{"ask": 57, "depth": 1, "keys": "*p1144g", "reason": "aim at the known floor tile (16,14), four west and two south, to reach the lower room", "turn": 2782}
+{"ask": 58, "depth": 1, "keys": "*p111144444444444444g", "reason": "aim at the known floor tile (0,18), sixteen west and four south, on the route to the up staircase", "turn": 2842}
+{"ask": 59, "depth": 1, "keys": "222", "reason": "walk south three tiles to the up staircase", "turn": 3002}
+{"ask": 60, "depth": 1, "keys": "<", "reason": "ascend the up staircase to the town", "turn": 3032}
+{"ask": 61, "depth": 0, "keys": " 33332", "reason": "clear the -more-, then walk to the General Store in the town", "turn": 3032}
+{"ask": 62, "depth": 0, "keys": "22668", "reason": "walk south twice, east twice and north onto the General Store's tile", "turn": 3062}
+{"ask": 63, "depth": 0, "keys": "*p33g", "reason": "aim at the General Store's tile, two east and two south, and walk there", "turn": 3092}
+{"ask": 64, "depth": 0, "keys": "*p1144444444444444444444444444444444444g", "reason": "aim at (7,11) on the long open street of row 11 and walk to the Armoury", "turn": 3102}
+{"ask": 65, "depth": 0, "keys": "244444444444444444444444444444444444482", "reason": "walk west along row 11 to the Armoury's door and step onto its tile", "turn": 3112}
+{"ask": 66, "depth": 0, "keys": " 4222", "reason": "clear the -more- and step west once then south three times onto the Armoury's tile", "turn": 3492}
+{"ask": 67, "depth": 0, "keys": "42pc1\\ny ", "reason": "step west and south onto the Armoury's tile and buy one Soft Leather Armour", "turn": 3532}
+{"ask": 68, "depth": 0, "keys": "\\ewi", "reason": "leave the Armoury and wear the Soft Leather Armour", "turn": 3542}
+{"ask": 69, "depth": 0, "keys": " e", "reason": "clear the -more- and open the equipment screen to see what is actually worn", "turn": 3552}
+{"ask": 70, "depth": 0, "keys": "\\e866666666666666666666666666666666666", "reason": "close the equipment menu, step north off the Armoury tile and walk east along row 12 to column 42", "turn": 3562}
+{"ask": 71, "depth": 0, "keys": "888888886", "reason": "walk north eight tiles and east one onto the town's down staircase", "turn": 3922}
+{"ask": 72, "depth": 0, "keys": "> ", "reason": "descend to depth 1 again, on a fresh level", "turn": 4012}
+{"ask": 73, "depth": 1, "keys": "lxg", "reason": "explore the fresh depth 1 toward the frontier", "turn": 4012}
+{"ask": 74, "depth": 1, "keys": "*p666666666666g", "reason": "aim twelve tiles east in free mode and walk that way", "turn": 4022}
+{"ask": 75, "depth": 1, "keys": "6666666666", "reason": "walk east out of the staircase room and along the corridor", "turn": 4042}
+{"ask": 76, "depth": 1, "keys": "666666666666666", "reason": "keep walking east along the corridor", "turn": 4142}
+{"ask": 77, "depth": 1, "keys": "66666666", "reason": "keep walking east along the corridor", "turn": 4292}
+{"ask": 78, "depth": 1, "keys": "848g", "reason": "step north-west onto the item at (35,9) and pick it up", "turn": 4372}
+{"ask": 79, "depth": 1, "keys": "3333g", "reason": "walk west four tiles onto the item and pick it up", "turn": 4402}
+{"ask": 80, "depth": 1, "keys": "444444488g", "reason": "walk west along row 12, north twice onto the item at (32,10) and pick it up", "turn": 4442}
+{"ask": 81, "depth": 1, "keys": "2444444", "reason": "step south into the corridor and walk west, so only one mouse can reach me at a time", "turn": 4533}
+{"ask": 82, "depth": 1, "keys": "66666", "reason": "walk east and melee the mice that come in reach", "turn": 4603}
+{"ask": 83, "depth": 1, "keys": "666666", "reason": "melee the mice down the corridor, one blow each", "turn": 4653}
+{"ask": 84, "depth": 1, "keys": "6666", "reason": "keep meleeing the mice eastwards", "turn": 4713}
+{"ask": 85, "depth": 1, "keys": "666", "reason": "move east along the corridor and kill the mice in line", "turn": 4743}
+{"ask": 86, "depth": 1, "keys": "q", "reason": "open the quaff prompt to see which potion to drink - I am at 6 of 14 hit points with eight mice around me", "turn": 4763}
+{"ask": 87, "depth": 1, "keys": "d", "reason": "quaff the Potion of Cure Serious Wounds to heal to full", "turn": 4763}
+{"ask": 88, "depth": 1, "keys": " 66", "reason": "clear the -more- and melee the mouse next to me", "turn": 4768}
+{"ask": 89, "depth": 1, "keys": " ", "reason": "clear the -more- to see whether I reached level 2", "turn": 4773}
+{"ask": 90, "depth": 1, "keys": " 44", "reason": "clear the -more- and kill the two mice beside me to the west", "turn": 4779}
+{"ask": 91, "depth": 1, "keys": " ", "reason": "clear the -more- and see the state of the fight", "turn": 4791}
+{"ask": 92, "depth": 1, "keys": "82", "reason": "kill the mouse north of me and the one south of me", "turn": 4791}
+{"ask": 93, "depth": 1, "keys": " ", "reason": "clear the -more-", "turn": 4795}
+{"ask": 94, "depth": 1, "keys": " qd", "reason": "clear the -more- and quaff the Potion of Cure Serious Wounds", "turn": 4795}
+{"ask": 95, "depth": 1, "keys": "\\eqd", "reason": "escape the drop prompt and quaff the Potion of Cure Serious Wounds immediately - I am at 3 of 24 hit points", "turn": 4803}
+{"ask": 96, "depth": 1, "keys": " *p444444444444444444444444444444g", "reason": "clear the -more- and aim 30 tiles west along the corridor to the up staircase", "turn": 4807}
+{"ask": 97, "depth": 1, "keys": "4466", "reason": "kill the mouse to my west and the one to my east", "turn": 4823}
+{"ask": 98, "depth": 1, "keys": " ", "reason": "clear the -more-", "turn": 4854}
+{"ask": 99, "depth": 1, "keys": "rf", "reason": "read the Scroll of Phase Door to jump ten squares away from the mice", "turn": 4863}
+{"ask": 100, "depth": 1, "keys": " ", "reason": "clear the -more- and see where the teleport put me", "turn": 4863}
+{"ask": 101, "depth": 1, "keys": " re", "reason": "read the Scroll of Phase Door (pack letter e) to jump clear of the mice while the Recall counts down", "turn": 4866}
+{"ask": 102, "depth": 1, "keys": "Ga", "reason": "study the Novice's Handbook and learn a random prayer, which also burns the Recall's timer", "turn": 4883}
+{"ask": 103, "depth": 1, "keys": " Ga", "reason": "learn the second prayer", "turn": 4883}
+{"ask": 104, "depth": 1, "keys": "mc", "reason": "cast Bless, which gives +5 armour class and +10 to-hit", "turn": 4903}
+{"ask": 105, "depth": 1, "keys": "mac", "reason": "choose the Novice's Handbook and cast Bless", "turn": 4903}
+{"ask": 106, "depth": 1, "keys": "22444444444444444444444444444444444444", "reason": "walk south into the corridor and west towards the up staircase; the Recall timer will fire on the way", "turn": 4913}
+{"ask": 107, "depth": 1, "keys": "qd", "reason": "quaff the brown potion - I am at 2 of 24 hit points with mice behind me", "turn": 5163}
+{"ask": 108, "depth": 1, "keys": "4444444444444444444", "reason": "walk west along the corridor toward the up staircase, with Speed the mice cannot keep up", "turn": 5168}
+{"ask": 109, "depth": 0, "keys": "R\\n", "reason": "rest in the town until I am healed and my spell points are back", "turn": 5201}
+{"ask": 110, "depth": 0, "keys": "2R\\n", "reason": "kill the boil-covered wretch next to me and then rest", "turn": 5241}
+{"ask": 111, "depth": 0, "keys": "R\\nR\\n", "reason": "rest twice more in the town to heal and to get my spell points back", "turn": 5412}
+{"ask": 112, "depth": 0, "keys": "\\eR\\n", "reason": "close the knowledge menu and rest again", "turn": 5632}
+{"ask": 113, "depth": 0, "keys": "maa", "reason": "cast Bless: the book, then the spell", "turn": 6232}
+{"ask": 114, "depth": 0, "keys": "mab", "reason": "cast Bless this time", "turn": 6242}
+{"ask": 115, "depth": 0, "keys": "d", "reason": "cast Bless", "turn": 6242}
+{"ask": 116, "depth": 0, "keys": "4444> ", "reason": "walk east to the town's down staircase and descend to a fresh depth 1", "turn": 6252}
+{"ask": 117, "depth": 0, "keys": "6666> ", "reason": "walk EAST four tiles to the down staircase and descend", "turn": 6252}
+{"ask": 118, "depth": 1, "keys": "lxg", "reason": "explore toward the frontier of this fresh level", "turn": 6292}
+{"ask": 119, "depth": 1, "keys": "8888888888", "reason": "walk north out of the staircase room", "turn": 6302}
+{"ask": 120, "depth": 1, "keys": "88888888", "reason": "walk north to the end of the corridor", "turn": 6392}
+{"ask": 121, "depth": 1, "keys": "44444444", "reason": "walk west along the top corridor", "turn": 6432}
+{"ask": 122, "depth": 1, "keys": "666666222444444", "reason": "go back east, down the corridor and west into the room to the south-west", "turn": 6492}
+{"ask": 123, "depth": 1, "keys": "2622222222", "reason": "go south out of the little room and keep going south", "turn": 6642}
+{"ask": 124, "depth": 1, "keys": "M", "reason": "draw the whole remembered level and look for a down staircase", "turn": 6692}
+{"ask": 125, "depth": 1, "keys": "2222266666888666", "reason": "back up through the corridor, east along row 6, north up the main corridor and east past the top", "turn": 6692}
+{"ask": 126, "depth": 1, "keys": "2666888666666", "reason": "get back to the top corridor and push east past its end", "turn": 6742}
+{"ask": 127, "depth": 1, "keys": "2666666666666", "reason": "drop to row 6 and run east along it into ground I have not seen", "turn": 6762}
+{"ask": 128, "depth": 1, "keys": "44448886666", "reason": "back to the main corridor, up to row 3 and east past the end of what I have seen", "turn": 6842}
+{"ask": 129, "depth": 1, "keys": "M", "reason": "check the whole remembered level for a down staircase", "turn": 6952}
+{"ask": 130, "depth": 1, "keys": "T6", "reason": "tunnel east through the vein that blocks the corridor", "turn": 6952}
+{"ask": 131, "depth": 1, "keys": "T6", "reason": "tunnel east through the vein (the last ask was eaten closing the M map)", "turn": 6952}
+{"ask": 132, "depth": 1, "keys": "66666666", "reason": "walk east through the new tunnel into ground I have never seen", "turn": 7002}
+{"ask": 133, "depth": 1, "keys": "T6", "reason": "dig the next vein east", "turn": 7012}
+{"ask": 134, "depth": 1, "keys": "66666666", "reason": "walk east through the second tunnel", "turn": 7082}
+{"ask": 135, "depth": 1, "keys": "T6", "reason": "dig the third vein in the row", "turn": 7092}
+{"ask": 136, "depth": 1, "keys": "66666666", "reason": "walk east through the third tunnel", "turn": 7192}
+{"ask": 137, "depth": 1, "keys": "T6", "reason": "dig the fourth vein east", "turn": 7202}
+{"ask": 138, "depth": 1, "keys": "66666666", "reason": "walk east through the fourth tunnel", "turn": 7302}
+{"ask": 139, "depth": 1, "keys": "T6", "reason": "dig the plain wall that now blocks the corridor", "turn": 7312}
+{"ask": 140, "depth": 1, "keys": "T6", "reason": "dig the granite wall again - a hundred more attempts", "turn": 8312}
+{"ask": 141, "depth": 1, "keys": "66666666", "reason": "walk east through the granite wall into new ground", "turn": 8662}
+{"ask": 142, "depth": 1, "keys": "T6", "reason": "one more hundred attempts at the granite wall", "turn": 8672}
+{"ask": 143, "depth": 1, "keys": "66666666", "reason": "walk east through the wall", "turn": 8942}
+{"ask": 144, "depth": 1, "keys": "T6", "reason": "dig the next granite tile", "turn": 8952}
+{"ask": 145, "depth": 1, "keys": "66666666", "reason": "walk east through the wall", "turn": 9952}
+{"ask": 146, "depth": 1, "keys": "M", "reason": "last look at the whole remembered level", "turn": 9952}
+{"ask": 147, "depth": 1, "keys": "i", "reason": "read the final pack for the report", "turn": 9952}
+{"ask": 148, "depth": 1, "keys": "\u0018", "reason": "the run was stopped", "turn": 9952}
+{"ask": 149, "depth": 1, "keys": "\\e", "reason": "the run was stopped", "turn": 9952}

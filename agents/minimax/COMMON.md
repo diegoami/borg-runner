@@ -1149,3 +1149,100 @@ base up before you decide what a letter is.
 `g` pickup was eaten at ask 33 and the rest of the chain still ran). And a
 digit chain walks into whatever is standing in the dark: the chain of ask 140
 killed about thirty-five silver mice in one decision and then killed me.
+## From `mmx-pri-1`, 2026-11-10
+
+## What I measured, 2026-11-10 (seed 17, a Dwarf Priest, 149 asks, stopped alive on depth 1)
+
+### A breeding monster is a tax on every ask, and it is arithmetic
+
+A giant white mouse has 2 hit points, 1d2 of damage and the MULTIPLY flag;
+one of them became eight in about fifteen turns. I fought them in a one-wide
+corridor, where only the mouse in front of me could reach me, and the first
+four cost me **nothing**: my blow happens first in the turn, so a mouse I
+kill never bites me. Then I walked a 38-digit route west with them at my
+back and it cost **22 hit points in one ask**.
+
+The lesson is the one I keep having to learn in a new shape: **the cost of
+a monster is per ASK, not per kill.** A run with 50 asks left and 24 hit
+points cannot pay two hit points an ask for fifty asks. Before I fight
+anything that breeds or multiplies, I have to know what it costs per
+decision, and I have to kill it where only one can reach me.
+
+### The flavour name does not identify a kind
+
+I worked out that the brown potion was the eighth potion in object.txt,
+which is Cure Light Wounds, and wrote it in my notebook as a fact.
+`flavor_assign()` in `src/obj-util.c` hands the flavours to the kinds **at
+random** (`choice = randint0(flavor_count)`), so the index means nothing at
+all, and the brown potion was a **Potion of Speed**. The safe way to
+identify an unknown consumable is the shop's 'd' (sell): `do_cmd_sell()`
+learns the runes before the item changes hands, so with selling off you get
+0 gold, lose the item, and know the kind for the rest of the game.
+
+This is the second time in this family that a number which looked like it
+must mean something turned out to mean nothing (the other was the belief
+that a priest never miscasts: the spell list's Fail column reads 5% for the
+level-1 prayers). **Check the code before a page says a number.**
+
+### The store's keys, and that gear's price is not in object.txt
+
+- `p` then the item's letter then the quantity then Enter then any other
+  key buys in one ask.
+- Pressing an item's letter **without** `p` opens that item's own menu
+  (l Examine / p Buy / o Buy one), and the letters in that menu are the
+  store's, not the pack's.
+- ESC leaves the store, and leaving takes a turn.
+- **Gear is priced by power, not by object.txt's `cost:`.** A Soft Leather
+  Armour has `cost:20` and the Armoury asks **84**. I nearly built the
+  whole shopping list out of the data file and it would have been wrong.
+
+### The aiming recipe, and the way an unknown destination betrays you
+
+`*` then **p** then direction digits then `g`: the `p` is essential, because
+in the default "interesting" mode a direction key snaps the cursor to the
+next MONSTER and the walk goes to that, not to the tile you aimed at. An
+aim at a tile the map has already drawn is a real walk (7 tiles in one ask
+for me, 30 to 44 in other runs); an aim at a tile the map has not drawn
+is a lottery - one aim twelve tiles east moved me **one tile west**. Aim
+only at drawn tiles, and use a digit string for everything else.
+
+A digit string stops at the first wall and the rest is dropped, and in a
+38 to 41 digit string I lost one digit once - so **check the position after
+every long route**, not just the message line.
+
+### Digging is one ask and a hundred attempts
+
+Digging is the `T` command plus a direction, and it **repeats by itself
+until the wall is gone**: one ask was a hundred attempts, and the turn
+counter rises by a thousand each time. Walking into a wall does **not**
+dig ("There is a wall in the way!"). The chances are out of 1200 and the
+skill is `race + adj_str_dig[STR] + weapon_weight/10`, so for a Dwarf with
+STR 18 and a 12 lb weapon it is 61: quartz 82 (6.8%), magma 204 (17%),
+granite 21 (1.75%), rubble 41%. A '*' on the map is a vein with treasure,
+and the vein I dug gave **90 gold in three attempts**.
+
+### The turn counter advances by ten per player action
+
+Every action is ten game turns, so a hundred digging attempts cost a
+thousand turns and a rest of about sixty actions is the longest useful
+sleep. Two rests of "R" and Enter heal about four hit points each in the
+town and are interrupted by townfolk.
+
+### A screen that is a menu eats the first key of the next ask
+
+The M map, a store and the equipment list all took a key from me: my 'T6'
+went to closing the map and only the '6' reached the game. The same thing
+happens with a `-more-`.
+
+### The Word of Recall fires wherever you are, and it does not heal
+
+Its timer is 15 to 34 **player actions** and it takes you to the town
+mid-walk - mine fired in the middle of a corridor walk with "There is a wall
+in the way!" as the message. It healed nothing; the heal in
+`minimaxflash-1-again`'s report was a **rest** in the town.
+
+### The keypad is 7 8 9 / 4 5 6 / 1 2 3
+
+'3' is down-**right** and '4' is **left**. I got both wrong once each and
+lost asks, which is the cheapest lesson on this page and the one I am most
+likely to repeat.
