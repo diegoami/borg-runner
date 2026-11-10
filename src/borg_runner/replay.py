@@ -15,15 +15,22 @@ SCREENS = 'replay-screens'
 
 
 # The tombstone prints the wall clock - "on Mon Nov  9 20:09:29 2026" - which
-# is not game state and can never replay. It is the only such thing found so
-# far, and it is normalised rather than ignored, so a real difference on the
-# same screen is still caught.
+# is not game state and can never replay. It is normalised rather than
+# ignored, so a real difference on the same screen is still caught.
 CLOCK = re.compile(r'on [A-Z][a-z]{2} [A-Z][a-z]{2}\s+\d{1,2} '
                    r'\d{2}:\d{2}:\d{2} \d{4}')
 
+# The splash prints the version, which for these builds ends in the
+# repository's git describe at compile time (" -g9afcd64-dirty"). A replay
+# under the same patch rebuilt at a later commit differs on that string and
+# nothing else; the build's identity is checked by its hashes in the record,
+# not by re-reading it off the splash.
+DESCRIBE = re.compile(r' -g[0-9a-f]{7,}(?:-dirty)?')
+
 
 def comparable(screen):
-    return CLOCK.sub('on <the clock>', screen)
+    return DESCRIBE.sub(' -g<describe>',
+                        CLOCK.sub('on <the clock>', screen))
 
 
 def recorded_keys(original, played_only=False):
@@ -34,7 +41,7 @@ def recorded_keys(original, played_only=False):
     replay wants them, because they are part of what happened; carrying a run
     on does not, or the game is handed over about to exit.
     """
-    taken = run_module.decisions(original)
+    taken, _ = run_module.played_decisions(original)
     if played_only:
         while taken and any(mark in (taken[-1].get('reason') or '')
                             for mark in run_module.STOPPING):
@@ -43,7 +50,7 @@ def recorded_keys(original, played_only=False):
 
 
 def replay(original, into, out=None, seed=None, stop_after=None,
-           keep_playing=False, played_only=False, log=print):
+           keep_playing=False, played_only=False, frames=False, log=print):
     """Play the recorded keys again and compare every screen.
 
     `stop_after` stops once that game turn is reached, which is how a takeover
@@ -54,6 +61,17 @@ def replay(original, into, out=None, seed=None, stop_after=None,
     keys = recorded_keys(original, played_only=played_only)
     fresh = run_module.directory(into.name) if into.parent == run_module.RUNS else into
     fresh.mkdir(parents=True, exist_ok=True)
+    # A replay directory is regenerated whole every time; what a previous
+    # replay left in it is stale, and the one-answer-per-ask guard would
+    # read last time's log as this time's answers.
+    for stale in [fresh / name for name in
+                  ('decisions.jsonl', 'input.txt', 'record.json',
+                   'replay.json', 'started.json', 'game.log')]:
+        stale.unlink(missing_ok=True)
+    ask_dir = fresh / run_module.ASK
+    if ask_dir.is_dir():
+        for stale in ask_dir.iterdir():
+            stale.unlink()
     (fresh / run_module.ASK).mkdir(exist_ok=True)
     (fresh / 'save').mkdir(exist_ok=True)
 
@@ -61,7 +79,8 @@ def replay(original, into, out=None, seed=None, stop_after=None,
     process = run_module.start(
         fresh, seed if seed is not None else record['seed'], out=out,
         # the original's character name, because the game shows it (D6)
-        character=started.get('character', original.name), log=log)
+        character=started.get('character', original.name), frames=frames,
+        log=log)
     differences, replayed, reached = [], 0, 0
     try:
         for number, press in enumerate(keys, start=1):
@@ -84,6 +103,7 @@ def replay(original, into, out=None, seed=None, stop_after=None,
         if not keep_playing:
             run_module.stop(fresh, process, log=log)
 
+    _, duplicates = run_module.played_decisions(original)
     verdict = {
         'schema': 'borg-runner/replay@1',
         'original': original.name,
@@ -94,6 +114,10 @@ def replay(original, into, out=None, seed=None, stop_after=None,
         'identical': not differences and replayed > 0,
         'differences': differences[:20],
         'stopped_after_turn': stop_after,
+        # Re-answers of the same ask, kept out of the replay: the game
+        # pressed the first answer. Named so a rewritten log is visible
+        # rather than silently worked around.
+        'duplicate_answers': sorted({entry['ask'] for entry in duplicates}),
     }
     (fresh / 'replay.json').write_text(json.dumps(verdict, indent=2, sort_keys=True) + '\n')
     run_module.write_record(fresh, outcome='replay')

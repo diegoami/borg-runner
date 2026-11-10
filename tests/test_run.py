@@ -101,6 +101,52 @@ def test_a_replay_reads_the_keys_ask_by_ask(tmp_path):
     assert replay.recorded_keys(run) == [' ', '2222']
 
 
+def test_a_rebuilt_binary_is_not_a_splash_difference(tmp_path):
+    """The splash carries the repo's git describe at compile time; the
+    build's identity lives in the record's hashes, not on that screen."""
+    before = '        ^^^^^                 |___/  -g9afcd64-dirty\n'
+    after = '        ^^^^^                 |___/  -g590c569-dirty\n'
+    assert replay.comparable(before) == replay.comparable(after)
+    assert replay.comparable(before) != replay.comparable(after + 'x')
+
+
+def test_an_ask_cannot_be_answered_twice(tmp_path):
+    """The game pressed the first answer and moved on; a second one can only
+    poison the record (minimaxflash-3's asks 27 and 56)."""
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='splash')
+    with pytest.raises(RuntimeError, match='already answered'):
+        run_module.answer(run, 1, 'x', reason='a better plan, too late')
+
+
+def answered_twice(run):
+    """A decisions log as an older answer() could leave it: ask 2 answered
+    twice, the second entry appended much later."""
+    run_module.answer(run, 1, ' ', reason='splash')
+    run_module.answer(run, 2, '2222', reason='south')
+    path = run / run_module.DECISIONS
+    entries = [json.loads(line) for line in path.read_text().splitlines()]
+    entries.append({'ask': 2, 'turn': 20, 'depth': 1, 'keys': '9999',
+                    'reason': 're-answered long after the game moved on'})
+    path.write_text(''.join(json.dumps(entry) + '\n' for entry in entries))
+    return run
+
+
+def test_the_replay_feeds_what_the_game_played(tmp_path):
+    run = answered_twice(a_run(tmp_path))
+    assert replay.recorded_keys(run) == [' ', '2222']
+    _, duplicates = run_module.played_decisions(run)
+    assert [entry['keys'] for entry in duplicates] == ['9999']
+
+
+def test_the_record_keeps_the_unplayed_answer_out_of_the_keys(tmp_path):
+    run = answered_twice(a_run(tmp_path))
+    record = run_module.write_record(run, outcome='stopped')
+    assert (run / 'input.txt').read_text() == ' 2222'
+    assert record['duplicate_answers'] == [2]
+    assert record['asks'] == 2
+
+
 @pytest.mark.slow
 def test_a_game_is_born_played_recorded_and_replays_identically(tmp_path):
     """The gate for T03-T06. Builds the game; takes about a minute.
@@ -108,6 +154,10 @@ def test_a_game_is_born_played_recorded_and_replays_identically(tmp_path):
     Birth is played from the screen like a person would: the letter moves the
     menu highlight and `\\n` selects it.
     """
+    # The directory survives a previous run of this test, and an ask may be
+    # answered once: start from nothing rather than re-answer ask 1.
+    import shutil
+    shutil.rmtree(run_module.RUNS / f'test-{tmp_path.name}', ignore_errors=True)
     run = run_module.directory(f'test-{tmp_path.name}')
     process = run_module.start(run, 7, log=lambda *a: None)
     plan = [' ', 'a', 'a', 'b', r'\n', r'\n', r'\n', 'y', ' ', '2222']
@@ -127,6 +177,19 @@ def test_a_game_is_born_played_recorded_and_replays_identically(tmp_path):
                             log=lambda *a: None)
     assert verdict['identical'], verdict['differences']
     assert verdict['asks_replayed'] == verdict['asks_recorded']
+
+    # The frame dump: replaying with frames on leaves the states the game
+    # showed while spending a buffered string ('2222' is four keys in one
+    # ask), and changes nothing at the asks themselves.
+    again = run_module.RUNS / f'{run.name}-replay-frames'
+    verdict = replay.replay(run, again, frames=True, log=lambda *a: None)
+    assert verdict['identical'], verdict['differences']
+    dumped = sorted((again / run_module.ASK).glob('frame-10-*.txt'))
+    assert len(dumped) == 3, 'three buffered keys of ask 10, three frames'
+    for number in range(1, 12):
+        original = (run / run_module.ASK / f'screen-{number}.txt').read_text()
+        assert (again / run_module.ASK / f'screen-{number}.txt').read_text() \
+            == original, f'the frame dump changed screen {number}'
 
 
 def test_a_note_gets_one_bullet_however_the_player_wrote_it(tmp_path):
@@ -236,6 +299,18 @@ def test_a_run_is_kept_in_git_without_its_screens(tmp_path):
     assert 'notebook.md' in names
     assert not any(name.startswith('screen-') for name in names)
     assert (kept / 'input.txt').read_text() == run_module.keys_sent(run)
+
+
+def test_archive_reconciles_a_script_written_beside_the_record(tmp_path):
+    """The prompts say tools/; a player mid-game writes the script where its
+    hands are. Archive keeps it either way."""
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='splash')
+    run_module.answer(run, 2, 'a', reason='east')
+    run_module.write_record(run, outcome='stopped')
+    (run / 'g.py').write_text('# a walk planner, written mid-game\n')
+    kept = run_module.archive(run, into=tmp_path / 'kept', log=lambda *a: None)
+    assert (kept / 'tools' / 'g.py').read_text().startswith('# a walk planner')
 
 
 def test_the_cost_of_a_run_is_recorded(tmp_path):

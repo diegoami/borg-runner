@@ -73,6 +73,22 @@ def test_keys_that_do_not_match_their_hash_are_caught(tmp_path, monkeypatch):
     assert any('match the hash' in what for what in misses('good', tmp_path))
 
 
+def test_a_log_that_answers_an_ask_twice_is_named(tmp_path, monkeypatch):
+    """The game pressed the first answer; the second one is a rewritten
+    record, and the audit says so (minimaxflash-3's asks 27 and 56)."""
+    monkeypatch.setattr(run_module, 'KNOWLEDGE', tmp_path / 'knowledge')
+    monkeypatch.setattr(run_module, 'RECORDS', tmp_path / 'records')
+    kept = a_finished_run(tmp_path)
+    (kept / 'decisions.jsonl').write_text(
+        '{"ask": 1, "keys": "a", "turn": 1}\n'
+        '{"ask": 2, "keys": "b", "turn": 2}\n'
+        '{"ask": 2, "keys": "c", "turn": 2}\n')
+    rows = audit.audit('good', tmp_path / 'records')
+    dupe = [row for row in rows if 'answered once' in row['what']]
+    assert dupe and not dupe[0]['ok'] and dupe[0]['warn']
+    assert '2' in dupe[0]['fix']
+
+
 def test_a_death_must_name_its_cause(tmp_path, monkeypatch):
     monkeypatch.setattr(run_module, 'KNOWLEDGE', tmp_path / 'knowledge')
     monkeypatch.setattr(run_module, 'RECORDS', tmp_path / 'records')
