@@ -21,9 +21,16 @@ that belongs to the model, in the prompt.
 prompt, kept in one place so every run is played under the same rules; what
 follows is the longer explanation behind them.
 
+Whoever starts you passes `AGENT=<family>` — which agent you are, as a model
+family. That names [agents/&lt;family&gt;/](agents/), the directory your own
+earlier sessions wrote for this one: `COMMON.md` and a page per class. You
+read it before your first keypress and write back to it before you stop, and
+`borg_runner playbook --family <family> --class <class>` says which pages
+exist. It is the only place your experience changes how your own model plays.
+
 You are the player, not the maintainer. Read the brief
-(`docs/BRIEF.md`) and nothing else from this repository — not the plan, not
-other runs' reports. Your judgement at a position has to be independent of
+(`docs/BRIEF.md`) and your own agent directory, and nothing else from this
+repository — not the plan, not other runs' reports. Your judgement at a position has to be independent of
 anyone else's, or the run is worth nothing (D9).
 
 Read the manuals, press keys, keep your own memory of the world, and write the

@@ -1,0 +1,148 @@
+"""The per-family playbooks under agents/, and the prompts that use them.
+
+A playbook is read before the first keypress and written after the last one,
+so what these tests hold is the layout (which a tool can check) and the two
+prompts' order (which is what went wrong with the write-ups: a step listed
+after `archive` is a step that does not happen).
+"""
+import json
+from pathlib import Path
+
+import pytest
+
+from borg_runner import pins, playbooks, run as run_module
+
+from test_run import a_run
+
+
+def a_playbook(tmp_path, family='minimax', text='# COMMON\n\nseen in sonnet-1.\n',
+               name=playbooks.COMMON):
+    (tmp_path / family).mkdir(parents=True, exist_ok=True)
+    (tmp_path / family / name).write_text(text)
+    return tmp_path
+
+
+def test_the_repositorys_own_playbooks_are_well_formed():
+    assert playbooks.check() == []
+
+
+def test_a_family_keeps_a_common_page_and_a_page_per_class():
+    minimax = [row for row in playbooks.families() if row['family'] == 'minimax']
+    assert minimax, 'agents/minimax/ is the first playbook and should be listed'
+    assert minimax[0]['common'] and 'Druid' in minimax[0]['classes']
+
+
+def test_the_class_page_is_the_class_in_capitals():
+    wanted = playbooks.paths('minimax', 'Druid')
+    assert [path['path'].name for path in wanted] == ['COMMON.md', 'DRUID.md']
+    assert all(path['exists'] and path['lines'] > 50 for path in wanted)
+
+
+def test_a_family_that_has_never_played_has_nothing_to_read():
+    wanted = playbooks.paths('nobody-yet', 'Warrior')
+    assert [path['exists'] for path in wanted] == [False, False]
+
+
+def test_a_playbook_that_cites_no_run_is_a_complaint(tmp_path):
+    """The repository's claim is that anything in it can be checked."""
+    a_playbook(tmp_path, text='# COMMON\n\nalways fight in corridors.\n')
+    complaints = playbooks.check(tmp_path, known_runs=['sonnet-1'])
+    assert any('names no run' in complaint for complaint in complaints)
+
+
+def test_a_page_named_after_no_class_is_a_complaint(tmp_path):
+    a_playbook(tmp_path)
+    (tmp_path / 'minimax' / 'TACTICS.md').write_text('seen in sonnet-1.\n')
+    complaints = playbooks.check(tmp_path, known_runs=['sonnet-1'])
+    assert any('TACTICS.md' in c and 'no class' in c for c in complaints)
+
+
+def test_a_family_without_a_common_page_is_a_complaint(tmp_path):
+    a_playbook(tmp_path, name=playbooks.class_file('Druid'))
+    complaints = playbooks.check(tmp_path, known_runs=['sonnet-1'])
+    assert any('has no COMMON.md' in complaint for complaint in complaints)
+
+
+def test_an_empty_page_is_a_complaint(tmp_path):
+    a_playbook(tmp_path, text='   \n')
+    assert any('is empty' in c for c in playbooks.check(tmp_path, known_runs=['x']))
+
+
+def test_a_first_run_can_start_its_familys_page(tmp_path):
+    page = playbooks.start('newmodel', run='newmodel-1', where=tmp_path)
+    assert page.name == playbooks.COMMON and 'newmodel-1' in page.read_text()
+    # It never overwrites: the family's own words survive a second call.
+    page.write_text('# COMMON\n\nmine, from newmodel-1.\n')
+    assert 'mine' in playbooks.start('newmodel', where=tmp_path).read_text()
+
+
+def test_the_record_says_which_family_playbook_the_run_used(tmp_path):
+    run = a_run(tmp_path)
+    record = run_module.write_record(run, playbook='minimax')
+    assert record['playbook'] == 'minimax'
+    # And a later rewrite does not lose it, as the standing once was lost.
+    assert run_module.write_record(run)['playbook'] == 'minimax'
+
+
+def test_archive_says_whether_the_run_wrote_back(tmp_path, monkeypatch):
+    run = a_run(tmp_path)
+    monkeypatch.setattr(playbooks, 'AGENTS', tmp_path / 'agents')
+    a_playbook(tmp_path / 'agents', family='fam',
+               text='# COMMON\n\nseen in r1.\n')
+    run_module.write_record(run, playbook='fam')
+    # started.json is written before the playbook here, so the page counts as
+    # written during the run.
+    assert 'wrote back to agents/fam/' in run_module._playbook_note(run)
+
+    stale = tmp_path / 'agents' / 'fam' / playbooks.COMMON
+    import os
+    old = (run / 'started.json').stat().st_mtime - 10
+    os.utime(stale, (old, old))
+    assert 'wrote nothing back' in run_module._playbook_note(run)
+
+
+def test_a_run_that_names_no_family_is_told_so(tmp_path):
+    run = a_run(tmp_path)
+    run_module.write_record(run)
+    assert 'names no playbook' in run_module._playbook_note(run)
+
+
+PROMPTS = ('PLAYGAME.txt', 'CONTINUEGAME.txt')
+
+
+@pytest.mark.parametrize('name', PROMPTS)
+def test_both_prompts_send_the_player_to_its_own_directory(name):
+    text = (pins.ROOT / name).read_text()
+    assert '{AGENT}' in text, 'the prompt must name which agent is playing'
+    assert 'agents/{AGENT}/COMMON.md' in text
+    assert 'playbook --family {AGENT}' in text
+    assert '--playbook {AGENT}' in text, 'the record must carry the family'
+    assert 'git add records knowledge agents' in text, \
+        'the commit must include the playbook the run just wrote'
+
+
+@pytest.mark.parametrize('name', PROMPTS)
+def test_the_writing_comes_before_the_finishing_commands(name):
+    """The lesson of the lost report: a step after `archive` does not happen."""
+    text = (pins.ROOT / name).read_text()
+    report = text.index('WRITE IT UP FIRST')
+    playbook = text.index('WRITE BACK TO agents/{AGENT}/')
+    commands = text.index('borg_runner record --run')
+    assert report < playbook < commands
+
+
+@pytest.mark.parametrize('name', PROMPTS)
+def test_the_prompts_do_not_send_a_player_to_a_file_that_is_gone(name):
+    """NOTES.md was removed; nothing a player is told to read may point at it."""
+    assert 'NOTES.md' not in (pins.ROOT / name).read_text()
+
+
+def test_no_live_document_points_at_the_removed_notes_file():
+    """`records/` and `knowledge/` are history and keep their own words."""
+    live = [pins.ROOT / name for name in
+            ('README.md', 'AGENTS.md', 'docs/BRIEF.md', 'agents/README.md',
+             'manuals/INSTRUCTIONS.md', 'manuals/INSTRUCTIONS_2.md')]
+    live += sorted((pins.ROOT / 'src' / 'borg_runner').glob('*.py'))
+    stale = [path.name for path in live
+             if path.exists() and 'NOTES.md' in path.read_text()]
+    assert not stale, f'{stale} still send a reader to knowledge/NOTES.md'

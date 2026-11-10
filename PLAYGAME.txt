@@ -6,6 +6,10 @@ records/OVERVIEW.md and say in your first note which one you chose.
 
     {RUNNAME}   the name of your run, e.g. codex-1
     {SEED}      an integer, e.g. 101
+    {AGENT}     which agent you are, as a model family: minimax, sonnet,
+                codex, qwen, glm. It names your own directory of notes,
+                agents/{AGENT}/, which you read before you play and write
+                back to before you stop
     {RACE}      optional: a race, e.g. Half-Troll. Omitted, it is drawn
     {CLASS}     optional: a class, e.g. Warrior. Omitted, it is drawn
 
@@ -15,25 +19,49 @@ directory, game process, seed, character and notebook. If the name is already
 taken by a live run, the tool refuses and names the run holding it; pick
 another.
 
-== READ THESE TWO FIRST, COMPLETELY ==
+== READ THESE FIRST, COMPLETELY ==
 
     manuals/INSTRUCTIONS.md   the game's manual and a strategy manual
-                              distilled into the order a player needs them.
-                              Section 9 has a block for each of the nine
-                              classes - read the one you are given, after the
-                              draw. Every line is labelled FACT, POLICY or
-                              UNTESTED and says where it came from.
-    knowledge/NOTES.md        what earlier runs found out, each line marked
-                              with how many runs saw it. Where these two
-                              disagree, NOTES wins: it is evidence and the
-                              other is reading.
+                              distilled into the order a player needs them,
+                              with what earlier runs found folded in. Every
+                              line is labelled: **FACT** is in the game's data
+                              or source, **OBSERVED** is what runs measured
+                              and says how many saw it, **POLICY** is the
+                              strategy manual's advice to be tested, and
+                              **UNTESTED** means nobody has tried it. Section
+                              9 has a block for each of the nine classes -
+                              read the one you are given, after the draw.
 
-Everything else in the repository is lookup. Go to it for a number or a page,
-not before. Do not read other runs' decisions or write-ups for your own seed -
+**And your own agent directory, agents/{AGENT}/.** Earlier sessions of your
+own model family wrote it for you: what they measured, what cost them the most
+asks, what they got wrong, what they would try next. It is not a manual - it
+is one player's account, kept for its own next session, which is you. After
+the draw, this prints exactly which pages exist and how long they are:
+
+    .venv/bin/python -m borg_runner playbook --family {AGENT} --class <CLASS>
+
+    agents/{AGENT}/COMMON.md    everything your family has learned
+    agents/{AGENT}/<CLASS>.md   the part that is only true of your class,
+                                when your family has played one
+
+If neither exists you are the first of your family here, and those pages are
+yours to write when you stop. Another family's directory is open to you too -
+knowledge is not private here - but you write only your own.
+
+Weigh them by what is behind them: a FACT or an OBSERVED line is the game or
+many runs, your playbook is one family's experience, a POLICY line is advice
+nobody has settled. Where your playbook contradicts an OBSERVED line, follow
+the OBSERVED line and say in your write-up which one held.
+
+Everything else in the repository is lookup. `knowledge/LEARNED.md` has the
+evidence behind each OBSERVED line, run and ask; `knowledge/MANUAL-GAPS.md`
+has the long cheat sheets; `manuals/INSTRUCTIONS_2.md` is depth 5 to 20 and no
+run has been there. Go to any of them for a number or a page, not before. Do not read other runs' decisions or write-ups for your own seed -
 general notes are knowledge, a transcript of your seed is a solution key.
 
-Your first note must say which files you actually opened. Nothing else records
-it, and the whole question here is what a reader does differently.
+Your first note must say which files you actually opened, your own playbook
+among them. Nothing else records it, and the whole question here is what a
+reader does differently.
 
 == START ==
 
@@ -138,19 +166,46 @@ your leads - each with the evidence and what would settle it.
 
 A broken run honestly reported is a result. A tidy story is not.
 
+== THEN WRITE BACK TO agents/{AGENT}/ ==
+
+Still before the commands. Your report is about this run and is read by
+whoever reads this repository; your agent directory is read by the next
+session of {AGENT} before its first keypress, which is the only place your
+experience can change how your own model plays.
+
+Update agents/{AGENT}/COMMON.md, and agents/{AGENT}/<CLASS>.md when your
+class has one or has earned one. Three rules:
+
+- **Fold it in, do not append a log.** A page a session cannot read whole is
+  a page it will skim. If something you were told turned out to be wrong,
+  correct that line rather than contradicting it further down.
+- **Name the run every claim came from**, so a reader can check it against
+  the record: `{RUNNAME}` is yours.
+- **Keep it yours.** What belongs there is what you measured, what cost you
+  asks and what you got wrong - not the manual restated. A general claim that
+  any player should have belongs in your notebook, where `keep` promotes it
+  into `knowledge/`.
+
+If your family has no COMMON.md yet, start one:
+
+    .venv/bin/python -m borg_runner playbook --family {AGENT} --start {RUNNAME}
+
+`archive` says afterwards whether you wrote back or not.
+
 Then run all six, in order. The first three are about your run; the last two
 publish it, and they are what makes your run visible to anyone else.
 
     .venv/bin/python -m borg_runner record --run runs/{RUNNAME} \
         --tokens <total> --tool-calls <total> \
         --played-by <session|codex|opencode|other> \
-        --model <provider>/<exact model version>
+        --model <provider>/<exact model version> \
+        --playbook {AGENT}
 
     .venv/bin/python -m borg_runner stop --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner keep --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner archive --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner overview
-    git add records knowledge index.html && \
+    git add records knowledge agents index.html && \
         git commit -m "{RUNNAME}: <depth, level, how it ended>" && \
         git pull --rebase -q && git push -q
 
@@ -179,8 +234,8 @@ What each does:
 - **the commit** publishes it. The dashboard is served at
   <https://diegoami.github.io/borg-runner/>, so until you push, your run is
   not there. Pull with a rebase first: other runs may have finished while you
-  played, and only `records/`, `knowledge/` and the dashboard files are yours
-  to add.
+  played, and only `records/`, `knowledge/`, your own `agents/{AGENT}/` and
+  the dashboard files are yours to add.
 
 If the replay page itself ever needs rebuilding for every run - after someone
 changes it - that is `borg_runner report --all`, not something a run does.

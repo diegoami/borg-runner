@@ -150,11 +150,14 @@ whole question here is what a reader does differently.
 
 | | |
 |---|---|
-| [manuals/INSTRUCTIONS.md](../manuals/INSTRUCTIONS.md) | the game's manual and the strategy manual distilled into what a player needs, in the order a player needs it, with **a block for every class** — find the one you drew. Every line is labelled FACT, POLICY or UNTESTED, and says where it came from |
-| [knowledge/NOTES.md](../knowledge/NOTES.md) | what earlier runs found out, each line marked with how many runs saw it. **Where the two disagree, NOTES wins**: it is evidence and the other is reading |
+| [manuals/INSTRUCTIONS.md](../manuals/INSTRUCTIONS.md) | the game's manual and the strategy manual distilled into what a player needs, in the order a player needs it, with **a block for every class** — find the one you drew, and with what earlier runs found folded in. Every line is labelled and says where it came from: **FACT** from the game's data or source, **OBSERVED** from runs with how many saw it, **POLICY** from the strategy manual to be tested, **UNTESTED** by anybody |
+| `agents/<family>/COMMON.md` and `<CLASS>.md` | your own model family's notes, written by its earlier sessions for this one — see below, and `borg_runner playbook --family <family>` |
 
-Those two are about 23 KB together and they are the reading. Everything below
-is **lookup** — go to it when you need a number or a page, not before.
+That page is about 23 KB and it is the reading, with your own family's pages
+beside it. Everything below is **lookup** — go to it when you need a number or
+a page, not before. `knowledge/LEARNED.md` holds the evidence behind each
+OBSERVED line with the run and the ask, and `knowledge/MANUAL-GAPS.md` the
+long cheat sheets.
 
 A player who has played this game before in this repository, and written up
 what that taught them, keeps their own generalisations here. These are

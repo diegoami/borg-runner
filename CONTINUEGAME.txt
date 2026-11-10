@@ -12,6 +12,11 @@ other. Two runs here end in `-again` and predate that; continuing one gives
 
     {FROM}      the run to continue, e.g. sonnet-2-again
     {RUNNAME}   the new run, e.g. sonnet-2-again-2
+    {AGENT}     which agent you are, as a model family: minimax, sonnet,
+                codex, qwen, glm. It names your own directory of notes,
+                agents/{AGENT}/, which you read before you play and write
+                back to before you stop. It is yours even when the character
+                you inherit was played by another family
 
 Work from /home/diego/projects/borg-runner and use .venv/bin/python. Your run
 will not disturb any other: each one owns its directory, game process,
@@ -47,12 +52,29 @@ you should say so rather than play on.
 
 == READ ==
 
-    manuals/INSTRUCTIONS.md   the manuals distilled. Section 9 has a block per
-                              class - **read the block for the character you
-                              have inherited**, which the screen's sidebar and
-                              `C` will tell you.
-    knowledge/NOTES.md        what earlier runs found. Where these two
-                              disagree, NOTES wins.
+    manuals/INSTRUCTIONS.md   the manuals distilled, with what earlier runs
+                              found folded in and labelled: FACT from the
+                              game's data, OBSERVED from runs (with how many
+                              saw it), POLICY to be tested, UNTESTED by
+                              anyone. Section 9 has a block per class -
+                              **read the block for the character you have
+                              inherited**, which the screen's sidebar and `C`
+                              will tell you.
+
+**Your own agent directory, agents/{AGENT}/.** Earlier sessions of your own
+model family wrote it for the next one, which is you: what they measured, what
+cost them asks, what they got wrong. This prints which pages exist, for your
+family and the class you have inherited:
+
+    .venv/bin/python -m borg_runner playbook --family {AGENT} --class <CLASS>
+
+If neither exists, you are the first of your family here and they are yours to
+write when you stop. Another family's directory is open to you - knowledge is
+not private here - and is worth opening when you inherit their character; you
+write only your own. Weigh them by what is behind them: a FACT or an OBSERVED
+line is the game or many runs, a playbook is one family's experience, a POLICY
+line is advice nobody has settled. The evidence behind each OBSERVED line is
+in `knowledge/LEARNED.md`, with the run and the ask.
 **Your own history, which no manual contains.** This character has lived
 before, perhaps more than once. Run
 
@@ -74,7 +96,7 @@ what is new, or what contradicts them - and when something they claim turns
 out to be wrong, say so with the evidence.
 
 Your first note must say which files you actually opened, **including which
-of your own write-ups**.
+of your own write-ups** and your own playbook.
 
 Do not read a *different* run's decisions or write-up for this seed. The run
 you continue is your own past; another run's transcript of the same dungeon is
@@ -120,19 +142,45 @@ settle each.
 
 A broken run honestly reported is a result. A tidy story is not.
 
+== THEN WRITE BACK TO agents/{AGENT}/ ==
+
+Still before the commands. Your report is about this life of this character;
+your agent directory is read by the next session of {AGENT} before its first
+keypress, whatever character it gets, and that is the only place your
+experience can change how your own model plays.
+
+Update agents/{AGENT}/COMMON.md, and the page for the class you inherited
+when it has one or has earned one. Three rules:
+
+- **Fold it in, do not append a log.** A page a session cannot read whole is
+  a page it will skim. A line that turned out to be wrong gets corrected
+  where it stands, not contradicted further down - and you are the session
+  best placed to do that, because you played on what it said.
+- **Name the run every claim came from**: `{RUNNAME}` is yours.
+- **Keep it yours.** What you measured, what cost you asks, what you got
+  wrong. A claim any player should have belongs in your notebook instead,
+  where `keep` promotes it into `knowledge/`.
+
+If your family has no COMMON.md yet, start one:
+
+    .venv/bin/python -m borg_runner playbook --family {AGENT} --start {RUNNAME}
+
+`archive` says afterwards whether you wrote back or not.
+
 Then run all six, in order. The first three are about your run; the last two
 publish it, and they are what makes your run visible to anyone else.
 
     .venv/bin/python -m borg_runner record --run runs/{RUNNAME} \
         --tokens <total> --tool-calls <total> \
         --played-by <session|codex|opencode|other> \
-        --model <provider>/<exact model version>
+        --model <provider>/<exact model version> \
+        --playbook {AGENT}
 
     .venv/bin/python -m borg_runner stop --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner keep --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner archive --run runs/{RUNNAME}
     .venv/bin/python -m borg_runner overview
-    git add records knowledge index.html && \
+    git add records knowledge agents index.html && \
         git commit -m "{RUNNAME}: <depth, level, how it ended>" && \
         git pull --rebase -q && git push -q
 
@@ -161,8 +209,8 @@ What each does:
 - **the commit** publishes it. The dashboard is served at
   <https://diegoami.github.io/borg-runner/>, so until you push, your run is
   not there. Pull with a rebase first: other runs may have finished while you
-  played, and only `records/`, `knowledge/` and the dashboard files are yours
-  to add.
+  played, and only `records/`, `knowledge/`, your own `agents/{AGENT}/` and
+  the dashboard files are yours to add.
 
 If the replay page itself ever needs rebuilding for every run - after someone
 changes it - that is `borg_runner report --all`, not something a run does.

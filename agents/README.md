@@ -1,8 +1,9 @@
 # agents/ — what each model family has learned, in its own words
 
-`knowledge/NOTES.md` is the repository's memory: every run's notes,
-consolidated, each line marked with how many runs saw it. Nothing in it
-belongs to anybody.
+`manuals/INSTRUCTIONS.md` is the repository's memory: the manuals distilled,
+with what runs measured folded in as **OBSERVED** lines that say how many runs
+saw each one, and the evidence behind them in `knowledge/LEARNED.md`. Nothing
+in it belongs to anybody.
 
 This directory is the other kind of memory. **One directory per model family,
 written by that family for its own next session.**
@@ -40,12 +41,12 @@ or left the next session where it started.
 
 | | |
 |---|---|
-| `manuals/INSTRUCTIONS.md` | the game's manual and a strategy manual, distilled. Reading. |
-| `knowledge/NOTES.md` | what runs found, with how many runs saw each line. Evidence. |
+| `manuals/INSTRUCTIONS.md` | the manuals distilled, plus what runs measured as OBSERVED lines. Has to hold for any player. |
+| `knowledge/LEARNED.md`, `MANUAL-GAPS.md`, `<run>.md` | the evidence under those lines: the claim, its status, the run and the ask. |
 | `agents/<family>/` | one family's own account: what it measured, what cost it asks, what it got wrong. |
 
 So a line like *"a down staircase is `>` and `l>g` walks to one"* belongs in
-NOTES, where any player benefits from it. A line like *"I keep losing track of
+INSTRUCTIONS, where any player benefits from it. A line like *"I keep losing track of
 what I am carrying because I will not spend an ask on `i`"* belongs here: it is
 true of one player and useless as a general claim.
 

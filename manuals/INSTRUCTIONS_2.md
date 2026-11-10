@@ -1,6 +1,6 @@
 # INSTRUCTIONS 2: Angband 4.2.6, depth 5 to 20, for a character that survived volume 1
 
-**No run has reached depth 8. Volume 1 carries OBSERVED lines because earlier runs tested it; this volume has none and cannot have any yet.** Every line below is extraction from the game's data and source, or a strategy-manual rule: a hypothesis, not knowledge. A run that gets here should expect to correct it, and `knowledge/NOTES.md` wins over this page as over volume 1. Character level 8 to 25 is the manual's rough figure (c12 12.6, 12.7: typical CL 8-22 and 18-32), not a game rule.
+**No run has reached depth 8. Volume 1 carries OBSERVED lines because earlier runs tested it; this volume has none and cannot have any yet.** Every line below is extraction from the game's data and source, or a strategy-manual rule: a hypothesis, not knowledge. A run that gets here should expect to correct it, and what a run has actually measured - in volume 1, or here - wins over this page. Character level 8 to 25 is the manual's rough figure (c12 12.6, 12.7: typical CL 8-22 and 18-32), not a game rule.
 
 Sources, so any line can be checked. Volume 1's shorthand holds, plus `monster_spell`/`monster_base`/`projection`/`curse`/`ego_item`/`constants`/`player_timed`/`dungeon_profile`/`object_property` = `vendor/angband/lib/gamedata/<name>.txt` and `c8`/`c12`/`c13` for strategy chapters. Labels as in volume 1: **FACT** (game data or source), **POLICY** (a chapter 15 rule: a starting policy to be measured, not truths), **UNTESTED** (untried).
 

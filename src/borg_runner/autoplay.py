@@ -135,7 +135,7 @@ def manual_files():
     # that gets skimmed. Three runs recorded what they opened and every one
     # read a section or two of command.rst and a fraction of chapter 15.
     wanted = [pins.ROOT / 'manuals' / 'INSTRUCTIONS.md',
-              run_module.KNOWLEDGE / 'NOTES.md']
+              run_module.KNOWLEDGE / 'LEARNED.md']
     if not any(path.exists() for path in wanted):       # before the distillate
         game = pins.clone('angband')
         wanted = [game / 'docs' / 'command.rst', game / 'docs' / 'guide.rst']

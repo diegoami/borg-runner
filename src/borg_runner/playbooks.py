@@ -1,13 +1,14 @@
 """What one model family has learned, kept for its own next session.
 
-`knowledge/NOTES.md` is the whole corpus: every run's notes, each line marked
-with how many runs saw it, and no line in it belongs to anybody. A playbook is
+`manuals/INSTRUCTIONS.md` is the repository's memory: the manuals distilled,
+with what runs measured folded in as OBSERVED lines and the evidence behind
+them in `knowledge/LEARNED.md`. Nothing in it belongs to anybody. A playbook is
 the other thing - one family's own account of playing this game, written for
 the next session of the same model: what it measured, what it got wrong, and
 the judgement it would apply again. The two are not interchangeable. A line in
-NOTES is evidence that stands whoever reads it; a line in a playbook may be
-"this is how I keep losing track of my inventory", which is true of one player
-and useless as a general claim.
+INSTRUCTIONS has to hold for any player; a line in a playbook may be "this is
+how I keep losing track of my inventory", which is true of one player and
+useless as a general claim.
 
     agents/<family>/COMMON.md     what any run of that family should know
     agents/<family>/<CLASS>.md    the part that is only true of one class
@@ -106,7 +107,7 @@ SKELETON = """# COMMON - what {family} has learned about playing Angband
 
 *Written by the player of `{run}`. This file is for the next session of
 {family}, not a general manual: `manuals/INSTRUCTIONS.md` and
-`knowledge/NOTES.md` are that. What belongs here is what is **mine** - what I
+`knowledge/LEARNED.md` are that. What belongs here is what is **mine** - what I
 measured, what I got wrong, and the judgement I would apply again. Where it
 contradicts the manual, it is because I measured it, and it says so.*
 

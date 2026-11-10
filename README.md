@@ -19,10 +19,15 @@ Two files are the entry points. Hand either to any harness — Codex, a Claude
 session, a terminal — as one line, with the placeholders filled in:
 
 ```
-Follow the prompt in /home/diego/projects/borg-runner/PLAYGAME.txt — RUNNAME=codex-1
-Follow the prompt in /home/diego/projects/borg-runner/PLAYGAME.txt — RUNNAME=gnome-1, RACE=Gnome, CLASS=Mage
-Follow the prompt in /home/diego/projects/borg-runner/CONTINUEGAME.txt — FROM=minimaxflash-1-again
+Follow the prompt in /home/diego/projects/borg-runner/PLAYGAME.txt — RUNNAME=codex-1, AGENT=codex
+Follow the prompt in /home/diego/projects/borg-runner/PLAYGAME.txt — RUNNAME=gnome-1, AGENT=sonnet, RACE=Gnome, CLASS=Mage
+Follow the prompt in /home/diego/projects/borg-runner/CONTINUEGAME.txt — FROM=minimaxflash-1-again, AGENT=minimax
 ```
+
+`AGENT` is which agent is playing, as a model family: it names
+[agents/&lt;family&gt;/](agents/), the directory that family keeps for its own
+next session. The run reads it before its first keypress and writes back to it
+before it stops.
 
 [PLAYGAME.txt](PLAYGAME.txt) starts a new game: the reading, the loop, the
 rules and what to run when it stops. Give it a `SEED` as well to play a
@@ -52,12 +57,17 @@ that do it:
 
 ```sh
 .venv/bin/python -m borg_runner stop --run runs/mine               # it saves and quits
-.venv/bin/python -m borg_runner record --run runs/mine --played-by … --model …/…
+.venv/bin/python -m borg_runner record --run runs/mine --played-by … --model …/… --playbook …
 .venv/bin/python -m borg_runner keep --run runs/mine        # its notes into knowledge/
 .venv/bin/python -m borg_runner archive --run runs/mine     # keys, notes, and its replay page
 .venv/bin/python -m borg_runner overview                    # the dashboard, all three files
-git add records knowledge index.html && git commit -m … && git pull --rebase && git push
+git add records knowledge agents index.html && git commit -m … && git pull --rebase && git push
 ```
+
+Before those, two files the player writes itself: `REPORT.md`, and its own
+`agents/<family>/` pages. Both prompts put them **before** the commands,
+because a step after `archive` is a step that does not happen — one run wrote
+its report after archiving and the archive never had it.
 
 `archive` generates that run's replay; `overview` rebuilds
 `records/OVERVIEW.md`, `index.html` and `records/overview.html` from the
@@ -129,6 +139,16 @@ is the only part that is not reproducible, because it is what the player
 worked out, so `keep` promotes it into `knowledge/` with its provenance: the
 seed, the build, the depth reached and the hashes. A later run starts from it
 with `play --notebook`, and then the question is whether it gets deeper.
+
+And a third thing is kept: **[agents/](agents/)**, one directory per model
+family, written by that family for its own next session —
+`agents/<family>/COMMON.md` and a page per class. `knowledge/` is the
+repository's memory, where a line is weighed by how many runs saw it;
+`agents/` is one player's, where the line may be *"I keep losing track of what
+I am carrying because I will not spend an ask on `i`"*. Both prompts name the
+family as `AGENT`, the run reads those pages first and writes back to them
+last, `record --playbook <family>` puts it in the record, and `archive` says
+whether the run wrote back or left the next session where it started.
 
 ## Why the screen, and why keys
 

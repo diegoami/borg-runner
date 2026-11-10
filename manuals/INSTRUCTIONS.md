@@ -1,6 +1,6 @@
 # INSTRUCTIONS: Angband 4.2.6 for a player with one screen and ~150 decisions
 
-What the game's manual and the strategy manual say, cut to what you use, in the order you use it. **What earlier runs found out, including where they contradicted this page, is in `knowledge/NOTES.md`: read it too, and where the two disagree NOTES wins.**
+What the game's manual and the strategy manual say, cut to what you use, in the order you use it. **What earlier runs found out is folded into this page, marked OBSERVED with how many runs saw it**; the evidence behind each one, with the run and the ask, is in `knowledge/LEARNED.md`, and the long cheat sheets are in `knowledge/MANUAL-GAPS.md`. What one model family found out about *itself* is in `agents/<family>/`, which is yours to read and to write back to.
 
 **Depth 5 to 20 (breath, summoners, kit gates) is volume 2, `manuals/INSTRUCTIONS_2.md`; no run has tested it yet.**
 
@@ -23,6 +23,51 @@ Original keyset: digits walk (`1-9`, `5` stays), letters are commands. Keys you 
 OBSERVED, `sonnet-2-again` asks 156-230: this is how the only deliberate descent in any run happened — depth 6 to depth 7, after four runs and some 350 asks had never found a staircase at all. One ask walked 11 steps and 110 game turns onto the stairs.
 
 Two runs went wrong here in ways worth not repeating. One spent ~100 asks walking a level blind and found nothing. One wrote itself a 143-line pathfinder, used it for 148 asks, reached depth 1, and never tried `lxg` — the game already had what it was building. **Check the game's own commands before you write code.**
+
+## Keys as the game receives them
+
+The keys of one ask are fed to the game without anything looking at the screen
+in between, so every string is a bet that nothing interrupts it. This section
+is what that bet has cost earlier runs; each line is OBSERVED, with how many
+runs saw it, and the evidence is in `knowledge/LEARNED.md`.
+
+- **A `-more-` swallows the next key** (3 runs). A command typed behind one
+  loses its first key and the rest is misread. A space clears a `-more-` and
+  is harmless otherwise, so end a string with spaces (`va'   `). A level
+  change ends in one: take stairs with `> `, not `>` - `<>` in one ask left a
+  run standing in the town.
+- **Menu letters are labels, not positions** (3 runs). Store rows came up
+  `a c f h j m n o q r u v y z`; the pack skips `h j k l`, so its fifth row is
+  `e` and its eighth `i`; and the throw prompt has letters of its own (a flask
+  of oil was `a` there and `b` or `c` in the pack). Read the letter off the
+  screen, press it, and check the cursor moved to the row you meant - the
+  header of every screen gives you `cursor at x,y` for exactly this.
+- **A whole purchase fits one ask** (3 runs): `p`, the row letter, the
+  quantity as digits, Enter, then any key but Escape. `ph10\ny ` bought ten
+  flasks of oil. "One purchase per ask" was an early wrong note.
+- **Confused, blind, afraid or slowed: one or two keys per ask, never a
+  string of waits** (the Mage that died on depth 1). It sent sixteen hold keys
+  in one ask while confused; a wounded kobold it believed dead arrived about
+  seven turns in and killed it from full health, with five Cure Light Wounds
+  in the pack. The game flushes input on a disturbance, and what you sent is
+  still in the buffer afterwards.
+- **A digit string stops at the first wall and the rest is dropped** (2 runs).
+  In caves `.` plus a digit stopped every two or three squares, where
+  `4444444444` went further - but see the top of this page: neither is how to
+  cross a level.
+- **`l` with monsters on the screen answered only "You are on an open
+  floor"** (2 runs): the cursor starts on you. Both runs attacked or threw to
+  find out what a letter was. Cycling with space, or `[`, is UNTESTED.
+- **An unknown potion or scroll pays experience the first time it is used,
+  and the payment shrinks fast** (2 runs): Blessing at CL1 moved `NXT` by one,
+  Deep Descent at CL4 paid 3, Cure Serious Wounds at CL5 paid 1, Blessing at
+  CL6 nothing; one unknown potion at CL1 was worth a whole character level. So
+  try unknowns at CL1-3 and keep them for need after that: at CL5 one run
+  drank an unknown at 89/89 hit points and spent a Cure Serious Wounds on
+  nothing. Bought scrolls and potions are already named and pay nothing.
+- **A reroll of the level costs three asks** (2 runs): `< ` then `> ` on
+  connected stairs gives a freshly generated level of the same depth. It was
+  no quicker to finish than exploring the level it replaced (1 run).
 
 ## 1. Be born (`birth` ; the birth screens)
 - Race menu `*` (random item, Enter selects the highlight), class menu `*`. Stat screen: `a` (point-based), Enter to accept the allocation; Enter for the name, `y` for the history, any key to continue.
@@ -121,8 +166,9 @@ better weapon of the same kind swaps it for you automatically (OBSERVED,
 `sonnet-2-again`).
 
 **An unknown potion or scroll is worth trying** rather than carrying, because
-first use pays experience and selling pays nothing - the conditions and the
-risk table are in `knowledge/NOTES.md`.
+first use pays experience and selling pays nothing - the conditions are under
+"Keys as the game receives them" above and the risk table is in
+`knowledge/MANUAL-GAPS.md`.
 
 ## 7. Recover
 - `R` then `&` then Enter rests until healed or disturbed; `R` `*` Enter until HP and SP are full; or give a number. Resting doubles regeneration; poison, stun, cuts stop it (c15 CURE-01, REST-01).

@@ -35,6 +35,7 @@ COLUMNS = (
     ('read_its_own_playbook', 'read its class'),
     ('own_tools', 'own tools'),
     ('wrote_up', 'wrote up'),
+    ('playbook', 'playbook'),
     ('replay', 'replay'),
 )
 
@@ -84,6 +85,9 @@ def rows(where=None):
             'report': (f'{record_path.parent.name}/REPORT.md'
                        if (record_path.parent / 'REPORT.md').exists() else None),
             'wrote_up': 'yes' if (record_path.parent / 'REPORT.md').exists() else 'NO',
+            # The model family whose agents/<family>/ pages this run read and
+            # wrote back to: the other half of what a run leaves behind.
+            'playbook': record.get('playbook'),
             'replay': (f'{record_path.parent.name}/report.html'
                        if (record_path.parent / 'report.html').exists() else None),
             'seconds_per_decision': cost.get('seconds_per_decision'),
@@ -277,6 +281,10 @@ PAGE_SCRIPT = r"""
         + '<td>' + ended + '</td>'
         + '<td class="n">' + cell(r, 'tokens') + '</td>'
         + '<td class="model">' + escaped(r.inherited || '—') + '</td>'
+        + '<td class="model">' + (r.playbook
+            ? '<a href="https://github.com/diegoami/borg-runner/tree/main/agents/'
+              + escaped(r.playbook) + '">' + escaped(r.playbook) + '</a>'
+            : '—') + '</td>'
         + '</tr>';
     }).join('');
     count.textContent = shown.length + ' of ' + runs.length + ' runs';
@@ -303,7 +311,8 @@ HEADINGS = (('run', 'run'), ('seed', 'seed'), ('model', 'model'),
             ('character', 'character'), ('max_depth', 'depth'), ('character_level', 'level'),
             ('wealth', 'wealth'), ('asks', 'asks'), ('keypresses', 'keys'),
             ('final_turn', 'turn'), ('outcome', 'outcome'),
-            ('tokens', 'tokens'), ('inherited', 'inherited'))
+            ('tokens', 'tokens'), ('inherited', 'inherited'),
+            ('playbook', 'playbook'))
 
 
 def page(found=None, standalone=True):
