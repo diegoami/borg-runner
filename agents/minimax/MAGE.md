@@ -407,3 +407,50 @@ The three rules I would give the next mage:
   blows a turn) wake with it. **When the numbers say the fight costs
   more than the run, the staircases are worth more than the kill** — and
   the staircase is where the gold was (55 on depth 3).
+
+## From `mmf-mage.3`, 2026-11-10
+
+## What mmf-mage.3 measured (a Gnome Mage, depth 2, dead at 11 experience)
+
+- **THE SPELL LIST'S ROWS ARE THE SPELLS YOU HAVE LEARNED, while the screen
+  prints every spell in the book** with `unknown` or `difficult` beside the
+  ones you cannot use. A letter press is an INDEX into the menu's rows, not
+  into the letters on the screen, so every letter I pressed cast the one
+  spell I knew — Find Traps, four times, and I read it as Magic Missile
+  three times. **You cannot cast a spell you have not studied**, so the +4
+  experience of a first Magic Missile or Light Room is out of reach at CL1
+  (my one slot held Find Traps) and becomes reachable at CL2, when the
+  second slot opens.
+- **In that menu, a letter MOVES the cursor and a second press of the same
+  letter selects it, and `8` (up) does not move the cursor at all** — up is
+  direction 0 and the menu tests `if (dir && ...)`. Only `2` (down) works.
+  The cursor starts on the spell you already know.
+- **The first use of an unknown potion pays its kind's level**, and the
+  depth-1 pool's best kind is worth five: my Yellow Potion was a Potion of
+  Neutralize Poison (`level:5` in `object.txt`) and paid 5 experience in one
+  ask. The pool averages 1.4 experience a potion (Neutralize Poison 60,
+  Speed/Heroism/Boldness 40 each, Cure Light Wounds 80, and Sleep,
+  Blindness, Confusion, Poison, Slowness 10 each), and the five bad ones are
+  3 per cent each.
+- **Depth 2 has monsters that are never asleep.** The crow (`sleepiness:0`,
+  speed 120, two bites of 1d3, so up to 12 damage a turn) killed this run's
+  8-hit-point mage; the wild cat is the same shape (`sleepiness:0`, speed
+  120). At AC 17 most of depth 2 cannot hurt a mage much — the danger is the
+  monsters that act twice a turn, not the armoured ones. **A CL1 mage should
+  arrive on a new level with a full spell bar and should meet nothing
+  awake.**
+- **Cheap kills, measured:** the white worm mass (10 hp, AC 1, 2 experience)
+  and the giant white mouse (2 hp, AC 4, 1 experience) each die to ONE flask
+  — about 89 and 73 per cent to hit at those armour classes. The large white
+  snake (11 hp, AC 36) is the opposite: oil is on the 12 per cent floor
+  there, so it wants Magic Missile, not flasks, and it is worth 2 experience
+  for four flasks if you use oil.
+- **A room is where the monsters are, and the detection spell is how you find
+  the rooms:** its doors are the room entrances, and the corridors I walked
+  held nothing while the room held two. **But a door can also be a closet** —
+  one of the four doors this level had no floor on the far side at all, and
+  the room I inherited could only be left through a one-tile notch in its
+  east wall, reached by a diagonal step.
+- **The level behind you is worth nothing.** Leaving depth 1 destroyed it,
+  and its 22 asks of walking bought a level whose known area was a dead-end
+  tree: every known tile led back to the room I started in.
