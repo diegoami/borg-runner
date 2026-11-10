@@ -214,10 +214,16 @@ def link_report(text, name, into):
         '---',
         '',
     ])
-    body = text
-    if HEADER in body:
-        body = body.split('---\n\n', 1)[-1]
-    Path(into).write_text(block + body.lstrip('\n'))
+    body = text.lstrip('\n')
+    # A report can carry more than one generated block (a run that copied the
+    # format and was then archived); strip every leading one, not just the
+    # first, or the next archive stacks a third.
+    while body.startswith(HEADER):
+        end = body.find('---\n')
+        if end < 0:
+            break
+        body = body[end + len('---\n'):].lstrip('\n')
+    Path(into).write_text(block + body)
     return Path(into)
 
 
