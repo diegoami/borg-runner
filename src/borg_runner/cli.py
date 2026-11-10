@@ -20,7 +20,11 @@ def cmd_play(args):
         run_module.inherit(run, args.notebook)
     asked_for = {k: v for k, v in (('race', args.race), ('class', args.klass))
                  if v}
-    process = run_module.start(run, args.seed, asked_for=asked_for, log=print)
+    # The frame dump is on for every run: the states between the asks are
+    # where deaths happen, and a run that does not record them cannot be
+    # shown dying (minimaxflash-3's report was missing exactly those).
+    process = run_module.start(run, args.seed, asked_for=asked_for,
+                               frames=True, log=print)
     if not replay_module.wait_for(run, 1, process, timeout=60):
         run_module.stop(run, process)
         print('the game never asked for a key; see game.log', file=sys.stderr)
@@ -123,7 +127,7 @@ def cmd_autoplay(args):
     from . import autoplay as autoplay_module
 
     run = run_module.directory(args.name)
-    process = run_module.start(run, args.seed, log=print)
+    process = run_module.start(run, args.seed, frames=True, log=print)
     if not replay_module.wait_for(run, 1, process, timeout=60):
         run_module.stop(run, process)
         print('the game never asked for a key; see game.log', file=sys.stderr)
