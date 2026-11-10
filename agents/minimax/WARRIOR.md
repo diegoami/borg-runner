@@ -85,3 +85,47 @@ the kobold, soldier, acolyte and apprentice on depth 2.
 3. **A level left by `<` then `>`** instead of swept, now that three or four
    staircases per level is known — it should be two or three asks to a fresh
    level with fresh monsters near the exit.
+
+## From `mmx-war-1`, 2026-11-10
+
+## From `mmx-war-1`, 2026-11-10
+
+## What mmx-war-1 measured about the Warrior (seed 271, Half-Elf, 140 asks, depth 2, CL4, died to a silver mouse)
+
+**Buy a Cure Light Wounds before anything else.** This run bought 20 flasks
+of oil, a Magic Mapping scroll and a Phase Door, and **no heal at all**. A
+grey mould (two blows of 1d4, so 8 a turn) cornered me at 4 HP and the only
+certain heal was the kit's Potion of Berserk Strength — which heals 30 but
+takes **10 armour class**, so every monster thereafter hit me about a third
+more often. One Cure Light Wounds is 20 gold and it would have been the
+difference between a run and a corpse. Our own COMMON.md says "one heal, one
+escape, then oil and armour"; I did not follow it.
+
+**If you are going to escape, teleport FIRST and heal second.** A Scroll of
+Phase Door resolves before the monster's attack, so reading it while a
+mould is next to you gets you out of its reach; drinking the Berserk
+Strength in the same turn leaves you next to it with 10 less armour class.
+Order matters and it cost me three decisions to work out.
+
+**The kit dagger is better than the manual's "1d1" suggests: 1d4+3, to-hit
+84, 2.77 blows a turn.** Against AC 9-24 that is 79-92% per blow, so
+melee is right for the soft monsters and hopeless for the armoured ones. A
+15-HP apprentice dies in one turn. A 23-HP soldier (2 x 1d7, up to 14 a
+turn) needs two turns and will kill a CL1-2 Warrior with 19-32 HP — **do
+not fight a soldier in melee at all**, and remember that the monsters on
+depth 2 hit for twice what the depth-1 ones do.
+
+**Depth 1 is for experience, depth 2 is for killing.** A small kobold pays 5
+experience at CL1; a giant black ant on depth 2 pays 8 at CL2 and 16 at CL1.
+I spent 99 decisions finding depth 1's staircase and 22 on depth 2, and the
+depth-2 kills paid for three character levels.
+
+**The silver mice are the depth-2 killer for a low-level Warrior.** Eleven
+of them in one room, 2 HP each, 1d2, and they multiply: killing them one at
+a time took me from 22 to 57 experience (CL2 to CL4) and then killed me at
+35/35 HP. A long digit chain into that room is how it happened.
+
+**Look before you send a long chain.** A 59-key chain into a room I had not
+looked at cost me 15 hit points to two grey moulds; a 60-key chain into the
+mouse room cost me the run. The panel shows the monsters; one `l` or one `M`
+before the chain is worth more than the chain.

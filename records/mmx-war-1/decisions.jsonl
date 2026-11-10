@@ -1,0 +1,141 @@
+{"ask": 1, "depth": 0, "keys": " ", "reason": "intro screen, press a key", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "*", "reason": "race not given, so random race", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "a", "reason": "class menu: Warrior is row a", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "a", "reason": "stat generation menu: point-based (row a)", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "\\n", "reason": "accept the game's own point allocation, do not move points", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "\\n", "reason": "accept pre-filled name", "turn": 1}
+{"ask": 7, "depth": 0, "keys": "y", "reason": "accept history", "turn": 1}
+{"ask": 8, "depth": 0, "keys": " ", "reason": "continue into the game", "turn": 1}
+{"ask": 9, "depth": 0, "keys": "222222222444888", "reason": "walk down the town's main street, west along the plaza, then north onto the General Store tile (41,9)", "turn": 1}
+{"ask": 10, "depth": 0, "keys": "pj20\\n ", "reason": "buy 20 flasks of oil (row j, 3g each = 60g) at the General Store", "turn": 141}
+{"ask": 11, "depth": 0, "keys": " \\e", "reason": "clear the -more-, then leave the store", "turn": 141}
+{"ask": 12, "depth": 0, "keys": "24444444444444448", "reason": "walk from the General Store tile to the Alchemist tile (26,9) along the plaza", "turn": 151}
+{"ask": 13, "depth": 0, "keys": "2448", "reason": "step down, west twice along the plaza, then up onto the Alchemist tile (26,9)", "turn": 308}
+{"ask": 14, "depth": 0, "keys": "pm1\\n ", "reason": "buy 1 Scroll of Magic Mapping (row m, 65g) - it memorises terrain into cave->memory, so M and my digit-chain planner get a 44x80 known area, and it settles my family's open question", "turn": 338}
+{"ask": 15, "depth": 0, "keys": "pj1\\n ", "reason": "buy 1 Scroll of Phase Door (row j, 15g) - my family notes say spend on escapes before potions, and the kit's Berserk Strength is already a 30-point heal", "turn": 338}
+{"ask": 16, "depth": 0, "keys": "\\e", "reason": "leave the Alchemist", "turn": 338}
+{"ask": 17, "depth": 0, "keys": "l>g", "reason": "use the game's own pathfinding: look, jump the cursor to the known down staircase, walk there", "turn": 348}
+{"ask": 18, "depth": 0, "keys": "666666666666666668888888", "reason": "digit chain east along the plaza then north up column 44 onto the town's down staircase at (44,3)", "turn": 358}
+{"ask": 19, "depth": 0, "keys": "> ", "reason": "take the town's down staircase to depth 1", "turn": 598}
+{"ask": 20, "depth": 1, "keys": "r", "reason": "open the read prompt to see the scroll letters before reading the Magic Mapping", "turn": 598}
+{"ask": 21, "depth": 1, "keys": "e", "reason": "read the Scroll of Magic Mapping (letter e) - it memorises 44x80 tiles into cave->memory", "turn": 598}
+{"ask": 22, "depth": 1, "keys": "M", "reason": "draw the whole remembered level to look for a down staircase", "turn": 608}
+{"ask": 23, "depth": 1, "keys": " lxg", "reason": "dismiss the M map, then use the game's own autoexplore: look, jump to the nearest unexplored edge, walk there. The Magic Mapping made a huge known region, so the game's pathfinder should cross it.", "turn": 608}
+{"ask": 24, "depth": 1, "keys": "8", "reason": "the white worm mass (AC 1, 10hp, 1d2 poison) is directly north and blocks the only exit of this dead-end pocket; melee it with the dagger", "turn": 618}
+{"ask": 25, "depth": 1, "keys": " 8", "reason": "clear the -more-, then north: attack the worm mass again if it lives, else step into its square", "turn": 618}
+{"ask": 26, "depth": 1, "keys": "lxg", "reason": "autoexplore: look, jump the cursor to the nearest unexplored edge, walk there", "turn": 635}
+{"ask": 27, "depth": 1, "keys": "488884224884224884224884", "reason": "beam-search digit chain: 24 steps that maximise the number of dark squares turned into remembered ones", "turn": 645}
+{"ask": 28, "depth": 1, "keys": "4444448888844442222222444444444444848888", "reason": "beam chain of 40 steps into the dark: 34 unknown squares turned into remembered ones", "turn": 875}
+{"ask": 29, "depth": 1, "keys": "M", "reason": "whole remembered level: look for a down staircase and find where the dark is relative to me", "turn": 1175}
+{"ask": 30, "depth": 1, "keys": "[", "reason": "list the visible monsters: I need the name of the two C glyphs 10 tiles east of me before I move", "turn": 1175}
+{"ask": 31, "depth": 1, "keys": " 2226666666", "reason": "dismiss the monster-list screen, then walk onto the armour lying in the room (42,15)", "turn": 1175}
+{"ask": 32, "depth": 1, "keys": "g888848888888888888", "reason": "pick up the armour, then walk north through the only opening of this room (41,10) and on into the dark", "turn": 1275}
+{"ask": 33, "depth": 1, "keys": " 4484222222248888888422222222488888888422", "reason": "beam chain into the dark: 39 unknown squares in the plan", "turn": 1405}
+{"ask": 34, "depth": 1, "keys": " 8888888888884222222222488888888842222222", "reason": "beam chain north through the door and into the dark: 38 unknown squares in the plan", "turn": 1545}
+{"ask": 35, "depth": 1, "keys": "4488888888842222222222222222222488888888", "reason": "beam chain into the dark", "turn": 1665}
+{"ask": 36, "depth": 1, "keys": "4488888888842222222222222222222224888888", "reason": "beam chain into the dark", "turn": 1705}
+{"ask": 37, "depth": 1, "keys": "4488888888842222222222222222222224888888", "reason": "beam chain into the dark", "turn": 1745}
+{"ask": 38, "depth": 1, "keys": "4488888888842222222222222222222224888888", "reason": "beam chain into the dark", "turn": 1785}
+{"ask": 39, "depth": 1, "keys": "lxg", "reason": "autoexplore: the game's own path to the nearest unexplored edge", "turn": 1825}
+{"ask": 40, "depth": 1, "keys": "lxg", "reason": "autoexplore: the game's own path to the nearest unexplored edge", "turn": 1835}
+{"ask": 41, "depth": 1, "keys": "lxg", "reason": "autoexplore: the game's own path to the nearest unexplored edge", "turn": 1845}
+{"ask": 42, "depth": 1, "keys": "lxg", "reason": "autoexplore: the game's own path to the nearest unexplored edge", "turn": 1855}
+{"ask": 43, "depth": 1, "keys": "M", "reason": "whole remembered level: coverage and any down staircase", "turn": 1865}
+{"ask": 44, "depth": 1, "keys": "4488888888842222222222222222222224888888", "reason": "beam chain into the dark", "turn": 1865}
+{"ask": 45, "depth": 1, "keys": "4488888888842222222222222222222224888888", "reason": "beam chain into the dark", "turn": 1895}
+{"ask": 46, "depth": 1, "keys": "4488888888842222222222222222222224888888", "reason": "beam chain into the dark", "turn": 1935}
+{"ask": 47, "depth": 1, "keys": "4488888888842222222222222222222224888888", "reason": "beam chain into the dark", "turn": 1975}
+{"ask": 48, "depth": 1, "keys": "4844888866888666666666666666666888622222", "reason": "beam chain into the dark", "turn": 2055}
+{"ask": 49, "depth": 1, "keys": "8886886222226666662222222222222222488888", "reason": "beam chain into the dark", "turn": 2395}
+{"ask": 50, "depth": 1, "keys": " 8", "reason": "kill the small kobold that is awake and adjacent (8 hp, AC 24, 1d5): walk north into it", "turn": 2695}
+{"ask": 51, "depth": 1, "keys": "8", "reason": "step north onto the item the kobold dropped", "turn": 2705}
+{"ask": 52, "depth": 1, "keys": "g", "reason": "pick up the 5 unknown potions the kobold dropped (free loot; their kind is unknown, so I will not drink one until I can identify it)", "turn": 2715}
+{"ask": 53, "depth": 1, "keys": "8888444", "reason": "walk north up the corridor and west into the room to the scroll at (55,5)", "turn": 2716}
+{"ask": 54, "depth": 1, "keys": "g", "reason": "pick up the unknown scroll (carry it; I will read it only when a Deep Descent would not kill me)", "turn": 2786}
+{"ask": 55, "depth": 1, "keys": "8888422222488888422244444444444444444222", "reason": "beam chain into the dark", "turn": 2787}
+{"ask": 56, "depth": 1, "keys": "8884448888888884484224884224884224884224", "reason": "beam chain into the dark", "turn": 3187}
+{"ask": 57, "depth": 1, "keys": "88888626862686268626862", "reason": "beam chain into the dark", "turn": 3587}
+{"ask": 58, "depth": 1, "keys": "2222222222488888884222222222488888888842", "reason": "beam chain into the dark", "turn": 3777}
+{"ask": 59, "depth": 1, "keys": "2222222222224888888888422222222248888888", "reason": "beam chain into the dark", "turn": 3897}
+{"ask": 60, "depth": 1, "keys": "4888626862686268626862", "reason": "beam chain into the dark", "turn": 3997}
+{"ask": 61, "depth": 1, "keys": "2222222222488888884222222222488888888842", "reason": "beam chain into the dark", "turn": 4177}
+{"ask": 62, "depth": 1, "keys": "2222222222224888888888422222222248888888", "reason": "beam chain into the dark", "turn": 4294}
+{"ask": 63, "depth": 1, "keys": "M", "reason": "whole remembered level: coverage and any down staircase", "turn": 4394}
+{"ask": 64, "depth": 1, "keys": " *p9999999999999999999999999999999999999999g", "reason": "aim-walk: put the cursor 40 tiles north-east, in the direction the M map says the dark is, and let the game's pathfinder cross ground nobody has seen", "turn": 4394}
+{"ask": 65, "depth": 1, "keys": "M", "reason": "coverage check", "turn": 4554}
+{"ask": 66, "depth": 1, "keys": " lxg", "reason": "autoexplore: the game's own path to the nearest unexplored edge", "turn": 4554}
+{"ask": 67, "depth": 1, "keys": "8866666666686268626862686268626862686268", "reason": "beam chain into the dark", "turn": 4594}
+{"ask": 68, "depth": 1, "keys": "lxg", "reason": "autoexplore: the game's own path to the nearest unexplored edge", "turn": 4994}
+{"ask": 69, "depth": 1, "keys": "6886666688888884222488842222248888842222", "reason": "beam chain into the dark", "turn": 5004}
+{"ask": 70, "depth": 1, "keys": "lxg", "reason": "autoexplore: the game's own path to the nearest unexplored edge", "turn": 5184}
+{"ask": 71, "depth": 1, "keys": "6666668626862688886666888888422224888842", "reason": "beam chain into the dark", "turn": 5214}
+{"ask": 72, "depth": 1, "keys": "lxg", "reason": "autoexplore: the game's own path to the nearest unexplored edge", "turn": 5504}
+{"ask": 73, "depth": 1, "keys": "4444888842222488884224884224884222224888", "reason": "beam chain into the dark", "turn": 5534}
+{"ask": 74, "depth": 1, "keys": "lxg", "reason": "autoexplore: the game's own path to the nearest unexplored edge", "turn": 5674}
+{"ask": 75, "depth": 1, "keys": "6666622224444222222222488842224888422222", "reason": "beam chain into the dark", "turn": 5694}
+{"ask": 76, "depth": 1, "keys": "M", "reason": "coverage check", "turn": 6034}
+{"ask": 77, "depth": 1, "keys": " *p6666666666666666666666666666666666666666666666666666666666666666666666666666666g", "reason": "fast travel: aim the cursor 80 tiles east, on the far side of the known blob, and let the game's pathfinder walk me across the remembered level (the dark is east)", "turn": 6034}
+{"ask": 78, "depth": 1, "keys": "M", "reason": "coverage check", "turn": 6304}
+{"ask": 79, "depth": 1, "keys": " lxg", "reason": "autoexplore to the nearest unexplored edge", "turn": 6304}
+{"ask": 80, "depth": 1, "keys": "lxg", "reason": "autoexplore to the nearest unexplored edge", "turn": 6314}
+{"ask": 81, "depth": 1, "keys": "lxg", "reason": "autoexplore to the nearest unexplored edge", "turn": 6324}
+{"ask": 82, "depth": 1, "keys": "lxg", "reason": "autoexplore to the nearest unexplored edge", "turn": 6334}
+{"ask": 83, "depth": 1, "keys": "lxg", "reason": "autoexplore to the nearest unexplored edge", "turn": 6344}
+{"ask": 84, "depth": 1, "keys": "lxg", "reason": "autoexplore to the nearest unexplored edge", "turn": 6384}
+{"ask": 85, "depth": 1, "keys": "lxg", "reason": "autoexplore to the nearest unexplored edge", "turn": 6394}
+{"ask": 86, "depth": 1, "keys": "lxg", "reason": "autoexplore to the nearest unexplored edge", "turn": 6404}
+{"ask": 87, "depth": 1, "keys": "lxg", "reason": "autoexplore to the nearest unexplored edge", "turn": 6414}
+{"ask": 88, "depth": 1, "keys": "lxg", "reason": "autoexplore to the nearest unexplored edge", "turn": 6424}
+{"ask": 89, "depth": 1, "keys": "M", "reason": "coverage and staircase check", "turn": 6434}
+{"ask": 90, "depth": 1, "keys": "22222222222248888888888422222222224888888888422222222248888888884222222222488888", "reason": "beam chain into the dark, 80 steps", "turn": 6434}
+{"ask": 91, "depth": 1, "keys": "66666666688888888842222222488888884222222248888888422222224888888842222222488888", "reason": "beam chain into the dark, 80 steps", "turn": 6584}
+{"ask": 92, "depth": 1, "keys": "66666666668888888888422222222488888888422222222488888888422222222488888888422222", "reason": "beam chain into the dark, 80 steps", "turn": 6814}
+{"ask": 93, "depth": 1, "keys": "66666666688888888884222222224888888884222222224888888884222222224888888884222222", "reason": "beam chain into the dark, 80 steps", "turn": 7004}
+{"ask": 94, "depth": 1, "keys": "666688888622222222484248424842484248424842484444248424842484248424842484248", "reason": "beam chain into the dark, 80 steps", "turn": 7444}
+{"ask": 95, "depth": 1, "keys": "M", "reason": "coverage and staircase check", "turn": 7904}
+{"ask": 96, "depth": 1, "keys": "68886666888866888888888842222222248888888842222222248888888842222222248888888842", "reason": "beam chain into the dark", "turn": 7904}
+{"ask": 97, "depth": 1, "keys": "48866666668844888888888842222222222488888888884222222222248888888888422222222224", "reason": "beam chain into the dark", "turn": 8034}
+{"ask": 98, "depth": 1, "keys": "44888888888842222222222222488888888888884222222222222248888888888888422222222222", "reason": "beam chain into the dark", "turn": 8234}
+{"ask": 99, "depth": 1, "keys": "44888888888842222222222222224888888888888888422222222222442224888422248884222488", "reason": "beam chain into the dark", "turn": 8304}
+{"ask": 100, "depth": 1, "keys": "88886222222268888888622226866666666666666666666666666668888888888422222222488888", "reason": "beam chain into the dark", "turn": 8594}
+{"ask": 101, "depth": 1, "keys": "44442222222448424842484888888842222222248888888842222222248888888842222222248888", "reason": "beam chain into the dark", "turn": 9264}
+{"ask": 102, "depth": 1, "keys": "M", "reason": "coverage and staircase check", "turn": 9474}
+{"ask": 103, "depth": 1, "keys": " *p22222222444444444444444444444444g", "reason": "aim-walk to the gold pile at (11,9): the game pathfinds over remembered ground and steps on it, and gold is picked up for free", "turn": 9474}
+{"ask": 104, "depth": 1, "keys": "66688662266222224444444444444444444444444444444448", "reason": "walk the known corridor west to the gold pile at (11,9); gold is picked up for free when I step on it", "turn": 9514}
+{"ask": 105, "depth": 1, "keys": "R\b*\\n", "reason": "full rest: R, backspace to clear the pre-filled field, * for HP and SP, Enter", "turn": 9579}
+{"ask": 106, "depth": 1, "keys": "q", "reason": "open the quaff prompt to read the potion letters - a prompt passes no turns, so it is safe at 4 HP", "turn": 9584}
+{"ask": 107, "depth": 1, "keys": "\\e", "reason": "cancel whatever prompt is open (the last key press passed no turn, so a prompt was waiting)", "turn": 9584}
+{"ask": 108, "depth": 1, "keys": "i", "reason": "open the inventory: tells me whether the game is responsive and shows the pack letters I need", "turn": 9584}
+{"ask": 109, "depth": 1, "keys": "\\ere", "reason": "leave the inventory, open the read prompt, read the Scroll of Phase Door (pack letter e): the teleport resolves before the grey mould (speed 110) gets its attack, and a quaff would not", "turn": 9584}
+{"ask": 110, "depth": 1, "keys": "qc", "reason": "quaff the Potion of Berserk Strength (pack letter c): heals 30, so 4 -> 19 HP, plus +75 to-hit and fear immunity; the cost is -10 armour class", "turn": 9594}
+{"ask": 111, "depth": 1, "keys": " l>g", "reason": "use the game's own pathfinding to walk to the known down staircase", "turn": 9594}
+{"ask": 112, "depth": 1, "keys": "4886666666", "reason": "walk to the item at (51,3): west one, north two up the comb corridor, then east along the row-3 corridor", "turn": 9754}
+{"ask": 113, "depth": 1, "keys": "2", "reason": "attack the small kobold directly south of me (8 hp, AC 24, 1d5): the berserk gives +75 to-hit so the blow cannot miss, and it pays 5 experience which is the 3 I need for character level 2", "turn": 9855}
+{"ask": 114, "depth": 1, "keys": "1", "reason": "attack the small kobold diagonally south-west of me: with the berserk's +75 to-hit the blow cannot miss, and 5 experience is the 3 I need for character level 2", "turn": 9855}
+{"ask": 115, "depth": 1, "keys": " 1", "reason": "second blow on the small kobold: 8 hp, two hits of 1d4+3 should finish it, and the kill pays the 5 experience for character level 2", "turn": 9855}
+{"ask": 116, "depth": 1, "keys": "g", "reason": "pick up the potion the kobold dropped", "turn": 9871}
+{"ask": 117, "depth": 1, "keys": "2442", "reason": "step down and west twice onto the down staircase at (48,6)", "turn": 9872}
+{"ask": 118, "depth": 1, "keys": "> ", "reason": "take the down staircase to depth 2", "turn": 9912}
+{"ask": 119, "depth": 2, "keys": "R\b*\\n", "reason": "rest until healed on the up staircase of depth 2 (level feeling is tame, so nothing is near)", "turn": 9912}
+{"ask": 120, "depth": 2, "keys": "88888888888422222222248888888884222222222222222222222488888888888888888888842222", "reason": "beam chain into the dark on depth 2", "turn": 10012}
+{"ask": 121, "depth": 2, "keys": "68", "reason": "beam chain into the dark on depth 2", "turn": 10462}
+{"ask": 122, "depth": 2, "keys": "24", "reason": "beam chain into the dark on depth 2", "turn": 10482}
+{"ask": 123, "depth": 2, "keys": "68", "reason": "beam chain into the dark on depth 2", "turn": 10502}
+{"ask": 124, "depth": 2, "keys": "24", "reason": "beam chain into the dark on depth 2", "turn": 10522}
+{"ask": 125, "depth": 2, "keys": "68", "reason": "beam chain into the dark on depth 2", "turn": 10542}
+{"ask": 126, "depth": 2, "keys": "24", "reason": "beam chain into the dark on depth 2", "turn": 10562}
+{"ask": 127, "depth": 2, "keys": "M", "reason": "whole remembered level on depth 2: where is the dark, and is there a down staircase", "turn": 10582}
+{"ask": 128, "depth": 2, "keys": " [", "reason": "list the visible monsters: I need the name of the person one tile from me before I decide to fight it", "turn": 10582}
+{"ask": 129, "depth": 2, "keys": "va'", "reason": "throw a flask of oil at the closest monster (the apprentice): 9 to 36 damage at range 6, and oil is the only throwable in my pack so it is letter a in the throw list", "turn": 10582}
+{"ask": 130, "depth": 2, "keys": "g", "reason": "confirm the target so the flask of oil flies at the apprentice", "turn": 10582}
+{"ask": 131, "depth": 2, "keys": "\\n", "reason": "Enter to confirm the target in the targeting mode", "turn": 10582}
+{"ask": 132, "depth": 2, "keys": "\\e", "reason": "cancel the throw prompt: the apprentice is 6 south and 6 west of me and the prompt is not accepting a target, so I will take the fight to melee instead", "turn": 10582}
+{"ask": 133, "depth": 2, "keys": "1", "reason": "in the targeting mode a direction key fires the throw: the apprentice is 6 south and 6 west, so south-west", "turn": 10582}
+{"ask": 134, "depth": 2, "keys": " 2222244444", "reason": "walk south five and west five; the last step walks into the apprentice and attacks it (15 hp, AC 9, 1d4, six experience at character level 2)", "turn": 10583}
+{"ask": 135, "depth": 2, "keys": "6", "reason": "attack the apprentice directly east of me: 15 hp against my 1d4+3 at 89% to-hit is one turn, and it is already awake and hitting me", "turn": 10692}
+{"ask": 136, "depth": 2, "keys": "6", "reason": "second blow on the apprentice: three hits of 1d4+3 should have left it a few hit points", "turn": 10702}
+{"ask": 137, "depth": 2, "keys": "868", "reason": "attack the silver mouse north of me (2 hp, so one blow kills it) and the one east of it, then step onto the item at (39,10)", "turn": 10712}
+{"ask": 138, "depth": 2, "keys": " 68", "reason": "step east and north onto the item at (39,10)", "turn": 10724}
+{"ask": 139, "depth": 2, "keys": " 8g", "reason": "step north onto the item and pick it up", "turn": 10739}
+{"ask": 140, "depth": 2, "keys": "88888422222422222226222248842248884222488884848422222248888888888888888888884222", "reason": "beam chain into the dark on depth 2", "turn": 10750}
+{"ask": 141, "depth": 2, "keys": "\u0018", "reason": "the run was stopped", "turn": 10923}

@@ -1076,4 +1076,76 @@ depth 5.
 
 ## From `minimaxflash-1.5`, 2026-11-10
 
+## From `mmx-war-1`, 2026-11-10
 
+## What mmx-war-1 measured (seed 271, Half-Elf Warrior, 140 asks, depth 2, CL4, died to a silver mouse)
+
+**A tool that slices the map panel out of a raw screen dump must pad it.**
+The dump **strips trailing whitespace**, so a map row that is entirely blank
+(unknown ground) comes back as a short line, and every tile on that row reads
+as a WALL. Our own beam-search tool (`minimaxflash-1.5/g.py`) had this bug:
+it reported "0 unknown squares memorised" and refused to plan into the dark
+until I added `.ljust(66)`. The shared `tools/screen/screen.py` already pads
+its rows. This cost me most of one run's exploration: the tool was working
+perfectly on the screen and I was reading its output as "there is no dark
+near me". (ask 34)
+
+**The read and quaff prompts use the PACK letters; the throw prompt renumbers.**
+At ask 21 the read prompt said "Read which scroll? (Inven: d-f)" and the
+scrolls were at `d`, `e`, `f` — the pack letters, with three other pack
+items before them. The quaff prompt is the same. The throw prompt is not: it
+lists only the throwables and numbers them from `a`, so my oil was `a` there
+and `b` in the pack. **Worn equipment takes no pack letter at all** — the
+dagger and the soft leather armour live in the equipment list, so the pack
+starts at `a`. My pack, measured on the inventory screen at ask 109:
+`a` 3 rations, `b` 20 flasks of oil, `c` Potion of Berserk Strength,
+`d` 5 unknown potions, `e` Scroll of Phase Door, `f` Scroll of Word of
+Recall, `g` an unknown scroll, `i` Wooden Torch (h, j, k, l are skipped).
+Letters MOVE when an item is used or picked up. (asks 21, 52, 109)
+
+**The throw prompt did not finish for me, and it cost four decisions.**
+`v` `a` `'` printed "The apprentice is targeted." and then nothing I sent
+(`g`, Enter, a direction key) took the shot; only Escape got me out. Before
+spending four decisions on a throw, spend one on `[`, which lists the visible
+monsters by name — that is what told me the `p` was an apprentice. (asks
+129-132)
+
+**The rest command works in one decision and it is far too slow to plan
+with.** `R` backspace `*` Enter rests until healed (the backspace really does
+clear the whole pre-filled "& " field). But it healed **3 hit points in 100
+turns** — 18/32 to 21/32. Resting is not a way to heal inside 150
+decisions. (ask 119)
+
+**The Magic Mapping window is 44 rows by 80 columns, and on this seed it held
+no down staircase.** Read on depth 1 at the arrival point, the `M` view
+afterwards showed 280 of 1716 box tiles with terrain — **16% of the level** —
+and no `>`; the staircase turned up on the `M` map at ask 92, 24 boxes
+outside the mapped area. That is the third run to read a Magic Mapping
+scroll and find no staircase in it (the others: `minimaxflash-1.4`,
+`sonnet-2`). The scroll is probably a coin flip, not a fix.
+
+**The depth-1 unknown scroll pool, computed from `object.txt` alloc bands**
+(the only scrolls whose band includes depth 1): Phase Door 50, Treasure
+Detection 50, Detect Invisible 50, Light 50, Blessing 50, Deep Descent 20,
+Summon Monster 10, Darkness 10 — total 290. So an unknown scroll on depth 1
+is 17% Phase Door, 17% Treasure Detection, 17% Detect Invisible, 17% Light,
+17% Blessing, **6.9% Deep Descent**, 3.4% Summon Monster, 3.4% Darkness.
+Magic Mapping and Word of Recall cannot appear before depth 5, which
+confirms our own note about the scroll.
+
+**Two monsters the manual's table does not give the reader, both measured on
+depth 2.** The **silver mouse** is `depth:4` in `monster.txt` but it spawns
+on depth 2 in this build, in a pack of eleven, with `MULTIPLY` and an
+`EAT_LIGHT` blow: 2 HP, AC 4, 1d2, one experience each. Killing them one
+at a time is how the pack grows. The **grey mould** has **two** blows of
+1d4, so it is 8 damage a turn, not 4.
+
+**A letter is a monster only if the monster's colour says so: the glyph is
+in `monster_base.txt`.** The `C` on my depth-1 screen was the *canine* base
+(wild dog), not a centipede; `monster.txt` has no `color:C` at all. Look the
+base up before you decide what a letter is.
+
+**A `-more-` swallows the first key of the next ask** (confirmed again: my
+`g` pickup was eaten at ask 33 and the rest of the chain still ran). And a
+digit chain walks into whatever is standing in the dark: the chain of ask 140
+killed about thirty-five silver mice in one decision and then killed me.
