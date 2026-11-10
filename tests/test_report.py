@@ -87,6 +87,31 @@ def test_the_replay_has_a_frame_per_ask_with_what_it_faced_and_did(tmp_path):
     assert shown[1]['notes'], 'a note made at that ask belongs to that frame'
 
 
+def test_dumped_frames_sit_inside_their_ask(tmp_path):
+    """frame-<ask>-<n>.txt files are the middle of an ask, shown after its
+    own frame and before the next one, with no keys of their own."""
+    run = a_run(tmp_path)
+    (run / run_module.ASK / 'frame-2-1.txt').write_text('after the first 2\n')
+    (run / run_module.ASK / 'frame-2-3.txt').write_text('after the third 2\n')
+    (run / run_module.ASK / 'frame-2-2.txt').write_text('after the second 2\n')
+    shown = report.frames(report.read(run))
+    assert [f['ask'] for f in shown] == [1, 2, 2, 2, 2]
+    assert [f['screen'] for f in shown[2:5]] == [
+        'after the first 2\n', 'after the second 2\n', 'after the third 2\n']
+    assert all(not f['keys'] for f in shown[2:5]), 'a frame has no keys'
+    assert shown[2]['turn'] == shown[1]['turn']
+
+
+def test_identical_frames_collapse_with_a_count(tmp_path):
+    """A tombstone behind forty buffered keys is one frame, not forty."""
+    run = a_run(tmp_path)
+    for seq in (1, 2, 3):
+        (run / run_module.ASK / f'frame-2-{seq}.txt').write_text('same\n')
+    shown = report.frames(report.read(run))
+    assert [f['ask'] for f in shown] == [1, 2, 2]
+    assert '3 frames' in shown[-1]['reason']
+
+
 def test_the_screens_cannot_break_out_of_the_script(tmp_path):
     """A screen is the game's characters and a reason is a model's words."""
     run = a_run(tmp_path)

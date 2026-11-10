@@ -39,6 +39,19 @@ static char agent_directory[1024] = ".";
 static uint32_t agent_seed;
 static bool agent_seeded;
 
+/* Where to dump the screen at every input event, not just the ones that
+ * empty the buffer, and how many we have written for the current ask.
+ *
+ * A screen is normally written only when the buffer is empty, so what the
+ * game showed while it spent a buffered string - the states a death
+ * happens in - was recorded nowhere. With -f<directory> those states are
+ * kept too, as frame-<ask>-<n>.txt, numbered within the ask whose keys
+ * are being spent. Nothing else changes: same keys, same screens at the
+ * asks, and with no -f the byte stream out of this frontend is what it
+ * always was. */
+static char agent_frames[1024];
+static long agent_frame_seq;
+
 /* The keys still to press, and where we are in them.
  *
  * Keycodes, not bytes: Angband's Enter is KC_ENTER (0x9c), not carriage
@@ -133,6 +146,7 @@ static bool agent_read_keys(const char *path)
         read = 0;
 
     agent_at = agent_held = 0;
+    agent_frame_seq = 0;
     for (i = 0; i < read && agent_held < N_ELEMENTS(agent_buffer); i++) {
         if (raw[i] == '\\' && i + 1 < read) {
             switch (raw[i + 1]) {
@@ -187,6 +201,12 @@ static errr agent_event(int wait)
     char screen[1024], question[1024], answer[1024];
 
     if (agent_at < agent_held) {
+        if (agent_frames[0]) {
+            char frame[1024];
+            strnfmt(frame, sizeof(frame), "%s/frame-%ld-%ld.txt",
+                    agent_frames, agent_asks, ++agent_frame_seq);
+            agent_write_screen(frame);
+        }
         Term_keypress(agent_buffer[agent_at++], 0);
         return 0;
     }
@@ -300,6 +320,8 @@ errr init_agent(int argc, char *argv[])
     for (i = 1; i < argc; i++) {
         if (prefix(argv[i], "-d")) {
             my_strcpy(agent_directory, argv[i] + 2, sizeof(agent_directory));
+        } else if (prefix(argv[i], "-f")) {
+            my_strcpy(agent_frames, argv[i] + 2, sizeof(agent_frames));
         } else if (prefix(argv[i], "-s")) {
             agent_seed = (uint32_t)strtoul(argv[i] + 2, NULL, 10);
             agent_seeded = true;
@@ -318,6 +340,6 @@ errr init_agent(int argc, char *argv[])
     return 0;
 }
 
-const char help_agent[] = "Agent mode, subopts -d<directory> -s<seed>";
+const char help_agent[] = "Agent mode, subopts -d<directory> -s<seed> -f<frame directory>";
 
 #endif /* USE_AGENT */

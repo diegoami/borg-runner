@@ -111,6 +111,19 @@ def read(run):
         screen = run / run_module.ASK / f'screen-{entry["ask"]}.txt'
         if screen.exists():
             screens[entry['ask']] = screen.read_text()
+    # The frames the frontend dumped while spending each ask's buffered keys
+    # (frame-<ask>-<n>.txt): the states the game showed between two asks,
+    # which is where a death happens. Present only in runs started or
+    # replayed with the frame dump on.
+    frames = {}
+    for frame in sorted((run / run_module.ASK).glob('frame-*-*.txt')):
+        try:
+            ask, seq = (int(part) for part in frame.stem.split('-')[1:3])
+        except ValueError:
+            continue
+        frames.setdefault(ask, []).append((seq, frame.read_text()))
+    for ask in frames:
+        frames[ask] = [text for _, text in sorted(frames[ask])]
     notes = {}
     book = run / run_module.NOTEBOOK
     if book.exists():
@@ -139,6 +152,7 @@ def read(run):
         'decisions': taken,
         'calls': calls,
         'screens': screens,
+        'frames': frames,
         'notes': notes,
         'notebook': run_module.notebook(run, lines=10 ** 6),
         'writeup': writeup.read_text() if writeup.exists() else '',
@@ -240,6 +254,31 @@ def frames(data):
             'notes': data['notes'].get(at, []),
             'screen': data['screens'].get(at, ''),
         })
+        # What the game showed while spending this ask's buffered keys, in
+        # order: the scroll taking effect, the monster crossing the corridor,
+        # the hit that killed the character. No keys and no reason of their
+        # own - they are the middle of this ask, not new decisions. A run of
+        # identical frames (a tombstone behind a long key string, say) is
+        # one frame with its count; every frame stays in the run directory.
+        run_of = 0
+        for extra in data['frames'].get(at, []):
+            if out and extra == out[-1]['screen']:
+                run_of += 1
+                out[-1]['reason'] = ('the game plays out the buffered keys '
+                                     f'of this ask (this screen, '
+                                     f'{run_of + 1} frames)')
+                continue
+            run_of = 0
+            out.append({
+                'ask': at,
+                'turn': entry.get('turn'),
+                'depth': entry.get('depth'),
+                'keys': '',
+                'reason': 'the game plays out the buffered keys of this ask',
+                'goal': '',
+                'notes': [],
+                'screen': extra,
+            })
     # The game's last word. It asked once more and the run ended there, so
     # this frame has no keys - and on a death it is the tombstone, which is
     # the one frame a replay must not drop.
