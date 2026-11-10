@@ -20,13 +20,19 @@ session, a terminal — as one line, with the placeholders filled in:
 
 ```
 Follow the prompt in /home/diego/projects/borg-runner/PLAYGAME.txt — RUNNAME=codex-1
+Follow the prompt in /home/diego/projects/borg-runner/PLAYGAME.txt — RUNNAME=gnome-1, RACE=Gnome, CLASS=Mage
 Follow the prompt in /home/diego/projects/borg-runner/CONTINUEGAME.txt — FROM=minimaxflash-1-again
 ```
 
 [PLAYGAME.txt](PLAYGAME.txt) starts a new game: the reading, the loop, the
 rules and what to run when it stops. Give it a `SEED` as well to play a
 dungeon another run has played, or leave it out and it picks an unused one and
-records which. [CONTINUEGAME.txt](CONTINUEGAME.txt) carries a stopped run on
+records which. Give it a `RACE` or a `CLASS` to test one deliberately — a
+class no run has drawn, say — and the record marks the character as chosen
+rather than drawn, and says whether the player managed to be born as asked.
+Omitted, the character is drawn, which is the default for a reason: a model
+left to choose picks the class it reasons best about every time, and its notes
+then read as general when they are one class's. [CONTINUEGAME.txt](CONTINUEGAME.txt) carries a stopped run on
 from where it left off, with that character's level, gear, wounds and notes —
 and with **its own history**. A lineage is `<base>.<generation>` —
 `rogue-1`, `rogue-1.2`, `rogue-1.3` — and `carry-on` picks the next name

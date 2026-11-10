@@ -18,7 +18,9 @@ def cmd_play(args):
     run = run_module.directory(args.name)
     if args.notebook:
         run_module.inherit(run, args.notebook)
-    process = run_module.start(run, args.seed, log=print)
+    asked_for = {k: v for k, v in (('race', args.race), ('class', args.klass))
+                 if v}
+    process = run_module.start(run, args.seed, asked_for=asked_for, log=print)
     if not replay_module.wait_for(run, 1, process, timeout=60):
         run_module.stop(run, process)
         print('the game never asked for a key; see game.log', file=sys.stderr)
@@ -252,6 +254,9 @@ def parser():
     p.add_argument('--name')
     p.add_argument('--notebook', type=Path,
                    help='start with these notes, from knowledge/ or another run')
+    p.add_argument('--race', help='be born this race instead of drawing one; '
+                                  'recorded, so a chosen character is visible')
+    p.add_argument('--class', dest='klass', help='likewise for the class')
     p.set_defaults(func=cmd_play)
 
     p = sub.add_parser('wait', help='show the question waiting now')

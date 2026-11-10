@@ -6,6 +6,8 @@ records/OVERVIEW.md and say in your first note which one you chose.
 
     {RUNNAME}   the name of your run, e.g. codex-1
     {SEED}      an integer, e.g. 101
+    {RACE}      optional: a race, e.g. Half-Troll. Omitted, it is drawn
+    {CLASS}     optional: a class, e.g. Warrior. Omitted, it is drawn
 
 Work from /home/diego/projects/borg-runner and use .venv/bin/python for every
 python command. Your run will not disturb any other run: each one owns its own
@@ -36,6 +38,12 @@ it, and the whole question here is what a reader does differently.
 == START ==
 
     .venv/bin/python -m borg_runner play --seed {SEED} --name {RUNNAME}
+
+If you were given a race or a class, add them, and they are recorded as a
+deliberate choice rather than a draw:
+
+    .venv/bin/python -m borg_runner play --seed {SEED} --name {RUNNAME} \
+        --race {RACE} --class {CLASS}
     .venv/bin/python -m borg_runner wait --run runs/{RUNNAME}
 
 Do not pass --notebook. Inherited knowledge belongs in the reading; your
@@ -91,8 +99,17 @@ from this page". No run has ever found a staircase by walking.
 
 == RULES ==
 
-- Your character is drawn, not chosen: press * at the race menu and * at the
-  class menu. Then read your class's block in INSTRUCTIONS section 9.
+- Your character is drawn unless you were given one. **Given neither a race
+  nor a class, press * at the race menu and * at the class menu**, then read
+  your class's block in INSTRUCTIONS section 9.
+  Given a race or a class, **read its letter off the screen** and press that:
+  the menu's letters skip h, j, k and l, so the fifth row is `e` but the
+  eighth is `i` - counting rows will give you the wrong character. Press the
+  letter, check the cursor moved to that row, then Enter. For whichever of
+  the two you were not given, press *.
+  The record keeps what the game actually produced and compares it with what
+  you were asked for, so a mis-read menu shows up afterwards as
+  `born_as_asked: false` rather than as a quietly different experiment.
 - Take the easy option at birth: at the stat screen press a (point-based) then
   Enter to accept the allocation the game has filled in. Do not move points.
 - Read the top line of the screen first. It is the game's message line and it

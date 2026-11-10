@@ -602,3 +602,43 @@ def test_a_lineage_is_numbered_rather_than_renamed_each_time():
     assert run_module.next_generation('sonnet-2-again') == 'sonnet-2.3'
     # A path is accepted as readily as a name.
     assert run_module.next_generation('runs/rogue-1/') == 'runs/rogue-1.2'
+
+
+def test_a_chosen_character_is_recorded_as_chosen(tmp_path):
+    """Random is the default; a named race or class is an override, and the
+    record says which so a note is never read as general when it came from a
+    class somebody picked."""
+    run = a_run(tmp_path)
+    (run / run_module.ASK / 'question-1.txt').write_text(
+        'ask 1\nturn 1\ndepth 0\nmax_depth 0\nlevel 1\ngold 100\ncarried 0\n'
+        'race Half-Troll\nclass Warrior\ncursor 1 2\n')
+    started = json.loads((run / 'started.json').read_text())
+    started['asked_for'] = {'race': 'Half-Troll', 'class': 'Warrior'}
+    (run / 'started.json').write_text(json.dumps(started))
+    run_module.answer(run, 1, 'i', reason='x')
+    record = run_module.write_record(run, outcome='stopped')
+    assert record['character_asked_for'] == {'race': 'Half-Troll', 'class': 'Warrior'}
+    assert record['born_as_asked'] is True
+    assert 'character_drawn' not in record
+
+
+def test_a_mis_read_birth_menu_shows_up_afterwards(tmp_path):
+    """The menu's letters skip h, j, k and l, so counting rows mis-picks."""
+    run = a_run(tmp_path)
+    (run / run_module.ASK / 'question-1.txt').write_text(
+        'ask 1\nturn 1\ndepth 0\nmax_depth 0\nlevel 1\ngold 100\ncarried 0\n'
+        'race Kobold\nclass Blackguard\ncursor 1 2\n')
+    started = json.loads((run / 'started.json').read_text())
+    started['asked_for'] = {'race': 'Half-Troll', 'class': 'Warrior'}
+    (run / 'started.json').write_text(json.dumps(started))
+    run_module.answer(run, 1, 'i', reason='x')
+    record = run_module.write_record(run, outcome='stopped')
+    assert record['born_as_asked'] is False
+
+
+def test_a_drawn_character_says_so(tmp_path):
+    run = a_run(tmp_path)
+    run_module.answer(run, 1, ' ', reason='x')
+    record = run_module.write_record(run, outcome='stopped')
+    assert record['character_drawn'] is True
+    assert 'born_as_asked' not in record

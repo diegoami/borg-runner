@@ -326,7 +326,8 @@ def archive(run, into=None, log=print):
     return target
 
 
-def start(run, seed, out=None, character=None, resume=False, log=print):
+def start(run, seed, out=None, character=None, resume=False, asked_for=None,
+          log=print):
     """Start the game in `run`, waiting for its first answer.
 
     It is given its own save directory so runs never share one.
@@ -395,6 +396,11 @@ def start(run, seed, out=None, character=None, resume=False, log=print):
         'schema': 'borg-runner/started@1',
         'seed': seed,
         'character': character,
+        # What the run was told to be born as, if anything. The default is a
+        # draw; a named race or class is a deliberate override, and the record
+        # says which so that a note is never read as general when it came from
+        # a chosen class.
+        'asked_for': asked_for or None,
         'pid': process.pid,
         'command': command,
         'savefile': str(savefile_of(out, character)),
@@ -823,6 +829,20 @@ def write_record(run, process=None, outcome=None, cost=None):
                 record[field] = before[field]
     # Last, because it is checked against the class the record ends up with,
     # which for an older run is the one recovered by replaying its keys.
+    asked_for = started.get('asked_for') or {}
+    if asked_for:
+        record['character_asked_for'] = asked_for
+        drawn = {'race': record.get('race'), 'class': record.get('class')}
+        matched = all(not asked_for.get(k)
+                      or (drawn.get(k) or '').lower() == asked_for[k].lower()
+                      for k in ('race', 'class'))
+        # A player that was told what to be and arrived as something else is
+        # worth seeing: it means the birth menu was mis-read, not that the
+        # game disobeyed.
+        record['born_as_asked'] = matched if any(drawn.values()) else None
+    else:
+        record['character_drawn'] = True
+
     note = reading_note(run)
     record['read_before_playing'] = note
     record['read_its_own_playbook'] = read_for_its_character(
