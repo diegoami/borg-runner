@@ -163,7 +163,8 @@ def cmd_carry_on(args):
     """Replay a run's keys into a fresh run and leave it playing."""
     from . import replay as replay_module
 
-    into = run_module.RUNS / (args.name or f'{Path(args.run).name}-again')
+    into = run_module.RUNS / (args.name
+                              or run_module.next_generation(Path(args.run).name))
     verdict = replay_module.carry_on(args.run, into)
     print(json.dumps({'run': str(into), 'identical': verdict['identical'],
                       'waiting_at_ask': verdict['asks_replayed'] + 1,
@@ -319,7 +320,9 @@ def parser():
 
     p = sub.add_parser('carry-on', help="continue where another run stopped")
     p.add_argument('--run', required=True, type=Path, help='the run to continue')
-    p.add_argument('--name', help='the new run (default: <run>-again)')
+    p.add_argument('--name',
+                   help='the new run (default: the next generation of this '
+                        'character, <base>.<n>)')
     p.set_defaults(func=cmd_carry_on)
 
     p = sub.add_parser('history', help="the runs this character has been through")

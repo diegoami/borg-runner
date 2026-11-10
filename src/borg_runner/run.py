@@ -221,6 +221,25 @@ def link_report(text, name, into):
     return Path(into)
 
 
+def next_generation(name):
+    """The name for the run that continues `name`.
+
+    A character's lineage is `<base>.<generation>`: `rogue-1`, then
+    `rogue-1.2`, `rogue-1.3`. The base names the character, the number says
+    which life this is, and the whole thing sorts next to its siblings.
+
+    Two runs here predate the convention and end in `-again`; that was
+    generation 2, so continuing one gives `.3`.
+    """
+    name = str(name).rstrip('/')
+    generation = re.match(r'^(?P<base>.+)\.(?P<n>\d+)$', name)
+    if generation:
+        return f"{generation.group('base')}.{int(generation.group('n')) + 1}"
+    if name.endswith('-again'):
+        return f'{name[: -len("-again")]}.3'
+    return f'{name}.2'
+
+
 def where_is(name):
     """A run's directory, live or archived, whichever exists."""
     for place in (RUNS / name, RECORDS / name):

@@ -1,8 +1,14 @@
 Carry on a game of Angband 4.2.6 that an earlier run stopped playing.
 
-Substitute the placeholders. If you were given only the run to continue, the
-new name is that name with "-again" on the end; if that exists already, add a
-number.
+Substitute the placeholders. If you were given only the run to continue,
+**leave {RUNNAME} out of the start command**: `carry-on` names the run itself,
+as the next generation of the character.
+
+A lineage is `<base>.<generation>`: a character born as `rogue-1` continues as
+`rogue-1.2`, then `rogue-1.3`. The base names the character for its whole
+life, the number says which life this is, and the runs sort next to each
+other. Two runs here end in `-again` and predate that; continuing one gives
+`.3`, because `-again` was generation 2.
 
     {FROM}      the run to continue, e.g. sonnet-2-again
     {RUNNAME}   the new run, e.g. sonnet-2-again-2
@@ -24,7 +30,11 @@ and yours, so it replays from its seed like any other.
 
 == START ==
 
-    .venv/bin/python -m borg_runner carry-on --run runs/{FROM} --name {RUNNAME}
+    .venv/bin/python -m borg_runner carry-on --run runs/{FROM}
+
+It prints the name it chose - the next generation of the character - and that
+is your {RUNNAME} for every command below. Pass `--name` only if you were
+given one.
 
 It prints `waiting_at_ask` and the turn. That ask number is where you begin -
 **not 1**. It also prints `identical`: true means the replay reproduced the

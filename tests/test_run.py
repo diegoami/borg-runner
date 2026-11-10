@@ -586,3 +586,19 @@ def test_an_archived_ancestor_is_found_too(tmp_path, monkeypatch):
     chain = run_module.ancestry(new)
     assert [step['run'] for step in chain] == ['gone', 'live']
     assert chain[0]['report'].endswith('records/gone/REPORT.md')
+
+
+def test_a_lineage_is_numbered_rather_than_renamed_each_time():
+    """`-again-again` is not a convention.
+
+    A character's lineage is <base>.<generation>, so a run sorts next to its
+    siblings and the base still names the character.
+    """
+    assert run_module.next_generation('rogue-1') == 'rogue-1.2'
+    assert run_module.next_generation('rogue-1.2') == 'rogue-1.3'
+    assert run_module.next_generation('rogue-1.9') == 'rogue-1.10'
+    # The two runs that predate this were generation 2.
+    assert run_module.next_generation('minimaxflash-1-again') == 'minimaxflash-1.3'
+    assert run_module.next_generation('sonnet-2-again') == 'sonnet-2.3'
+    # A path is accepted as readily as a name.
+    assert run_module.next_generation('runs/rogue-1/') == 'runs/rogue-1.2'

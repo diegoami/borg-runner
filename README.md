@@ -20,7 +20,7 @@ session, a terminal — as one line, with the placeholders filled in:
 
 ```
 Follow the prompt in /home/diego/projects/borg-runner/PLAYGAME.txt — RUNNAME=codex-1
-Follow the prompt in /home/diego/projects/borg-runner/CONTINUEGAME.txt — FROM=sonnet-2-again
+Follow the prompt in /home/diego/projects/borg-runner/CONTINUEGAME.txt — FROM=minimaxflash-1-again
 ```
 
 [PLAYGAME.txt](PLAYGAME.txt) starts a new game: the reading, the loop, the
@@ -28,7 +28,10 @@ rules and what to run when it stops. Give it a `SEED` as well to play a
 dungeon another run has played, or leave it out and it picks an unused one and
 records which. [CONTINUEGAME.txt](CONTINUEGAME.txt) carries a stopped run on
 from where it left off, with that character's level, gear, wounds and notes —
-and with **its own history**: `borg_runner history --run X` lists every run
+and with **its own history**. A lineage is `<base>.<generation>` —
+`rogue-1`, `rogue-1.2`, `rogue-1.3` — and `carry-on` picks the next name
+itself, so nobody types `-again-again`. The base names the character for its
+whole life. Its history: `borg_runner history --run X` lists every run
 the character has lived through, oldest first, and the continuation is told to
 read each of their write-ups. The notebook carries what a character learned;
 the write-ups carry what it *did*, and nothing else records that.
