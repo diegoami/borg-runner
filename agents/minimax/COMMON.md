@@ -769,3 +769,77 @@ Potions of Cure Light Wounds**. A `!` on the floor must be looked at.
   more cannot shop, and that is worth knowing before it plans a trip.
 - **A Scroll of Blessing lasts about thirty turns** ("The prayer has
   expired."). It is a minute of play, not a plan.
+
+## From `minimaxflash-3`, 2026-11-10
+
+## minimaxflash-3 (seed 313): the level map is the tool, and a level has more than one staircase
+
+**`M` costs one ask and finds staircases you have already walked past.**
+On depth 1 I explored for 70 asks and the down staircase was drawn on my
+own panel the whole time. At ask 85 I pressed `M` and it was there. The
+`M` view is the whole remembered level, drawn once, with everything seen
+in it — including staircases you have walked by. I found depth 1's `>`
+this way and depth 2's `>` on the same screen. **But I missed it for
+70 asks because my own glyph lists never checked for `>`** — the shared
+`tools/screen/look.py` does list `>` as a down staircase, and my hand
+written `find()` lists did not. Run look.py on every screen; do not keep
+your own list.
+
+**A level has THREE OR FOUR down staircases, not one** (asks 103, 119,
+147 — three staircases found on three different levels). `gen-cave.c:1291`
+calls `handle_level_stairs(..., rand_range(3, 4), rand_range(1, 2))`, and
+`alloc_stairs` (`gen-util.c:620`) puts each one on an empty square with
+EXACTLY THREE adjacent walls — a corridor end — at least 16 tiles from
+the others. The inherited note "exactly ONE down staircase per level,
+uniform over 13,068 squares" comes from the labyrinth generator
+(`gen-cave.c:1584`, alloc −1, only chosen by hard-coded tests); the
+levels this build actually plays at depth 1-14 are 'classic' (alloc 90)
+and 'modified' (alloc 97), and both have several. **A corridor end is a
+shape you can walk to; that is a better lead than any coverage
+argument.**
+
+**The aim-walk, and the key that breaks it.** `*` opens the targeting
+mode; `p` puts it in free mode, where a digit moves the CURSOR one tile
+instead of picking the next interesting grid (without `p` a digit picks
+the next monster and the walk walks to it — that is what my first aim
+did). Then `g` pathfinds the player to the cursor. Because
+`find_path` sets `only_known = (start known AND dest known)`, an unknown
+destination makes the whole unknown passable, so the walk crosses ground
+nobody has seen; it stops at the first real wall, which is usually one
+tile away, because most of a level is wall. **A keypress after `g`
+interrupts the walk** (ask 143: my `l>g>` reached the staircase and the
+trailing `>` cancelled it). A staircase walk must be the last thing in
+an ask.
+
+**A level you leave is regenerated** (ask 148). The `M` view of the depth
+2 I came back up to showed 0% remembered — one tile, my own — after 25
+asks on that level. The plain version of our standing question 3, and it
+costs one ask to re-measure.
+
+**The Word of Recall is not an escape** (ask 150, and it killed me). Its
+timer ticks once every ten turns, so the shortest wait is 150 turns and
+the longest 350. I read it and stood still for forty turns, and a cave
+spider killed the character (26/43 HP, 1d4 a turn). Read it and then
+walk, or not at all.
+
+**Magic Mapping's window is 44 by 80, not 22 by 40** (`object.txt:2609`
+`effect-yx:22:40` are half-extents; `effect-handler-general.c:1201`
+scans centre ± 22 rows and ± 40 columns) — 3,520 tiles, 27% of a 198×66
+level. With three or four staircases per level, one scroll covers one
+with about 27% probability and three with about 63%. Our own summary
+"22 rows × 40 columns" is the half-extent, so the inherited note
+"MM (65 g) did not help" is not evidence against the scroll. Still
+unmeasured: buy one, read it on depth 1, and count the `>`.
+
+**Small things, all measured.** A Wooden Torch gives a 3×3 view
+(`cave-view.c:658`, radius = |cur_light| − 1). The throw prompt numbers
+its own list: oil was `c` in the pack and `a` in the prompt. The rune of
+rubble `:` is NOT walkable (`terrain.txt:257` has no PASSABLE) although
+`tools/screen/map.py` treats it as walkable, so its routes can be wrong
+in the town — I wrote `runs/minimaxflash-3/tools/route.py` to route only
+over `.` and `'`. `5` is "stay", and a turn passes. Item kinds get a
+flat allocation weight over their whole level range (`obj-make.c:88`),
+so on depth 2 the scroll weights are Treasure Detection 50, Light 50,
+Phase Door 50, Detect Invisible 50, Blessing 50, Deep Descent 20,
+Summon Monster 10, Darkness 10, and Magic Mapping cannot appear before
+depth 5.

@@ -1,0 +1,152 @@
+{"ask": 1, "depth": 0, "keys": " ", "memory": "Warrior class given; race drawn. Seed 313 chosen by me (seeds 7,11,23,41,103 already used). Plan: buy oil + armour in town, descend with lxg, level up, do not chase depth for its own sake.", "reason": "past the splash", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "*", "reason": "race not given: press * for a random race", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "a\\n", "reason": "class given as Warrior: press 'a' then Enter to select it", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "\\n", "reason": "accept the game's own point-based allocation as it stands (20/20 spent)", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "\\n", "reason": "accept the pre-filled name", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "y", "reason": "accept the character history", "turn": 1}
+{"ask": 7, "depth": 0, "keys": " ", "memory": "Human Warrior (drawn race), seed 313, CL1, HP 20/20, Gold 0, AC 2 (soft leather), dagger 1d1+3, 2.7 blows, to-hit 24(+4). Kit: rations, torches, Potion of Berserk Strength, Scroll of Word of Recall. NO gold: must find dungeon gold (worth 5x with birth_no_selling) to buy oil/armour.", "reason": "final confirm: any key starts the game", "turn": 1}
+{"ask": 8, "depth": 0, "keys": "i\\e", "reason": "look at my pack, then dismiss it", "turn": 1}
+{"ask": 9, "depth": 0, "keys": "i", "reason": "open the pack so I can read it this time", "turn": 1}
+{"ask": 10, "depth": 0, "keys": "\\e*p66666666662222222222222g", "reason": "close the pack, then aim the cursor at the General Store digit (10 E, 13 S from me) and walk there with the game's own pathfinder", "turn": 1}
+{"ask": 11, "depth": 0, "keys": "333222333", "reason": "walk the nine steps from the map route to the General Store; the last digit lands on its tile and opens the shop", "turn": 41}
+{"ask": 12, "depth": 0, "keys": "ph15\\n ", "reason": "buy 15 flasks of oil (row h) at 3 gold each = 45 gold", "turn": 121}
+{"ask": 13, "depth": 0, "keys": " \\e71111411474477444777", "reason": "clear the -more-, leave the shop, walk the 20-step route to the Alchemist", "turn": 121}
+{"ask": 14, "depth": 0, "keys": "117444777", "reason": "walk the 9-step route to the Alchemist (rubble avoided)", "turn": 241}
+{"ask": 15, "depth": 0, "keys": "pj1\\n  pa3\\n ", "reason": "buy 1 Scroll of Phase Door (row j, 15g) and 3 Potions of Cure Light Wounds (row a, 20g each) = 75 of 98 gold", "turn": 321}
+{"ask": 16, "depth": 0, "keys": " \\ee", "reason": "clear the -more-, leave the shop, and open the equipment screen: the birth sheet showed 'Melee 1d1', which is the unarmed line, so I need to know whether the dagger is actually wielded", "turn": 321}
+{"ask": 17, "depth": 0, "keys": "\\e799999666989799> ", "memory": "Human Warrior (drawn race), seed 313, CL1, HP 20/20, AC 10 (soft leather +8, DEX +2), dagger 1d4+3, 2.77 blows, to-hit 84. Kit: 15 flasks of oil, 3 Cure Light Wounds, 1 Scroll of Phase Door, 1 Potion of Berserk Strength (heals 30 + cures fear), 1 Scroll of Word of Recall, 2 rations, 1 torch (5000 turns). Gold 23. Melee ~15 damage/turn. Plan: descend, level up with lxg exploring, grab dungeon gold (5x), come back to town.", "reason": "close the equipment screen, walk 15 steps to the town staircase and take it down to depth 1", "turn": 331}
+{"ask": 18, "depth": 1, "keys": "lxg", "reason": "explore: look, jump the cursor to the nearest unexplored square, walk there", "turn": 481}
+{"ask": 19, "depth": 1, "keys": "lxg", "reason": "explore further: walk to the next unexplored square", "turn": 491}
+{"ask": 20, "depth": 1, "keys": ".8", "reason": "run north along the corridor: with a 3x3 light 'lxg' only creeps one step, so use the game's own run to cover ground", "turn": 501}
+{"ask": 21, "depth": 1, "keys": "8o8", "reason": "step north to the closed door and open it ('o' then the direction)", "turn": 511}
+{"ask": 22, "depth": 1, "keys": "[", "reason": "list the visible monsters: I saw an 'a' (an ant) two tiles north and want its name, health and position", "turn": 521}
+{"ask": 23, "depth": 1, "keys": "87", "reason": "step north through the open door, then attack the sleeping soldier ant to the north-west", "turn": 521}
+{"ask": 24, "depth": 1, "keys": "87", "reason": "step north through the open door, then attack the sleeping soldier ant to the north-west", "turn": 521}
+{"ask": 25, "depth": 1, "keys": " 7", "reason": "clear the -more- and hit the soldier ant again to finish it", "turn": 533}
+{"ask": 26, "depth": 1, "keys": ".8", "reason": "run north through the now-open door into the room above", "turn": 542}
+{"ask": 27, "depth": 1, "keys": "4444444447177", "reason": "walk the 13-step route through the north-west room, over the scroll '?' and on to the potion '!' - the game picks items up as you step on them", "turn": 552}
+{"ask": 28, "depth": 1, "keys": "339", "reason": "walk the three-step route onto the scroll glyph to pick it up", "turn": 682}
+{"ask": 29, "depth": 1, "keys": " i", "reason": "clear the -more- and open the pack: I need the item letters for throwing oil, and to see whether the scroll was picked up", "turn": 712}
+{"ask": 30, "depth": 1, "keys": "-a", "reason": "pick the scroll off the floor: the inventory prompt's '-' key switches to the floor items and 'a' selects the first", "turn": 712}
+{"ask": 31, "depth": 1, "keys": "g\\e177", "reason": "pick up the book, close the menu, and walk the three-step route onto the potion glyph", "turn": 712}
+{"ask": 32, "depth": 1, "keys": "ga6", "reason": "pick up the potion off the floor, then attack the rock lizard that is biting me from the east", "turn": 743}
+{"ask": 33, "depth": 1, "keys": " 6", "reason": "clear the -more- and hit (or step onto) the tile east where the lizard was", "turn": 744}
+{"ask": 34, "depth": 1, "keys": "3366666666633", "reason": "walk the 13-step route east across the room to the corridor mouth at the far east end", "turn": 761}
+{"ask": 35, "depth": 1, "keys": ".6", "reason": "run east along the corridor that leaves the room", "turn": 891}
+{"ask": 36, "depth": 1, "keys": ".2", "reason": "run south down the vertical corridor", "turn": 1031}
+{"ask": 37, "depth": 1, "keys": ".2", "reason": "keep running south down the corridor", "turn": 1051}
+{"ask": 38, "depth": 1, "keys": ".6", "reason": "run east along the corridor", "turn": 1061}
+{"ask": 39, "depth": 1, "keys": ".6", "reason": "run east along the corridor toward the centipede I can see", "turn": 1071}
+{"ask": 40, "depth": 1, "keys": "6.6", "reason": "attack the soldier ant that woke up east of me, then run on east", "turn": 1101}
+{"ask": 41, "depth": 1, "keys": "666666", "reason": "walk six tiles east along the corridor to the sword on the floor", "turn": 1119}
+{"ask": 42, "depth": 1, "keys": "22i-ag\\e", "reason": "walk two tiles south onto the item glyph, then pick it up from the floor via the inventory's '-' floor mode", "turn": 1179}
+{"ask": 43, "depth": 1, "keys": "6i-ag\\e", "reason": "step east onto the item glyph and pick it up off the floor", "turn": 1199}
+{"ask": 44, "depth": 1, "keys": ".6", "reason": "run east along the room toward the centipede", "turn": 1210}
+{"ask": 45, "depth": 1, "keys": "66666669", "reason": "walk the eight-step route east and attack the centipede", "turn": 1220}
+{"ask": 46, "depth": 1, "keys": " 9", "reason": "clear the -more- and hit the centipede that is now north-east of me", "turn": 1280}
+{"ask": 47, "depth": 1, "keys": "i", "reason": "open the pack to see what the two floor items were", "turn": 1293}
+{"ask": 48, "depth": 1, "keys": "\\e.8", "reason": "close the pack and run north", "turn": 1293}
+{"ask": 49, "depth": 1, "keys": "44888.8", "reason": "walk west to the corridor at column 60 and run north up it toward the little room with the two doors", "turn": 1303}
+{"ask": 50, "depth": 1, "keys": "88.8", "reason": "step north into the diamond-shaped room and run north across it toward the open door", "turn": 1383}
+{"ask": 51, "depth": 1, "keys": ".8", "reason": "run north through the open door into the unknown ground beyond", "turn": 1443}
+{"ask": 52, "depth": 1, "keys": "2222.2", "reason": "walk back down the corridor to the open door and run south into the big room below", "turn": 1493}
+{"ask": 53, "depth": 1, "keys": "22.2", "reason": "step down the corridor to the open door and run south into the big room", "turn": 1593}
+{"ask": 54, "depth": 1, "keys": "2.6", "reason": "step south into the room and run east across it", "turn": 1633}
+{"ask": 55, "depth": 1, "keys": "666222", "reason": "sweep the east end of the room: three tiles east and three south, to pick up anything lying on the floor", "turn": 1663}
+{"ask": 56, "depth": 1, "keys": "6i-ag\\e", "reason": "step east onto the potion and pick it up off the floor", "turn": 1723}
+{"ask": 57, "depth": 1, "keys": "v", "reason": "open the throw prompt so I can read the item letters the throw prompt uses (the pack letter for oil may differ)", "turn": 1734}
+{"ask": 58, "depth": 1, "keys": "a'", "reason": "throw a flask of oil at the closest worm mass (the throw prompt's letter for oil is 'a')", "turn": 1734}
+{"ask": 59, "depth": 1, "keys": " ", "reason": "clear the -more- so the aimed oil throw actually happens", "turn": 1734}
+{"ask": 60, "depth": 1, "keys": "no9", "reason": "decline the out-of-range throw (the oil would explode on top of me) and open the closed door to the north-east", "turn": 1734}
+{"ask": 61, "depth": 1, "keys": ".4", "reason": "run west along the room and corridor toward the worm masses", "turn": 1744}
+{"ask": 62, "depth": 1, "keys": "4444444444", "reason": "walk ten tiles west along the corridor, looking for anything on the floor and fighting what is in the way", "turn": 1754}
+{"ask": 63, "depth": 1, "keys": "q", "reason": "open the quaff prompt so I can read the potion letters in my pack", "turn": 1845}
+{"ask": 64, "depth": 1, "keys": "e", "reason": "drink the Potion of Berserk Strength: it heals 30 (I am 24/36), cures fear and grants heroism", "turn": 1845}
+{"ask": 65, "depth": 1, "keys": "6", "reason": "attack the worm mass adjacent to me on the east", "turn": 1845}
+{"ask": 66, "depth": 1, "keys": "3", "reason": "attack the worm mass to the south-east of me", "turn": 1855}
+{"ask": 67, "depth": 1, "keys": " 3", "reason": "clear the -more- and finish the worm mass to my south-east", "turn": 1855}
+{"ask": 68, "depth": 1, "keys": " va' ", "reason": "throw a flask of oil at the closest worm mass (range 2 or 3, so no explosion can reach me)", "turn": 1872}
+{"ask": 69, "depth": 1, "keys": " va'  va'  ", "reason": "two oil throws at the closest worm masses", "turn": 1872}
+{"ask": 70, "depth": 1, "keys": " va'  va'  ", "reason": "two more oil throws to finish the last two worm masses", "turn": 1882}
+{"ask": 71, "depth": 1, "keys": " va'  ", "reason": "one last oil throw to finish the last worm mass", "turn": 1902}
+{"ask": 72, "depth": 1, "keys": " va'  ", "reason": "the last worm still has a hit point left: throw the flask again", "turn": 1902}
+{"ask": 73, "depth": 1, "keys": " 4444774444444447888888874444444122", "reason": "clear the -more- and walk the 34-step route west to the up staircase, where I can drink the unknown potions safely", "turn": 1912}
+{"ask": 27, "depth": 1, "keys": "339i-ag\\e", "reason": "walk the three-step route onto the scroll glyph, then pick it up off the floor with the inventory's floor mode", "turn": 552}
+{"ask": 74, "depth": 1, "keys": "qf", "reason": "quaff the unidentified Smoky Potion here on the up staircase, at full health with nothing in view - the policy for an unknown potion", "turn": 2262}
+{"ask": 75, "depth": 1, "keys": " qg", "reason": "quaff the second unidentified potion (the pair of Bubbling ones)", "turn": 2262}
+{"ask": 76, "depth": 1, "keys": "f", "reason": "quaff the remaining unidentified potion ('f', a Smoky - already identified once as Heroism)", "turn": 2272}
+{"ask": 77, "depth": 1, "keys": "i", "reason": "open the pack to see what the unidentified potions were and what I still carry", "turn": 2282}
+{"ask": 78, "depth": 1, "keys": "\\eqe", "reason": "close the pack, then drink the Potion of Heroism for its +12 to-hit before exploring further", "turn": 2282}
+{"ask": 79, "depth": 1, "keys": "8896666666322222223666666666989", "reason": "take the 31-step route through the big room down into the south room, looking for gold and monsters", "turn": 2292}
+{"ask": 80, "depth": 1, "keys": "33399998887477", "reason": "take the 14-step route north through the room and into the big hall, looking for gold on the floor", "turn": 2592}
+{"ask": 81, "depth": 1, "keys": "99998888", "reason": "walk the eight-step route north through the open door and up the corridor, to open up new ground", "turn": 2732}
+{"ask": 82, "depth": 1, "keys": ".8", "memory": "Human Warrior, seed 313, CL2, HP 36/36, gold 23, AC 10 (berserk expired), Heroism active (+12 to-hit). Kit: 10 oil, 3 CLW, 1 Heroism, 7 Phase Door, 1 Recall, 2 rations, torch, Novice's Handbook. NXT 5 exp to CL3. On depth 1; the up staircase is 11 rows south and 27 columns west of me. Plan: hunt gold (need 65 for a Magic Mapping scroll to test whether it reveals the '>' glyph), then return to town.", "reason": "run north up the corridor", "turn": 2812}
+{"ask": 83, "depth": 1, "keys": ".8", "reason": "run north up the corridor", "turn": 2852}
+{"ask": 84, "depth": 1, "keys": "22236.6", "reason": "walk to the side passage at the end of the corridor and run east along it", "turn": 2852}
+{"ask": 56, "depth": 1, "keys": "6g", "reason": "step east onto the potion and open the pick-up prompt to see what it is", "turn": 1723}
+{"ask": 85, "depth": 1, "keys": "M", "reason": "draw the whole remembered level, to see how much of depth 1 I have seen and whether a down staircase has been spotted", "turn": 2902}
+{"ask": 86, "depth": 1, "keys": " lxg", "reason": "clear the map view, then use the game's own look-mode explorer: 'x' jumps the cursor to the nearest unknown square and 'g' pathfinds me there through ground I have never seen", "turn": 2902}
+{"ask": 87, "depth": 1, "keys": "*7777777777777777777777777777777777777777777777g", "reason": "aim far north-west, the part of the level with the most dark, and let the game's own pathfinder walk me there through ground I have never seen", "turn": 2912}
+{"ask": 88, "depth": 1, "keys": "*p7777777777777777777777777g", "reason": "aim 25 tiles north-west into the dark part of the level and let the game pathfind me there through ground I have never seen", "turn": 2982}
+{"ask": 89, "depth": 1, "keys": "*p4444444444444444444444444444444444444444444444444444444444448888888g", "reason": "aim far west and a little north into the unexplored part of the level, and let the game walk me there through ground I have never seen", "turn": 3012}
+{"ask": 90, "depth": 1, "keys": "333699982336998889371222211111444444777772222266666666666666639641222366666", "reason": "sweep the whole drawn floor in one ask - the north-east corridor, the east corridor, the hall's three sides and the room below - looking for gold on the floor and for monsters to fight", "turn": 3082}
+{"ask": 91, "depth": 1, "keys": "M", "reason": "draw the remembered level again to see how much I have covered and where the dark is now", "turn": 3832}
+{"ask": 92, "depth": 1, "keys": " 1111444444477g", "reason": "walk west along the corridor to the weapon lying on the floor and pick it up - a Warrior with a sword is worth more than a dagger", "turn": 3832}
+{"ask": 93, "depth": 1, "keys": "*p444444444444444444444444444444444444444444444444444444444444g", "reason": "aim at the far west of the level and let the game pathfind me there: the corridor under me runs west, and beyond it is ground I have never seen", "turn": 3963}
+{"ask": 94, "depth": 1, "keys": "*p444444444444444444444444444444444444444444444444444444444444g", "reason": "keep pushing west along the corridor into ground I have never seen", "turn": 4083}
+{"ask": 95, "depth": 1, "keys": "66666666666336999998887777789*p8888888888888888888888888888888888888888888g", "reason": "walk east along the corridor and north through the open door at the top of the hall, then aim north into the ground I have never seen", "turn": 4093}
+{"ask": 96, "depth": 1, "keys": "*p8888888888888888888888888888888888888888888g", "reason": "aim north up the passage I have just come up, into ground I have never seen", "turn": 4443}
+{"ask": 97, "depth": 1, "keys": "lxg", "reason": "use the game's own explorer: jump the cursor to the nearest unknown square and pathfind there - it always finds a legal walk to the edge of what I have seen", "turn": 4453}
+{"ask": 98, "depth": 1, "keys": "*p7777777777777777777777777777777777777777777g", "reason": "aim north-west: the passage I am in opens north-west into ground I have never seen", "turn": 4463}
+{"ask": 99, "depth": 1, "keys": "*p444444444444444444444444444444444444444444444444444444444444g", "reason": "aim west: the panel shows 38 tiles of never-seen ground that way and the corridor under me runs with it", "turn": 4473}
+{"ask": 100, "depth": 1, "keys": "46622222144444714442222298886222169888922221698886222169888622216988862221698888622221698888622221698888988888888362222222169888862222168", "reason": "sweep every tile of drawn floor in this panel in one ask - 137 steps - to find any gold on the floor and to meet whatever is living here", "turn": 4483}
+{"ask": 101, "depth": 1, "keys": "7777444471444222229888622216988892222169888622216988862221698889988887444714444686221221698988622211669888862222122221444421444444444714468888888744444447777444444444229292929292929292926976622922263629862169862169886221698888887988888888888836223222216988882322169886221698862216988928", "reason": "sweep the east corridor I have walked into - it runs north and south off the panel, and there are two locked doors on it to try", "turn": 5093}
+{"ask": 102, "depth": 1, "keys": "M", "reason": "draw the remembered level: I want to see how much of depth 1 is mapped, where the dark is, and whether there is a room I have drawn but never entered", "turn": 6565}
+{"ask": 103, "depth": 1, "keys": " l>g", "reason": "the level map shows a down staircase I have already seen (box 55,9) - use the game's own jump to a KNOWN down staircase and walk there", "turn": 6565}
+{"ask": 104, "depth": 1, "keys": "9", "reason": "attack the grey mould that is standing between me and the down staircase - it is 2 hit points and its spore does 1d4 twice", "turn": 6715}
+{"ask": 105, "depth": 1, "keys": " ", "reason": "clear the message and see where the mould is now", "turn": 6716}
+{"ask": 106, "depth": 1, "keys": "99>", "reason": "kill the grey mould (2 hp, my dagger does about 11 a turn) and step up to the down staircase", "turn": 6725}
+{"ask": 107, "depth": 1, "keys": "99>", "reason": "step up to the down staircase and take it down to depth 2", "turn": 6738}
+{"ask": 108, "depth": 2, "keys": " ", "reason": "clear the level feeling and take stock of depth 2", "turn": 6748}
+{"ask": 109, "depth": 2, "keys": "8*p8888888888888888888888888888888888888888888g", "reason": "leave the up staircase alcove and aim north into the dark of depth 2", "turn": 6748}
+{"ask": 110, "depth": 2, "keys": "*p6666666666666666666666666666666666666g*p8888888888888888888888888888888888888g", "reason": "two aims in one ask: east along the corridor that leaves the up staircase pocket, then north, to open up depth 2", "turn": 6778}
+{"ask": 111, "depth": 2, "keys": "*p9999999999999999999999999999999999999g*p8888888888888888888888888888888888888g*p3333333333333333333333333333333333333g*p2222222222222222222222222222222222222g*p6666666666666666666666666666666666666g", "reason": "five aims in one ask - north-east, north, south-east, south, east - to find which way the corridor from the up staircase pocket turns", "turn": 6788}
+{"ask": 112, "depth": 2, "keys": "6", "reason": "bump into the locked door east of me: walking into a locked door picks the lock, and a room on depth 2 can hold a kobold", "turn": 6818}
+{"ask": 113, "depth": 2, "keys": "6*p6666666666666666666666666666666666666g", "reason": "step through the door I just unlocked and aim east into the room beyond", "turn": 6828}
+{"ask": 114, "depth": 2, "keys": "2*p222222222222222222222222222222222222g", "reason": "try the locked door south of me and, if it opens, walk into the room behind it", "turn": 6848}
+{"ask": 115, "depth": 2, "keys": "qd", "reason": "heal to full before I read an unknown scroll: I am at 23 of 36 after the walk down the corridor (11 damage, probably a trap)", "turn": 7117}
+{"ask": 116, "depth": 2, "keys": "8777778g1111g", "reason": "walk to the first scroll and pick it up, then walk to the second and pick it up - an unidentified scroll on depth 2 can be Magic Mapping, and this run's standing question is what Magic Mapping shows", "turn": 7127}
+{"ask": 117, "depth": 2, "keys": "rg", "reason": "read the unidentified scroll: the source says a scroll on depth 2 can be Treasure Detection (17%), Light (17%), Phase Door (17%), Detect Invisible (17%), Blessing (17%), Deep Descent (7%), Summon Monster (3%) or Darkness (3%) - Magic Mapping cannot appear before depth 5, so this is a good bet", "turn": 7239}
+{"ask": 118, "depth": 2, "keys": "36699999988889393>", "reason": "walk the 17-step route to the down staircase I can see at the top of the vein corridor and take it down", "turn": 7249}
+{"ask": 119, "depth": 3, "keys": " ", "reason": "clear the level feeling and look at depth 3", "turn": 7419}
+{"ask": 120, "depth": 3, "keys": "8*p8888888888888888888888888888888g*p6666666666666666666666666666666g*p4444444444444444444444444444444g", "reason": "leave the up staircase pocket of depth 3 and try three aims - north, east, west - to open up the level", "turn": 7419}
+{"ask": 121, "depth": 3, "keys": "*p2222222222222222222222222222222g*p3333333333333333333333333333333g*p1111111111111111111111111111111g", "reason": "aim south into the open ground, then south-east and south-west, to open up depth 3", "turn": 7439}
+{"ask": 122, "depth": 3, "keys": "*p4444444444444444444444444444444g*p7777777777777777777777777777777g*p1111111111111111111111111111111g", "reason": "aim west into the open ground, then north-west and south-west", "turn": 7469}
+{"ask": 123, "depth": 3, "keys": "*p4444444444444444444444444444444g*p7777777777777777777777777777777g*p4444444444444444444444444444444g*p1111111111111111111111111111111g", "reason": "four westward aims in one ask, each a little off the last, to push past the walls the walk keeps bumping into", "turn": 7489}
+{"ask": 124, "depth": 3, "keys": "*p4444444444444444444444444444444g*p7777777777777777777777777777777g*p4444444444444444444444444444444g*p3333333333333333333333333333333g", "reason": "four more westward aims to push along the corridor of depth 3", "turn": 7509}
+{"ask": 125, "depth": 3, "keys": "*p4444444444444444444444444444444g*p7777777777777777777777777777777g*p4444444444444444444444444444444g*p3333333333333333333333333333333g", "reason": "keep pushing west along the corridor of depth 3", "turn": 7529}
+{"ask": 126, "depth": 3, "keys": "*p8888888888888888888888888888888g*p9999999999999999999999999999999g*p6666666666666666666666666666666g*p8888888888888888888888888888888g", "reason": "aim north through the opening above me, then north-east, east and north again", "turn": 7569}
+{"ask": 127, "depth": 3, "keys": "*p6666666666666666666666666666666g*p3333333333333333333333333333333g*p2222222222222222222222222222222g*p6666666666666666666666666666666g", "reason": "aim back east and then south, to follow the corridor that runs past the up staircase", "turn": 7589}
+{"ask": 128, "depth": 3, "keys": "*p2222222222222222222222222222222g*p3333333333333333333333333333333g*p6666666666666666666666666666666g*p8888888888888888888888888888888g", "reason": "aim south down the corridor that leaves the up staircase junction, then south-east, east and north", "turn": 7689}
+{"ask": 129, "depth": 3, "keys": "*p2222222222222222222222222222222g*p3333333333333333333333333333333g*p6666666666666666666666666666666g*p2222222222222222222222222222222g", "reason": "aim south down the corridor past the up staircase, then around the corner to the east", "turn": 7779}
+{"ask": 130, "depth": 3, "keys": "*p6666666666666666666666666666666g*p3333333333333333333333333333333g*p6666666666666666666666666666666g*p8888888888888888888888888888888g", "reason": "aim east along the corridor that leaves the bottom of the shaft", "turn": 7859}
+{"ask": 131, "depth": 3, "keys": "*p6666666666666666666666666666666g*p9999999999999999999999999999999g*p6666666666666666666666666666666g*p9999999999999999999999999999999g", "reason": "aim east and north-east, the two open directions, to open up the east of depth 3", "turn": 7879}
+{"ask": 132, "depth": 3, "keys": "*p6666666666666666666666666666666g*p9999999999999999999999999999999g*p6666666666666666666666666666666g*p2222222222222222222222222222222g*p6666666666666666666666666666666g*p9999999999999999999999999999999g", "reason": "six aims in one ask to open up the east of depth 3 as fast as the game will walk", "turn": 7909}
+{"ask": 133, "depth": 3, "keys": "*p6666666666666666666666666666666g*p9999999999999999999999999999999g*p6666666666666666666666666666666g*p9999999999999999999999999999999g*p6666666666666666666666666666666g*p3333333333333333333333333333333g", "reason": "six more aims east and north-east along the corridor of depth 3", "turn": 7939}
+{"ask": 134, "depth": 3, "keys": "*p6666666666666666666666666666666g*p9999999999999999999999999999999g*p6666666666666666666666666666666g*p9999999999999999999999999999999g*p6666666666666666666666666666666g*p9999999999999999999999999999999g*p6666666666666666666666666666666g*p9999999999999999999999999999999g", "reason": "eight aims in one ask, east and north-east, to run the corridor of depth 3 as far as it goes", "turn": 7969}
+{"ask": 135, "depth": 3, "keys": "6*p6666666666666666666666666666666g*p3333333333333333333333333333333g", "reason": "try the locked door at the end of the corridor and, if it opens, walk east into whatever is behind it", "turn": 7999}
+{"ask": 136, "depth": 3, "keys": "*p6666666666666666666666666666666g*p9999999999999999999999999999999g*p6666666666666666666666666666666g*p2222222222222222222222222222222g*p3333333333333333333333333333333g*p6666666666666666666666666666666g", "reason": "six aims into the room behind the unlocked door - east, north-east, east, south, south-east, east", "turn": 8013}
+{"ask": 137, "depth": 3, "keys": "*p4444444444444444444444g*p99999999999999999999g", "reason": "aim west at the gold pile seven tiles away, behind the wall: the pathfinder will route around it and the game picks gold up for me when I step on it", "turn": 8143}
+{"ask": 138, "depth": 3, "keys": "*p4444448g", "reason": "aim six west and one north - the corridor west of me is walled off at row 14, so the gold is reached along the row above it", "turn": 8153}
+{"ask": 139, "depth": 3, "keys": "*p444444422g", "reason": "aim exactly at the gold - seven west and two south - and let the pathfinder route me round the wall to it", "turn": 8163}
+{"ask": 140, "depth": 3, "keys": "*p44422g", "reason": "aim at the gold pile itself - three west and two south - and walk onto it; the game picks gold up for me when I stand on it", "turn": 8203}
+{"ask": 141, "depth": 3, "keys": "1", "reason": "step south-west onto the tile next to the gold - if something is standing there I attack it and learn what it is", "turn": 8213}
+{"ask": 142, "depth": 3, "keys": "4l>g>", "reason": "step west onto the gold pile, then use the game's jump to the KNOWN down staircase six tiles east and take it down to depth 4", "turn": 8223}
+{"ask": 143, "depth": 3, "keys": "l<g", "reason": "walk to the up staircase two tiles east of me - the game's own jump to a known up staircase - and nothing after the 'g', because a key after 'g' interrupts the walk (ask 143)", "turn": 8243}
+{"ask": 144, "depth": 3, "keys": "666", "reason": "kill the kobold that is standing in the corridor between me and both staircases, and step onto where it fell so its drop is picked up", "turn": 8253}
+{"ask": 145, "depth": 3, "keys": " 6l<g", "reason": "clear the message, step onto the corpse to collect whatever the kobold shaman dropped, then walk to the up staircase", "turn": 8260}
+{"ask": 146, "depth": 3, "keys": "<", "reason": "take the up staircase to the town, to buy a Scroll of Magic Mapping and settle the repo's standing question about it", "turn": 8284}
+{"ask": 147, "depth": 2, "keys": "M", "reason": "draw the remembered level of depth 2 for the last time: how much of it did I map, and are there down staircases in it I never noticed", "turn": 8284}
+{"ask": 148, "depth": 2, "keys": "M", "reason": "draw the remembered level of depth 2 now that the level feeling is out of the way", "turn": 8284}
+{"ask": 149, "depth": 2, "keys": "rg5555555555555555555555555555555555555555", "reason": "read the Word of Recall to leave the dungeon, then stand still until its timer fires and the game yanks me up to the town", "turn": 8284}
+{"ask": 150, "depth": 2, "keys": "\u0018", "reason": "the run was stopped", "turn": 8394}
