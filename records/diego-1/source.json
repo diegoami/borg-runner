@@ -1,0 +1,19 @@
+{
+  "arguments": [
+    "--",
+    "-n1"
+  ],
+  "build": {
+    "binary_sha256": "9ee282b156ccf08e4556d72e4aa138bd52d1545a7f49d4724c85a35dafe95dce",
+    "git_rev": "21fcb34ff1a10e0077ed86a6edd78aae1e794ccc",
+    "impl": "rust"
+  },
+  "duration_seconds": 638.5493729689988,
+  "frames": 6105,
+  "frames_sha256": "f7b0d30d6dd4089cb44affc6475f2bf6b947fa67c5f347e5c6d51272fbdfe1e1",
+  "frontend": "x11",
+  "recording": "/home/diego/projects/borg-rs/.angband-rust/recordings/20261110T013230.890660Z-1",
+  "schema": "borg-runner/foreign-source@1",
+  "screens_in_the_replay": 570,
+  "why": "A session played by a person, kept here so it can be compared with the model runs in the same table and the same viewer. It is not a borg-runner run: a different build, and no seed-and-keys recording, so it cannot be replayed by this repository - the screens in report.html are the recording reconstructed."
+}

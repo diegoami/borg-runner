@@ -1,0 +1,36 @@
+{
+  "asks": 418,
+  "asks_made": 418,
+  "carried_value": null,
+  "character": "Kobold Priest",
+  "character_drawn": true,
+  "character_level": 2,
+  "class": "Priest",
+  "cost": {
+    "model": "none/human",
+    "played_by": "a person",
+    "seconds_per_decision": 1.5
+  },
+  "death_depth": null,
+  "died": false,
+  "final_turn": 4741,
+  "gold": 2,
+  "hp": {
+    "max": 18,
+    "now": 18
+  },
+  "keypresses": 418,
+  "killed_by": null,
+  "max_character_level": 2,
+  "max_depth": 1,
+  "notebook_lines": 0,
+  "outcome": "stopped, saved",
+  "own_tools": [],
+  "played_from": "borg-rs",
+  "race": "Kobold",
+  "run": "diego-1",
+  "schema": "borg-runner/run-record@1",
+  "seed": null,
+  "standing_from": "the borg-rs recording, frames.jsonl.gz",
+  "wealth": null
+}

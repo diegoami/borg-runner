@@ -110,6 +110,15 @@ Four parts, and nothing else:
 4. **Report** — one page per run: what happened, what it believed at the time,
    and what it would do differently.
 
+One of the runs in `records/` was **played by a person** (`diego-1`, a Kobold
+Priest), converted from a borg-rs recording by
+[tools/replay_from_borg_rs.py](tools/replay_from_borg_rs.py) so that it sits in
+the same table and the same viewer as the model runs. It is marked
+`none/human` and its `source.json` says what it is and what it is not: a
+different build, no seed-and-keys recording, so this repository cannot replay
+it — the screens in its replay are the recording reconstructed. Comparing a
+person with a model on the same game is the point of keeping it.
+
 Two things are **kept in git**, and the run directory is not one of them:
 `records/` holds each run's seed, **every key**, the reasons and the notes —
 everything that cannot be regenerated. The screens are left out because
