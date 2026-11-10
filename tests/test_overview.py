@@ -120,3 +120,21 @@ def test_a_run_with_no_replay_page_is_still_listed(tmp_path):
     a_record(tmp_path, 'bare')
     page = overview.page(overview.rows(tmp_path))
     assert 'bare' in page
+
+
+def test_the_markdown_links_a_replay_that_opens(tmp_path):
+    """github.com renders .html as source, so a relative link to a replay
+    shows markup to anyone reading OVERVIEW.md on GitHub - which is where it
+    is read."""
+    run = a_record(tmp_path, 'one')
+    (run / 'report.html').write_text('<title>x</title>')
+    table = overview.markdown(overview.rows(tmp_path))
+    assert f'[watch]({overview.SITE}/records/one/report.html)' in table
+
+
+def test_the_page_keeps_its_links_relative(tmp_path):
+    """The page is served from the site, so relative is right there."""
+    run = a_record(tmp_path, 'one')
+    (run / 'report.html').write_text('<title>x</title>')
+    page = overview.page(overview.rows(tmp_path))
+    assert '"one/report.html"' in page

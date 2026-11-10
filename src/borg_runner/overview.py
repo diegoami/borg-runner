@@ -109,9 +109,11 @@ def markdown(found):
                 where = row.get('report') or row['record']
                 cells.append(f"[{row['run']}]({where})")
             elif key == 'replay':
-                # The local page first: it is public, where the artifact link
-                # is private to the owner's account.
-                where = row.get('replay') or row.get('replay_url')
+                # The served page first: it is public and it opens, where a
+                # relative link shows markup on GitHub and the artifact link
+                # is private to its owner.
+                where = (f"{SITE}/records/{row['replay']}" if row.get('replay')
+                         else row.get('replay_url'))
                 cells.append(f'[watch]({where})' if where else '—')
             elif key == 'wealth' and row['wealth'] is not None:
                 cells.append(f"{row['wealth']:,} "
@@ -128,6 +130,11 @@ def markdown(found):
 # records/. One command writes all three, so a run finishing from any harness
 # leaves the dashboard current instead of only the markdown.
 PAGES = ('index.html', 'records/overview.html')
+# A replay is an HTML page, and github.com renders .html as source - so a
+# relative link to one works from the Pages site and shows markup when the
+# markdown table is read on GitHub, which is where people actually read it.
+# The markdown therefore links the served copy absolutely.
+SITE = 'https://diegoami.github.io/borg-runner'
 
 
 def write_all(found=None, log=print):
