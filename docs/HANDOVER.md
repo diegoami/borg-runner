@@ -160,6 +160,11 @@ diffs every ask byte for byte.
     dashboard and `records/OVERVIEW.md` lead with characters.
 11. The `-again` runs renamed to the lineage convention
     (`minimaxflash-1.2`, `sonnet-2.2`).
+12. **The throw mystery solved.** `mmx-war-1`'s four wasted decisions were
+    not a throw bug: it answered the `[` monster list with `v` `a` `'`, the
+    list ate `v`, `a` ran Aim a wand, and `'` only set a target. The page
+    now names the monster list in its "a key is swallowed" rule, and the
+    export's row says what the frames show.
 
 ## T11: the flush rule, and why old runs still replay
 
@@ -184,10 +189,7 @@ new runs replay identically under the new build with `-k`.
 2. **The coverage measurement nobody has made** (ACCUMULATED section 8,
    question 2): how much of a level a sweep actually remembers, counted off
    `minimaxflash-1.4`'s replay rather than believed.
-3. **The throw prompt** (ACCUMULATED section 3): `mmx-war-1` could not fire
-   a thrown flask after `v` + item + `'`; one run that finds the finishing
-   key would settle whether the page's recipe is wrong.
-4. **Offered and not taken up**: CI for `pytest -m slow`, and an Angband MCP
+3. **Offered and not taken up**: CI for `pytest -m slow`, and an Angband MCP
    server.
 
 ## Rules that are not obvious and have each cost something

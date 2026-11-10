@@ -104,7 +104,11 @@ its decisions under `records/`.
   the first key of the next string is read as one: a stray `a` became "Aim a
   wand" and ate the rest five times in one run (minimaxflash-2#91). The rule
   that covers every case of this: **never send two commands in one ask after a
-  movement command.**
+  movement command.** **The monster list is the same trap**: `[` takes one key
+  to close and eats it, so the `v` (throw) sent next vanished, the `a` after
+  it ran Aim a wand - "You have no wands to aim" - and the `'` after that only
+  set a target, which reads exactly like a throw that is ready (mmx-war-1#129).
+  Lead the next ask with a space, or press `\e` first.
 - **The store list renumbers when an item sells out**, so every letter below
   it changes - read the letter off the screen after each purchase, not before
   the first (minimaxflash-2#91). Only the letters *after* the removed row
