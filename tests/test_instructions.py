@@ -59,7 +59,7 @@ from borg_runner import gamedata, instructions
 
 # Floors, set just below what the page yields today. Raising the page's claims
 # raises these; lowering them means checks were lost, and should be a decision.
-TOTAL_FLOOR = 700
+TOTAL_FLOOR = 745
 KIND_FLOORS = {
     'object cost': 12, 'table cost': 15, 'table level': 15, 'table alloc': 15,
     'race hitdie': 10, 'class hitdie': 15, 'race exp': 3,
@@ -68,7 +68,7 @@ KIND_FLOORS = {
     'store always': 20, 'store normal': 8, 'shop digit': 16, 'cost 0': 30,
     'citation': 60, 'quotation': 4, 'manual says': 10, 'price semantics': 25,
     'experience': 18, 'spell experience': 6, 'spell damage': 4,
-    'monster experience': 2, 'staircases': 8, 'constitution': 28, 'death': 10, 'unknown': 48,
+    'monster experience': 2, 'staircases': 8, 'constitution': 28, 'death': 10, 'unknown': 48, 'mechanic': 16,
 }
 
 
@@ -126,6 +126,10 @@ def test_every_extractor_found_something(report):
 DOCTORED = [
     ('Hobbit 7;', 'Hobbit 8;', ['Hobbit hit die', "8", "7"]),
     ('CL5 70, CL6 100', 'CL5 75, CL6 100', ['experience for CL5', '75', '70']),
+    ('takes **10 off your armour class**', 'takes **8 off your armour class**',
+     ['the berserk armour penalty', '8', '10']),
+    ('`skill-dig:0:0` in `class`', '`skill-dig:1:0` in `class`',
+     ['the Warrior digging skill', '1:0', '0:0']),
     ('Phase Door 17%, Deep Descent 7%', 'Phase Door 20%, Deep Descent 7%',
      ['an unknown scroll is Phase Door', '20', '17']),
     ('Summon Monster 10; Darkness 10', 'Summon Monster 15; Darkness 10',

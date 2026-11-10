@@ -219,6 +219,14 @@ them to a big hit, and each line names the run that saw it:
   throwing oil, with a Scroll of Phase Door in its pack that it had carried
   the whole game and did not read until it was at 2 (minimaxflash-2.2#350).
 
+And the fourth death, which was none of those things: a **Human Warrior** at
+**43 maximum hit points**, constitution +5, character level 4, killed on depth
+2 by a **cave spider** at 26 of 43 - because it read a Scroll of Word of
+Recall on arriving at a fresh level and then **stood still for forty turns**
+waiting for it (minimaxflash-3#149). Hit points buy you mistakes; they do not
+buy you standing still. See section 6 for what the Recall's timer actually
+is.
+
 None of this makes depth 1 safe, and none of it says stay in the town. It
 makes a death a thing you chose rather than a thing that happened while you
 were reading the map.
@@ -322,15 +330,20 @@ one near you as this one was - at two asks instead of a hundred.
 - Stairs are connected (`birth`): after `>` you stand on an up staircase; after `<` on a down one. Leaving a level destroys it; taking a staircase always gives a new level.
 - Light: your kit torch is wielded at birth and burns out; `F` refuels a lantern from flasks of oil. You cannot read scrolls in the dark, blind or confused (c15 CURE-02, `src/player-util.c`).
 - Hunger: `Fed %` on the status line; `E` eats.
+- **A closed door may be locked, and a lock is a roll, not a wall.** One closed door in four gets a lock of strength `randint1(7)` (FACT, `src/gen-util.c`), and walking into it picks it: the chance is `MAX(2, disarm-phys - 4 x lock strength)` per cent, with the skill divided by ten if you cannot see the lock or are blind (FACT, `src/player-calcs.c calc_unlocking_chance()`). A class with disarm-phys 40 opens a depth-1 door about two attempts in five. Two costs the manuals do not mention, both measured: **a failed pick prints `Cancelled` and eats the rest of the keys in that ask**, so a string of repeats is one attempt, not five (OBSERVED, minimaxflash-1.4#616); and **a picked lock does not move you** - the door opens and you are still outside it, so every locked door is two decisions (OBSERVED, minimaxflash-2.2#162).
 
 ## 4. See (`command`, `playing`)
 - `l` look. The list is sorted nearest first and includes your own square (`playing`; `src/target.c cmp_distance`), so it can open on it: Space or `+` for the next thing, `-` back, `r` toggles detail, Esc leaves (`playing`: "the list includes ... the player's location"). `[` lists visible monsters with asleep/awake and relative position. `]` lists items. `/` + symbol says what a glyph is. `M` whole-level map; `L` scroll the map by sectors (Esc leaves).
 - Monster memory: look at a monster for its name and health; kills and hits teach you its attacks (`attack`). `~` knowledge menus.
 - **A letter is a monster; an item is punctuation.** Items are drawn `! ? ( = " _ | \ , $ -` and the like, monsters with letters of either case (`monster_base.txt`: `i` is the icky thing, not an item). On the floor of these depths almost everything is a monster (OBSERVED, minimaxflash-2#91).
 - Health bar of the tracked monster is in the sidebar; `[----------]` or nothing means **not in view**, not dead.
+- **In look mode a direction key does not move the cursor one tile: it jumps to the next *interesting* square** in that direction - a door, an item, a monster, a staircase (`src/ui-target.c square_isinteresting()`). That is why `l` + direction + `g` walks a corridor to the next door in one ask, six to twelve tiles at a time (OBSERVED, minimaxflash-1.4#698). `p` switches to free mode, where a digit moves the cursor one tile; without it a digit picks the next thing and `g` walks you to that instead.
+- **`l` then `>` is the only exact distance the game will tell you**: it parks the cursor on the nearest *known* down staircase and the message line prints the offset from you to it, `18 S, 30 W` (`src/ui-target.c`, `src/target.c coords_desc()`). The panel's own columns cannot measure anything because the panel scrolls; this survives it (OBSERVED, minimaxflash-2.2#178).
+- **`!` is both a flask of oil and a potion, and only the colour differs** - `graphics:!:y` for oil, `graphics:!:d` for the potions (FACT, `object`). A text screen has no colour, so a `!` on the floor must be looked at before you assume: one run picked up what it was sure was oil and had bought itself four Potions of Cure Light Wounds (OBSERVED, minimaxflash-1.4#638).
 
 ## 5. Fight (`command`, `attack`, c4 4.11)
 - Melee: walk into it. Blows per turn depend on STR, DEX and weapon weight (`I`nspect shows them). A hit that does no damage counts as a miss; armour class lowers both (`attack`).
+- **Armour class mostly buys misses, not padding.** When a blow does land, armour removes `damage x min(AC, 240) / 400` of it (FACT, `src/mon-attack.c adjust_dam_armor()`) - **2.5% at AC 10**. What AC really buys is the monster missing more often (it is the defence value in the hit roll, `src/mon-attack.c`), which is the formula below. So a 100-gold armour for +4 AC is a poor trade for a class that can fight, and a **Potion of Berserk Strength** - which heals 30, gives **+75 to-hit** and fear immunity and takes **10 off your armour class** (FACT, `src/player-calcs.c`, the berserk timer) - is a bargain at that level, because the 10 AC it costs is worth 2.5% of one blow (measured by minimaxflash-3, which drank one and watched `Cur AC` fall from 10 to 0 while winning the fight; its report has the numbers).
 - **Throw** `v`, the item, then a target. At the `Direction?` prompt: `'` = closest monster, `5` or `t` = the current target, `*` = choose (Space next, `t` select, Esc/`q` quit), a digit = that direction (`playing`, Targeting). `'` alone, as a command, targets the closest monster. Fire: `f`, ammo, target; **`h`** (or Tab) fires the first quiver ammo at the nearest visible monster.
 - **Armour class decides whether you can hit at all.** FACT,
 `src/player-attack.c:196 hit_chance()`: the chance is `12% + 83% x (to_hit - 2 x AC / 3) / to_hit`, so against AC `A` a to-hit below `2A/3` leaves you on the flat **12%** floor and nothing else. At depth 1 a giant black ant and a small kobold are AC 24, so they need to-hit 16: a character with to-hit 9-11 (a Mage's rapier, or its thrown oil) cannot fight them at all and must pick low-armour targets - worm mass, mould, mushroom patch, icky thing, mouse are AC 1-8 (OBSERVED, minimaxflash-1-again on Grip at AC 36, minimaxflash-2#91 with to-hit 11). The same formula is what your own AC does for you: 200 gold of armour took one Mage from AC 1 to **AC 21**, which puts most of depth 1 on its 12% floor against eight hit points.
@@ -350,7 +363,7 @@ one near you as this one was - at two asks instead of a hundred.
 ## 6. Escape (c13, c15 ESC)
 - Standing on a staircase: take it (one action). Phase Door (15 g): teleports about 10 squares; Cure Light Wounds: heals 20, cures blindness, cuts 20 and confusion 20 turns (`object`). Potions work blind or confused; scrolls do not.
 - **POLICY** c15 ESC-01 ladder, in order: a staircase under you; Phase Door if one monster is the problem; Teleportation; heal; an unknown potion only as the last rung. HEAL-01: heal on predicted danger, the smallest heal that makes you safe; HEAL-04: if the monster out-damages your best heal per turn, leave instead.
-- Do not treat Word of Recall (15-34 turns delay) or Deep Descent (3+1d4 turns) as an escape (c15 ESC-04). Those are *player* turns: FACT, `src/game-world.c` decrements the recall counter once every ten game turns, so the wait is 150-340 game turns, and a run that gave up on it after about forty had waited a quarter of the minimum. Read in town before you have ever left it, Recall takes you to DL1 rather than nowhere - see volume 2.
+- Do not treat Word of Recall (15-34 turns delay) or Deep Descent (3+1d4 turns) as an escape (c15 ESC-04). Those are *player* turns: FACT, `src/game-world.c` decrements the recall counter once every ten game turns, so the wait is 150-340 game turns, and a run that gave up on it after about forty had waited a quarter of the minimum. **One run died of exactly this** (OBSERVED, minimaxflash-3#149): it read the Recall on arriving at a fresh depth 2 and stood still for forty turns, and a cave spider killed it at 26 of 43 hit points. Read it and keep walking, or do not read it. Read in town before you have ever left it, Recall takes you to DL1 rather than nowhere - see volume 2.
 - Running from faster monsters does not work: +10 speed is double your moves (`attack`, "A note on speed").
 
 ## 6b. What to keep and what to leave
@@ -491,13 +504,35 @@ section is only how.
 not try to compute those positions - you cannot read your coordinates (see
 "Where you are" above). Cast, walk a long way with one aimed `g`, cast again,
 and if two casts find nothing, **reroll the level**: a fresh one is as likely
-to have its staircase in your first window as this one was. At CL1 one spell point is about 71 player actions of regeneration (`player_regen_mana()`, `msp x 197 + 524` in 65536ths, doubled while resting), so those six casts plus the travel between them are **the whole of a 150-decision budget**.
+to have its staircase in your first window as this one was. **But read the
+next line before you cast twice on one level.**
+- **The detection spell breaks the game's own walking, and that is the most
+expensive thing any run here has found.** `DETECT_TRAPS` sets the trap-detected flag
+on **every** square of its window, trap or no trap (FACT,
+`src/effect-handler-general.c:1376`), and `src/cmd-cave.c run_step()` stops a run - and the
+`g` pathfinder with it - the moment it steps **off** a detected square, every
+step but the first (FACT, `src/cmd-cave.c run_step()`, which disturbs the
+player when the square left was detected and the one entered is not). So on
+a level you have cast on twice from different places, the seams between the
+windows cut every walk: `l>g` to a staircase 36 tiles away moved **one or two
+tiles an ask for about a hundred asks** (OBSERVED, minimaxflash-2.2#165,
+#256). Three things follow, and they are the whole technique:
+  1. **Plain digit walking is immune** - `src/cmd-cave.c do_cmd_walk()` has no such test, so
+     `44` always moves you two tiles west. If a walk is being cut short, send
+     digits.
+  2. **A fresh level has no detected squares at all**, so the first cast's own
+     window walks clean: one cast on a new depth 2 and the staircase inside it
+     was reached in a single ask (OBSERVED, minimaxflash-2.2#178).
+  3. **On a level you have already broken, cast again from a spot whose window
+     covers the path** - one spell point re-marks every square, seams
+     included, even though the spell then reports nothing new. A cast that
+     says "You sense no traps" has still done this work. At CL1 one spell point is about 71 player actions of regeneration (`player_regen_mana()`, `msp x 197 + 524` in 65536ths, doubled while resting), so those six casts plus the travel between them are **the whole of a 150-decision budget**.
 - **POLICY** c15 DEPTH-02, minimum kit before going below: DL5 needs Word of Recall, 3+ cure potions and a ranged attack; DL15 needs 100 max HP and about 10 Phase Door. DEPTH-01 says gate depth on the worst single hit of the depth band, not on character level. Treat these as numbers to test.
 
 ## 9. Your class (`class`, `race`, c14; section numbers are c14's)
 Level-1 facts are from `class.txt`; "buy" is POLICY from c4/c14/c15 with real prices from section 2.
 
-**Warrior** (c14 s1): hit die 9, up to 6 blows, no spells, fear-proof only from CL30 (before that fear stops melee: Boldness 8 g, Berserk Strength). Kit: Dagger, Soft Leather Armour, Berserk Strength, food, torches. Buy: oil 15-20, Cure Light Wounds, Phase Door; a Sling or Short Bow if gold is left. Kills it: paralysis (floating eye), fear, open-room packs, running out of escapes.
+**Warrior** (c14 s1): hit die 9, up to 6 blows, no spells, fear-proof only from CL30 (before that fear stops melee: Boldness 8 g, Berserk Strength). Kit: Dagger, Soft Leather Armour, Berserk Strength, food, torches. Buy: oil 15-20, Cure Light Wounds, Phase Door; a Sling or Short Bow if gold is left. Kills it: paralysis (floating eye), fear, open-room packs, running out of escapes. **It can never dig**: `skill-dig:0:0` in `class` and no points a level, while `src/player-calcs.c calc_digging_chances()` needs digging skill over 10 for magma and over 20 for quartz, so every vein on every level is a permanent wall to this class - and a `*` is a vein **with treasure** in it (`%` is a plain one), which means every `*` you see is money a Warrior cannot have. A Shovel does not change it (measured by minimaxflash-3; its report has the veins it walked past).
 
 **Mage** (s2): hit die 0 (HP = race die: **10** for a Human, 8 for a Gnome), INT, 30 lb armour. Learns **one** spell at CL1 (`G`, book, spell); studying costs one action and nothing else - no mana, no experience, no gold (`src/cmd-obj.c do_cmd_study_spell()`) - and the status line says `Study` while a slot is free, so take every slot the level gives you as soon as it appears. CL1 spells: Magic Missile 1 sp (dice `$Dd4` with the count `(CL-1)/5+3`, so **3d4, 3 to 12 damage**, all the way from CL1 to CL5 and 4d4 at CL6; never resisted. The 3 is the dice count, not a bonus: there is no `+3`, and a page that reads it as 6-15 is reading the expression wrong), Light Room 2 sp, Find Traps/Doors/Stairs 1 sp (detects within 22 rows and 40 columns). That last one is the staircase detector, and what its window costs in asks is in section 8. **Its melee is not a fallback**: to-hit 9 with the kit rapier is below `2 x AC / 3` for most of depth 1, so melee lands on the 12% floor only (OBSERVED, minimaxflash-2#91). Spell points at CL1 regenerate at about 0.014 a player action, one point per 71 actions. Phase Door spell at CL2, Detect Monsters CL3, Fire Ball CL6. Kit: Rapier, [First Spells], food, torch. Buy: oil (your real attack), Cure Light Wounds, Phase Door scrolls. Kills it: one round of melee, casting at 0 mana, anything adjacent at 10 HP. **Your hit points grow slowly**: this class is -1 or worse on constitution, so see **Constitution sets how fast you may dive** above - it is a pace for descending, and all three characters that died here were this fragile.
 

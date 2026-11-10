@@ -297,8 +297,8 @@ def race_experience(c):
                int(first[1]), int(match[1]) if match else 'player_exp not found')
 
 
-WORD_NUMBERS = {'two': 2, 'three': 3, 'six': 6, 'twelve': 12, 'twenty': 20,
-                'forty': 40}
+WORD_NUMBERS = {'two': 2, 'three': 3, 'six': 6, 'ten': 10, 'twelve': 12,
+                'twenty': 20, 'forty': 40}
 
 
 def player_exp_table():
@@ -378,6 +378,110 @@ def died_records():
         if record.get('died'):
             found[path.parent.name] = record
     return found
+
+
+@extractor('mechanics runs measured', minimum=16)
+def measured_mechanics(c):
+    """Locked doors, the detection flag that stops a walk, digging, armour and
+    the ambiguous `!`: what three runs took out of the source this week."""
+    found = c.search(r'One closed door in four gets a lock of strength '
+                     r'`randint1\((\d+)\)` \(FACT, `src/gen-util\.c`\), and walking into it '
+                     r'picks it: the chance is `MAX\((\d+), disarm-phys - (\d+) x lock '
+                     r'strength\)` per cent, with the skill divided by (\w+) if you cannot '
+                     r'see the lock or are blind', name='the lock arithmetic')
+    if found:
+        util = gd.read_source('src/gen-util.c') or ''
+        calcs = gd.read_source('src/player-calcs.c') or ''
+        body = re.search(r'int calc_unlocking_chance\(.*?\n\}', calcs, re.S)
+        text = body[0] if body else ''
+        c.emit('mechanic', found.start(1), 'the strength of a new lock',
+               f'randint1({found[1]})', 'randint1(7)' if 'randint1(7)' in util else 'not found')
+        c.emit('mechanic', found.start(), 'one closed door in four is locked', True,
+               'one_in_(4)' in util and 'square_set_door_lock' in util)
+        c.emit('mechanic', found.start(2), 'the floor under the unlocking chance',
+               int(found[2]),
+               int(match[1]) if (match := re.search(r'MAX\((\d+), skill', text)) else 'not found')
+        c.emit('mechanic', found.start(3), 'what a point of lock strength costs',
+               int(found[3]),
+               int(match[1]) if (match := re.search(r'skill - (\d+) \* lock_power', text))
+               else 'not found')
+        c.emit('mechanic', found.start(4), 'what blindness does to the skill',
+               WORD_NUMBERS.get(found[4].lower(), found[4]),
+               10 if 'skill /= 10' in text else 'not found')
+    found = c.search(r'sets the trap-detected flag\s+on \*\*every\*\* square of its window, '
+                     r'trap or no trap \(FACT,\s+`src/effect-handler-general\.c:(\d+)`\)',
+                     name='the trap-detected flag')
+    if found:
+        source = (gd.read_source('src/effect-handler-general.c') or '').splitlines()
+        line = int(found[1])
+        marked = source[line - 1] if 0 < line <= len(source) else ''
+        c.emit('mechanic', found.start(1), 'the line that marks the window',
+               True, 'SQUARE_DTRAP' in marked)
+        walk = gd.read_source('src/cmd-cave.c') or ''
+        c.emit('mechanic', found.start(), 'a run stops when it steps off a detected square',
+               True, 'old_dtrap && !new_dtrap' in walk)
+        body = re.search(r'void do_cmd_walk\(struct command \*cmd\)(.*?)\n\}', walk, re.S)
+        c.emit('mechanic', found.start(), 'and plain walking has no such test',
+               True, bool(body) and 'dtrap' not in body[1])
+    found = c.search(r'\*\*It can never dig\*\*: `skill-dig:(\d+):(\d+)` in `class` and no '
+                     r'points a level, while\s+`src/player-calcs\.c calc_digging_chances\(\)` '
+                     r'needs digging skill over (\d+) for magma\s+and over (\d+) for quartz',
+                     name='what a Warrior cannot dig')
+    if found:
+        warrior = next((e for e in gd.load('class.txt')[0] if e.value == 'Warrior'), None)
+        c.emit('mechanic', found.start(1), 'the Warrior digging skill',
+               f'{found[1]}:{found[2]}', (warrior.first('skill-dig') or '').strip()
+               if warrior else 'no Warrior')
+        calcs = gd.read_source('src/player-calcs.c') or ''
+        for group, kind in ((3, 'MAGMA'), (4, 'QUARTZ')):
+            match = re.search(rf'chances\[DIGGING_{kind}\] = \(state->skills\[SKILL_DIGGING\] '
+                              rf'- (\d+)\)', calcs)
+            c.emit('mechanic', found.start(group), f'digging skill needed for {kind.lower()}',
+                   int(found[group]), int(match[1]) if match else 'not found')
+    found = c.search(r'armour removes `damage x min\(AC, (\d+)\) / (\d+)` of it \(FACT, '
+                     r'`src/mon-attack\.c adjust_dam_armor\(\)`\) - \*\*([\d.]+)% at AC (\d+)\*\*',
+                     name='what armour takes off a blow')
+    if found:
+        source = gd.read_source('src/mon-attack.c') or ''
+        match = re.search(r'return damage - \(damage \* \(\(ac < (\d+)\) \? ac : (\d+)\) '
+                          r'/ (\d+)\)', source)
+        c.emit('mechanic', found.start(1), 'the armour cap in the damage formula',
+               int(found[1]), int(match[1]) if match else 'not found')
+        c.emit('mechanic', found.start(2), 'the divisor in the damage formula',
+               int(found[2]), int(match[3]) if match else 'not found')
+        if match:
+            ac = int(found[4])
+            c.emit('mechanic', found.start(3), f'what AC {ac} removes from a blow',
+                   float(found[3]), round(100 * ac / int(match[3]), 1))
+    found = c.search(r'which heals (\d+), gives \*\*\+(\d+) to-hit\*\* and fear immunity and '
+                     r'takes \*\*(\d+) off your armour class\*\*', name='what berserk trades')
+    if found:
+        calcs = gd.read_source('src/player-calcs.c') or ''
+        body = re.search(r'if \(p->timed\[TMD_SHERO\]\) \{(.*?)\}', calcs, re.S)
+        text = body[1] if body else ''
+        c.emit('mechanic', found.start(2), 'the berserk to-hit bonus', int(found[2]),
+               int(match[1]) if (match := re.search(r'SKILL_TO_HIT_MELEE\] \+= (\d+)', text))
+               else 'not found')
+        c.emit('mechanic', found.start(3), 'the berserk armour penalty', int(found[3]),
+               int(match[1]) if (match := re.search(r'to_a -= (\d+)', text)) else 'not found')
+    found = c.search(r'`graphics:!:(\w)` for oil, `graphics:!:(\w)` for the potions '
+                     r'\(FACT, `object`\)', name='the ambiguous glyph')
+    if found:
+        text = (gd.GAMEDATA / 'object.txt').read_text()
+        oil = re.search(r'name:& Flask~ of oil\n(?:.*\n)*?graphics:(\S+)', text)
+        c.emit('mechanic', found.start(1), 'the flask of oil glyph and colour',
+               f'!:{found[1]}', oil[1] if oil else 'not found')
+        c.emit('mechanic', found.start(2), 'the potions share the glyph',
+               True, f'graphics:!:{found[2]}' in text)
+    found = c.search(r'it jumps to the next \*interesting\* square\*\* in that direction - a '
+                     r'door, an item, a monster, a staircase \(`src/ui-target\.c '
+                     r'square_isinteresting\(\)`\)', name='how look mode moves')
+    if found:
+        target = gd.read_source('src/ui-target.c') or ''
+        c.emit('mechanic', found.start(), 'look mode knows interesting squares',
+               True, 'square_isinteresting' in target)
+        c.emit('mechanic', found.start(), 'and `p` switches to free mode', True,
+               "event_is_key(press, 'p')" in target and 'free mode' in target)
 
 
 def item_pool(tval, depth):
