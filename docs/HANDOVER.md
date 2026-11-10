@@ -1,7 +1,7 @@
 # Handover
 
-**Written 2026-11-10 by the session that did the work below. It is for the
-next session, whichever model and whichever harness that is.** Read
+**Written 2026-11-10 (second session of the day), for the next session,
+whichever model and whichever harness that is.** Read
 [AGENTS.md](../AGENTS.md) first (it says which of the two jobs you are here
 for), then this file, then [PLAN.md](../PLAN.md) and
 [docs/DESIGN.md](DESIGN.md).
@@ -14,63 +14,75 @@ can run `.venv/bin/python` from the repository root, which AGENTS.md sets up
 in four commands.
 
 Everything described here is **in the repository and pushed**. Nothing a
-session needs lives in a conversation, and that is a rule now, not an accident:
-see "A tip lives on the page" below.
+session needs lives in a conversation, and that is a rule now, not an accident.
 
 **If you are here to play rather than to maintain**, this file is not yours:
 read `PLAYGAME.txt` (or `CONTINUEGAME.txt`), `manuals/INSTRUCTIONS.md` and
 your own `agents/<family>/` pages, and nothing else from this repository.
-A player's judgement has to be independent of the maintainer's (D9).
+A player's judgement has to be independent of the maintainer's (D9). Note the
+prompts changed today: **a run now starts in a worktree on a branch of its
+own** - see "The worktree model" below.
 
 ## Where the work stands
 
-The frontend works and is not where the open questions are. What is open is
-**knowledge**: what a player is told before its first keypress, and whether
-that changes how it plays.
-
-- **14 runs archived** in `records/`, one of them played by a person
-  (`diego-1`). Deepest: depth 7 (`sonnet-2-again`). Four deaths, none of them
-  to a big hit: three were characters below zero on constitution, and the
-  fourth a Warrior with 43 hit points that read Word of Recall and stood still
-  for forty turns.
+- **16 runs archived** in `records/`, one played by a person (`diego-1`).
+  Deepest: depth 7 (`sonnet-2-again`). **Five deaths**, none of them a big
+  hit: three low-CON characters, the Warrior that stood still beside its
+  Word of Recall, and the Druid that met crows with no escape in its pack.
 - **The dashboard** is <https://diegoami.github.io/borg-runner/>, rebuilt by
-  `overview` and published by pushing `main`.
-- **433 fast tests** (`pytest -q`). The slow ones build and play the game
-  (`pytest -q -m slow`), and CI does not run them today - an offer the owner
-  has not taken up.
-- **Nothing is playing.** The last run, `minimaxflash-3`, died on depth 2 to
-  a cave spider; its sections are folded in and the export is current.
+  `overview` on the main checkout and published by pushing `main`.
+- **445 fast tests** (`pytest -q`). The slow ones build and play the game
+  (`pytest -q -m slow`); CI does not run them.
+- **Nothing is playing.** The last run, `minimaxflash-1.5`, died on depth 2
+  to an acolyte after 893 asks - the longest run yet - and is fully
+  consolidated (archive, knowledge, playbook section, dashboard, and now the
+  export).
+- **Every death report now shows the death.** The reports of all four dead
+  runs carry the frames the game drew *between* the asks (see "The frame
+  dump" below); `minimaxflash-3`'s scrubber plays the spider killing it.
+
+## The worktree model (new today)
+
+**A run plays in a worktree on a branch of its own** (`git worktree add`,
+`run/<name>`), builds there, and finishes by committing `records/`,
+`knowledge/` and its `agents/` section on the branch and pushing it. It does
+**not** rebuild the dashboard and does **not** merge. The reasons: a run
+never shares a working tree with another run or with maintainer work, and
+two runs never race for the same files at commit time.
+
+**Merging run branches is maintainer work, done when nothing is playing:**
+
+```sh
+git merge run/<name>                 # agents/ and knowledge/ merge=union
+.venv/bin/python -m borg_runner overview
+git add records/OVERVIEW.md records/overview.html index.html
+git commit -m "overview: <run>" && git push
+```
+
+`agents/**/*.md` and `knowledge/*.md` carry `.gitattributes merge=union`, so
+two runs of one family that appended sections both survive the merge. The
+**append rule keeps its teeth**: players append sections, never rewrite;
+folding sections into the page bodies is still a nothing-is-playing task.
 
 ## The one structure to understand: where knowledge lives
-
-Four places, and nothing else:
 
 | Where | What it is | Who reads it |
 |---|---|---|
 | `manuals/INSTRUCTIONS.md` (+ `_2` for depth 5-20) | **the page**: the game's manual and a strategy manual distilled, with what runs found folded in, every line labelled FACT / OBSERVED / POLICY / UNTESTED and sourced | every player, before its first keypress |
 | `knowledge/<run>.md` + `records/<run>/` | the **evidence**: each run's own notebook, decisions, keys and replay | a consolidating session; a player only for a line it wants to check |
 | `agents/<family>/COMMON.md` and `<CLASS>.md` | the **playbook**: one model family's own account, written for its own next session | that family only |
-| `ACCUMULATED_KNOWLEDGE.md` | the **export**, outward to borg-reborn-rs; nothing the manuals already say | the consumer of this repository, not players |
+| `ACCUMULATED_KNOWLEDGE.md` | the **export**, outward to borg-reborn-rs; nothing the manuals already say. **Edition 4** covers all 16 runs. The owner calls this the reason the repository exists - its correctness outranks everything else here | the consumer, not players |
+| `prompts/` | the **briefs** worth running twice. A brief is an objective added to `PLAYGAME.txt`, never a replacement | one player each |
 
-And one more, added today: `prompts/` keeps the **briefs** worth running
-twice. A brief is an objective added to `PLAYGAME.txt`, never a replacement
-for it.
-
-**A tip lives on the page, not in a prompt.** A prompt is handed to one player
-and thrown away; the page is read by everyone, for ever. `borg_runner prompts`
-enforces it: a labelled claim in a prompt must carry an anchor (a source
-citation or a `run#ask`) and that anchor must be on the page too; a quoted page
-section must still exist; a brief must name the template it extends. This
-exists because a brief written for one mage carried the experience ladder, the
-kill arithmetic and a corrected spell damage, and nothing else did.
+**A tip lives on the page, not in a prompt.** `borg_runner prompts` enforces
+it: a labelled claim in a prompt must carry an anchor and that anchor must be
+on the page; a quoted page section must still exist; a brief must name the
+template it extends.
 
 ## Every check, and what each one refuses
 
-Run all of these before you commit anything that touches the page, the
-prompts or the playbooks:
-
 ```sh
-.venv/bin/python -m pytest -q                         # 433, includes the page check
+.venv/bin/python -m pytest -q                         # 445, includes the page check
 .venv/bin/python -m borg_runner prompts               # nothing is said only in a prompt
 .venv/bin/python -m borg_runner playbook --check      # layout, and spell numbers vs class.txt
 .venv/bin/python -m borg_runner consolidate --check   # every claim on the page names a real run#ask
@@ -81,120 +93,101 @@ prompts or the playbooks:
 ```
 
 The page check (`borg_runner.instructions`, driven by
-`tests/test_instructions.py`) is the strongest tool here: **718 claims on
-volume one, each parsed out of the page's own sentences and looked up in
-`vendor/` at the pin**, with floors per kind so a check cannot quietly
-disappear, and doctored rows that prove it can fail. It caught three of this
-session's own errors - a staircase rule that counted diagonals, a citation
-written in a form it mistook for an option, and a spell's damage bonus that
-does not exist.
+`tests/test_instructions.py`) parses claims out of the page's own sentences
+and looks them up in `vendor/` at the pin - **775+ claims on volume one**,
+with floors per kind and doctored rows that prove it can fail. It caught
+three errors in this session alone, and its grammar had to follow two of
+this session's legitimate page edits (the lock-arithmetic phrasing, and an
+obsolete rule that pinned volume 2 to volume 1's wrong Recall cell). **When
+a page edit is right and the check fails, read the failure twice: it may be
+the grammar that is stale, not the page.**
 
-## What this session changed, and why
+## The two things that changed the game today
 
-1. **The page gained the arithmetic of levelling** (section 1): the
-   experience ladder from `player_exp[]`, the kill award
-   `mexp x monster level / your level` with its consequence (forty depth-1
-   kills for a Human's CL5, most of them for the last level), and what pays
-   nothing at all.
-2. **"Depth is not the objective" gained the town-and-depth-1 shuttle**, named
-   and priced, UNTESTED as a route to a character level.
-3. **Section 8 gained the real staircase facts**: `classic_gen` and
-   `modified_gen`, the only profiles at depth 1, both ask for **3 or 4 down
-   staircases and 1 or 2 up**, on squares with three orthogonal walls, 16
-   apart. `minimaxflash-1.4` had swept two thirds of a level for one
-   staircase it believed was unique, and found none.
-4. **Section 6b gained the unknown-item pools**: what an unknown scroll or
-   potion can be at depth 2, with the weights from `object.txt` and the odds
-   (a scroll is Phase Door 17% of the time, 7% something against you), that
-   **Magic Mapping cannot be one of them below DL5**, that depth 1 and 2 have
-   no unknown wands, staves, rods, rings or amulets at all, and the three ways
-   a kind becomes known - including that **giving an item to the store that
-   buys its type identifies the kind for 0 gold**, which is the only way to
-   learn something you dare not use. A run had made "what does Magic Mapping
-   show" its standing question on depth 2, where that scroll cannot exist.
-5. **"Constitution sets how fast you may dive"** replaced a draft written as a
-   band of hit points, which "fitted nobody" (the owner's correction). CON is
-   a rate - `player_hp[level-1] + adj_con_mhp x level / 100` - so the rule is
-   a **pace**: gate each descent on the worst round of the depth you are
-   entering (14 at depth 2 or shallower), descend one depth at a time, take
-   more levels between descents when CON is low. Six class entries and both
-   prompts point at it.
-6. **`borg_runner prompts`** and `prompts/mage-shuttle-to-level-5.txt`.
-7. **`playbook --check` now reads a family page's spell mana and dice against
-   `class.txt`**, which caught `agents/minimax/MAGE.md` giving Magic Missile a
-   `+3` it does not have. Corrected where it stood, with a note.
-8. **`reading_note` reads a carried-on run's own notes**, not the notebook it
-   inherited: `minimaxflash-1.4`'s record claimed it had read nothing for its
-   class while its own note named both playbook pages.
-9. **`borg_runner audit`** (added just before this session's work): what a
-   finished run should have left, as 18-19 checks. Both prompts end with it.
-10. **The reconcile.** The four `## From <run>` logs in `agents/minimax/` are
-    folded into the bodies by topic with the run named in every heading, and
-    three of their claims are corrected where they stood: "exactly one down
-    staircase per level" (that was the labyrinth generator), "the manual is out
-    by a factor of ten" on the armour-weight penalty (it is not - `cur_wgt` is
-    in tenths of a pound as well), and a CL5 experience target that was too
-    low. `agents/minimax/WARRIOR.md`, which `playbook --start` had left as a
-    COMMON skeleton, is a Warrior page now. `ACCUMULATED_KNOWLEDGE.md` is **edition 3**.
+**One answer per ask.** `minimaxflash-3`'s decisions log answered asks 27 and
+56 twice (a session re-answer appended much later); the game had consumed the
+first answers, and every replay diverged from the record at exactly that
+point. `minimaxflash-2.2` had the same at ask 329. Now: `answer` refuses a
+second answer; `recorded_keys` and the record's `input.txt` take the played
+(first) answer and name the rest in `duplicate_answers`; the audit warns on a
+re-answered log; a replay regenerates its scratch directory; the splash's git
+describe is not a screen difference (build identity lives in the record's
+hashes). All 16 runs replay `identical: true` under this.
+
+**The frame dump.** The frontend used to write the screen only when the key
+buffer emptied, so everything the game showed while spending a buffered
+string - which is where deaths happen - was recorded nowhere. With `-f<dir>`
+it writes `frame-<ask>-<n>.txt` at every input event; `play` and `autoplay`
+turn it on for every new run, `replay --frames` recovers it for old ones,
+and the report's scrubber splices the frames into their ask (collapsing
+unchanged runs). The slow test replays a game with the dump on and off and
+diffs every ask byte for byte.
+
+## What this session changed, in short
+
+1. The page consolidated `mmf-mage.2` (rest out the Recall timer; gold is
+   picked up by stepping but an object takes `g`; a level's monsters are
+   few, asleep and distant).
+2. A consistency pass over every player-facing document (PR #2): the export
+   first (its edition-3 header, corpus table and tallies now agree), then
+   the page (the early sections no longer teach the retracted one-staircase
+   model; lock arithmetic; the real rest-to-full keys; Recall-from-town is
+   DL1; the birth Scroll of Word of Recall is named), then seven stale
+   numbers in `agents/minimax/`, corrected where they stand with the date on
+   each. One proposed fix was **rejected with proof** (walking onto a shop
+   does open it - `player_handle_post_move`; the review's grep had missed
+   the cross-file call).
+3. Record integrity and the frame dump (PR #4), above.
+4. `archive` reconciles scripts a player wrote **loose in the run directory**
+   into `tools/` (a druid wrote its walk-planner beside the record, and only
+   `tools/` was archived); the audit warns when one is left behind.
+5. The worktree prompts, above.
+6. The export is **edition 4**.
 
 ## What is waiting, in order
 
-1. **Start the next run.** The owner's next one is a **fresh Gnome Mage**,
-   played from the **plain `PLAYGAME.txt`** with `AGENT` set to whatever
-   family is playing - no brief, because what a mage needs is on the page now
-   and the prompt points at it. Older characters can be carried on instead
-   with `CONTINUEGAME.txt`; `carry-on --run runs/<name>` names the next
-   generation itself.
-2. **The three tools `minimaxflash-3` wrote are not in the library.**
-   `records/minimaxflash-3/tools/open.py`,
-   `records/minimaxflash-3/tools/route.py` and
-   `records/minimaxflash-3/tools/sweep.py` are archived with the run, and
-   `tools` lists them under "written by runs, not in the library".
-   Adopting one is `tools --adopt <path> --from <run>` and means reading it
-   first: that run's own report says its hand-written glyph list missed `>`
-   for seventy asks, so its code is not above suspicion.
-3. **The measurement nobody has made**, and the cheapest one left: how much of
-   a level a sweep actually remembers. `minimaxflash-1.4` claimed two thirds
-   and found none of the level's three or four staircases; its keys replay, so
-   the number can be counted off the replay instead of believed.
-   `ACCUMULATED_KNOWLEDGE.md` section 8, question 2.
-4. **T11 is the owner's call**, not a session's: whether the frontend should
-   honour `TERM_XTRA_FLUSH`. See PLAN.md - it would have saved `sonnet-3`, and
-   it would change what every existing recording replays to.
-5. **Offered and not taken up**: a CI job running `pytest -m slow` with
-   `BORG_RUNNER_NO_X11=1` (CI never builds the game today), and an Angband MCP
-   server so a session could play through tools rather than a CLI.
+1. **Start the next run under the new prompts** - it is the first test of
+   the worktree flow, and friction in it is a finding. Nothing is playing.
+   `AGENT` set to the family playing; `agents/` currently has only
+   `minimax/`.
+2. **Merge the run branches** as runs finish (see the worktree model), and
+   rebuild the dashboard on main.
+3. **Tools written by runs, not adopted**: `records/minimaxflash-3/tools/`
+   (`open.py`, `route.py`, `sweep.py`) and now
+   `records/minimaxflash-1.5/tools/g.py` (a beam-search walk planner its
+   report credits with a 7x sweep rate - and which has the family bug of a
+   hardcoded panel slice; read before adopting). `tools --adopt <path>
+   --from <run>`.
+4. **The coverage measurement nobody has made** (ACCUMULATED section 8,
+   question 2): how much of a level a sweep actually remembers, counted off
+   `minimaxflash-1.4`'s replay rather than believed.
+5. **T11 is the owner's call**: whether the frontend should honour
+   `TERM_XTRA_FLUSH` (PLAN.md). It changes what recordings mean.
+6. **Offered and not taken up**: CI for `pytest -m slow`, and an Angband MCP
+   server.
 
 ## Rules that are not obvious and have each cost something
 
-- **The frontend holds no tactics, no thresholds, no opinion about how to
-  play** (D2). If you are writing `if hit points below`, it belongs in the
-  page or the prompt, not in the code.
-- **No API keys, no provider config, no budget here** (D8). The session is the
-  player.
+- **The frontend holds no tactics** (D2). A grep of `main-agent.c` for
+  `hit_point`, `danger`, `monster`, `inventory`, `spell` is a test; keep
+  even comments free of them.
+- **No API keys, no provider config** (D8). The session is the player.
 - **A player may read its own history, never another run's transcript of its
   own seed** (D9).
-- **`playbook --append`, never a rewrite, while any run is playing.** Several
-  runs of one family write the same pages; the last whole-file write wins and
-  erases the others. The lock and `.gitattributes merge=union` are there for
-  exactly this.
-- **Never commit or stash a file a live session is editing**, and use explicit
-  git paths - never `git add -A`. A `git add -A` from one session swept
-  another's unfinished work into a commit today.
-- **A rebase can refuse** while live sessions hold unstaged `agents/` files.
-  Push without pulling when you are only ahead; do not stash their work.
-- **Attribution**: a commit carries at most the single `Co-Authored-By:` line
-  your own harness tells you to add, naming whatever model you are, and no
-  other AI attribution - no "generated with" footer in a commit message.
-  `git log` shows the shape; follow your harness's line, not the last
-  session's.
+- **An ask is answered once.** The game pressed the first answer; a second
+  one can only poison the record. `answer` refuses it; the notebook is where
+  a better plan goes.
+- **`playbook --append` for players, always; folding is for a session with
+  nothing playing.** The branches union-merge; rewrites do not.
+- **Use explicit git paths, never `git add -A`.**
+- **Attribution**: at most the single `Co-Authored-By:` line your own
+  harness tells you to add, and no other AI attribution.
 
 ## The two prompts, which are the product
 
 `PLAYGAME.txt` (new game) and `CONTINUEGAME.txt` (carry one on) are what a
 harness is handed, with `{RUNNAME}`, `{SEED}` and `{AGENT}` substituted;
-`docs/BRIEF.md` is the same thing at length. They now carry, besides the
-procedure: that the player starts on the town's staircase, that depth is
-recorded and not scored, that levelling has a price list, that constitution
-sets the pace of descent, the tools library, the append rule, and `audit` as
-the last step. If you change them, run `borg_runner prompts`.
+`docs/BRIEF.md` is the same thing at length. They now open with the worktree
+setup, carry the five finish commands (record, stop, keep, archive, commit
+on the branch), and end with `audit`. If you change them, run
+`borg_runner prompts`.
