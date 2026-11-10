@@ -1,0 +1,63 @@
+{
+  "asks": 151,
+  "asks_made": 151,
+  "born_as_asked": true,
+  "build": {
+    "binary_sha256": "d22486e6479e043b43d965e315cb4837ff6170c92f125753fadc653388bbecd7",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "c3c737df21442d78adccbc33b94248e6359b3baeeed6e1b19f444bd3a2561d60",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 574,
+  "character": "Hobbit Ranger",
+  "character_asked_for": {
+    "class": "Ranger"
+  },
+  "character_level": 1,
+  "class": "Ranger",
+  "cost": {
+    "model": "minimax-coding-plan/MiniMax-M3.1-Flash",
+    "played_by": "opencode"
+  },
+  "death_depth": null,
+  "died": false,
+  "duplicate_answers": [],
+  "exit_code": null,
+  "final_turn": 5219,
+  "flush": "honour",
+  "gold": 150,
+  "hp": {
+    "max": 12,
+    "now": 12
+  },
+  "keypresses": 3041,
+  "keys_sha256": "215af62f9f81aeb945a28ce6012c0902f6c31fcb57cb73a4403dc4aa3ab82f8c",
+  "killed_by": null,
+  "max_character_level": 1,
+  "max_depth": 1,
+  "notebook_lines": 26,
+  "notebook_sha256": "2384e523fe4209a09451ac0a9c651e6d4a9ec3cfd38224f9df2bc7d366a551af",
+  "outcome": "stopped",
+  "own_tools": [
+    "chain.py"
+  ],
+  "playbook": "minimax",
+  "race": "Hobbit",
+  "read_before_playing": "FIRST NOTE - files I actually opened, all of them read in full: manuals/INSTRUCTIONS.md (the manual, all 575 lines), agents/minimax/COMMON.md (my own family playbook, all 1290 lines), agents/minimax/WARRIOR.md (my family's Warrior page, closest to a Ranger), records/OVERVIEW.md (only to pick a seed: 103,23,41,313,1,17,271,7,11 are taken so I chose SEED 137), and the headers of tools/screen/look.py and tools/screen/explore.py. No other family's page: no family has ever played a Ranger, so agents/minimax/RANGER.md does not exist and the page is mine to write. (ask 1)",
+  "read_its_own_playbook": true,
+  "run": "mmx-ran-1",
+  "savefile_sha256": "8bdb62c7845fe32b6af19bdd669e7f8155f30ae1fa0d5cfea506de09d66fac3a",
+  "schema": "borg-runner/run-record@1",
+  "screens": 151,
+  "screens_sha256": "a77b35d4085c35f77f336ccb35eac737a1e1c90aa6b06fd42caeffee4d5c6077",
+  "seed": 137,
+  "wealth": 724
+}
