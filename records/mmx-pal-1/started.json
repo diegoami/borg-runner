@@ -1,0 +1,34 @@
+{
+  "asked_for": {
+    "class": "Paladin"
+  },
+  "build": {
+    "binary_sha256": "ba79c07573e3590a5af3ab64a13aa8f056283e2f7707c4d72779ede1803cc224",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "c3c737df21442d78adccbc33b94248e6359b3baeeed6e1b19f444bd3a2561d60",
+    "schema": "borg-runner/build@1"
+  },
+  "character": "mmx-pal-1",
+  "command": [
+    "/home/diego/projects/mmx-pal-1/build/e473720ed88a-c3c737df2144/build/game/angband",
+    "-magent",
+    "-ummx-pal-1",
+    "--",
+    "-d/home/diego/projects/mmx-pal-1/runs/mmx-pal-1/ask",
+    "-s401",
+    "-f/home/diego/projects/mmx-pal-1/runs/mmx-pal-1/ask"
+  ],
+  "flush": "honour",
+  "pid": 237621,
+  "savefile": "/home/diego/projects/mmx-pal-1/build/e473720ed88a-c3c737df2144/build/game/lib/save/mmx-pal-1",
+  "schema": "borg-runner/started@1",
+  "seed": 401
+}

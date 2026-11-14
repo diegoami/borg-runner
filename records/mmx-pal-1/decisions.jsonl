@@ -1,0 +1,137 @@
+{"ask": 1, "depth": 0, "keys": " ", "reason": "past the splash", "turn": 0}
+{"ask": 2, "depth": 0, "keys": "*", "reason": "race not given: draw it with *", "turn": 1}
+{"ask": 3, "depth": 0, "keys": "f", "reason": "class is given as Paladin; the menu shows f) Paladin, press f and check the cursor", "turn": 1}
+{"ask": 4, "depth": 0, "keys": "\\n", "reason": "accept Paladin (cursor was on f) Paladin)", "turn": 1}
+{"ask": 5, "depth": 0, "keys": "a", "reason": "take the easy option: point-based stats", "turn": 1}
+{"ask": 6, "depth": 0, "keys": "\\n", "reason": "accept the allocation the game filled in (Total Cost 20/20)", "turn": 1}
+{"ask": 7, "depth": 0, "keys": "\\n", "reason": "accept the default name", "turn": 1}
+{"ask": 8, "depth": 0, "keys": "y", "reason": "accept the character history", "turn": 1}
+{"ask": 9, "depth": 0, "keys": " ", "reason": "continue into the town", "turn": 1}
+{"ask": 10, "depth": 0, "keys": "i", "reason": "see the kit I was born with (oil? scrolls?)", "turn": 1}
+{"ask": 11, "depth": 0, "keys": "\\eG", "reason": "leave the item menu and press G to study; a free prayer slot is waiting", "turn": 1}
+{"ask": 12, "depth": 0, "keys": "a", "reason": "study the Novice's Handbook (a); a Paladin is given a random learnable prayer", "turn": 1}
+{"ask": 13, "depth": 0, "keys": "123333", "reason": "walk to the General Store (1) at (25,10) to buy oil", "turn": 11}
+{"ask": 14, "depth": 0, "keys": "2266", "reason": "walk 2 south then 2 east onto the General Store tile (1) at (25,10)", "turn": 51}
+{"ask": 15, "depth": 0, "keys": "pj20\\n ", "reason": "buy 20 flasks of oil at 3 gold each (60 gold): oil is the Paladin's real ranged attack", "turn": 81}
+{"ask": 16, "depth": 0, "keys": "\\e8666666666622666", "reason": "leave the store and walk to the Alchemist (5) at (38,11) for cures, a Phase Door and a Boldness", "turn": 81}
+{"ask": 17, "depth": 0, "keys": "22666", "reason": "walk 2 south then 3 east onto the Alchemist (5) at (38,11)", "turn": 201}
+{"ask": 18, "depth": 0, "keys": "2666", "reason": "3 east then 1 south? no: 3 east to reach the Alchemist tile at (38,11)", "turn": 211}
+{"ask": 19, "depth": 0, "keys": "l6g", "reason": "look east to the next interesting square (the Alchemist) and walk there with g", "turn": 221}
+{"ask": 20, "depth": 0, "keys": "pa2\\n ", "reason": "buy 2 Potions of Cure Light Wounds at 20 gold (the heal a CL1 Paladin will actually use)", "turn": 241}
+{"ask": 21, "depth": 0, "keys": " pn2\\n ", "reason": "clear the -more- with a space, then buy 2 Scrolls of Phase Door at 15 gold", "turn": 241}
+{"ask": 22, "depth": 0, "keys": " pj1\\n ", "reason": "buy 1 Potion of Boldness at 8 gold: fear takes away a Paladin's attacks and adds 8 AC, and Heroism is CL12", "turn": 241}
+{"ask": 23, "depth": 0, "keys": "*p4444444444444444g", "reason": "aim at the known Weaponsmith tile 16 tiles west and let the game path there", "turn": 241}
+{"ask": 24, "depth": 0, "keys": "86666666666", "reason": "walk north one then east ten along row 10 to the Armoury (2) at (45,10)", "turn": 281}
+{"ask": 25, "depth": 0, "keys": "lp6", "reason": "put the cursor one tile east in free mode to see what that tile really is", "turn": 291}
+{"ask": 26, "depth": 0, "keys": "[", "reason": "list the monsters: something is disturbing me without a message", "turn": 291}
+{"ask": 27, "depth": 0, "keys": "\\e[", "reason": "leave the look mode and list the monsters", "turn": 291}
+{"ask": 28, "depth": 0, "keys": " .6", "reason": "dismiss the monster list, then run east along the street toward the Armoury", "turn": 291}
+{"ask": 29, "depth": 0, "keys": "l6g", "reason": "look east to the next interesting square (the Armoury) and walk there with g", "turn": 311}
+{"ask": 30, "depth": 0, "keys": "\\e*p8666666g", "reason": "leave the store, aim at the floor tile in front of the Armoury (44,10) and let the game path there", "turn": 311}
+{"ask": 31, "depth": 0, "keys": "6", "reason": "step east onto the Armoury tile (45,10)", "turn": 381}
+{"ask": 32, "depth": 0, "keys": "pc1\\n ", "reason": "buy 1 Soft Leather Armour (AC 8, 8 lb) for 84 gold: armour buys misses, and this is the cheapest +8 AC in the game", "turn": 381}
+{"ask": 33, "depth": 0, "keys": "pf1\\n ", "reason": "buy 1 Small Metal Shield (AC 5, 6 lb) for 50 gold; worn armour 14 lb is inside the Paladin's 40 lb spell allowance", "turn": 381}
+{"ask": 34, "depth": 0, "keys": "\\ewo", "reason": "leave the store and wear the Small Metal Shield (pack letter o)", "turn": 381}
+{"ask": 35, "depth": 0, "keys": "i", "reason": "inventory: see what is worn and what the pack letters are", "turn": 401}
+{"ask": 36, "depth": 0, "keys": "\\ewn", "reason": "leave the inventory and wear the Soft Leather Armour (letter n): AC 8 more", "turn": 401}
+{"ask": 37, "depth": 0, "keys": "l>g", "reason": "look-mode jump to the known down staircase and walk to it", "turn": 411}
+{"ask": 38, "depth": 0, "keys": "*p88888444444444444444444444g", "reason": "aim at the floor tile beside the down staircase (23,4) and let the game path there", "turn": 421}
+{"ask": 39, "depth": 0, "keys": "*p8884444444444444444444g", "reason": "aim at the floor beside the down staircase (23,4) and walk there", "turn": 441}
+{"ask": 40, "depth": 0, "keys": "\\e4444444444448884444444", "reason": "escape any mode, then walk 22 steps west/north to the down staircase at (22,4)", "turn": 451}
+{"ask": 41, "depth": 0, "keys": "\\e4444444444", "reason": "escape any mode then walk 10 west along row 7", "turn": 461}
+{"ask": 42, "depth": 0, "keys": "\\e48884444444", "reason": "escape, then walk the computed route to the down staircase", "turn": 561}
+{"ask": 43, "depth": 0, "keys": "> ", "reason": "take the down staircase (with a trailing space for the -more-)", "turn": 671}
+{"ask": 44, "depth": 1, "keys": "lxg", "reason": "explore: look-mode jump to the nearest unexplored square and walk there", "turn": 671}
+{"ask": 45, "depth": 1, "keys": "\\e4", "reason": "step west into the closed door: one key opens it and walks through", "turn": 671}
+{"ask": 46, "depth": 1, "keys": "\\e4", "reason": "step west through the open door into the corridor", "turn": 681}
+{"ask": 47, "depth": 1, "keys": "lxg", "reason": "explore with the game's own frontier walk", "turn": 691}
+{"ask": 48, "depth": 1, "keys": "M", "reason": "press M for the whole remembered level: it shows any staircase seen so far and feeds explore.py", "turn": 691}
+{"ask": 49, "depth": 1, "keys": " *3333333333333333333333333333333333333333333333g", "reason": "close the M map with a space, then use the aimed walk explore.py suggests to cross new ground", "turn": 691}
+{"ask": 50, "depth": 1, "keys": "*p3333333333333333333333333333333333333333333333g", "reason": "aimed walk in free-cursor mode 40 tiles south-east into the dark, then walk", "turn": 691}
+{"ask": 51, "depth": 1, "keys": "va1", "reason": "throw a flask of oil at Grip, which is down-left of me (1 S, 1 W)", "turn": 691}
+{"ask": 52, "depth": 1, "keys": "  va1", "reason": "clear the -more- with spaces and throw another flask at Grip (down-left)", "turn": 691}
+{"ask": 53, "depth": 1, "keys": "  \\e818", "reason": "clear the -more-, escape any mode, then north 1, north-west through the open door, north again - avoiding the mushroom patch", "turn": 704}
+{"ask": 54, "depth": 1, "keys": "qd444", "reason": "quaff the Cure Light Wounds (cures confusion 20 turns, heals 20) then step 2-3 tiles west away from the patch", "turn": 711}
+{"ask": 55, "depth": 1, "keys": " \\e818", "reason": "clear the -more-, escape, then north, north-west through the open door, north again", "turn": 715}
+{"ask": 56, "depth": 1, "keys": " \\e11", "reason": "clear the -more-, escape, then attack the mushroom patch north-west (2 HP, AC 1) to stop the spores for good", "turn": 720}
+{"ask": 57, "depth": 1, "keys": " \\e111", "reason": "attack the mushroom patch again; 2 HP and my melee does 8 damage a blow-turn", "turn": 721}
+{"ask": 58, "depth": 1, "keys": " \\e11", "reason": "attack the mushroom patch again while confused (each blow keeps its direction 25% of the time)", "turn": 731}
+{"ask": 59, "depth": 1, "keys": " \\eqd", "reason": "quaff the last Cure Light Wounds: cured for 20 turns (so the patch cannot re-confuse me) and healed to full", "turn": 741}
+{"ask": 60, "depth": 1, "keys": " \\e11", "reason": "attack the mushroom patch north-west (now that I am cured the direction is deliberate) and step into its tile", "turn": 741}
+{"ask": 61, "depth": 1, "keys": "\\e1", "reason": "escape the stuck quaff prompt, then attack the mushroom patch to the north-west", "turn": 751}
+{"ask": 62, "depth": 1, "keys": "\\e7", "reason": "attack the mushroom patch: it is NORTH-WEST of me, which is 7, not 1 - my attacks were hitting the locked door south-west", "turn": 761}
+{"ask": 63, "depth": 1, "keys": " 7", "reason": "clear the -more-, then north-west: if the patch is dead I step onto its tile, if not I hit it again", "turn": 761}
+{"ask": 64, "depth": 1, "keys": "\\e8888888888", "reason": "run north up the corridor; the chain stops by itself at the first wall", "turn": 776}
+{"ask": 65, "depth": 1, "keys": "\\e6g", "reason": "step east onto the unknown item and pick it up with g", "turn": 796}
+{"ask": 66, "depth": 1, "keys": "\\e6666666666666", "reason": "walk east along the corridor; the chain stops at the first wall", "turn": 806}
+{"ask": 67, "depth": 1, "keys": "\\e2222222222", "reason": "go south down the corridor at column 29; the chain stops at the first wall", "turn": 906}
+{"ask": 68, "depth": 1, "keys": "\\e22", "reason": "two steps south; if only one happens, something at (29,8) disturbs every step", "turn": 916}
+{"ask": 69, "depth": 1, "keys": "\\e22222", "reason": "continue south down the corridor to its end", "turn": 936}
+{"ask": 70, "depth": 1, "keys": "\\e44444", "reason": "walk west along the corridor into the centipede; one blow-turn of 8 damage should kill a 7-9 HP centipede", "turn": 986}
+{"ask": 71, "depth": 1, "keys": " \\e4", "reason": "attack the centipede again (my first blow-turn did about 8 damage against its 9 hit points)", "turn": 1031}
+{"ask": 72, "depth": 1, "keys": "  v4", "reason": "clear the -more- and throw a flask of oil west at the centipede (9-36 damage against its remaining hit points)", "turn": 1031}
+{"ask": 73, "depth": 1, "keys": "\\e4", "reason": "melee the centipede again; it has about 5 hit points left and my blow-turn does 8", "turn": 1034}
+{"ask": 74, "depth": 1, "keys": "\\eva444", "reason": "throw the oil west at the centipede (v, a = the oil in the throw list, 4 = west) and keep walking west", "turn": 1042}
+{"ask": 75, "depth": 1, "keys": "\\e44444", "reason": "walk west to the end of the corridor (a down staircase is always at a corridor end)", "turn": 1052}
+{"ask": 76, "depth": 1, "keys": "M", "reason": "press M: the whole remembered level in one screen, to see whether a down staircase has already come into view and how much of the level I have", "turn": 1102}
+{"ask": 77, "depth": 1, "keys": " \\e44444444", "reason": "close the M map and walk west along the corridor to its next end", "turn": 1102}
+{"ask": 78, "depth": 1, "keys": "\\e4444", "reason": "walk west to the corridor's end at column 8", "turn": 1182}
+{"ask": 79, "depth": 1, "keys": "\\e8", "reason": "check the one-tile spur north of the corridor end - three walls around a single tile is exactly the shape a staircase sits in", "turn": 1222}
+{"ask": 80, "depth": 1, "keys": "\\e44444444", "reason": "keep going west; the corridor continues", "turn": 1222}
+{"ask": 81, "depth": 1, "keys": "\\e8888", "reason": "go north up the vertical corridor at column 7 to the door at (8,10)", "turn": 1232}
+{"ask": 82, "depth": 1, "keys": "\\e6", "reason": "open the door east of me at (8,10) and step through into unexplored ground", "turn": 1272}
+{"ask": 83, "depth": 1, "keys": "\\e666", "reason": "walk east through the door into the small room", "turn": 1402}
+{"ask": 84, "depth": 1, "keys": "\\eva6", "reason": "throw oil east at the large white snake (11 HP, AC 36 - my oil to-hit 117 hits it about 78% of the time for 9-36 damage)", "turn": 1432}
+{"ask": 85, "depth": 1, "keys": " \\e6", "reason": "clear the -more- and step east onto the snake if it is still alive", "turn": 1432}
+{"ask": 86, "depth": 1, "keys": "\\e6", "reason": "open the secret door east of me and step through", "turn": 1452}
+{"ask": 87, "depth": 1, "keys": "\\e6", "reason": "step east through the now-open secret door", "turn": 1462}
+{"ask": 88, "depth": 1, "keys": "\\e6666", "reason": "continue east through the secret-door passage", "turn": 1472}
+{"ask": 89, "depth": 1, "keys": "maa", "reason": "cast Bless: the book's letter then the spell's letter; it pays 4 experience for the first cast and gives +5 AC and +10 to-hit", "turn": 1502}
+{"ask": 90, "depth": 1, "keys": "\\e666", "reason": "east through the secret door and keep going", "turn": 1512}
+{"ask": 91, "depth": 1, "keys": "\\e6", "reason": "step east through the opened secret door", "turn": 1522}
+{"ask": 92, "depth": 1, "keys": "\\e4444444442222", "reason": "west along the corridor to the column-7 passage, then south to the row-14 corridor", "turn": 1532}
+{"ask": 93, "depth": 1, "keys": "\\e444442222", "reason": "continue west to column 7 then south to the row-14 corridor", "turn": 1572}
+{"ask": 94, "depth": 1, "keys": "*p2222222222222222222222222g", "reason": "aimed walk 25 tiles south into unmapped ground: find_path treats unknown as passable and the walk crosses new territory", "turn": 1582}
+{"ask": 95, "depth": 1, "keys": "\\e444444444", "reason": "west along the row-10 corridor to the column-7 passage", "turn": 1592}
+{"ask": 96, "depth": 1, "keys": "\\e44488888", "reason": "west to the column-7 passage and north up it to the row-6 corridor (the kobold and the unknown scroll are up there)", "turn": 1602}
+{"ask": 97, "depth": 1, "keys": "[", "reason": "list the monsters: something disturbs me at every step of this room", "turn": 1612}
+{"ask": 98, "depth": 1, "keys": " va6", "reason": "dismiss the monster list and throw oil east at the salamander (14 HP, AC 24)", "turn": 1612}
+{"ask": 99, "depth": 1, "keys": "\\e44488888", "reason": "west to column 7 and north up to the row-6 corridor", "turn": 1612}
+{"ask": 100, "depth": 1, "keys": " va8", "reason": "throw oil north at the kobold two tiles away (8 HP, AC 24 - one flask kills it)", "turn": 1662}
+{"ask": 101, "depth": 1, "keys": " va8", "reason": "throw another flask at the kobold (the last one missed)", "turn": 1672}
+{"ask": 102, "depth": 1, "keys": "\\e888666666666666g", "reason": "north to the row-6 corridor, east along it to the unknown scroll, then g to pick it up", "turn": 1672}
+{"ask": 103, "depth": 1, "keys": "\\e886666666666666g", "reason": "north to the row-6 corridor, east to the unknown scroll at (19,6), then pick it up", "turn": 1692}
+{"ask": 104, "depth": 1, "keys": "\\e6666666g", "reason": "east along the corridor to the unknown scroll at (19,6) and pick it up", "turn": 1762}
+{"ask": 105, "depth": 1, "keys": "\\e66666666", "reason": "continue east along the row-6 corridor toward the column-29 passage", "turn": 1832}
+{"ask": 106, "depth": 1, "keys": "\\e662222222222", "reason": "east to the column-29 passage, then south down it", "turn": 1912}
+{"ask": 107, "depth": 1, "keys": "\\e442", "reason": "west two and south one to the passage at (27,15), the only way south off this corridor", "turn": 2012}
+{"ask": 108, "depth": 1, "keys": "\\e2222222222", "reason": "south into the unexplored southern part of the level", "turn": 2042}
+{"ask": 109, "depth": 1, "keys": "\\e888888", "reason": "north up the column-27 passage to the row-11 corridor", "turn": 2142}
+{"ask": 110, "depth": 1, "keys": "\\e8888844444444", "reason": "north to the row-6 corridor, then west along it to the unknown scroll at (19,6)", "turn": 2202}
+{"ask": 111, "depth": 1, "keys": "g", "reason": "pick up the unknown scroll with g, in an ask of its own", "turn": 2332}
+{"ask": 112, "depth": 1, "keys": "i", "reason": "inventory: settle whether the scroll and the Wicker Shield were picked up, and know my pack for the endgame", "turn": 2332}
+{"ask": 113, "depth": 1, "keys": "l<g", "reason": "look-mode jump to the nearest known up staircase and walk there", "turn": 2332}
+{"ask": 114, "depth": 1, "keys": "\\e\\el<g", "reason": "escape the item menu and the inventory, then look-mode jump to the known up staircase and walk to it", "turn": 2332}
+{"ask": 115, "depth": 1, "keys": "\\e42666", "reason": "walk west one, south two through the door, then east three to the up staircase at (21,8)", "turn": 2332}
+{"ask": 116, "depth": 1, "keys": "\\el<g", "reason": "escape, then look-mode jump to the nearest known up staircase (21,0) and walk to it", "turn": 2342}
+{"ask": 117, "depth": 1, "keys": "\\e888888666", "reason": "north up the column-18 passage through the two doors, then east along row 0 to the up staircase", "turn": 2342}
+{"ask": 118, "depth": 1, "keys": "\\e6666666666688888844444444", "reason": "east along row 6 to column 29, north up that corridor to row 0, then west along row 0 to the up staircase (21,0)", "turn": 2352}
+{"ask": 119, "depth": 1, "keys": "\\e8888884444444444", "reason": "south down the column-29 corridor to row 14, then west along it toward the secret-door passage at (18,13)", "turn": 2522}
+{"ask": 120, "depth": 1, "keys": "\\e6666666666688666", "reason": "west along the row-6 corridor, south through the open door at (18,7), then east to the up staircase at (21,8)", "turn": 2542}
+{"ask": 121, "depth": 1, "keys": "66", "reason": "two steps west along the corridor to test that keys are being read", "turn": 2542}
+{"ask": 122, "depth": 1, "keys": "\\e222222224444444444", "reason": "south down the column-29 corridor to row 14, then west along row 14 to the secret-door passage", "turn": 2542}
+{"ask": 123, "depth": 1, "keys": "\\e48886", "reason": "west one, north three through the secret-door passage and the closet, east one", "turn": 2722}
+{"ask": 124, "depth": 1, "keys": "\\e88866", "reason": "north through the door at (19,10) into the room, then east to the up staircase at (21,8)", "turn": 2772}
+{"ask": 125, "depth": 1, "keys": "M", "reason": "press M for the whole level: I need the global picture to find a route to an up staircase", "turn": 2772}
+{"ask": 126, "depth": 1, "keys": "\\e422266666666666888888", "reason": "back through the closet to the row-14 corridor, west to column 7, then north up that passage to the Wicker Shield at (7,8)", "turn": 2772}
+{"ask": 127, "depth": 1, "keys": "\\e2222224444444444444444444444888888", "reason": "south to row 14, west along it to column 7, then north up that passage to the Wicker Shield at (7,8)", "turn": 2982}
+{"ask": 128, "depth": 1, "keys": "g", "reason": "pick up the Wicker Shield with g", "turn": 3322}
+{"ask": 129, "depth": 1, "keys": "\\e88666666666666", "reason": "north to the row-6 corridor and east to the unknown scroll at (19,6)", "turn": 3323}
+{"ask": 130, "depth": 1, "keys": "g", "reason": "pick up the unknown scroll with g", "turn": 3463}
+{"ask": 131, "depth": 1, "keys": "\\e42242222666", "reason": "back through the room and the two doors into the unexplored eastern area at (20,12)", "turn": 3464}
+{"ask": 132, "depth": 1, "keys": "\\e2222666", "reason": "south through the door at (17,10) and east into the unexplored eastern area", "turn": 3504}
+{"ask": 133, "depth": 1, "keys": "\\e8688", "reason": "back up through the door into the row-6 corridor", "turn": 3514}
+{"ask": 134, "depth": 1, "keys": "\\e666666666662222222244222", "reason": "east along row 6, south down column 29, then to the southern vein pocket at (27,17)", "turn": 3554}
+{"ask": 135, "depth": 1, "keys": "\\e22222222", "reason": "south down the column-27 passage toward the row-19 corridor", "turn": 3794}
+{"ask": 136, "depth": 1, "keys": "rf", "reason": "read the Scroll of Word of Recall (pack letter f): in the dungeon it takes me to the town", "turn": 3874}
+{"ask": 137, "depth": 1, "keys": " \\e8888888888866666666", "reason": "north out of the vein pocket and west along row 6; the Recall timer (15-34 actions) should fire during the walk and take me to the town", "turn": 3874}

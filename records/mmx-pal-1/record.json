@@ -1,0 +1,61 @@
+{
+  "asks": 137,
+  "asks_made": 137,
+  "born_as_asked": true,
+  "build": {
+    "binary_sha256": "ba79c07573e3590a5af3ab64a13aa8f056283e2f7707c4d72779ede1803cc224",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "c3c737df21442d78adccbc33b94248e6359b3baeeed6e1b19f444bd3a2561d60",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 521,
+  "character": "High-Elf Paladin",
+  "character_asked_for": {
+    "class": "Paladin"
+  },
+  "character_level": 4,
+  "class": "Paladin",
+  "cost": {
+    "model": "minimax-coding-plan/MiniMax-M3.1-Flash",
+    "played_by": "opencode"
+  },
+  "death_depth": null,
+  "died": false,
+  "duplicate_answers": [],
+  "exit_code": null,
+  "final_turn": 3874,
+  "flush": "honour",
+  "gold": 20,
+  "hp": {
+    "max": 41,
+    "now": 41
+  },
+  "keypresses": 1111,
+  "keys_sha256": "6b3ba175b283ab015753129295b3301864fcb98ef637189999e398a6850dd07d",
+  "killed_by": null,
+  "max_character_level": 4,
+  "max_depth": 1,
+  "notebook_lines": 21,
+  "notebook_sha256": "68ce69bece915dd889d83a8af6ec7c9a59e3b0dd44e8a86c953b1653df2a99ab",
+  "outcome": "ended",
+  "own_tools": [],
+  "playbook": "minimax",
+  "race": "High-Elf",
+  "read_before_playing": "FIRST NOTE. Seed 401 chosen by me; it is not in records/OVERVIEW.md. Files I actually opened before my first key: manuals/INSTRUCTIONS.md (all 600 lines), agents/minimax/COMMON.md (all 1481 lines), docs/BRIEF.md, PLAYGAME.txt, and vendor/strategy-manual chapter 14 section 6 (Paladin) read through git cat-file. agents/minimax/PALADIN.md does not exist and no family has written about a Paladin, so I am the first for this class and that page is mine to write. Class was given to me (Paladin); the race will be drawn by the game with *. (ask 1)",
+  "read_its_own_playbook": true,
+  "run": "mmx-pal-1",
+  "savefile_sha256": "b062c94b2dc043746fe68582a9cc0cdbc1ef89a7c4cf6a945c16a1a6e70a84b4",
+  "schema": "borg-runner/run-record@1",
+  "screens": 137,
+  "screens_sha256": "9e2ef96e6276552e59347045d48baa25b636df0e186856c90b0720958bf002b2",
+  "seed": 401,
+  "wealth": 541
+}

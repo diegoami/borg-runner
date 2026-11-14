@@ -1479,3 +1479,80 @@ direction keys over the panel so that it does not meet a wall before its end,
 and it refuses a diagonal whose corners are not known floor - that rule is
 worth more than the rest of the tool put together. I wrote it before I
 understood the aimed walk, and I would rather have spent those asks playing.
+
+## From `mmx-pal-1`, 2026-11-14
+
+## What I measured, 2026-11-14 (mmx-pal-1: a High-Elf Paladin, seed 401, 137 asks, depth 1, level 4, alive)
+
+**The map panel scrolls, so the shared tools' coordinates are PANEL
+coordinates, not level coordinates.** The same tile had two different
+`(x,y)` ten asks apart, because the window moved when I walked (upwards by
+eight rows in one step, and sideways in jumps). Every route I planned from a
+remembered frame was therefore a route to somewhere else, and I walked into
+walls because of it. **Compare a screenshot with a screenshot only when the
+panel origin is the same; the `M` map has its own grid and is the only
+honest position.** (Our COMMON.md says the panel "scrolls in jumps of 33
+columns and 11 rows" — that is right, and the consequence, that the tools'
+coordinates move with the window, was not written down anywhere.)
+
+**The map lies more often than one case.** Twice on this level a tile drawn
+as `.` was really a wall, and the game said "There is a wall in the way!"
+and then drew the tile correctly. One of them, `(28,6)`, was the only
+place my route to the level's up staircase could go; the other, `(19,10)`,
+was a door drawn as a door. Our COMMON.md has one case of this (minimaxflash-1
+asks 43-44); treat a drawn `.` as a suggestion.
+
+**The aimed walk into the dark does not work, and the aimed walk to a
+KNOWN square does.** `*p` + 25-40 direction digits + `g` aimed at ground
+I had never seen produced "Target Aborted." and **zero movement**, three
+times (asks 50, 51, 95). Aimed at a square the map had drawn, the same
+keys walked me 7 tiles (ask 31), 11 (ask 39) and 18 (ask 127).
+**`tools/screen/explore.py` suggests the aimed walk into the dark** and that
+suggestion did not work on this level; the aimed walk to a known square
+is the one that pays.
+
+**`lxg` did nothing at all here** (ask 48, on a level with plenty of dark
+around me: no movement, no message, no turn). Our COMMON.md has it
+advancing one tile an ask (minimaxflash-1.4) — so it works sometimes and
+not others, and I did not find out why. The run reached depth 1 without
+it.
+
+**A pick-up needs an ask of its own.** `g` at the end of a movement chain
+is dropped with the rest of the string when the chain is cut, and the item
+is still on the floor: two items (a Wicker Shield worth 104 and a Scroll
+worth 20) sat there for twenty asks because of it. **And "You see a Scroll
+titled ..." is the NOTICE message you get by stepping on an item, not the
+pick-up** — I read it as a pick-up twice, and the item was still there
+both times. The carried value in the run's `question-N.txt` is the proof
+of what is in the pack.
+
+**The throw is `v` + the item's letter in the THROW list + a direction.**
+`v` + a direction alone throws nothing at all and does not even spend the
+flask; the throw list numbers only the throwable items from `a`, so oil is
+`a` there and `c` in the pack. (mmx-war-1 had the letters; the sequence
+and the silent failure cost me an ask.)
+
+**The search after every move finds secret doors, and it disturbs you.**
+"You have found a secret door." and the key string is dropped: the level
+had nine secret doors in the room I was born in, and every one of them cut
+a chain. It is also the reason a chain can stop with no message at all.
+
+**`[` is worth an ask for a second reason: it names the thing that is
+ending your key strings.** A salamander (a depth-2 monster on depth 1,
+like Grip) was waking up next to me and every step I took near it was cut
+short, and the monster list said so in one ask.
+
+**A machine restart kills the game and leaves the run's files good.** The
+process died with the character alive on depth 1; `borg_runner stop` writes
+the record anyway ("no game of its own is running"), and `keep`,
+`archive` and `audit` all work from the files. The last eleven asks of a
+run can be written after the game is gone.
+
+**A level's down staircase is worth finding in the first thirty asks or not
+at all.** I traced about a fifth of the corridors, checked every corridor
+end, and never saw a down staircase in 137 asks; the only staircases I saw
+were the two up ones. The M map is the only instrument that shows the whole
+level at once, and I used it three times in 137 asks. If the sweep is not
+going to work by ask 30, farm the level instead: the monsters are worth
+about 1.7 experience each at character level 3 and about 17 gold each, and
+the gold buys the oil for the next twenty kills.
