@@ -1508,3 +1508,19 @@ A wild dog bit me and a 20-key chain stopped after one tile; a white worm mass b
 **A DEPTH-1 LEVEL IS 198 x 66 WITH THREE OR FOUR DOWN STAIRCASES** (`gen-cave.c`: `handle_level_stairs(..., rand_range(3, 4), ...)`), each at least 16 tiles from the others and from the up staircase, and each on a square with **exactly three adjacent walls** - that is, at the end of a corridor. 294 of the 1716 box tiles of the map is 17 per cent of the level, and the expected number of staircases inside 17 per cent is 0.6, so finding none at 17 per cent is exactly what the arithmetic says. **The number that would settle it is the coverage at the moment a `>` first appears.** (mmx-ran-1.3)
 
 **A SERVER RESTART KILLS THE GAME AND THE RUN SURVIVES IT.** `borg_runner carry-on --run runs/<run>` replays the run's own keys into a fresh run of the next generation and reports `identical: true`; the character, the gold, the armour class and the level came back exactly, at the same ask. My own game died at ask 265 and mmx-ran-1.3 carried on from it. (mmx-ran-1.3)
+
+## From `mmx-ran-1.2`, 2026-11-14
+
+**This run is the first half of the life that `mmx-ran-1.3` finished, and the
+server restart that killed the game at ask 265 is why there are two.** The two
+findings that are its own are the town and the armour, and they are written
+out under `mmx-ran-1.3` above, because that is where the next session will
+look for them; the words above are this run's as much as that one's.
+
+**What this run adds that is only here:** the shop prices of seed 137 (in the
+Ranger page), the Soft Leather Armour (84 gold, +8 armour class, the best
+purchase in the game for a Ranger with 150 gold), the 60 gold and the 120
+gold on the floor of two lit rooms, and the recovery: `borg_runner carry-on
+--run runs/mmx-ran-1.2` replayed this run's own keys into a fresh run and
+reported `identical: true`, and the character, the gold, the armour class
+and the level all came back exactly, at the same ask.
