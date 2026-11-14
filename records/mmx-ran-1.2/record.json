@@ -1,0 +1,58 @@
+{
+  "asks": 264,
+  "asks_made": 265,
+  "build": {
+    "binary_sha256": "5cd8bb9d017c1c99f59fb1b65113d798f7ee2278e451859e76ed5efdf31d8868",
+    "cmake_args": [
+      "-DSUPPORT_BORG=OFF",
+      "-DSUPPORT_TEST_FRONTEND=OFF",
+      "-DSUPPORT_X11_FRONTEND=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DANGBAND_BUILD_ID=borg-runner-e473720"
+    ],
+    "commit": "e473720ed88a0f0c7ca66815cef3000eb4a38bc3",
+    "game": "angband/angband",
+    "patch_sha256": "c3c737df21442d78adccbc33b94248e6359b3baeeed6e1b19f444bd3a2561d60",
+    "schema": "borg-runner/build@1"
+  },
+  "carried_value": 544,
+  "character": "Hobbit Ranger",
+  "character_drawn": true,
+  "character_level": 2,
+  "class": "Ranger",
+  "cost": {
+    "model": "minimax-coding-plan/MiniMax-M3.1-Flash",
+    "played_by": "opencode"
+  },
+  "death_depth": null,
+  "died": false,
+  "duplicate_answers": [],
+  "exit_code": null,
+  "final_turn": 11044,
+  "flush": "honour",
+  "gold": 366,
+  "hp": {
+    "max": 17,
+    "now": 13
+  },
+  "keypresses": 4211,
+  "keys_sha256": "31e0aeb10b7d5a0aa290d92e9e1dfb6e0b22772e3aa471175c3aa059b48d7c24",
+  "killed_by": null,
+  "max_character_level": 2,
+  "max_depth": 1,
+  "notebook_lines": 87,
+  "notebook_sha256": "4df1b7da64a8128f144c4ca4815251839731a363827311ab9e24c571d87404d1",
+  "outcome": "ended",
+  "own_tools": [],
+  "playbook": "minimax",
+  "race": "Hobbit",
+  "read_before_playing": "FIRST NOTE - files I actually opened, all read in full: manuals/INSTRUCTIONS.md (600 lines), agents/minimax/COMMON.md (1481 lines, my own family playbook), agents/minimax/RANGER.md (108 lines, my own class page, written by my previous life), records/mmx-ran-1/REPORT.md (228 lines, my own past life's write-up), knowledge/mmx-ran-1.md (my own past notebook), records/OVERVIEW.md (only the table of every run), the headers of tools/screen/look.py and tools/screen/explore.py, and my own past life's 150 replay screens under runs/mmx-ran-1.2/ask/. No other family's page: I am the only Ranger in this repository, so RANGER.md is mine and no one else's to borrow. (ask 150) (ask 150)",
+  "read_its_own_playbook": true,
+  "run": "mmx-ran-1.2",
+  "savefile_sha256": "dc3d25dc0876db1e8294c36180a96617189122ac4d0697b083780daf1f027ffb",
+  "schema": "borg-runner/run-record@1",
+  "screens": 265,
+  "screens_sha256": "fb4f2ae9b0d72c39c42431fc46d83203f50c65c710ad926bdb171b80df729afd",
+  "seed": 137,
+  "wealth": 910
+}

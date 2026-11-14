@@ -1479,3 +1479,32 @@ direction keys over the panel so that it does not meet a wall before its end,
 and it refuses a diagonal whose corners are not known floor - that rule is
 worth more than the rest of the tool put together. I wrote it before I
 understood the aimed walk, and I would rather have spent those asks playing.
+
+## From `mmx-ran-1.3`, 2026-11-14
+
+## What mmx-ran-1.3 measured (a Hobbit Ranger, seed 137, 155 asks, depth 1, level 2)
+
+**THE TOWN COSTS ONE TILE PER ASK, and that is the most expensive fact in the game.**
+`cmd-pickup.c`'s `do_autopickup()` calls `disturb(p)` for **every object on the square you step onto**, and `disturb()` signals `EVENT_INPUT_FLUSH`, which this build's patch turns into "drop the rest of the key string". The town's floor carries goods the map does not draw, so there a 20-key digit chain moves ONE tile, a path-walk one or two, and a run two. In the dungeon the same chain moves 5 to 24 tiles. So a shopping trip as the manuals imagine it costs 20 to 60 asks; mine cost thirty. (mmx-ran-1.2, asks 150-180)
+
+**THE WORD OF RECALL IS THE WAY OUT OF THE TOWN, NOT THE WAY HOME.**
+`effect_handler_RECALL` sets `player->word_recall = randint0(20) + 15`; `game-world.c` decrements it once per player action; when it reaches zero **in the town** it calls `dungeon_change_level(player, player->recall_depth)` with `recall_depth = MAX(recall_depth, 1)`, the deepest level you have reached. So `read the scroll` (1 ask) then `R` + backspace + `60` + Enter (1 ask) puts you back on depth 1 in **two asks**, where walking to the town's staircase costs about nineteen. It costs the scroll, so spend it on a trip you are sure of. (mmx-ran-1.2)
+
+**THE AIMED WALK IS NOT A SWEEP, and the claim that it is the fastest move in the game is wrong.**
+I measured it forty times: 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 9, 12, 13, 16, 20, 21, 22, 23, 27 - **median 2**. The reason is in the source: `find_path` treats an unknown destination as passable, so the path it builds is a straight line through ground it has not looked at, and the walk then stops at the **first real wall**. The aim barely matters; the local geometry does. A digit chain of 20-24 keys in one direction, or the game's own `lxg`, covers the same ground five to ten times faster. (mmx-ran-1.3, depth 1)
+
+**`lxg` IS THE GAME'S OWN EXPLORER AND IT CAN WALK A LONG WAY**: 23 tiles in one ask for me, and it never fails, because the square it aims at is beside ground you have already seen. When the frontier is right next to you it walks one tile, so it is a frontier crawl rather than a sweep. (mmx-ran-1.3, ask 274)
+
+**AN AWAKE MONSTER CUTS EVERY CHAIN, and a breeder cuts it every single action.**
+A wild dog bit me and a 20-key chain stopped after one tile; a white worm mass bred a second copy the moment it was hit. A breeding monster in a room is a tax on every ask, not only on its own. (mmx-ran-1.3)
+
+**THE REMEMBERED MAP LIES**: it drew floor at squares that were walls ((45,12), (23,15), (44,12)) and the chain that trusted it died with "There is a wall in the way!" and an **empty message line**, because `msg_flush()` erases the line. Read the ground with `tools/screen/look.py`, which gives every drawn glyph as an offset from `@`. (mmx-ran-1.3)
+
+**THERE IS NO TRAP DOOR ON DEPTH 1.** `trap.txt` gives the trap door `appear:1:2:0` - rarity 1, **min_depth 2** - so it is not a way down here, however much a run wants one. The depth-1 traps are the teleport, the pit, the confusion and the slow ones, and `gen-cave.c`'s `try_door` puts one on a junction square with probability `tun.jct / 500`. A **teleport trap** fired me from the western middle of the level to its far north-east corner in one step, for no damage - a free way across a level. (mmx-ran-1.3)
+
+**THE WHOLE-LEVEL MAP IS 3 LEVEL TILES TO A BOX ROW AND 2.5 TO A BOX COLUMN**
+(`display_map`, `ui-map.c`: `row = (y * map_hgt) / cave->height`), so the dark direction it reports is a real direction, and the panel's own coordinates scroll in jumps of 33 columns - read positions from the library, never from the panel. (mmx-ran-1.3)
+
+**A DEPTH-1 LEVEL IS 198 x 66 WITH THREE OR FOUR DOWN STAIRCASES** (`gen-cave.c`: `handle_level_stairs(..., rand_range(3, 4), ...)`), each at least 16 tiles from the others and from the up staircase, and each on a square with **exactly three adjacent walls** - that is, at the end of a corridor. 294 of the 1716 box tiles of the map is 17 per cent of the level, and the expected number of staircases inside 17 per cent is 0.6, so finding none at 17 per cent is exactly what the arithmetic says. **The number that would settle it is the coverage at the moment a `>` first appears.** (mmx-ran-1.3)
+
+**A SERVER RESTART KILLS THE GAME AND THE RUN SURVIVES IT.** `borg_runner carry-on --run runs/<run>` replays the run's own keys into a fresh run of the next generation and reports `identical: true`; the character, the gold, the armour class and the level came back exactly, at the same ask. My own game died at ask 265 and mmx-ran-1.3 carried on from it. (mmx-ran-1.3)
